@@ -277,8 +277,7 @@ function diffInYears(date1, date2) {
 //#region src/Helpers/Dates/timeAgo.ts
 function secondsAgo(value) {
 	const data = toValue(value);
-	if (!data) return null;
-	if (isNotValid(data)) return null;
+	if (isNotValid(data)) return 0;
 	const date = new Date(data);
 	const dataPassada = new Date(date);
 	const diferencaMs = (/* @__PURE__ */ new Date()).getTime() - dataPassada.getTime();
