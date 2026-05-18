@@ -28,8 +28,8 @@ export default defineConfig({
                 validations: path.resolve(__dirname, './src/Helpers/Validations/index.ts'),
                 vueuse: path.resolve(__dirname, './src/Helpers/VueUse/index.ts'),
                 composables: path.resolve(__dirname, './src/Composables/index.ts'),
-                routes: path.resolve(__dirname, './src/Routes/index.ts')
-                // vueUseCore: path.resolve(__dirname, './node_modules/@vueuse/core/index.d.ts')
+                routes: path.resolve(__dirname, './src/Routes/index.ts'),
+                vueUseCore: path.resolve(__dirname, './src/Helpers/VueUse/core.ts')
             },
             name: 'max-use',
             fileName: (format, entryName) => `${entryName}.${format}.js`,

@@ -1,0 +1,1 @@
+export * as vueUseCore from '@vueuse/core';
