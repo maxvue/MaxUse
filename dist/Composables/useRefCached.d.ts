@@ -1,5 +1,5 @@
-import { Ref } from 'vue';
-export declare function useRefCached(key: string, default_value: any): Ref<any, any>;
+import { RemovableRef } from '@vueuse/core';
+export declare function useRefCached<T>(key: string, default_value: T): RemovableRef<T>;
 export declare const useRefStorage: typeof useRefCached;
 export declare const useCached: typeof useRefCached;
 export declare const useSharedCache: typeof useRefCached;
