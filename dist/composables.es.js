@@ -1,6 +1,7 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { An as useTimeAgo$1, Di as watchDebounced, bn as useStorage$1 } from "./dist-BQ0OUEAh.js";
-import { ref } from "vue";
+import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
+import { computed, ref, watch } from "vue";
 import { ulid } from "ulid";
 import localforage from "localforage";
 //#region src/Composables/useDefaultReset.ts
@@ -26,7 +27,29 @@ function useDefaultReset(initialData, timer = null) {
 }
 var refAutoReset = useDefaultReset;
 //#endregion
-//#region src/Composables/useRefStorage.ts
+//#region src/Composables/useRefCachedApi.ts
+function useCachedApi(route_name, options = {}) {
+	const state = ref(options.defaultValue ?? null);
+	const key = options.key ?? route_name;
+	const data = localStorage.getItem(key);
+	if (data) state.value = JSON.parse(data);
+	if (options.watch !== false) watch(computed(() => JSON.stringify(state.value)), (value) => {
+		localStorage.setItem(key, value);
+	});
+	if (options.sync !== false) apiGetRoute(route_name, options.data_get ?? options.data ?? {}).then((value) => {
+		if (value) {
+			state.value = value;
+			const cleanData = JSON.parse(JSON.stringify(value));
+			localStorage.setItem(key, JSON.stringify(cleanData));
+		}
+	});
+	return state;
+}
+var useRefCachedApi = useCachedApi;
+var useSharedCacheApi = useCachedApi;
+var useInCacheApi = useCachedApi;
+//#endregion
+//#region src/Composables/useRefCached.ts
 function useRefCached(key, default_value = null) {
 	localforage.config({
 		name: "caches",
@@ -119,14 +142,18 @@ var Composables_exports = /* @__PURE__ */ __exportAll({
 	refAutoReset: () => refAutoReset,
 	timeAgo: () => timeAgo,
 	useCached: () => useCached,
+	useCachedApi: () => useCachedApi,
 	useDefaultReset: () => useDefaultReset,
+	useInCacheApi: () => useInCacheApi,
 	useRefCached: () => useRefCached,
+	useRefCachedApi: () => useRefCachedApi,
 	useRefStorage: () => useRefStorage,
 	useSharedCache: () => useSharedCache,
+	useSharedCacheApi: () => useSharedCacheApi,
 	useStorage: () => useStorage,
 	useTimeAgo: () => useTimeAgo
 });
 //#endregion
-export { refAutoReset, Composables_exports as t, timeAgo, useCached, useDefaultReset, useRefCached, useRefStorage, useSharedCache, useStorage, useTimeAgo };
+export { refAutoReset, Composables_exports as t, timeAgo, useCached, useCachedApi, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo };
 
 //# sourceMappingURL=composables.es.js.map

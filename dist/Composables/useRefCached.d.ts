@@ -3,4 +3,4 @@ export declare const useRefStorage: typeof useRefCached;
 export declare const useCached: typeof useRefCached;
 export declare const useSharedCache: typeof useRefCached;
 export declare const useStorage: typeof useRefCached;
-//# sourceMappingURL=useRefStorage.d.ts.map
+//# sourceMappingURL=useRefCached.d.ts.map

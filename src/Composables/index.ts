@@ -1,3 +1,4 @@
 export * from './useDefaultReset';
-export * from './useRefStorage';
+export * from './useRefCachedApi';
+export * from './useRefCached';
 export * from './useTimeAgo';

@@ -721,6 +721,17 @@ export declare const _: {
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     useDefaultReset<T>(initialData: T, timer?: number | null): Composables.DefaultResetRef<T>;
     refAutoReset: typeof Composables.useDefaultReset;
+    useCachedApi<T>(route_name: string, options?: {
+        data_get?: any;
+        data?: any;
+        key?: string | null;
+        defaultValue?: any;
+        sync?: boolean;
+        watch?: boolean;
+    }): import('vue').Ref<T | null>;
+    useRefCachedApi: typeof Composables.useCachedApi;
+    useSharedCacheApi: typeof Composables.useCachedApi;
+    useInCacheApi: typeof Composables.useCachedApi;
     useRefCached(key: string, default_value?: any): any;
     useRefStorage: typeof Composables.useRefCached;
     useCached: typeof Composables.useRefCached;
