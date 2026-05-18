@@ -17,6 +17,17 @@ import { refAutoReset, t as Composables_exports, timeAgo, useCached, useCachedAp
 import { apiDeleteRoute, apiPostRoute, apiPutRoute, apiUploadRoute, getRoute, getRouteByName, goToRoute, goToRouteByName, setLibraryRouter, t as Routes_exports } from "./routes.es.js";
 import { assert, bypassFilter, camelize, clamp, cloneFnJSON, computedAsync, computedInject, computedWithControl, containsProp, createEventHook, createFetch, createFilterWrapper, createGlobalState, createInjectionState, createRef, createReusableTemplate, createSharedComposable, createSingletonPromise, createTemplatePromise, createUnrefFn, debounceFilter, extendRef, formatDate, formatTimeAgo, formatTimeAgoIntl, formatTimeAgoIntlParts, getLifeCycleTarget, getSSRHandler, hasOwn, hyphenate, identity, increaseWithUnit, injectLocal, invoke, isDef, isDefined, makeDestructurable, mapGamepadToXbox360Controller, noop, normalizeDate, notNullish, objectEntries, objectOmit, objectPick, onClickOutside, onElementRemoval, onKeyDown, onKeyPressed, onKeyStroke, onKeyUp, onLongPress, onStartTyping, pausableFilter, promiseTimeout, provideLocal, provideSSRWidth, pxValue, rand, reactify, reactifyObject, reactiveComputed, reactiveOmit, reactivePick, refDebounced, refDefault, refManualReset, refThrottled, refWithControl, setSSRHandler, syncRef, syncRefs, t as VueUse_exports, throttleFilter, timestamp, toArray, toReactive, transition, tryOnBeforeMount, tryOnBeforeUnmount, tryOnMounted, tryOnScopeDispose, tryOnUnmounted, unrefElement, until, useActiveElement, useAnimate, useArrayDifference, useArrayEvery, useArrayFilter, useArrayFind, useArrayFindIndex, useArrayFindLast, useArrayIncludes, useArrayJoin, useArrayMap, useArrayReduce, useArraySome, useArrayUnique, useAsyncQueue, useAsyncState, useBase64, useBattery, useBluetooth, useBreakpoints, useBroadcastChannel, useBrowserLocation, useClipboard, useClipboardItems, useCloned, useColorMode, useConfirmDialog, useCountdown, useCounter, useCssSupports, useCssVar, useCurrentElement, useCycleList, useDark, useDateFormat, useDebounceFn, useDebouncedRefHistory, useDeviceMotion, useDeviceOrientation, useDevicePixelRatio, useDevicesList, useDisplayMedia, useDocumentVisibility, useDraggable, useDropZone, useElementBounding, useElementByPoint, useElementHover, useElementSize, useElementVisibility, useEventBus, useEventListener, useEventSource, useEyeDropper, useFavicon, useFetch, useFileDialog, useFileSystemAccess, useFocus, useFocusWithin, useFps, useFullscreen, useGamepad, useGeolocation, useIdle, useImage, useInfiniteScroll, useIntersectionObserver, useInterval, useIntervalFn, useKeyModifier, useLastChanged, useLocalStorage, useMagicKeys, useManualRefHistory, useMediaControls, useMediaQuery, useMemoize, useMemory, useMounted, useMouse, useMouseInElement, useMousePressed, useMutationObserver, useNavigatorLanguage, useNetwork, useNow, useObjectUrl, useOffsetPagination, useOnline, usePageLeave, useParallax, useParentElement, usePerformanceObserver, usePermission, usePointer, usePointerLock, usePointerSwipe, usePreferredColorScheme, usePreferredContrast, usePreferredDark, usePreferredLanguages, usePreferredReducedMotion, usePreferredReducedTransparency, usePrevious, useRafFn, useRefHistory, useResizeObserver, useSSRWidth, useScreenOrientation, useScreenSafeArea, useScriptTag, useScroll, useScrollLock, useSessionStorage, useShare, useSorted, useSpeechRecognition, useSpeechSynthesis, useStepper, useStorageAsync, useStyleTag, useSupported, useSwipe, useTemplateRefsList, useTextDirection, useTextSelection, useTextareaAutosize, useThrottleFn, useThrottledRefHistory, useTimeAgoIntl, useTimeout, useTimeoutFn, useTimeoutPoll, useTimestamp, useTitle, useToNumber, useToString, useToggle, useTransition, useUrlSearchParams, useUserMedia, useVModel, useVModels, useVibrate, useVirtualList, useWakeLock, useWebNotification, useWebSocket, useWebWorker, useWebWorkerFn, useWindowFocus, useWindowScroll, useWindowSize, vueUse, watchArray, watchAtMost, watchDebounced, watchDeep, watchIgnorable, watchImmediate, watchOnce, watchThrottled, watchTriggerable, watchWithFilter, whenever } from "./vueuse.es.js";
 import * as lodash from "lodash-es";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+//#region src/scripts/generateList.ts
+var __filename = fileURLToPath(import.meta.url);
+var __dirname = path.dirname(__filename);
+function saveInJson(relative_path, data) {
+	const outputFile = path.resolve(__dirname, relative_path);
+	fs.writeFileSync(outputFile, JSON.stringify(data, null, 2));
+}
+//#endregion
 //#region src/Helpers/maxUseItems.ts
 /**
 * Retorna a lista de todos os nomes de exports disponíveis na biblioteca MaxUse.
@@ -43,7 +54,9 @@ var maxUseItems = () => {
 		if (["vueUse"].includes(key)) continue;
 		allKeys.add(key);
 	}
-	return Array.from(allKeys).sort();
+	const valueReturn = Array.from(allKeys).sort();
+	saveInJson("./all-modules.json", valueReturn);
+	return valueReturn;
 };
 var autoImport = () => {
 	return { "@maxvue/max-use": [

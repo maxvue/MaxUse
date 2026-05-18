@@ -1,3 +1,4 @@
+import { saveInJson } from '../scripts/generateList';
 import * as Composables from '../Composables';
 import * as Routes from '../Routes';
 import * as Browser from './Browser';
@@ -42,7 +43,11 @@ export const maxUseItems = (): string[] => {
     }
 
 
-    return Array.from(allKeys).sort();
+    const valueReturn = Array.from(allKeys).sort();
+
+    saveInJson('./all-modules.json', valueReturn);
+
+    return valueReturn;
 };
 
 const autoImport = () => {
