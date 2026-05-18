@@ -73,11 +73,17 @@ export const getVueUseTypes = (): [string, string][] => {
         const path = require('node:path');
         const dtsPath = path.resolve(process.cwd(), 'node_modules/@vueuse/core/dist/index.d.ts');
 
-        if (!fs.existsSync(dtsPath)) return [];
+        if (!fs.existsSync(dtsPath)) {
+            console.error('dtsPath not found:', dtsPath);
+            return [];
+        }
 
         const content = fs.readFileSync(dtsPath, 'utf-8');
         const exportMatch = content.match(/export\s*\{([^}]+)\}/g);
-        if (!exportMatch) return [];
+        if (!exportMatch) {
+            console.error('exportMatch failed');
+            return [];
+        }
 
         const lastExport = exportMatch[exportMatch.length - 1];
         const allExports = lastExport
@@ -89,8 +95,30 @@ export const getVueUseTypes = (): [string, string][] => {
         const valueKeys = Object.keys(VueUse);
         const typeExports = allExports.filter((name: string) => !valueKeys.includes(name));
 
-        return typeExports.map((name: string) => [name, `type ${name}`]);
+        const types = typeExports.map((name: string) => [name, `type ${name}`]) as [string, string][];
+
+        // Let's grab the types from @vueuse/shared as well
+        const sharedDtsPath = path.resolve(process.cwd(), 'node_modules/@vueuse/shared/dist/index.d.ts');
+        if (fs.existsSync(sharedDtsPath)) {
+            const sharedContent = fs.readFileSync(sharedDtsPath, 'utf-8');
+            const sharedExportMatch = sharedContent.match(/export\s*\{([^}]+)\}/g);
+            if (sharedExportMatch) {
+                const sharedLastExport = sharedExportMatch[sharedExportMatch.length - 1];
+                const sharedAllExports = sharedLastExport
+                    .replace(/export\s*\{|\}/g, '')
+                    .split(',')
+                    .map((s: string) => s.trim())
+                    .filter(Boolean);
+
+                const sharedTypeExports = sharedAllExports.filter((name: string) => !valueKeys.includes(name));
+                const sharedTypes = sharedTypeExports.map((name: string) => [name, `type ${name}`]) as [string, string][];
+                types.push(...sharedTypes);
+            }
+        }
+
+        return types;
     } catch (e) {
+        console.error('Error in getVueUseTypes:', e);
         return [];
     }
 };

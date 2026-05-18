@@ -1,8 +1,8 @@
 import * as vueUseCore from '@vueuse/core';
 
-export const vueUse = vueUseCore;
+export * as vueUse from '@vueuse/core';
 export type * from '@vueuse/core';
-
+export type * as vueUseTypes from '@vueuse/core';
 
 export const assert = vueUseCore.assert;
 export const bypassFilter = vueUseCore.bypassFilter;
