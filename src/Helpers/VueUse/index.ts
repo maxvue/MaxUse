@@ -1,6 +1,7 @@
 import * as vueUseCore from '@vueuse/core';
 
 export const vueUse = vueUseCore;
+export type * from '@vueuse/core';
 
 
 export const assert = vueUseCore.assert;

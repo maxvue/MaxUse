@@ -1,5 +1,6 @@
 import * as vueUseCore from '@vueuse/core';
 export declare const vueUse: typeof vueUseCore;
+export type * from '@vueuse/core';
 export declare const assert: (condition: boolean, ...infos: any[]) => void;
 export declare const bypassFilter: vueUseCore.EventFilter<any[], any, vueUseCore.AnyFn>;
 export declare const camelize: (str: string) => string;
