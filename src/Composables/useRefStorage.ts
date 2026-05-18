@@ -1,7 +1,7 @@
 import localforage from 'localforage';
 import { watchDebounced, useStorage as vueUseStorage } from '@vueuse/core';
 
-export function useCached(key: string, default_value: any = null): any {
+export function useRefCached(key: string, default_value: any = null): any {
     localforage.config({ name: 'caches', storeName: 'use-ref-storages' });
 
     const state = vueUseStorage(key, default_value);
@@ -12,7 +12,7 @@ export function useCached(key: string, default_value: any = null): any {
     return state;
 }
 
-export const useRefStorage = useCached;
-export const useRefCached = useCached;
-export const useSharedCache = useCached;
-export const useStorage = useCached;
+export const useRefStorage = useRefCached;
+export const useCached = useRefCached;
+export const useSharedCache = useRefCached;
+export const useStorage = useRefCached;

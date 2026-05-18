@@ -1,6 +1,6 @@
-export declare function useCached(key: string, default_value?: any): any;
-export declare const useRefStorage: typeof useCached;
-export declare const useRefCached: typeof useCached;
-export declare const useSharedCache: typeof useCached;
-export declare const useStorage: typeof useCached;
+export declare function useRefCached(key: string, default_value?: any): any;
+export declare const useRefStorage: typeof useRefCached;
+export declare const useCached: typeof useRefCached;
+export declare const useSharedCache: typeof useRefCached;
+export declare const useStorage: typeof useRefCached;
 //# sourceMappingURL=useRefStorage.d.ts.map
