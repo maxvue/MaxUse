@@ -56,8 +56,6 @@ function useRefCached(key, default_value) {
 		storeName: "use-ref-storages"
 	});
 	const state = ref();
-	state.key = key;
-	state.clearCache = () => localforage.removeItem(key);
 	state.value = default_value;
 	localforage.getItem(key).then((value) => state.value = value ? value : default_value);
 	watchDebounced(state, () => localforage.setItem(key, JSON.parse(JSON.stringify(state.value))), { debounce: 600 });

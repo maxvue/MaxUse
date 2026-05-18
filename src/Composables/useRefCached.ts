@@ -3,17 +3,11 @@ import { watchDebounced, useStorage as vueUseStorage, type RemovableRef } from '
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-export interface RefCached<T> extends Ref<T> {
-    key: string;
-    clearCache: () => void;
-};
 
-export function useRefCached<T>(key: string, default_value: T): RefCached<T> {
+export function useRefCached<T>(key: string, default_value: T): Ref {
     localforage.config({ name: 'caches', storeName: 'use-ref-storages' });
 
-    const state = ref<T>() as RefCached<T>;
-    state.key = key;
-    state.clearCache = () => localforage.removeItem(key);
+    const state = ref<T>();
     state.value = default_value;
 
     localforage.getItem(key).then((value: any) => state.value = value ? value : default_value);
