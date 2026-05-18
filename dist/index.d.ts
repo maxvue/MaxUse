@@ -20,6 +20,11 @@ export * from './Helpers/Types';
 export * from './Helpers/Validations';
 export * from './Helpers/Electrical';
 export * from './Helpers/Format';
+export * from './Helpers/VueUse';
+export { refAutoReset, useCached, useStorage, useTimeAgo } from './Composables';
+export { now } from './Helpers/Dates';
+export { get, set } from './Helpers/Objects';
+export { isObject } from './Helpers/Types';
 export { maxUseItems, maxUseAutoImport } from './Helpers/maxUseItems';
 /**
  * Objeto centralizado de helpers, semelhante ao Lodash (_).
