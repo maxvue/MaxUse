@@ -3,7 +3,5 @@
  * Gera a lista dinamicamente a partir dos módulos fonte.
  */
 export declare const maxUseItems: () => string[];
-export declare const maxUseAutoImport: {
-    "@maxvue/max-use": (string | string[])[];
-};
+export declare const maxUseAutoImport: any;
 //# sourceMappingURL=maxUseItems.d.ts.map

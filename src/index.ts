@@ -1,4 +1,6 @@
 import * as vueUse from '@vueuse/core';
+export * as vueUse from '@vueuse/core';
+
 import * as lodash from 'lodash-es';
 
 import * as Browser from './Helpers/Browser';

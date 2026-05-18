@@ -45,4 +45,4 @@ export const maxUseItems = (): string[] => {
     return Array.from(allKeys).sort();
 };
 
-export const maxUseAutoImport = autoImportData;
+export const maxUseAutoImport = autoImportData as any;

@@ -1,2560 +1,984 @@
-declare const _default: {
-  "@maxvue/max-use": [
-    "Obj",
-    "Random",
-    "Str",
-    "StrCase",
-    "StrFilter",
-    "addTime",
-    "apiDeleteRoute",
-    "apiGetRoute",
-    "apiPostRoute",
-    "apiPutRoute",
-    "apiUploadRoute",
-    "assert",
-    "average",
-    "blank",
-    "bypassFilter",
-    "calculaCabo",
-    "camelCase",
-    "camelize",
-    "canIterate",
-    "capitalize",
-    "cep",
-    "cepIsValid",
-    "chunk",
-    "clamp",
-    "cloneDeep",
-    "cloneFnJSON",
-    "cnpj",
-    "cnpjIsValid",
-    "cnpjOrCpf",
-    "computedAsync",
-    "computedInject",
-    "computedWithControl",
-    "containsProp",
-    "countBy",
-    "cpf",
-    "cpfCnpjIsValid",
-    "cpfIsValid",
-    "cpfOrCnpj",
-    "cpfcnpj",
-    "createEventHook",
-    "createFetch",
-    "createFilterWrapper",
-    "createGlobalState",
-    "createInjectionState",
-    "createRef",
-    "createReusableTemplate",
-    "createSharedComposable",
-    "createSingletonPromise",
-    "createTemplatePromise",
-    "createUnrefFn",
-    "daysAgo",
-    "debounceFilter",
-    "deepClone",
-    "deepMerge",
-    "diff",
-    "diffInDays",
-    "diffInHours",
-    "diffInMinutes",
-    "diffInMonths",
-    "diffInSeconds",
-    "diffInYears",
-    "eMail",
-    "eMailIsValid",
-    "electric",
-    "electrical",
-    "email",
-    "emailIsValid",
-    "empty",
-    "extendRef",
-    "filter",
-    "filterBy",
-    "filterByNot",
-    "findLast",
-    "first",
-    "format",
-    "formatBytes",
-    "formatCep",
-    "formatCnpj",
-    "formatCpf",
-    "formatCpfCnpj",
-    "formatCurrency",
-    "formatDate",
-    "formatPhone",
-    "formatTimeAgo",
-    "formatTimeAgoIntl",
-    "formatTimeAgoIntlParts",
-    "get",
-    "getColorFromVar",
-    "getLifeCycleTarget",
-    "getRoute",
-    "getRouteByName",
-    "getSSRHandler",
-    "goToRoute",
-    "goToRouteByName",
-    "groupBy",
-    "hasContent",
-    "hasContentFn",
-    "hasEMail",
-    "hasEmail",
-    "hasOwn",
-    "hasPassedDays",
-    "hasPassedHours",
-    "hasPassedMinutes",
-    "hasValidCep",
-    "hasValidCnpj",
-    "hasValidCnpjOrCpf",
-    "hasValidCpf",
-    "hasValidCpfCnpj",
-    "hasValidCpfOrCnpj",
-    "hasValidEMail",
-    "hasValidEmail",
-    "hoursAgo",
-    "hyphenate",
-    "identity",
-    "inDateInterval",
-    "increaseWithUnit",
-    "initials",
-    "injectLocal",
-    "intervalRandom",
-    "invoke",
-    "isArray",
-    "isBlank",
-    "isCepValid",
-    "isCnpj",
-    "isCnpjOrCpf",
-    "isCpf",
-    "isCpfCnpj",
-    "isCpfOrCnpj",
-    "isDate",
-    "isDef",
-    "isDefined",
-    "isEMail",
-    "isEmail",
-    "isEmpty",
-    "isEqual",
-    "isFuture",
-    "isInDateInterval",
-    "isIterable",
-    "isNotEmpty",
-    "isNotValid",
-    "isNumber",
-    "isNumeric",
-    "isObject",
-    "isPast",
-    "isSameDay",
-    "isTouchDevice",
-    "isValid",
-    "isValidCep",
-    "isValidCnpj",
-    "isValidCnpjOrCpf",
-    "isValidCpf",
-    "isValidCpfCnpj",
-    "isValidCpfOrCnpj",
-    "isValidEMail",
-    "isValidEmail",
-    "isWeekend",
-    "kebabCase",
-    "keyBy",
-    "last",
-    "makeDestructurable",
-    "mapGamepadToXbox360Controller",
-    "mapValues",
-    "maskSensitive",
-    "median",
-    "minutesAgo",
-    "monthsAgo",
-    "noEmpty",
-    "noHtml",
-    "noop",
-    "normalizeDate",
-    "normalizeToSearch",
-    "notEmpty",
-    "notHasValidContent",
-    "notNullish",
-    "now",
-    "numeric",
-    "objectEntries",
-    "objectOmit",
-    "objectPick",
-    "omit",
-    "onClickOutside",
-    "onElementRemoval",
-    "onKeyDown",
-    "onKeyPressed",
-    "onKeyStroke",
-    "onKeyUp",
-    "onLongPress",
-    "onStartTyping",
-    "onlyLetters",
-    "onlyLettersAndNumbers",
-    "onlyNumbers",
-    "onlySymbols",
-    "orderBy",
-    "orderByWithKey",
-    "pausableFilter",
-    "pick",
-    "promiseTimeout",
-    "provideLocal",
-    "provideSSRWidth",
-    "pxValue",
-    "rand",
-    "reactify",
-    "reactifyObject",
-    "reactiveComputed",
-    "reactiveOmit",
-    "reactivePick",
-    "readingTime",
-    "refAutoReset",
-    "refDebounced",
-    "refDefault",
-    "refManualReset",
-    "refThrottled",
-    "refWithControl",
-    "removeSpaces",
-    "renameKeys",
-    "roundDown",
-    "roundUp",
-    "sample",
-    "secondsAgo",
-    "set",
-    "setLibraryRouter",
-    "setSSRHandler",
-    "shuffle",
-    "size",
-    "slugify",
-    "snakeCase",
-    "sortBy",
-    "sortByMulti",
-    "stripHtml",
-    "sum",
-    "sumBy",
-    "syncRef",
-    "syncRefs",
-    "throttleFilter",
-    "timeAgo",
-    "timestamp",
-    "toArray",
-    "toNumber",
-    "toReactive",
-    "toSearchableString",
-    "transition",
-    "truncate",
-    "tryOnBeforeMount",
-    "tryOnBeforeUnmount",
-    "tryOnMounted",
-    "tryOnScopeDispose",
-    "tryOnUnmounted",
-    "ulid",
-    "uniq",
-    "uniqueBy",
-    "unrefElement",
-    "unset",
-    "until",
-    "useActiveElement",
-    "useAnimate",
-    "useArrayDifference",
-    "useArrayEvery",
-    "useArrayFilter",
-    "useArrayFind",
-    "useArrayFindIndex",
-    "useArrayFindLast",
-    "useArrayIncludes",
-    "useArrayJoin",
-    "useArrayMap",
-    "useArrayReduce",
-    "useArraySome",
-    "useArrayUnique",
-    "useAsyncQueue",
-    "useAsyncState",
-    "useBase64",
-    "useBattery",
-    "useBluetooth",
-    "useBreakpoints",
-    "useBroadcastChannel",
-    "useBrowserLocation",
-    "useCached",
-    "useCachedApi",
-    "useClipboard",
-    "useClipboardItems",
-    "useCloned",
-    "useColorMode",
-    "useConfirmDialog",
-    "useCountdown",
-    "useCounter",
-    "useCssSupports",
-    "useCssVar",
-    "useCurrentElement",
-    "useCycleList",
-    "useDark",
-    "useDateFormat",
-    "useDebounceFn",
-    "useDebouncedRefHistory",
-    "useDefaultReset",
-    "useDeviceMotion",
-    "useDeviceOrientation",
-    "useDevicePixelRatio",
-    "useDevicesList",
-    "useDisplayMedia",
-    "useDocumentVisibility",
-    "useDraggable",
-    "useDropZone",
-    "useElementBounding",
-    "useElementByPoint",
-    "useElementHover",
-    "useElementSize",
-    "useElementVisibility",
-    "useEventBus",
-    "useEventListener",
-    "useEventSource",
-    "useEyeDropper",
-    "useFavicon",
-    "useFetch",
-    "useFileDialog",
-    "useFileSystemAccess",
-    "useFocus",
-    "useFocusWithin",
-    "useFps",
-    "useFullscreen",
-    "useGamepad",
-    "useGeolocation",
-    "useIdle",
-    "useImage",
-    "useInCacheApi",
-    "useInfiniteScroll",
-    "useIntersectionObserver",
-    "useInterval",
-    "useIntervalFn",
-    "useKeyModifier",
-    "useLastChanged",
-    "useLocalStorage",
-    "useMagicKeys",
-    "useManualRefHistory",
-    "useMediaControls",
-    "useMediaQuery",
-    "useMemoize",
-    "useMemory",
-    "useMounted",
-    "useMouse",
-    "useMouseInElement",
-    "useMousePressed",
-    "useMutationObserver",
-    "useNavigatorLanguage",
-    "useNetwork",
-    "useNow",
-    "useObjectUrl",
-    "useOffsetPagination",
-    "useOnline",
-    "usePageLeave",
-    "useParallax",
-    "useParentElement",
-    "usePerformanceObserver",
-    "usePermission",
-    "usePointer",
-    "usePointerLock",
-    "usePointerSwipe",
-    "usePreferredColorScheme",
-    "usePreferredContrast",
-    "usePreferredDark",
-    "usePreferredLanguages",
-    "usePreferredReducedMotion",
-    "usePreferredReducedTransparency",
-    "usePrevious",
-    "useRafFn",
-    "useRefCached",
-    "useRefCachedApi",
-    "useRefHistory",
-    "useRefStorage",
-    "useResizeObserver",
-    "useSSRWidth",
-    "useScreenOrientation",
-    "useScreenSafeArea",
-    "useScriptTag",
-    "useScroll",
-    "useScrollLock",
-    "useSessionStorage",
-    "useShare",
-    "useSharedCache",
-    "useSharedCacheApi",
-    "useSorted",
-    "useSpeechRecognition",
-    "useSpeechSynthesis",
-    "useStepper",
-    "useStorage",
-    "useStorageAsync",
-    "useStyleTag",
-    "useSupported",
-    "useSwipe",
-    "useTemplateRefsList",
-    "useTextDirection",
-    "useTextSelection",
-    "useTextareaAutosize",
-    "useThrottleFn",
-    "useThrottledRefHistory",
-    "useTimeAgo",
-    "useTimeAgoIntl",
-    "useTimeout",
-    "useTimeoutFn",
-    "useTimeoutPoll",
-    "useTimestamp",
-    "useTitle",
-    "useToNumber",
-    "useToString",
-    "useToggle",
-    "useTransition",
-    "useUrlSearchParams",
-    "useUserMedia",
-    "useVModel",
-    "useVModels",
-    "useVibrate",
-    "useVirtualList",
-    "useWakeLock",
-    "useWebNotification",
-    "useWebSocket",
-    "useWebWorker",
-    "useWebWorkerFn",
-    "useWindowFocus",
-    "useWindowScroll",
-    "useWindowSize",
-    "validCnpj",
-    "validCnpjOrCpf",
-    "validCpf",
-    "validCpfCnpj",
-    "validCpfOrCnpj",
-    "validEMail",
-    "validEmail",
-    "validate",
-    "valuesInKey",
-    "watchArray",
-    "watchAtMost",
-    "watchDebounced",
-    "watchDeep",
-    "watchIgnorable",
-    "watchImmediate",
-    "watchOnce",
-    "watchThrottled",
-    "watchTriggerable",
-    "watchWithFilter",
-    "whenever",
-    "wireSize",
-    "yearsAgo",
-    "_",
-    "vueUse",
-    [
-      "AfterFetchContext",
-      "type AfterFetchContext"
-    ],
-    [
-      "AsyncComputedOnCancel",
-      "type AsyncComputedOnCancel"
-    ],
-    [
-      "AsyncComputedOptions",
-      "type AsyncComputedOptions"
-    ],
-    [
-      "BasicColorMode",
-      "type BasicColorMode"
-    ],
-    [
-      "BasicColorSchema",
-      "type BasicColorSchema"
-    ],
-    [
-      "BatteryManager",
-      "type BatteryManager"
-    ],
-    [
-      "BeforeFetchContext",
-      "type BeforeFetchContext"
-    ],
-    [
-      "Breakpoints",
-      "type Breakpoints"
-    ],
-    [
-      "BrowserLocationState",
-      "type BrowserLocationState"
-    ],
-    [
-      "CloneFn",
-      "type CloneFn"
-    ],
-    [
-      "ColorSchemeType",
-      "type ColorSchemeType"
-    ],
-    [
-      "ComputedInjectGetter",
-      "type ComputedInjectGetter"
-    ],
-    [
-      "ComputedInjectGetterWithDefault",
-      "type ComputedInjectGetterWithDefault"
-    ],
-    [
-      "ComputedInjectSetter",
-      "type ComputedInjectSetter"
-    ],
-    [
-      "ConfigurableDeepRefs",
-      "type ConfigurableDeepRefs"
-    ],
-    [
-      "ConfigurableDocument",
-      "type ConfigurableDocument"
-    ],
-    [
-      "ConfigurableDocumentOrShadowRoot",
-      "type ConfigurableDocumentOrShadowRoot"
-    ],
-    [
-      "ConfigurableLocation",
-      "type ConfigurableLocation"
-    ],
-    [
-      "ConfigurableNavigator",
-      "type ConfigurableNavigator"
-    ],
-    [
-      "ConfigurableScheduler",
-      "type ConfigurableScheduler"
-    ],
-    [
-      "ConfigurableWindow",
-      "type ConfigurableWindow"
-    ],
-    [
-      "ContrastType",
-      "type ContrastType"
-    ],
-    [
-      "CreateFetchOptions",
-      "type CreateFetchOptions"
-    ],
-    [
-      "CreateReusableTemplateOptions",
-      "type CreateReusableTemplateOptions"
-    ],
-    [
-      "CubicBezierPoints",
-      "type CubicBezierPoints"
-    ],
-    [
-      "DefaultMagicKeysAliasMap",
-      "type DefaultMagicKeysAliasMap"
-    ],
-    [
-      "DefineTemplateComponent",
-      "type DefineTemplateComponent"
-    ],
-    [
-      "DeviceMotionOptions",
-      "type DeviceMotionOptions"
-    ],
-    [
-      "DocumentEventName",
-      "type DocumentEventName"
-    ],
-    [
-      "EasingFunction",
-      "type EasingFunction"
-    ],
-    [
-      "ElementSize",
-      "type ElementSize"
-    ],
-    [
-      "EventBusEvents",
-      "type EventBusEvents"
-    ],
-    [
-      "EventBusIdentifier",
-      "type EventBusIdentifier"
-    ],
-    [
-      "EventBusKey",
-      "type EventBusKey"
-    ],
-    [
-      "EventBusListener",
-      "type EventBusListener"
-    ],
-    [
-      "EventSourceStatus",
-      "type EventSourceStatus"
-    ],
-    [
-      "EyeDropper",
-      "type EyeDropper"
-    ],
-    [
-      "EyeDropperOpenOptions",
-      "type EyeDropperOpenOptions"
-    ],
-    [
-      "FileSystemAccessShowOpenFileOptions",
-      "type FileSystemAccessShowOpenFileOptions"
-    ],
-    [
-      "FileSystemAccessShowSaveFileOptions",
-      "type FileSystemAccessShowSaveFileOptions"
-    ],
-    [
-      "FileSystemAccessWindow",
-      "type FileSystemAccessWindow"
-    ],
-    [
-      "FileSystemFileHandle",
-      "type FileSystemFileHandle"
-    ],
-    [
-      "FormatTimeAgoIntlOptions",
-      "type FormatTimeAgoIntlOptions"
-    ],
-    [
-      "FormatTimeAgoOptions",
-      "type FormatTimeAgoOptions"
-    ],
-    [
-      "GeneralEventListener",
-      "type GeneralEventListener"
-    ],
-    [
-      "GeneralPermissionDescriptor",
-      "type GeneralPermissionDescriptor"
-    ],
-    [
-      "InterpolationFunction",
-      "type InterpolationFunction"
-    ],
-    [
-      "KeyFilter",
-      "type KeyFilter"
-    ],
-    [
-      "KeyModifier",
-      "type KeyModifier"
-    ],
-    [
-      "KeyPredicate",
-      "type KeyPredicate"
-    ],
-    [
-      "KeyStrokeEventName",
-      "type KeyStrokeEventName"
-    ],
-    [
-      "MagicKeysInternal",
-      "type MagicKeysInternal"
-    ],
-    [
-      "MaybeComputedElementRef",
-      "type MaybeComputedElementRef"
-    ],
-    [
-      "MaybeElement",
-      "type MaybeElement"
-    ],
-    [
-      "MaybeElementRef",
-      "type MaybeElementRef"
-    ],
-    [
-      "MemoryInfo",
-      "type MemoryInfo"
-    ],
-    [
-      "MouseInElementOptions",
-      "type MouseInElementOptions"
-    ],
-    [
-      "MousePressedOptions",
-      "type MousePressedOptions"
-    ],
-    [
-      "NavigatorLanguageState",
-      "type NavigatorLanguageState"
-    ],
-    [
-      "NetworkEffectiveType",
-      "type NetworkEffectiveType"
-    ],
-    [
-      "NetworkState",
-      "type NetworkState"
-    ],
-    [
-      "NetworkType",
-      "type NetworkType"
-    ],
-    [
-      "OnClickOutsideHandler",
-      "type OnClickOutsideHandler"
-    ],
-    [
-      "OnClickOutsideOptions",
-      "type OnClickOutsideOptions"
-    ],
-    [
-      "OnClickOutsideReturn",
-      "type OnClickOutsideReturn"
-    ],
-    [
-      "OnElementRemovalOptions",
-      "type OnElementRemovalOptions"
-    ],
-    [
-      "OnFetchErrorContext",
-      "type OnFetchErrorContext"
-    ],
-    [
-      "OnKeyStrokeOptions",
-      "type OnKeyStrokeOptions"
-    ],
-    [
-      "OnLongPressModifiers",
-      "type OnLongPressModifiers"
-    ],
-    [
-      "OnLongPressOptions",
-      "type OnLongPressOptions"
-    ],
-    [
-      "OnLongPressReturn",
-      "type OnLongPressReturn"
-    ],
-    [
-      "OrientationLockType",
-      "type OrientationLockType"
-    ],
-    [
-      "OrientationType",
-      "type OrientationType"
-    ],
-    [
-      "PointerType",
-      "type PointerType"
-    ],
-    [
-      "Position",
-      "type Position"
-    ],
-    [
-      "ReducedMotionType",
-      "type ReducedMotionType"
-    ],
-    [
-      "ReducedTransparencyType",
-      "type ReducedTransparencyType"
-    ],
-    [
-      "RenderableComponent",
-      "type RenderableComponent"
-    ],
-    [
-      "ResizeObserverCallback",
-      "type ResizeObserverCallback"
-    ],
-    [
-      "ResizeObserverEntry",
-      "type ResizeObserverEntry"
-    ],
-    [
-      "ResizeObserverSize",
-      "type ResizeObserverSize"
-    ],
-    [
-      "ReusableTemplatePair",
-      "type ReusableTemplatePair"
-    ],
-    [
-      "ReuseTemplateComponent",
-      "type ReuseTemplateComponent"
-    ],
-    [
-      "SSRHandlersMap",
-      "type SSRHandlersMap"
-    ],
-    [
-      "ScreenOrientation",
-      "type ScreenOrientation"
-    ],
-    [
-      "Serializer",
-      "type Serializer"
-    ],
-    [
-      "SerializerAsync",
-      "type SerializerAsync"
-    ],
-    [
-      "ShadowRootEventName",
-      "type ShadowRootEventName"
-    ],
-    [
-      "StorageEventLike",
-      "type StorageEventLike"
-    ],
-    [
-      "StorageLike",
-      "type StorageLike"
-    ],
-    [
-      "StorageLikeAsync",
-      "type StorageLikeAsync"
-    ],
-    [
-      "StorageSerializers",
-      "type StorageSerializers"
-    ],
-    [
-      "Supportable",
-      "type Supportable"
-    ],
-    [
-      "TemplatePromise",
-      "type TemplatePromise"
-    ],
-    [
-      "TemplatePromiseOptions",
-      "type TemplatePromiseOptions"
-    ],
-    [
-      "TemplatePromiseProps",
-      "type TemplatePromiseProps"
-    ],
-    [
-      "TemplateRefsList",
-      "type TemplateRefsList"
-    ],
-    [
-      "TimeAgoUnit",
-      "type TimeAgoUnit"
-    ],
-    [
-      "ToDataURLOptions",
-      "type ToDataURLOptions"
-    ],
-    [
-      "TransitionOptions",
-      "type TransitionOptions"
-    ],
-    [
-      "TransitionPresets",
-      "type TransitionPresets"
-    ],
-    [
-      "UnRefElementReturn",
-      "type UnRefElementReturn"
-    ],
-    [
-      "UnrefFn",
-      "type UnrefFn"
-    ],
-    [
-      "UrlParams",
-      "type UrlParams"
-    ],
-    [
-      "UseActiveElementOptions",
-      "type UseActiveElementOptions"
-    ],
-    [
-      "UseActiveElementReturn",
-      "type UseActiveElementReturn"
-    ],
-    [
-      "UseAnimateKeyframes",
-      "type UseAnimateKeyframes"
-    ],
-    [
-      "UseAnimateOptions",
-      "type UseAnimateOptions"
-    ],
-    [
-      "UseAnimateReturn",
-      "type UseAnimateReturn"
-    ],
-    [
-      "UseAsyncQueueOptions",
-      "type UseAsyncQueueOptions"
-    ],
-    [
-      "UseAsyncQueueResult",
-      "type UseAsyncQueueResult"
-    ],
-    [
-      "UseAsyncQueueReturn",
-      "type UseAsyncQueueReturn"
-    ],
-    [
-      "UseAsyncQueueTask",
-      "type UseAsyncQueueTask"
-    ],
-    [
-      "UseAsyncStateOptions",
-      "type UseAsyncStateOptions"
-    ],
-    [
-      "UseAsyncStateReturn",
-      "type UseAsyncStateReturn"
-    ],
-    [
-      "UseAsyncStateReturnBase",
-      "type UseAsyncStateReturnBase"
-    ],
-    [
-      "UseBase64ObjectOptions",
-      "type UseBase64ObjectOptions"
-    ],
-    [
-      "UseBase64Options",
-      "type UseBase64Options"
-    ],
-    [
-      "UseBase64Return",
-      "type UseBase64Return"
-    ],
-    [
-      "UseBatteryOptions",
-      "type UseBatteryOptions"
-    ],
-    [
-      "UseBatteryReturn",
-      "type UseBatteryReturn"
-    ],
-    [
-      "UseBluetoothOptions",
-      "type UseBluetoothOptions"
-    ],
-    [
-      "UseBluetoothRequestDeviceOptions",
-      "type UseBluetoothRequestDeviceOptions"
-    ],
-    [
-      "UseBluetoothReturn",
-      "type UseBluetoothReturn"
-    ],
-    [
-      "UseBreakpointReturn",
-      "type UseBreakpointReturn"
-    ],
-    [
-      "UseBreakpointsOptions",
-      "type UseBreakpointsOptions"
-    ],
-    [
-      "UseBroadcastChannelOptions",
-      "type UseBroadcastChannelOptions"
-    ],
-    [
-      "UseBroadcastChannelReturn",
-      "type UseBroadcastChannelReturn"
-    ],
-    [
-      "UseBrowserLocationOptions",
-      "type UseBrowserLocationOptions"
-    ],
-    [
-      "UseBrowserLocationReturn",
-      "type UseBrowserLocationReturn"
-    ],
-    [
-      "UseCachedOptions",
-      "type UseCachedOptions"
-    ],
-    [
-      "UseCachedReturn",
-      "type UseCachedReturn"
-    ],
-    [
-      "UseClipboardItemsOptions",
-      "type UseClipboardItemsOptions"
-    ],
-    [
-      "UseClipboardItemsReturn",
-      "type UseClipboardItemsReturn"
-    ],
-    [
-      "UseClipboardOptions",
-      "type UseClipboardOptions"
-    ],
-    [
-      "UseClipboardReturn",
-      "type UseClipboardReturn"
-    ],
-    [
-      "UseClonedOptions",
-      "type UseClonedOptions"
-    ],
-    [
-      "UseClonedReturn",
-      "type UseClonedReturn"
-    ],
-    [
-      "UseColorModeOptions",
-      "type UseColorModeOptions"
-    ],
-    [
-      "UseColorModeReturn",
-      "type UseColorModeReturn"
-    ],
-    [
-      "UseConfirmDialogReturn",
-      "type UseConfirmDialogReturn"
-    ],
-    [
-      "UseConfirmDialogRevealResult",
-      "type UseConfirmDialogRevealResult"
-    ],
-    [
-      "UseCountdownOptions",
-      "type UseCountdownOptions"
-    ],
-    [
-      "UseCountdownReturn",
-      "type UseCountdownReturn"
-    ],
-    [
-      "UseCssSupportsOptions",
-      "type UseCssSupportsOptions"
-    ],
-    [
-      "UseCssSupportsReturn",
-      "type UseCssSupportsReturn"
-    ],
-    [
-      "UseCssVarOptions",
-      "type UseCssVarOptions"
-    ],
-    [
-      "UseCycleListOptions",
-      "type UseCycleListOptions"
-    ],
-    [
-      "UseCycleListReturn",
-      "type UseCycleListReturn"
-    ],
-    [
-      "UseDarkOptions",
-      "type UseDarkOptions"
-    ],
-    [
-      "UseDarkReturn",
-      "type UseDarkReturn"
-    ],
-    [
-      "UseDeviceMotionOptions",
-      "type UseDeviceMotionOptions"
-    ],
-    [
-      "UseDeviceMotionReturn",
-      "type UseDeviceMotionReturn"
-    ],
-    [
-      "UseDeviceOrientationOptions",
-      "type UseDeviceOrientationOptions"
-    ],
-    [
-      "UseDeviceOrientationReturn",
-      "type UseDeviceOrientationReturn"
-    ],
-    [
-      "UseDevicePixelRatioOptions",
-      "type UseDevicePixelRatioOptions"
-    ],
-    [
-      "UseDevicePixelRatioReturn",
-      "type UseDevicePixelRatioReturn"
-    ],
-    [
-      "UseDevicesListOptions",
-      "type UseDevicesListOptions"
-    ],
-    [
-      "UseDevicesListReturn",
-      "type UseDevicesListReturn"
-    ],
-    [
-      "UseDisplayMediaOptions",
-      "type UseDisplayMediaOptions"
-    ],
-    [
-      "UseDisplayMediaReturn",
-      "type UseDisplayMediaReturn"
-    ],
-    [
-      "UseDocumentVisibilityOptions",
-      "type UseDocumentVisibilityOptions"
-    ],
-    [
-      "UseDocumentVisibilityReturn",
-      "type UseDocumentVisibilityReturn"
-    ],
-    [
-      "UseDraggableOptions",
-      "type UseDraggableOptions"
-    ],
-    [
-      "UseDraggableReturn",
-      "type UseDraggableReturn"
-    ],
-    [
-      "UseDropZoneOptions",
-      "type UseDropZoneOptions"
-    ],
-    [
-      "UseDropZoneReturn",
-      "type UseDropZoneReturn"
-    ],
-    [
-      "UseElementBoundingOptions",
-      "type UseElementBoundingOptions"
-    ],
-    [
-      "UseElementBoundingReturn",
-      "type UseElementBoundingReturn"
-    ],
-    [
-      "UseElementByPointOptions",
-      "type UseElementByPointOptions"
-    ],
-    [
-      "UseElementByPointReturn",
-      "type UseElementByPointReturn"
-    ],
-    [
-      "UseElementHoverOptions",
-      "type UseElementHoverOptions"
-    ],
-    [
-      "UseElementSizeOptions",
-      "type UseElementSizeOptions"
-    ],
-    [
-      "UseElementSizeReturn",
-      "type UseElementSizeReturn"
-    ],
-    [
-      "UseElementVisibilityOptions",
-      "type UseElementVisibilityOptions"
-    ],
-    [
-      "UseElementVisibilityReturn",
-      "type UseElementVisibilityReturn"
-    ],
-    [
-      "UseElementVisibilityReturnWithControls",
-      "type UseElementVisibilityReturnWithControls"
-    ],
-    [
-      "UseEventBusReturn",
-      "type UseEventBusReturn"
-    ],
-    [
-      "UseEventSourceOptions",
-      "type UseEventSourceOptions"
-    ],
-    [
-      "UseEventSourceReturn",
-      "type UseEventSourceReturn"
-    ],
-    [
-      "UseEyeDropperOptions",
-      "type UseEyeDropperOptions"
-    ],
-    [
-      "UseEyeDropperReturn",
-      "type UseEyeDropperReturn"
-    ],
-    [
-      "UseFaviconOptions",
-      "type UseFaviconOptions"
-    ],
-    [
-      "UseFaviconReturn",
-      "type UseFaviconReturn"
-    ],
-    [
-      "UseFetchOptions",
-      "type UseFetchOptions"
-    ],
-    [
-      "UseFetchReturn",
-      "type UseFetchReturn"
-    ],
-    [
-      "UseFileDialogOptions",
-      "type UseFileDialogOptions"
-    ],
-    [
-      "UseFileDialogReturn",
-      "type UseFileDialogReturn"
-    ],
-    [
-      "UseFileSystemAccessCommonOptions",
-      "type UseFileSystemAccessCommonOptions"
-    ],
-    [
-      "UseFileSystemAccessOptions",
-      "type UseFileSystemAccessOptions"
-    ],
-    [
-      "UseFileSystemAccessReturn",
-      "type UseFileSystemAccessReturn"
-    ],
-    [
-      "UseFileSystemAccessShowSaveFileOptions",
-      "type UseFileSystemAccessShowSaveFileOptions"
-    ],
-    [
-      "UseFocusOptions",
-      "type UseFocusOptions"
-    ],
-    [
-      "UseFocusReturn",
-      "type UseFocusReturn"
-    ],
-    [
-      "UseFocusWithinReturn",
-      "type UseFocusWithinReturn"
-    ],
-    [
-      "UseFpsOptions",
-      "type UseFpsOptions"
-    ],
-    [
-      "UseFullscreenOptions",
-      "type UseFullscreenOptions"
-    ],
-    [
-      "UseFullscreenReturn",
-      "type UseFullscreenReturn"
-    ],
-    [
-      "UseGamepadOptions",
-      "type UseGamepadOptions"
-    ],
-    [
-      "UseGamepadReturn",
-      "type UseGamepadReturn"
-    ],
-    [
-      "UseGeolocationOptions",
-      "type UseGeolocationOptions"
-    ],
-    [
-      "UseGeolocationReturn",
-      "type UseGeolocationReturn"
-    ],
-    [
-      "UseHorizontalVirtualListOptions",
-      "type UseHorizontalVirtualListOptions"
-    ],
-    [
-      "UseIdleOptions",
-      "type UseIdleOptions"
-    ],
-    [
-      "UseIdleReturn",
-      "type UseIdleReturn"
-    ],
-    [
-      "UseImageOptions",
-      "type UseImageOptions"
-    ],
-    [
-      "UseImageReturn",
-      "type UseImageReturn"
-    ],
-    [
-      "UseInfiniteScrollOptions",
-      "type UseInfiniteScrollOptions"
-    ],
-    [
-      "UseInfiniteScrollReturn",
-      "type UseInfiniteScrollReturn"
-    ],
-    [
-      "UseIntersectionObserverOptions",
-      "type UseIntersectionObserverOptions"
-    ],
-    [
-      "UseIntersectionObserverReturn",
-      "type UseIntersectionObserverReturn"
-    ],
-    [
-      "UseKeyModifierReturn",
-      "type UseKeyModifierReturn"
-    ],
-    [
-      "UseMagicKeysOptions",
-      "type UseMagicKeysOptions"
-    ],
-    [
-      "UseMagicKeysReturn",
-      "type UseMagicKeysReturn"
-    ],
-    [
-      "UseManualRefHistoryOptions",
-      "type UseManualRefHistoryOptions"
-    ],
-    [
-      "UseManualRefHistoryReturn",
-      "type UseManualRefHistoryReturn"
-    ],
-    [
-      "UseMediaControlsReturn",
-      "type UseMediaControlsReturn"
-    ],
-    [
-      "UseMediaSource",
-      "type UseMediaSource"
-    ],
-    [
-      "UseMediaTextTrack",
-      "type UseMediaTextTrack"
-    ],
-    [
-      "UseMediaTextTrackSource",
-      "type UseMediaTextTrackSource"
-    ],
-    [
-      "UseMemoizeCache",
-      "type UseMemoizeCache"
-    ],
-    [
-      "UseMemoizeOptions",
-      "type UseMemoizeOptions"
-    ],
-    [
-      "UseMemoizeReturn",
-      "type UseMemoizeReturn"
-    ],
-    [
-      "UseMemoryOptions",
-      "type UseMemoryOptions"
-    ],
-    [
-      "UseMemoryReturn",
-      "type UseMemoryReturn"
-    ],
-    [
-      "UseModifierOptions",
-      "type UseModifierOptions"
-    ],
-    [
-      "UseMouseCoordType",
-      "type UseMouseCoordType"
-    ],
-    [
-      "UseMouseEventExtractor",
-      "type UseMouseEventExtractor"
-    ],
-    [
-      "UseMouseInElementReturn",
-      "type UseMouseInElementReturn"
-    ],
-    [
-      "UseMouseOptions",
-      "type UseMouseOptions"
-    ],
-    [
-      "UseMousePressedOptions",
-      "type UseMousePressedOptions"
-    ],
-    [
-      "UseMousePressedReturn",
-      "type UseMousePressedReturn"
-    ],
-    [
-      "UseMouseReturn",
-      "type UseMouseReturn"
-    ],
-    [
-      "UseMouseSourceType",
-      "type UseMouseSourceType"
-    ],
-    [
-      "UseMutationObserverOptions",
-      "type UseMutationObserverOptions"
-    ],
-    [
-      "UseMutationObserverReturn",
-      "type UseMutationObserverReturn"
-    ],
-    [
-      "UseNavigatorLanguageOptions",
-      "type UseNavigatorLanguageOptions"
-    ],
-    [
-      "UseNavigatorLanguageReturn",
-      "type UseNavigatorLanguageReturn"
-    ],
-    [
-      "UseNetworkOptions",
-      "type UseNetworkOptions"
-    ],
-    [
-      "UseNetworkReturn",
-      "type UseNetworkReturn"
-    ],
-    [
-      "UseNowOptions",
-      "type UseNowOptions"
-    ],
-    [
-      "UseNowReturn",
-      "type UseNowReturn"
-    ],
-    [
-      "UseOffsetPaginationInfinityPageReturn",
-      "type UseOffsetPaginationInfinityPageReturn"
-    ],
-    [
-      "UseOffsetPaginationOptions",
-      "type UseOffsetPaginationOptions"
-    ],
-    [
-      "UseOffsetPaginationReturn",
-      "type UseOffsetPaginationReturn"
-    ],
-    [
-      "UseOnLongPressReturn",
-      "type UseOnLongPressReturn"
-    ],
-    [
-      "UsePageLeaveOptions",
-      "type UsePageLeaveOptions"
-    ],
-    [
-      "UsePageLeaveReturn",
-      "type UsePageLeaveReturn"
-    ],
-    [
-      "UseParallaxOptions",
-      "type UseParallaxOptions"
-    ],
-    [
-      "UseParallaxReturn",
-      "type UseParallaxReturn"
-    ],
-    [
-      "UsePerformanceObserverOptions",
-      "type UsePerformanceObserverOptions"
-    ],
-    [
-      "UsePermissionOptions",
-      "type UsePermissionOptions"
-    ],
-    [
-      "UsePermissionReturn",
-      "type UsePermissionReturn"
-    ],
-    [
-      "UsePermissionReturnWithControls",
-      "type UsePermissionReturnWithControls"
-    ],
-    [
-      "UsePointerLockOptions",
-      "type UsePointerLockOptions"
-    ],
-    [
-      "UsePointerLockReturn",
-      "type UsePointerLockReturn"
-    ],
-    [
-      "UsePointerOptions",
-      "type UsePointerOptions"
-    ],
-    [
-      "UsePointerReturn",
-      "type UsePointerReturn"
-    ],
-    [
-      "UsePointerState",
-      "type UsePointerState"
-    ],
-    [
-      "UsePointerSwipeOptions",
-      "type UsePointerSwipeOptions"
-    ],
-    [
-      "UsePointerSwipeReturn",
-      "type UsePointerSwipeReturn"
-    ],
-    [
-      "UseRafFnCallbackArguments",
-      "type UseRafFnCallbackArguments"
-    ],
-    [
-      "UseRafFnOptions",
-      "type UseRafFnOptions"
-    ],
-    [
-      "UseRefHistoryOptions",
-      "type UseRefHistoryOptions"
-    ],
-    [
-      "UseRefHistoryRecord",
-      "type UseRefHistoryRecord"
-    ],
-    [
-      "UseRefHistoryReturn",
-      "type UseRefHistoryReturn"
-    ],
-    [
-      "UseResizeObserverOptions",
-      "type UseResizeObserverOptions"
-    ],
-    [
-      "UseResizeObserverReturn",
-      "type UseResizeObserverReturn"
-    ],
-    [
-      "UseScreenOrientationOptions",
-      "type UseScreenOrientationOptions"
-    ],
-    [
-      "UseScreenOrientationReturn",
-      "type UseScreenOrientationReturn"
-    ],
-    [
-      "UseScreenSafeAreaReturn",
-      "type UseScreenSafeAreaReturn"
-    ],
-    [
-      "UseScriptTagOptions",
-      "type UseScriptTagOptions"
-    ],
-    [
-      "UseScriptTagReturn",
-      "type UseScriptTagReturn"
-    ],
-    [
-      "UseScrollOptions",
-      "type UseScrollOptions"
-    ],
-    [
-      "UseScrollReturn",
-      "type UseScrollReturn"
-    ],
-    [
-      "UseShareOptions",
-      "type UseShareOptions"
-    ],
-    [
-      "UseShareReturn",
-      "type UseShareReturn"
-    ],
-    [
-      "UseSortedCompareFn",
-      "type UseSortedCompareFn"
-    ],
-    [
-      "UseSortedFn",
-      "type UseSortedFn"
-    ],
-    [
-      "UseSortedOptions",
-      "type UseSortedOptions"
-    ],
-    [
-      "UseSpeechRecognitionOptions",
-      "type UseSpeechRecognitionOptions"
-    ],
-    [
-      "UseSpeechRecognitionReturn",
-      "type UseSpeechRecognitionReturn"
-    ],
-    [
-      "UseSpeechSynthesisOptions",
-      "type UseSpeechSynthesisOptions"
-    ],
-    [
-      "UseSpeechSynthesisReturn",
-      "type UseSpeechSynthesisReturn"
-    ],
-    [
-      "UseSpeechSynthesisStatus",
-      "type UseSpeechSynthesisStatus"
-    ],
-    [
-      "UseStepperReturn",
-      "type UseStepperReturn"
-    ],
-    [
-      "UseStorageAsyncOptions",
-      "type UseStorageAsyncOptions"
-    ],
-    [
-      "UseStorageOptions",
-      "type UseStorageOptions"
-    ],
-    [
-      "UseStyleTagOptions",
-      "type UseStyleTagOptions"
-    ],
-    [
-      "UseStyleTagReturn",
-      "type UseStyleTagReturn"
-    ],
-    [
-      "UseSupportedReturn",
-      "type UseSupportedReturn"
-    ],
-    [
-      "UseSwipeDirection",
-      "type UseSwipeDirection"
-    ],
-    [
-      "UseSwipeOptions",
-      "type UseSwipeOptions"
-    ],
-    [
-      "UseSwipeReturn",
-      "type UseSwipeReturn"
-    ],
-    [
-      "UseTextDirectionOptions",
-      "type UseTextDirectionOptions"
-    ],
-    [
-      "UseTextDirectionValue",
-      "type UseTextDirectionValue"
-    ],
-    [
-      "UseTextSelectionOptions",
-      "type UseTextSelectionOptions"
-    ],
-    [
-      "UseTextSelectionReturn",
-      "type UseTextSelectionReturn"
-    ],
-    [
-      "UseTextareaAutosizeOptions",
-      "type UseTextareaAutosizeOptions"
-    ],
-    [
-      "UseTextareaAutosizeReturn",
-      "type UseTextareaAutosizeReturn"
-    ],
-    [
-      "UseThrottledRefHistoryOptions",
-      "type UseThrottledRefHistoryOptions"
-    ],
-    [
-      "UseThrottledRefHistoryReturn",
-      "type UseThrottledRefHistoryReturn"
-    ],
-    [
-      "UseTimeAgoFormatter",
-      "type UseTimeAgoFormatter"
-    ],
-    [
-      "UseTimeAgoIntlOptions",
-      "type UseTimeAgoIntlOptions"
-    ],
-    [
-      "UseTimeAgoMessages",
-      "type UseTimeAgoMessages"
-    ],
-    [
-      "UseTimeAgoMessagesBuiltIn",
-      "type UseTimeAgoMessagesBuiltIn"
-    ],
-    [
-      "UseTimeAgoOptions",
-      "type UseTimeAgoOptions"
-    ],
-    [
-      "UseTimeAgoReturn",
-      "type UseTimeAgoReturn"
-    ],
-    [
-      "UseTimeAgoUnit",
-      "type UseTimeAgoUnit"
-    ],
-    [
-      "UseTimeAgoUnitNamesDefault",
-      "type UseTimeAgoUnitNamesDefault"
-    ],
-    [
-      "UseTimeoutPollOptions",
-      "type UseTimeoutPollOptions"
-    ],
-    [
-      "UseTimestampOptions",
-      "type UseTimestampOptions"
-    ],
-    [
-      "UseTimestampReturn",
-      "type UseTimestampReturn"
-    ],
-    [
-      "UseTitleOptions",
-      "type UseTitleOptions"
-    ],
-    [
-      "UseTitleOptionsBase",
-      "type UseTitleOptionsBase"
-    ],
-    [
-      "UseTitleReturn",
-      "type UseTitleReturn"
-    ],
-    [
-      "UseTransitionOptions",
-      "type UseTransitionOptions"
-    ],
-    [
-      "UseUrlSearchParamsOptions",
-      "type UseUrlSearchParamsOptions"
-    ],
-    [
-      "UseUserMediaOptions",
-      "type UseUserMediaOptions"
-    ],
-    [
-      "UseUserMediaReturn",
-      "type UseUserMediaReturn"
-    ],
-    [
-      "UseVModelOptions",
-      "type UseVModelOptions"
-    ],
-    [
-      "UseVerticalVirtualListOptions",
-      "type UseVerticalVirtualListOptions"
-    ],
-    [
-      "UseVibrateOptions",
-      "type UseVibrateOptions"
-    ],
-    [
-      "UseVibrateReturn",
-      "type UseVibrateReturn"
-    ],
-    [
-      "UseVirtualListItem",
-      "type UseVirtualListItem"
-    ],
-    [
-      "UseVirtualListOptions",
-      "type UseVirtualListOptions"
-    ],
-    [
-      "UseVirtualListOptionsBase",
-      "type UseVirtualListOptionsBase"
-    ],
-    [
-      "UseVirtualListReturn",
-      "type UseVirtualListReturn"
-    ],
-    [
-      "UseWakeLockOptions",
-      "type UseWakeLockOptions"
-    ],
-    [
-      "UseWakeLockReturn",
-      "type UseWakeLockReturn"
-    ],
-    [
-      "UseWebNotificationOptions",
-      "type UseWebNotificationOptions"
-    ],
-    [
-      "UseWebNotificationReturn",
-      "type UseWebNotificationReturn"
-    ],
-    [
-      "UseWebSocketOptions",
-      "type UseWebSocketOptions"
-    ],
-    [
-      "UseWebSocketReturn",
-      "type UseWebSocketReturn"
-    ],
-    [
-      "UseWebWorkerFnReturn",
-      "type UseWebWorkerFnReturn"
-    ],
-    [
-      "UseWebWorkerOptions",
-      "type UseWebWorkerOptions"
-    ],
-    [
-      "UseWebWorkerReturn",
-      "type UseWebWorkerReturn"
-    ],
-    [
-      "UseWindowScrollOptions",
-      "type UseWindowScrollOptions"
-    ],
-    [
-      "UseWindowScrollReturn",
-      "type UseWindowScrollReturn"
-    ],
-    [
-      "UseWindowSizeOptions",
-      "type UseWindowSizeOptions"
-    ],
-    [
-      "UseWindowSizeReturn",
-      "type UseWindowSizeReturn"
-    ],
-    [
-      "VueInstance",
-      "type VueInstance"
-    ],
-    [
-      "WakeLockSentinel",
-      "type WakeLockSentinel"
-    ],
-    [
-      "WebNotificationOptions",
-      "type WebNotificationOptions"
-    ],
-    [
-      "WebSocketHeartbeatMessage",
-      "type WebSocketHeartbeatMessage"
-    ],
-    [
-      "WebSocketStatus",
-      "type WebSocketStatus"
-    ],
-    [
-      "WebWorkerStatus",
-      "type WebWorkerStatus"
-    ],
-    [
-      "WindowEventName",
-      "type WindowEventName"
-    ],
-    [
-      "WritableComputedInjectOptions",
-      "type WritableComputedInjectOptions"
-    ],
-    [
-      "WritableComputedInjectOptionsWithDefault",
-      "type WritableComputedInjectOptionsWithDefault"
-    ],
-    [
-      "asyncComputed",
-      "type asyncComputed"
-    ],
-    [
-      "breakpointsAntDesign",
-      "type breakpointsAntDesign"
-    ],
-    [
-      "breakpointsBootstrapV5",
-      "type breakpointsBootstrapV5"
-    ],
-    [
-      "breakpointsElement",
-      "type breakpointsElement"
-    ],
-    [
-      "breakpointsMasterCss",
-      "type breakpointsMasterCss"
-    ],
-    [
-      "breakpointsPrimeFlex",
-      "type breakpointsPrimeFlex"
-    ],
-    [
-      "breakpointsQuasar",
-      "type breakpointsQuasar"
-    ],
-    [
-      "breakpointsSematic",
-      "type breakpointsSematic"
-    ],
-    [
-      "breakpointsTailwind",
-      "type breakpointsTailwind"
-    ],
-    [
-      "breakpointsVuetify",
-      "type breakpointsVuetify"
-    ],
-    [
-      "breakpointsVuetifyV2",
-      "type breakpointsVuetifyV2"
-    ],
-    [
-      "breakpointsVuetifyV3",
-      "type breakpointsVuetifyV3"
-    ],
-    [
-      "customStorageEventName",
-      "type customStorageEventName"
-    ],
-    [
-      "defaultDocument",
-      "type defaultDocument"
-    ],
-    [
-      "defaultLocation",
-      "type defaultLocation"
-    ],
-    [
-      "defaultNavigator",
-      "type defaultNavigator"
-    ],
-    [
-      "defaultWindow",
-      "type defaultWindow"
-    ],
-    [
-      "executeTransition",
-      "type executeTransition"
-    ],
-    [
-      "templateRef",
-      "type templateRef"
-    ],
-    [
-      "useCached",
-      "type useCached"
-    ],
-    [
-      "useStorage",
-      "type useStorage"
-    ],
-    [
-      "useTimeAgo",
-      "type useTimeAgo"
-    ],
-    [
-      "AnyFn",
-      "type AnyFn"
-    ],
-    [
-      "ArgumentsType",
-      "type ArgumentsType"
-    ],
-    [
-      "Arrayable",
-      "type Arrayable"
-    ],
-    [
-      "Awaitable",
-      "type Awaitable"
-    ],
-    [
-      "Awaited",
-      "type Awaited"
-    ],
-    [
-      "ComputedEagerOptions",
-      "type ComputedEagerOptions"
-    ],
-    [
-      "ComputedEagerReturn",
-      "type ComputedEagerReturn"
-    ],
-    [
-      "ComputedRefWithControl",
-      "type ComputedRefWithControl"
-    ],
-    [
-      "ComputedWithControlRef",
-      "type ComputedWithControlRef"
-    ],
-    [
-      "ComputedWithControlRefExtra",
-      "type ComputedWithControlRefExtra"
-    ],
-    [
-      "ConfigurableEventFilter",
-      "type ConfigurableEventFilter"
-    ],
-    [
-      "ConfigurableFlush",
-      "type ConfigurableFlush"
-    ],
-    [
-      "ConfigurableFlushSync",
-      "type ConfigurableFlushSync"
-    ],
-    [
-      "ControlledRefOptions",
-      "type ControlledRefOptions"
-    ],
-    [
-      "CreateGlobalStateReturn",
-      "type CreateGlobalStateReturn"
-    ],
-    [
-      "CreateInjectionStateOptions",
-      "type CreateInjectionStateOptions"
-    ],
-    [
-      "CreateInjectionStateReturn",
-      "type CreateInjectionStateReturn"
-    ],
-    [
-      "CreateRefReturn",
-      "type CreateRefReturn"
-    ],
-    [
-      "DateLike",
-      "type DateLike"
-    ],
-    [
-      "DebounceFilterOptions",
-      "type DebounceFilterOptions"
-    ],
-    [
-      "DeepMaybeRef",
-      "type DeepMaybeRef"
-    ],
-    [
-      "ElementOf",
-      "type ElementOf"
-    ],
-    [
-      "EventFilter",
-      "type EventFilter"
-    ],
-    [
-      "EventHook",
-      "type EventHook"
-    ],
-    [
-      "EventHookOff",
-      "type EventHookOff"
-    ],
-    [
-      "EventHookOn",
-      "type EventHookOn"
-    ],
-    [
-      "EventHookReturn",
-      "type EventHookReturn"
-    ],
-    [
-      "EventHookTrigger",
-      "type EventHookTrigger"
-    ],
-    [
-      "ExtendRefOptions",
-      "type ExtendRefOptions"
-    ],
-    [
-      "ExtendRefReturn",
-      "type ExtendRefReturn"
-    ],
-    [
-      "Fn",
-      "type Fn"
-    ],
-    [
-      "FunctionArgs",
-      "type FunctionArgs"
-    ],
-    [
-      "FunctionWrapperOptions",
-      "type FunctionWrapperOptions"
-    ],
-    [
-      "IfAny",
-      "type IfAny"
-    ],
-    [
-      "IgnoredPrevAsyncUpdates",
-      "type IgnoredPrevAsyncUpdates"
-    ],
-    [
-      "IgnoredUpdater",
-      "type IgnoredUpdater"
-    ],
-    [
-      "InstanceProxy",
-      "type InstanceProxy"
-    ],
-    [
-      "IsAny",
-      "type IsAny"
-    ],
-    [
-      "IsDefinedReturn",
-      "type IsDefinedReturn"
-    ],
-    [
-      "ManualResetRefReturn",
-      "type ManualResetRefReturn"
-    ],
-    [
-      "MapOldSources",
-      "type MapOldSources"
-    ],
-    [
-      "MapSources",
-      "type MapSources"
-    ],
-    [
-      "type MultiWatchSources",
-      "type type MultiWatchSources"
-    ],
-    [
-      "Mutable",
-      "type Mutable"
-    ],
-    [
-      "Pausable",
-      "type Pausable"
-    ],
-    [
-      "PausableFilterOptions",
-      "type PausableFilterOptions"
-    ],
-    [
-      "Promisify",
-      "type Promisify"
-    ],
-    [
-      "PromisifyFn",
-      "type PromisifyFn"
-    ],
-    [
-      "ProvideLocalReturn",
-      "type ProvideLocalReturn"
-    ],
-    [
-      "Reactified",
-      "type Reactified"
-    ],
-    [
-      "ReactifyNested",
-      "type ReactifyNested"
-    ],
-    [
-      "ReactifyObjectOptions",
-      "type ReactifyObjectOptions"
-    ],
-    [
-      "ReactifyObjectReturn",
-      "type ReactifyObjectReturn"
-    ],
-    [
-      "ReactifyOptions",
-      "type ReactifyOptions"
-    ],
-    [
-      "ReactifyReturn",
-      "type ReactifyReturn"
-    ],
-    [
-      "ReactiveComputedReturn",
-      "type ReactiveComputedReturn"
-    ],
-    [
-      "ReactiveOmitPredicate",
-      "type ReactiveOmitPredicate"
-    ],
-    [
-      "ReactiveOmitReturn",
-      "type ReactiveOmitReturn"
-    ],
-    [
-      "ReactivePickPredicate",
-      "type ReactivePickPredicate"
-    ],
-    [
-      "ReactivePickReturn",
-      "type ReactivePickReturn"
-    ],
-    [
-      "ReadonlyRefOrGetter",
-      "type ReadonlyRefOrGetter"
-    ],
-    [
-      "RefAutoResetReturn",
-      "type RefAutoResetReturn"
-    ],
-    [
-      "RefDebouncedReturn",
-      "type RefDebouncedReturn"
-    ],
-    [
-      "RefThrottledReturn",
-      "type RefThrottledReturn"
-    ],
-    [
-      "RemovableRef",
-      "type RemovableRef"
-    ],
-    [
-      "ShallowOrDeepRef",
-      "type ShallowOrDeepRef"
-    ],
-    [
-      "ShallowUnwrapRef",
-      "type ShallowUnwrapRef"
-    ],
-    [
-      "SharedComposableReturn",
-      "type SharedComposableReturn"
-    ],
-    [
-      "SingletonPromiseReturn",
-      "type SingletonPromiseReturn"
-    ],
-    [
-      "Stoppable",
-      "type Stoppable"
-    ],
-    [
-      "SyncRefOptions",
-      "type SyncRefOptions"
-    ],
-    [
-      "SyncRefsOptions",
-      "type SyncRefsOptions"
-    ],
-    [
-      "ThrottleFilterOptions",
-      "type ThrottleFilterOptions"
-    ],
-    [
-      "TimerHandle",
-      "type TimerHandle"
-    ],
-    [
-      "ToRefsOptions",
-      "type ToRefsOptions"
-    ],
-    [
-      "ToggleFn",
-      "type ToggleFn"
-    ],
-    [
-      "UntilArrayInstance",
-      "type UntilArrayInstance"
-    ],
-    [
-      "UntilBaseInstance",
-      "type UntilBaseInstance"
-    ],
-    [
-      "UntilToMatchOptions",
-      "type UntilToMatchOptions"
-    ],
-    [
-      "UntilValueInstance",
-      "type UntilValueInstance"
-    ],
-    [
-      "UseArrayDifferenceOptions",
-      "type UseArrayDifferenceOptions"
-    ],
-    [
-      "UseArrayDifferenceReturn",
-      "type UseArrayDifferenceReturn"
-    ],
-    [
-      "UseArrayEveryReturn",
-      "type UseArrayEveryReturn"
-    ],
-    [
-      "UseArrayFilterReturn",
-      "type UseArrayFilterReturn"
-    ],
-    [
-      "UseArrayFindIndexReturn",
-      "type UseArrayFindIndexReturn"
-    ],
-    [
-      "UseArrayFindLastReturn",
-      "type UseArrayFindLastReturn"
-    ],
-    [
-      "UseArrayFindReturn",
-      "type UseArrayFindReturn"
-    ],
-    [
-      "UseArrayIncludesComparatorFn",
-      "type UseArrayIncludesComparatorFn"
-    ],
-    [
-      "UseArrayIncludesOptions",
-      "type UseArrayIncludesOptions"
-    ],
-    [
-      "UseArrayIncludesReturn",
-      "type UseArrayIncludesReturn"
-    ],
-    [
-      "UseArrayJoinReturn",
-      "type UseArrayJoinReturn"
-    ],
-    [
-      "UseArrayMapReturn",
-      "type UseArrayMapReturn"
-    ],
-    [
-      "UseArrayReduceReturn",
-      "type UseArrayReduceReturn"
-    ],
-    [
-      "UseArrayReducer",
-      "type UseArrayReducer"
-    ],
-    [
-      "UseArraySomeReturn",
-      "type UseArraySomeReturn"
-    ],
-    [
-      "UseArrayUniqueReturn",
-      "type UseArrayUniqueReturn"
-    ],
-    [
-      "UseCounterOptions",
-      "type UseCounterOptions"
-    ],
-    [
-      "UseCounterReturn",
-      "type UseCounterReturn"
-    ],
-    [
-      "UseDateFormatOptions",
-      "type UseDateFormatOptions"
-    ],
-    [
-      "UseDateFormatReturn",
-      "type UseDateFormatReturn"
-    ],
-    [
-      "UseDebounceFnReturn",
-      "type UseDebounceFnReturn"
-    ],
-    [
-      "UseIntervalControls",
-      "type UseIntervalControls"
-    ],
-    [
-      "UseIntervalFnOptions",
-      "type UseIntervalFnOptions"
-    ],
-    [
-      "UseIntervalFnReturn",
-      "type UseIntervalFnReturn"
-    ],
-    [
-      "UseIntervalOptions",
-      "type UseIntervalOptions"
-    ],
-    [
-      "UseIntervalReturn",
-      "type UseIntervalReturn"
-    ],
-    [
-      "UseLastChangedOptions",
-      "type UseLastChangedOptions"
-    ],
-    [
-      "UseLastChangedReturn",
-      "type UseLastChangedReturn"
-    ],
-    [
-      "UseTimeoutFnOptions",
-      "type UseTimeoutFnOptions"
-    ],
-    [
-      "UseTimeoutFnReturn",
-      "type UseTimeoutFnReturn"
-    ],
-    [
-      "UseTimeoutOptions",
-      "type UseTimeoutOptions"
-    ],
-    [
-      "UseTimeoutReturn",
-      "type UseTimeoutReturn"
-    ],
-    [
-      "UseTimoutReturn",
-      "type UseTimoutReturn"
-    ],
-    [
-      "UseToNumberOptions",
-      "type UseToNumberOptions"
-    ],
-    [
-      "UseToggleOptions",
-      "type UseToggleOptions"
-    ],
-    [
-      "UseToggleReturn",
-      "type UseToggleReturn"
-    ],
-    [
-      "WatchArrayCallback",
-      "type WatchArrayCallback"
-    ],
-    [
-      "WatchAtMostOptions",
-      "type WatchAtMostOptions"
-    ],
-    [
-      "WatchAtMostReturn",
-      "type WatchAtMostReturn"
-    ],
-    [
-      "WatchDebouncedOptions",
-      "type WatchDebouncedOptions"
-    ],
-    [
-      "WatchIgnorableReturn",
-      "type WatchIgnorableReturn"
-    ],
-    [
-      "WatchOptionFlush",
-      "type WatchOptionFlush"
-    ],
-    [
-      "WatchPausableOptions",
-      "type WatchPausableOptions"
-    ],
-    [
-      "WatchPausableReturn",
-      "type WatchPausableReturn"
-    ],
-    [
-      "WatchThrottledOptions",
-      "type WatchThrottledOptions"
-    ],
-    [
-      "WatchTriggerableCallback",
-      "type WatchTriggerableCallback"
-    ],
-    [
-      "WatchTriggerableReturn",
-      "type WatchTriggerableReturn"
-    ],
-    [
-      "WatchWithFilterOptions",
-      "type WatchWithFilterOptions"
-    ],
-    [
-      "WheneverOptions",
-      "type WheneverOptions"
-    ],
-    [
-      "WritableComputedRefWithControl",
-      "type WritableComputedRefWithControl"
-    ],
-    [
-      "autoResetRef",
-      "type autoResetRef"
-    ],
-    [
-      "computedEager",
-      "type computedEager"
-    ],
-    [
-      "controlledComputed",
-      "type controlledComputed"
-    ],
-    [
-      "controlledRef",
-      "type controlledRef"
-    ],
-    [
-      "createDisposableDirective",
-      "type createDisposableDirective"
-    ],
-    [
-      "createReactiveFn",
-      "type createReactiveFn"
-    ],
-    [
-      "debouncedRef",
-      "type debouncedRef"
-    ],
-    [
-      "debouncedWatch",
-      "type debouncedWatch"
-    ],
-    [
-      "eagerComputed",
-      "type eagerComputed"
-    ],
-    [
+declare const _default: [
+  {
+    "@maxvue/max-use": [
+      "Obj",
+      "Random",
+      "Str",
+      "StrCase",
+      "StrFilter",
+      "addTime",
+      "apiDeleteRoute",
+      "apiGetRoute",
+      "apiPostRoute",
+      "apiPutRoute",
+      "apiUploadRoute",
+      "assert",
+      "average",
+      "blank",
+      "bypassFilter",
+      "calculaCabo",
+      "camelCase",
+      "camelize",
+      "canIterate",
+      "capitalize",
+      "cep",
+      "cepIsValid",
+      "chunk",
+      "clamp",
+      "cloneDeep",
+      "cloneFnJSON",
+      "cnpj",
+      "cnpjIsValid",
+      "cnpjOrCpf",
+      "computedAsync",
+      "computedInject",
+      "computedWithControl",
+      "containsProp",
+      "countBy",
+      "cpf",
+      "cpfCnpjIsValid",
+      "cpfIsValid",
+      "cpfOrCnpj",
+      "cpfcnpj",
+      "createEventHook",
+      "createFetch",
+      "createFilterWrapper",
+      "createGlobalState",
+      "createInjectionState",
+      "createRef",
+      "createReusableTemplate",
+      "createSharedComposable",
+      "createSingletonPromise",
+      "createTemplatePromise",
+      "createUnrefFn",
+      "daysAgo",
+      "debounceFilter",
+      "deepClone",
+      "deepMerge",
+      "diff",
+      "diffInDays",
+      "diffInHours",
+      "diffInMinutes",
+      "diffInMonths",
+      "diffInSeconds",
+      "diffInYears",
+      "eMail",
+      "eMailIsValid",
+      "electric",
+      "electrical",
+      "email",
+      "emailIsValid",
+      "empty",
+      "extendRef",
+      "filter",
+      "filterBy",
+      "filterByNot",
+      "findLast",
+      "first",
+      "format",
+      "formatBytes",
+      "formatCep",
+      "formatCnpj",
+      "formatCpf",
+      "formatCpfCnpj",
+      "formatCurrency",
+      "formatDate",
+      "formatPhone",
+      "formatTimeAgo",
+      "formatTimeAgoIntl",
+      "formatTimeAgoIntlParts",
       "get",
-      "type get"
-    ],
-    [
-      "ignorableWatch",
-      "type ignorableWatch"
-    ],
-    [
-      "isClient",
-      "type isClient"
-    ],
-    [
-      "isIOS",
-      "type isIOS"
-    ],
-    [
+      "getColorFromVar",
+      "getLifeCycleTarget",
+      "getRoute",
+      "getRouteByName",
+      "getSSRHandler",
+      "goToRoute",
+      "goToRouteByName",
+      "groupBy",
+      "hasContent",
+      "hasContentFn",
+      "hasEMail",
+      "hasEmail",
+      "hasOwn",
+      "hasPassedDays",
+      "hasPassedHours",
+      "hasPassedMinutes",
+      "hasValidCep",
+      "hasValidCnpj",
+      "hasValidCnpjOrCpf",
+      "hasValidCpf",
+      "hasValidCpfCnpj",
+      "hasValidCpfOrCnpj",
+      "hasValidEMail",
+      "hasValidEmail",
+      "hoursAgo",
+      "hyphenate",
+      "identity",
+      "inDateInterval",
+      "increaseWithUnit",
+      "initials",
+      "injectLocal",
+      "intervalRandom",
+      "invoke",
+      "isArray",
+      "isBlank",
+      "isCepValid",
+      "isCnpj",
+      "isCnpjOrCpf",
+      "isCpf",
+      "isCpfCnpj",
+      "isCpfOrCnpj",
+      "isDate",
+      "isDef",
+      "isDefined",
+      "isEMail",
+      "isEmail",
+      "isEmpty",
+      "isEqual",
+      "isFuture",
+      "isInDateInterval",
+      "isIterable",
+      "isNotEmpty",
+      "isNotValid",
+      "isNumber",
+      "isNumeric",
       "isObject",
-      "type isObject"
-    ],
-    [
-      "isWorker",
-      "type isWorker"
-    ],
-    [
+      "isPast",
+      "isSameDay",
+      "isTouchDevice",
+      "isValid",
+      "isValidCep",
+      "isValidCnpj",
+      "isValidCnpjOrCpf",
+      "isValidCpf",
+      "isValidCpfCnpj",
+      "isValidCpfOrCnpj",
+      "isValidEMail",
+      "isValidEmail",
+      "isWeekend",
+      "kebabCase",
+      "keyBy",
+      "last",
+      "makeDestructurable",
+      "mapGamepadToXbox360Controller",
+      "mapValues",
+      "maskSensitive",
+      "median",
+      "minutesAgo",
+      "monthsAgo",
+      "noEmpty",
+      "noHtml",
+      "noop",
+      "normalizeDate",
+      "normalizeToSearch",
+      "notEmpty",
+      "notHasValidContent",
+      "notNullish",
       "now",
-      "type now"
-    ],
-    [
-      "pausableWatch",
-      "type pausableWatch"
-    ],
-    [
+      "numeric",
+      "objectEntries",
+      "objectOmit",
+      "objectPick",
+      "omit",
+      "onClickOutside",
+      "onElementRemoval",
+      "onKeyDown",
+      "onKeyPressed",
+      "onKeyStroke",
+      "onKeyUp",
+      "onLongPress",
+      "onStartTyping",
+      "onlyLetters",
+      "onlyLettersAndNumbers",
+      "onlyNumbers",
+      "onlySymbols",
+      "orderBy",
+      "orderByWithKey",
+      "pausableFilter",
+      "pick",
+      "promiseTimeout",
+      "provideLocal",
+      "provideSSRWidth",
+      "pxValue",
+      "rand",
+      "reactify",
+      "reactifyObject",
+      "reactiveComputed",
+      "reactiveOmit",
+      "reactivePick",
+      "readingTime",
       "refAutoReset",
-      "type refAutoReset"
-    ],
-    [
+      "refDebounced",
+      "refDefault",
+      "refManualReset",
+      "refThrottled",
+      "refWithControl",
+      "removeSpaces",
+      "renameKeys",
+      "roundDown",
+      "roundUp",
+      "sample",
+      "secondsAgo",
       "set",
-      "type set"
-    ],
-    [
-      "throttledRef",
-      "type throttledRef"
-    ],
-    [
-      "throttledWatch",
-      "type throttledWatch"
-    ],
-    [
-      "toRef",
-      "type toRef"
-    ],
-    [
-      "toRefs",
-      "type toRefs"
-    ],
-    [
-      "useDebounce",
-      "type useDebounce"
-    ],
-    [
-      "useThrottle",
-      "type useThrottle"
-    ],
-    [
-      "watchPausable",
-      "type watchPausable"
+      "setLibraryRouter",
+      "setSSRHandler",
+      "shuffle",
+      "size",
+      "slugify",
+      "snakeCase",
+      "sortBy",
+      "sortByMulti",
+      "stripHtml",
+      "sum",
+      "sumBy",
+      "syncRef",
+      "syncRefs",
+      "throttleFilter",
+      "timeAgo",
+      "timestamp",
+      "toArray",
+      "toNumber",
+      "toReactive",
+      "toSearchableString",
+      "transition",
+      "truncate",
+      "tryOnBeforeMount",
+      "tryOnBeforeUnmount",
+      "tryOnMounted",
+      "tryOnScopeDispose",
+      "tryOnUnmounted",
+      "ulid",
+      "uniq",
+      "uniqueBy",
+      "unrefElement",
+      "unset",
+      "until",
+      "useActiveElement",
+      "useAnimate",
+      "useArrayDifference",
+      "useArrayEvery",
+      "useArrayFilter",
+      "useArrayFind",
+      "useArrayFindIndex",
+      "useArrayFindLast",
+      "useArrayIncludes",
+      "useArrayJoin",
+      "useArrayMap",
+      "useArrayReduce",
+      "useArraySome",
+      "useArrayUnique",
+      "useAsyncQueue",
+      "useAsyncState",
+      "useBase64",
+      "useBattery",
+      "useBluetooth",
+      "useBreakpoints",
+      "useBroadcastChannel",
+      "useBrowserLocation",
+      "useCached",
+      "useCachedApi",
+      "useClipboard",
+      "useClipboardItems",
+      "useCloned",
+      "useColorMode",
+      "useConfirmDialog",
+      "useCountdown",
+      "useCounter",
+      "useCssSupports",
+      "useCssVar",
+      "useCurrentElement",
+      "useCycleList",
+      "useDark",
+      "useDateFormat",
+      "useDebounceFn",
+      "useDebouncedRefHistory",
+      "useDefaultReset",
+      "useDeviceMotion",
+      "useDeviceOrientation",
+      "useDevicePixelRatio",
+      "useDevicesList",
+      "useDisplayMedia",
+      "useDocumentVisibility",
+      "useDraggable",
+      "useDropZone",
+      "useElementBounding",
+      "useElementByPoint",
+      "useElementHover",
+      "useElementSize",
+      "useElementVisibility",
+      "useEventBus",
+      "useEventListener",
+      "useEventSource",
+      "useEyeDropper",
+      "useFavicon",
+      "useFetch",
+      "useFileDialog",
+      "useFileSystemAccess",
+      "useFocus",
+      "useFocusWithin",
+      "useFps",
+      "useFullscreen",
+      "useGamepad",
+      "useGeolocation",
+      "useIdle",
+      "useImage",
+      "useInCacheApi",
+      "useInfiniteScroll",
+      "useIntersectionObserver",
+      "useInterval",
+      "useIntervalFn",
+      "useKeyModifier",
+      "useLastChanged",
+      "useLocalStorage",
+      "useMagicKeys",
+      "useManualRefHistory",
+      "useMediaControls",
+      "useMediaQuery",
+      "useMemoize",
+      "useMemory",
+      "useMounted",
+      "useMouse",
+      "useMouseInElement",
+      "useMousePressed",
+      "useMutationObserver",
+      "useNavigatorLanguage",
+      "useNetwork",
+      "useNow",
+      "useObjectUrl",
+      "useOffsetPagination",
+      "useOnline",
+      "usePageLeave",
+      "useParallax",
+      "useParentElement",
+      "usePerformanceObserver",
+      "usePermission",
+      "usePointer",
+      "usePointerLock",
+      "usePointerSwipe",
+      "usePreferredColorScheme",
+      "usePreferredContrast",
+      "usePreferredDark",
+      "usePreferredLanguages",
+      "usePreferredReducedMotion",
+      "usePreferredReducedTransparency",
+      "usePrevious",
+      "useRafFn",
+      "useRefCached",
+      "useRefCachedApi",
+      "useRefHistory",
+      "useRefStorage",
+      "useResizeObserver",
+      "useSSRWidth",
+      "useScreenOrientation",
+      "useScreenSafeArea",
+      "useScriptTag",
+      "useScroll",
+      "useScrollLock",
+      "useSessionStorage",
+      "useShare",
+      "useSharedCache",
+      "useSharedCacheApi",
+      "useSorted",
+      "useSpeechRecognition",
+      "useSpeechSynthesis",
+      "useStepper",
+      "useStorage",
+      "useStorageAsync",
+      "useStyleTag",
+      "useSupported",
+      "useSwipe",
+      "useTemplateRefsList",
+      "useTextDirection",
+      "useTextSelection",
+      "useTextareaAutosize",
+      "useThrottleFn",
+      "useThrottledRefHistory",
+      "useTimeAgo",
+      "useTimeAgoIntl",
+      "useTimeout",
+      "useTimeoutFn",
+      "useTimeoutPoll",
+      "useTimestamp",
+      "useTitle",
+      "useToNumber",
+      "useToString",
+      "useToggle",
+      "useTransition",
+      "useUrlSearchParams",
+      "useUserMedia",
+      "useVModel",
+      "useVModels",
+      "useVibrate",
+      "useVirtualList",
+      "useWakeLock",
+      "useWebNotification",
+      "useWebSocket",
+      "useWebWorker",
+      "useWebWorkerFn",
+      "useWindowFocus",
+      "useWindowScroll",
+      "useWindowSize",
+      "validCnpj",
+      "validCnpjOrCpf",
+      "validCpf",
+      "validCpfCnpj",
+      "validCpfOrCnpj",
+      "validEMail",
+      "validEmail",
+      "validate",
+      "valuesInKey",
+      "watchArray",
+      "watchAtMost",
+      "watchDebounced",
+      "watchDeep",
+      "watchIgnorable",
+      "watchImmediate",
+      "watchOnce",
+      "watchThrottled",
+      "watchTriggerable",
+      "watchWithFilter",
+      "whenever",
+      "wireSize",
+      "yearsAgo",
+      "_",
+      "vueUse"
     ]
-  ]
-};
+  },
+  {
+    "from": "@maxvue/max-use",
+    "imports": [
+      "AfterFetchContext",
+      "AsyncComputedOnCancel",
+      "AsyncComputedOptions",
+      "BasicColorMode",
+      "BasicColorSchema",
+      "BatteryManager",
+      "BeforeFetchContext",
+      "Breakpoints",
+      "BrowserLocationState",
+      "CloneFn",
+      "ColorSchemeType",
+      "ComputedInjectGetter",
+      "ComputedInjectGetterWithDefault",
+      "ComputedInjectSetter",
+      "ConfigurableDeepRefs",
+      "ConfigurableDocument",
+      "ConfigurableDocumentOrShadowRoot",
+      "ConfigurableLocation",
+      "ConfigurableNavigator",
+      "ConfigurableScheduler",
+      "ConfigurableWindow",
+      "ContrastType",
+      "CreateFetchOptions",
+      "CreateReusableTemplateOptions",
+      "CubicBezierPoints",
+      "DefaultMagicKeysAliasMap",
+      "DefineTemplateComponent",
+      "DeviceMotionOptions",
+      "DocumentEventName",
+      "EasingFunction",
+      "ElementSize",
+      "EventBusEvents",
+      "EventBusIdentifier",
+      "EventBusKey",
+      "EventBusListener",
+      "EventSourceStatus",
+      "EyeDropper",
+      "EyeDropperOpenOptions",
+      "FileSystemAccessShowOpenFileOptions",
+      "FileSystemAccessShowSaveFileOptions",
+      "FileSystemAccessWindow",
+      "FileSystemFileHandle",
+      "FormatTimeAgoIntlOptions",
+      "FormatTimeAgoOptions",
+      "GeneralEventListener",
+      "GeneralPermissionDescriptor",
+      "InterpolationFunction",
+      "KeyFilter",
+      "KeyModifier",
+      "KeyPredicate",
+      "KeyStrokeEventName",
+      "MagicKeysInternal",
+      "MaybeComputedElementRef",
+      "MaybeElement",
+      "MaybeElementRef",
+      "MemoryInfo",
+      "MouseInElementOptions",
+      "MousePressedOptions",
+      "NavigatorLanguageState",
+      "NetworkEffectiveType",
+      "NetworkState",
+      "NetworkType",
+      "OnClickOutsideHandler",
+      "OnClickOutsideOptions",
+      "OnClickOutsideReturn",
+      "OnElementRemovalOptions",
+      "OnFetchErrorContext",
+      "OnKeyStrokeOptions",
+      "OnLongPressModifiers",
+      "OnLongPressOptions",
+      "OnLongPressReturn",
+      "OrientationLockType",
+      "OrientationType",
+      "PointerType",
+      "Position",
+      "ReducedMotionType",
+      "ReducedTransparencyType",
+      "RenderableComponent",
+      "ResizeObserverCallback",
+      "ResizeObserverEntry",
+      "ResizeObserverSize",
+      "ReusableTemplatePair",
+      "ReuseTemplateComponent",
+      "SSRHandlersMap",
+      "ScreenOrientation",
+      "Serializer",
+      "SerializerAsync",
+      "ShadowRootEventName",
+      "StorageEventLike",
+      "StorageLike",
+      "StorageLikeAsync",
+      "StorageSerializers",
+      "Supportable",
+      "TemplatePromise",
+      "TemplatePromiseOptions",
+      "TemplatePromiseProps",
+      "TemplateRefsList",
+      "TimeAgoUnit",
+      "ToDataURLOptions",
+      "TransitionOptions",
+      "TransitionPresets",
+      "UnRefElementReturn",
+      "UnrefFn",
+      "UrlParams",
+      "UseActiveElementOptions",
+      "UseActiveElementReturn",
+      "UseAnimateKeyframes",
+      "UseAnimateOptions",
+      "UseAnimateReturn",
+      "UseAsyncQueueOptions",
+      "UseAsyncQueueResult",
+      "UseAsyncQueueReturn",
+      "UseAsyncQueueTask",
+      "UseAsyncStateOptions",
+      "UseAsyncStateReturn",
+      "UseAsyncStateReturnBase",
+      "UseBase64ObjectOptions",
+      "UseBase64Options",
+      "UseBase64Return",
+      "UseBatteryOptions",
+      "UseBatteryReturn",
+      "UseBluetoothOptions",
+      "UseBluetoothRequestDeviceOptions",
+      "UseBluetoothReturn",
+      "UseBreakpointReturn",
+      "UseBreakpointsOptions",
+      "UseBroadcastChannelOptions",
+      "UseBroadcastChannelReturn",
+      "UseBrowserLocationOptions",
+      "UseBrowserLocationReturn",
+      "UseCachedOptions",
+      "UseCachedReturn",
+      "UseClipboardItemsOptions",
+      "UseClipboardItemsReturn",
+      "UseClipboardOptions",
+      "UseClipboardReturn",
+      "UseClonedOptions",
+      "UseClonedReturn",
+      "UseColorModeOptions",
+      "UseColorModeReturn",
+      "UseConfirmDialogReturn",
+      "UseConfirmDialogRevealResult",
+      "UseCountdownOptions",
+      "UseCountdownReturn",
+      "UseCssSupportsOptions",
+      "UseCssSupportsReturn",
+      "UseCssVarOptions",
+      "UseCycleListOptions",
+      "UseCycleListReturn",
+      "UseDarkOptions",
+      "UseDarkReturn",
+      "UseDeviceMotionOptions",
+      "UseDeviceMotionReturn",
+      "UseDeviceOrientationOptions",
+      "UseDeviceOrientationReturn",
+      "UseDevicePixelRatioOptions",
+      "UseDevicePixelRatioReturn",
+      "UseDevicesListOptions",
+      "UseDevicesListReturn",
+      "UseDisplayMediaOptions",
+      "UseDisplayMediaReturn",
+      "UseDocumentVisibilityOptions",
+      "UseDocumentVisibilityReturn",
+      "UseDraggableOptions",
+      "UseDraggableReturn",
+      "UseDropZoneOptions",
+      "UseDropZoneReturn",
+      "UseElementBoundingOptions",
+      "UseElementBoundingReturn",
+      "UseElementByPointOptions",
+      "UseElementByPointReturn",
+      "UseElementHoverOptions",
+      "UseElementSizeOptions",
+      "UseElementSizeReturn",
+      "UseElementVisibilityOptions",
+      "UseElementVisibilityReturn",
+      "UseElementVisibilityReturnWithControls",
+      "UseEventBusReturn",
+      "UseEventSourceOptions",
+      "UseEventSourceReturn",
+      "UseEyeDropperOptions",
+      "UseEyeDropperReturn",
+      "UseFaviconOptions",
+      "UseFaviconReturn",
+      "UseFetchOptions",
+      "UseFetchReturn",
+      "UseFileDialogOptions",
+      "UseFileDialogReturn",
+      "UseFileSystemAccessCommonOptions",
+      "UseFileSystemAccessOptions",
+      "UseFileSystemAccessReturn",
+      "UseFileSystemAccessShowSaveFileOptions",
+      "UseFocusOptions",
+      "UseFocusReturn",
+      "UseFocusWithinReturn",
+      "UseFpsOptions",
+      "UseFullscreenOptions",
+      "UseFullscreenReturn",
+      "UseGamepadOptions",
+      "UseGamepadReturn",
+      "UseGeolocationOptions",
+      "UseGeolocationReturn",
+      "UseHorizontalVirtualListOptions",
+      "UseIdleOptions",
+      "UseIdleReturn",
+      "UseImageOptions",
+      "UseImageReturn",
+      "UseInfiniteScrollOptions",
+      "UseInfiniteScrollReturn",
+      "UseIntersectionObserverOptions",
+      "UseIntersectionObserverReturn",
+      "UseKeyModifierReturn",
+      "UseMagicKeysOptions",
+      "UseMagicKeysReturn",
+      "UseManualRefHistoryOptions",
+      "UseManualRefHistoryReturn",
+      "UseMediaControlsReturn",
+      "UseMediaSource",
+      "UseMediaTextTrack",
+      "UseMediaTextTrackSource",
+      "UseMemoizeCache",
+      "UseMemoizeOptions",
+      "UseMemoizeReturn",
+      "UseMemoryOptions",
+      "UseMemoryReturn",
+      "UseModifierOptions",
+      "UseMouseCoordType",
+      "UseMouseEventExtractor",
+      "UseMouseInElementReturn",
+      "UseMouseOptions",
+      "UseMousePressedOptions",
+      "UseMousePressedReturn",
+      "UseMouseReturn",
+      "UseMouseSourceType",
+      "UseMutationObserverOptions",
+      "UseMutationObserverReturn",
+      "UseNavigatorLanguageOptions",
+      "UseNavigatorLanguageReturn",
+      "UseNetworkOptions",
+      "UseNetworkReturn",
+      "UseNowOptions",
+      "UseNowReturn",
+      "UseOffsetPaginationInfinityPageReturn",
+      "UseOffsetPaginationOptions",
+      "UseOffsetPaginationReturn",
+      "UseOnLongPressReturn",
+      "UsePageLeaveOptions",
+      "UsePageLeaveReturn",
+      "UseParallaxOptions",
+      "UseParallaxReturn",
+      "UsePerformanceObserverOptions",
+      "UsePermissionOptions",
+      "UsePermissionReturn",
+      "UsePermissionReturnWithControls",
+      "UsePointerLockOptions",
+      "UsePointerLockReturn",
+      "UsePointerOptions",
+      "UsePointerReturn",
+      "UsePointerState",
+      "UsePointerSwipeOptions",
+      "UsePointerSwipeReturn",
+      "UseRafFnCallbackArguments",
+      "UseRafFnOptions",
+      "UseRefHistoryOptions",
+      "UseRefHistoryRecord",
+      "UseRefHistoryReturn",
+      "UseResizeObserverOptions",
+      "UseResizeObserverReturn",
+      "UseScreenOrientationOptions",
+      "UseScreenOrientationReturn",
+      "UseScreenSafeAreaReturn",
+      "UseScriptTagOptions",
+      "UseScriptTagReturn",
+      "UseScrollOptions",
+      "UseScrollReturn",
+      "UseShareOptions",
+      "UseShareReturn",
+      "UseSortedCompareFn",
+      "UseSortedFn",
+      "UseSortedOptions",
+      "UseSpeechRecognitionOptions",
+      "UseSpeechRecognitionReturn",
+      "UseSpeechSynthesisOptions",
+      "UseSpeechSynthesisReturn",
+      "UseSpeechSynthesisStatus",
+      "UseStepperReturn",
+      "UseStorageAsyncOptions",
+      "UseStorageOptions",
+      "UseStyleTagOptions",
+      "UseStyleTagReturn",
+      "UseSupportedReturn",
+      "UseSwipeDirection",
+      "UseSwipeOptions",
+      "UseSwipeReturn",
+      "UseTextDirectionOptions",
+      "UseTextDirectionValue",
+      "UseTextSelectionOptions",
+      "UseTextSelectionReturn",
+      "UseTextareaAutosizeOptions",
+      "UseTextareaAutosizeReturn",
+      "UseThrottledRefHistoryOptions",
+      "UseThrottledRefHistoryReturn",
+      "UseTimeAgoFormatter",
+      "UseTimeAgoIntlOptions",
+      "UseTimeAgoMessages",
+      "UseTimeAgoMessagesBuiltIn",
+      "UseTimeAgoOptions",
+      "UseTimeAgoReturn",
+      "UseTimeAgoUnit",
+      "UseTimeAgoUnitNamesDefault",
+      "UseTimeoutPollOptions",
+      "UseTimestampOptions",
+      "UseTimestampReturn",
+      "UseTitleOptions",
+      "UseTitleOptionsBase",
+      "UseTitleReturn",
+      "UseTransitionOptions",
+      "UseUrlSearchParamsOptions",
+      "UseUserMediaOptions",
+      "UseUserMediaReturn",
+      "UseVModelOptions",
+      "UseVerticalVirtualListOptions",
+      "UseVibrateOptions",
+      "UseVibrateReturn",
+      "UseVirtualListItem",
+      "UseVirtualListOptions",
+      "UseVirtualListOptionsBase",
+      "UseVirtualListReturn",
+      "UseWakeLockOptions",
+      "UseWakeLockReturn",
+      "UseWebNotificationOptions",
+      "UseWebNotificationReturn",
+      "UseWebSocketOptions",
+      "UseWebSocketReturn",
+      "UseWebWorkerFnReturn",
+      "UseWebWorkerOptions",
+      "UseWebWorkerReturn",
+      "UseWindowScrollOptions",
+      "UseWindowScrollReturn",
+      "UseWindowSizeOptions",
+      "UseWindowSizeReturn",
+      "VueInstance",
+      "WakeLockSentinel",
+      "WebNotificationOptions",
+      "WebSocketHeartbeatMessage",
+      "WebSocketStatus",
+      "WebWorkerStatus",
+      "WindowEventName",
+      "WritableComputedInjectOptions",
+      "WritableComputedInjectOptionsWithDefault",
+      "asyncComputed",
+      "breakpointsAntDesign",
+      "breakpointsBootstrapV5",
+      "breakpointsElement",
+      "breakpointsMasterCss",
+      "breakpointsPrimeFlex",
+      "breakpointsQuasar",
+      "breakpointsSematic",
+      "breakpointsTailwind",
+      "breakpointsVuetify",
+      "breakpointsVuetifyV2",
+      "breakpointsVuetifyV3",
+      "customStorageEventName",
+      "defaultDocument",
+      "defaultLocation",
+      "defaultNavigator",
+      "defaultWindow",
+      "executeTransition",
+      "templateRef",
+      "useCached",
+      "useStorage",
+      "useTimeAgo",
+      "AnyFn",
+      "ArgumentsType",
+      "Arrayable",
+      "Awaitable",
+      "Awaited",
+      "ComputedEagerOptions",
+      "ComputedEagerReturn",
+      "ComputedRefWithControl",
+      "ComputedWithControlRef",
+      "ComputedWithControlRefExtra",
+      "ConfigurableEventFilter",
+      "ConfigurableFlush",
+      "ConfigurableFlushSync",
+      "ControlledRefOptions",
+      "CreateGlobalStateReturn",
+      "CreateInjectionStateOptions",
+      "CreateInjectionStateReturn",
+      "CreateRefReturn",
+      "DateLike",
+      "DebounceFilterOptions",
+      "DeepMaybeRef",
+      "ElementOf",
+      "EventFilter",
+      "EventHook",
+      "EventHookOff",
+      "EventHookOn",
+      "EventHookReturn",
+      "EventHookTrigger",
+      "ExtendRefOptions",
+      "ExtendRefReturn",
+      "Fn",
+      "FunctionArgs",
+      "FunctionWrapperOptions",
+      "IfAny",
+      "IgnoredPrevAsyncUpdates",
+      "IgnoredUpdater",
+      "InstanceProxy",
+      "IsAny",
+      "IsDefinedReturn",
+      "ManualResetRefReturn",
+      "MapOldSources",
+      "MapSources",
+      "type MultiWatchSources",
+      "Mutable",
+      "Pausable",
+      "PausableFilterOptions",
+      "Promisify",
+      "PromisifyFn",
+      "ProvideLocalReturn",
+      "Reactified",
+      "ReactifyNested",
+      "ReactifyObjectOptions",
+      "ReactifyObjectReturn",
+      "ReactifyOptions",
+      "ReactifyReturn",
+      "ReactiveComputedReturn",
+      "ReactiveOmitPredicate",
+      "ReactiveOmitReturn",
+      "ReactivePickPredicate",
+      "ReactivePickReturn",
+      "ReadonlyRefOrGetter",
+      "RefAutoResetReturn",
+      "RefDebouncedReturn",
+      "RefThrottledReturn",
+      "RemovableRef",
+      "ShallowOrDeepRef",
+      "ShallowUnwrapRef",
+      "SharedComposableReturn",
+      "SingletonPromiseReturn",
+      "Stoppable",
+      "SyncRefOptions",
+      "SyncRefsOptions",
+      "ThrottleFilterOptions",
+      "TimerHandle",
+      "ToRefsOptions",
+      "ToggleFn",
+      "UntilArrayInstance",
+      "UntilBaseInstance",
+      "UntilToMatchOptions",
+      "UntilValueInstance",
+      "UseArrayDifferenceOptions",
+      "UseArrayDifferenceReturn",
+      "UseArrayEveryReturn",
+      "UseArrayFilterReturn",
+      "UseArrayFindIndexReturn",
+      "UseArrayFindLastReturn",
+      "UseArrayFindReturn",
+      "UseArrayIncludesComparatorFn",
+      "UseArrayIncludesOptions",
+      "UseArrayIncludesReturn",
+      "UseArrayJoinReturn",
+      "UseArrayMapReturn",
+      "UseArrayReduceReturn",
+      "UseArrayReducer",
+      "UseArraySomeReturn",
+      "UseArrayUniqueReturn",
+      "UseCounterOptions",
+      "UseCounterReturn",
+      "UseDateFormatOptions",
+      "UseDateFormatReturn",
+      "UseDebounceFnReturn",
+      "UseIntervalControls",
+      "UseIntervalFnOptions",
+      "UseIntervalFnReturn",
+      "UseIntervalOptions",
+      "UseIntervalReturn",
+      "UseLastChangedOptions",
+      "UseLastChangedReturn",
+      "UseTimeoutFnOptions",
+      "UseTimeoutFnReturn",
+      "UseTimeoutOptions",
+      "UseTimeoutReturn",
+      "UseTimoutReturn",
+      "UseToNumberOptions",
+      "UseToggleOptions",
+      "UseToggleReturn",
+      "WatchArrayCallback",
+      "WatchAtMostOptions",
+      "WatchAtMostReturn",
+      "WatchDebouncedOptions",
+      "WatchIgnorableReturn",
+      "WatchOptionFlush",
+      "WatchPausableOptions",
+      "WatchPausableReturn",
+      "WatchThrottledOptions",
+      "WatchTriggerableCallback",
+      "WatchTriggerableReturn",
+      "WatchWithFilterOptions",
+      "WheneverOptions",
+      "WritableComputedRefWithControl",
+      "autoResetRef",
+      "computedEager",
+      "controlledComputed",
+      "controlledRef",
+      "createDisposableDirective",
+      "createReactiveFn",
+      "debouncedRef",
+      "debouncedWatch",
+      "eagerComputed",
+      "get",
+      "ignorableWatch",
+      "isClient",
+      "isIOS",
+      "isObject",
+      "isWorker",
+      "now",
+      "pausableWatch",
+      "refAutoReset",
+      "set",
+      "throttledRef",
+      "throttledWatch",
+      "toRef",
+      "toRefs",
+      "useDebounce",
+      "useThrottle",
+      "watchPausable"
+    ],
+    "type": true
+  }
+];
 
 export default _default;

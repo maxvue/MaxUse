@@ -1,4 +1,5 @@
 import * as vueUse from '@vueuse/core';
+export * as vueUse from '@vueuse/core';
 import * as Browser from './Helpers/Browser';
 import * as Math from './Helpers/Math';
 import * as Objects from './Helpers/Objects';

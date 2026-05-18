@@ -53,7 +53,7 @@ const maxUseItems = (): string[] => {
     return Array.from(allKeys).sort();
 };
 
-const getVueUseTypes = (): [string, string][] => {
+const getVueUseTypes = (): string[] => {
     try {
         let corePkgPath;
         try {
@@ -87,7 +87,7 @@ const getVueUseTypes = (): [string, string][] => {
         const valueKeys = Object.keys(VueUse);
         const typeExports = allExports.filter((name: string) => !valueKeys.includes(name));
 
-        const types = typeExports.map((name: string) => [name, `type ${name}`]) as [string, string][];
+        const types = typeExports as string[];
 
         let sharedPkgPath;
         try {
@@ -108,7 +108,7 @@ const getVueUseTypes = (): [string, string][] => {
                         .filter(Boolean);
 
                     const sharedTypeExports = sharedAllExports.filter((name: string) => !valueKeys.includes(name));
-                    const sharedTypes = sharedTypeExports.map((name: string) => [name, `type ${name}`]) as [string, string][];
+                    const sharedTypes = sharedTypeExports as string[];
                     types.push(...sharedTypes);
                 }
             }
@@ -125,12 +125,16 @@ export const generateAutoImportData = () => {
     const items = [...maxUseItems(), '_', 'vueUse'];
     const types = getVueUseTypes();
 
-    const valueReturn = {
-        '@maxvue/max-use': [
-            ...items,
-            ...types
-        ]
-    };
+    const valueReturn = [
+        {
+            '@maxvue/max-use': items
+        },
+        {
+            from: '@maxvue/max-use',
+            imports: types,
+            type: true
+        }
+    ];
 
     const outputFile = path.resolve(__dirname, '../Helpers/autoImportData.json');
     fs.writeFileSync(outputFile, JSON.stringify(valueReturn, null, 2));
