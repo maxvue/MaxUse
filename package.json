@@ -41,16 +41,16 @@
             "import": "./dist/types.es.js"
         },
         "./validations": {
-            "types": "./dist/Helpers/VueUse/core.ts",
-            "import": "./dist/Helpers/VueUse/vueUseCore.ts"
+            "types": "./dist/Helpers/Validations/index.d.ts",
+            "import": "./dist/validations.es.js"
         },
         "./electrical": {
             "types": "./dist/Helpers/Electrical/index.d.ts",
             "import": "./dist/electrical.es.js"
         },
         "./vueUseCore": {
-            "types": "./dist/Helpers/vueUse/index.d.ts",
-            "import": "./dist/electrical.es.js"
+            "types": "./dist/Helpers/VueUse/core.ts",
+            "import": "./dist/Helpers/VueUse/vueUseCore.ts"
         },
         "./format": {
             "types": "./dist/Helpers/Format/index.d.ts",
