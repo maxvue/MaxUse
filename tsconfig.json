@@ -16,7 +16,7 @@
         "moduleResolution": "bundler",
         "allowImportingTsExtensions": false,
         "resolveJsonModule": true,
-        "isolatedModules": true,
+        "isolatedModules": false,
         "module": "ESNext",
         "target": "ESNext",
         "useDefineForClassFields": true,
