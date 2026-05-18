@@ -1,16 +1,17 @@
-import { O as dist_exports } from "./dist-CVecz8iT.js";
-import { n as getColorFromVar, r as isTouchDevice, t as Browser_exports } from "./Browser-Ch4-GjXZ.js";
-import { $ as validCnpj, A as cnpj, B as hasValidCpf, C as hasValidEmail, D as isValidEmail, E as isValidEMail, F as cpfIsValid, G as isCpf, H as hasValidCpfOrCnpj, I as cpfOrCnpj, J as isValidCnpj, K as isCpfCnpj, L as cpfcnpj, M as cnpjOrCpf, N as cpf, O as validEMail, P as cpfCnpjIsValid, Q as isValidCpfOrCnpj, R as hasValidCnpj, S as hasValidEMail, T as isEmail, U as isCnpj, V as hasValidCpfCnpj, W as isCnpjOrCpf, X as isValidCpf, Y as isValidCnpjOrCpf, Z as isValidCpfCnpj, _ as eMailIsValid, a as isNotEmpty, b as hasEMail, c as noEmpty, d as cep, et as validCnpjOrCpf, f as cepIsValid, g as eMail, h as isValidCep, i as isEmpty, j as cnpjIsValid, k as validEmail, l as notEmpty, m as isCepValid, n as validate, nt as validCpfCnpj, o as isNotValid, p as hasValidCep, q as isCpfOrCnpj, r as empty, rt as validCpfOrCnpj, s as isValid, t as Validations_exports, tt as validCpf, u as notHasValidContent, v as email, w as isEMail, x as hasEmail, y as emailIsValid, z as hasValidCnpjOrCpf } from "./Validations-DRaR7BG2.js";
+import { n as __require } from "./chunk-DDJX3-wc.js";
+import { O as dist_exports } from "./dist-Pjqd8aWa.js";
+import { n as getColorFromVar, r as isTouchDevice, t as Browser_exports } from "./Browser-Bg-6ylK8.js";
+import { $ as validCnpj, A as cnpj, B as hasValidCpf, C as hasValidEmail, D as isValidEmail, E as isValidEMail, F as cpfIsValid, G as isCpf, H as hasValidCpfOrCnpj, I as cpfOrCnpj, J as isValidCnpj, K as isCpfCnpj, L as cpfcnpj, M as cnpjOrCpf, N as cpf, O as validEMail, P as cpfCnpjIsValid, Q as isValidCpfOrCnpj, R as hasValidCnpj, S as hasValidEMail, T as isEmail, U as isCnpj, V as hasValidCpfCnpj, W as isCnpjOrCpf, X as isValidCpf, Y as isValidCnpjOrCpf, Z as isValidCpfCnpj, _ as eMailIsValid, a as isNotEmpty, b as hasEMail, c as noEmpty, d as cep, et as validCnpjOrCpf, f as cepIsValid, g as eMail, h as isValidCep, i as isEmpty, j as cnpjIsValid, k as validEmail, l as notEmpty, m as isCepValid, n as validate, nt as validCpfCnpj, o as isNotValid, p as hasValidCep, q as isCpfOrCnpj, r as empty, rt as validCpfOrCnpj, s as isValid, t as Validations_exports, tt as validCpf, u as notHasValidContent, v as email, w as isEMail, x as hasEmail, y as emailIsValid, z as hasValidCnpjOrCpf } from "./Validations-BGs_Zsyu.js";
 import { n as isArray, t as isObject } from "./isObject-BPnkB1ef.js";
 import { i as hasContentFn, n as isBlank, r as hasContent, t as blank } from "./isBlank-DrIS5hlK.js";
 import { canIterate, isIterable, isNumber, isNumeric, numeric, t as Types_exports } from "./types.es.js";
 import { chunk, countBy, filter, filterBy, filterByNot, findLast, first, groupBy, keyBy, last, orderBy, orderByWithKey, sample, shuffle, size, sortBy, sortByMulti, sum, sumBy, t as Iterables_exports, uniq, uniqueBy, valuesInKey } from "./iterables.es.js";
 import { addTime, daysAgo, diffInDays, diffInHours, diffInMinutes, diffInMonths, diffInSeconds, diffInYears, hasPassedDays, hasPassedHours, hasPassedMinutes, hoursAgo, inDateInterval, isDate, isFuture, isInDateInterval, isPast, isSameDay, isWeekend, minutesAgo, monthsAgo, now, secondsAgo, t as Dates_exports, yearsAgo } from "./dates.es.js";
-import { a as average, i as roundUp, n as median, r as roundDown, t as Math_exports } from "./Math-CrfIlrCG.js";
-import { a as mapValues, c as renameKeys, d as unset, f as get, i as set, l as deepMerge, n as Objects_exports, o as omit, p as deepClone, r as diff, s as pick, t as Obj, u as isEqual } from "./Objects-BvjDI8RK.js";
+import { a as average, i as roundUp, n as median, r as roundDown, t as Math_exports } from "./Math-DSt-G-h0.js";
+import { a as mapValues, c as renameKeys, d as unset, f as get, i as set, l as deepMerge, n as Objects_exports, o as omit, p as deepClone, r as diff, s as pick, t as Obj, u as isEqual } from "./Objects-B5oFz-DR.js";
 import { a as formatPhone, i as formatCpfCnpj, n as formatCnpj, o as maskSensitive, r as formatCpf, t as formatCep } from "./masks-C4wTVhhL.js";
 import { Random, Str, StrCase, StrFilter, camelCase, capitalize, initials, intervalRandom, kebabCase, noHtml as stripHtml, normalizeToSearch, onlyLetters, onlyLettersAndNumbers, onlyNumbers, onlySymbols, readingTime, removeSpaces, slugify, snakeCase, t as Strings_exports, toNumber, toSearchableString, truncate, ulid } from "./strings.es.js";
-import { a as wireSize, i as calculaCabo, n as electric, r as electrical, t as Electrical_exports } from "./Electrical-C3m_VKWv.js";
+import { a as wireSize, i as calculaCabo, n as electric, r as electrical, t as Electrical_exports } from "./Electrical-Buq1jnuT.js";
 import { format, formatBytes, formatCurrency, t as Format_exports } from "./format.es.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { refAutoReset, t as Composables_exports, timeAgo, useCached, useCachedApi, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo } from "./composables.es.js";
@@ -54,16 +55,32 @@ var maxUseItems = () => {
 		if (["vueUse"].includes(key)) continue;
 		allKeys.add(key);
 	}
-	const valueReturn = Array.from(allKeys).sort();
-	saveInJson("./all-modules.json", valueReturn);
-	return valueReturn;
+	return Array.from(allKeys).sort();
 };
 var autoImport = () => {
-	return { "@maxvue/max-use": [
+	const items = [
 		...maxUseItems(),
 		"_",
 		"vueUse"
-	] };
+	];
+	const types = getVueUseTypes();
+	const valueReturn = { "@maxvue/max-use": [...items, ...types] };
+	saveInJson("./all-modules.json", valueReturn);
+	return valueReturn;
+};
+var getVueUseTypes = () => {
+	try {
+		const fs = __require("node:fs");
+		const dtsPath = __require("node:path").resolve(process.cwd(), "node_modules/@vueuse/core/dist/index.d.ts");
+		if (!fs.existsSync(dtsPath)) return [];
+		const exportMatch = fs.readFileSync(dtsPath, "utf-8").match(/export\s*\{([^}]+)\}/g);
+		if (!exportMatch) return [];
+		const allExports = exportMatch[exportMatch.length - 1].replace(/export\s*\{|\}/g, "").split(",").map((s) => s.trim()).filter(Boolean);
+		const valueKeys = Object.keys(VueUse_exports);
+		return allExports.filter((name) => !valueKeys.includes(name)).map((name) => [name, `type ${name}`]);
+	} catch (e) {
+		return [];
+	}
 };
 var maxUseAutoImport = autoImport();
 //#endregion

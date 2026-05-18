@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export function saveInJson(relative_path: string, data: string[]){
+export function saveInJson(relative_path: string, data: any){
 
     const outputFile = path.resolve(__dirname, relative_path);
 

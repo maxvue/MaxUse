@@ -42,20 +42,53 @@ export const maxUseItems = (): string[] => {
         allKeys.add(key);
     }
 
+    return Array.from(allKeys).sort();
+};
 
-    const valueReturn = Array.from(allKeys).sort();
+const autoImport = () => {
+    const items = [...maxUseItems(), '_', 'vueUse'];
+
+    // Adicionar os tipos do VueUse dinamicamente lendo o arquivo d.ts
+    const types = getVueUseTypes();
+
+    const valueReturn = {
+        '@maxvue/max-use': [
+            ...items,
+            ...types
+        ]
+    };
 
     saveInJson('./all-modules.json', valueReturn);
 
     return valueReturn;
 };
 
-const autoImport = () => {
-    const items = [...maxUseItems(), '_', 'vueUse'];
-    // console.log(items.filter((i) => i.includes('api')));
-    return {
-        '@maxvue/max-use': items
-    };
+export const getVueUseTypes = (): [string, string][] => {
+    try {
+        const fs = require('node:fs');
+        const path = require('node:path');
+        const dtsPath = path.resolve(process.cwd(), 'node_modules/@vueuse/core/dist/index.d.ts');
+
+        if (!fs.existsSync(dtsPath)) return [];
+
+        const content = fs.readFileSync(dtsPath, 'utf-8');
+        const exportMatch = content.match(/export\s*\{([^}]+)\}/g);
+        if (!exportMatch) return [];
+
+        const lastExport = exportMatch[exportMatch.length - 1];
+        const allExports = lastExport
+            .replace(/export\s*\{|\}/g, '')
+            .split(',')
+            .map((s: string) => s.trim())
+            .filter(Boolean);
+
+        const valueKeys = Object.keys(VueUse);
+        const typeExports = allExports.filter((name: string) => !valueKeys.includes(name));
+
+        return typeExports.map((name: string) => [name, `type ${name}`]);
+    } catch (e) {
+        return [];
+    }
 };
 
 export const maxUseAutoImport = autoImport();
