@@ -2,9 +2,7 @@ import localforage from 'localforage';
 import { watchDebounced, useStorage as vueUseStorage, type RemovableRef } from '@vueuse/core';
 import type { Ref } from 'vue';
 
-type MyRef<T> = Ref<T, T | null | undefined>;
-
-export function useRefCached(key: string, default_value: any) {
+export function useRefCached(key: string, default_value: any): Ref {
     localforage.config({ name: 'caches', storeName: 'use-ref-storages' });
 
     const state = vueUseStorage(key, default_value);
