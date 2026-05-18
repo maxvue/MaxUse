@@ -50,7 +50,7 @@ var useSharedCacheApi = useCachedApi;
 var useInCacheApi = useCachedApi;
 //#endregion
 //#region src/Composables/useRefCached.ts
-function useRefCached(key, default_value) {
+function useRefCached(key, default_value = null) {
 	localforage.config({
 		name: "caches",
 		storeName: "use-ref-storages"
