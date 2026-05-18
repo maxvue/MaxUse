@@ -1,6 +1,6 @@
 import localforage from 'localforage';
 import { watchDebounced, useStorage as vueUseStorage, type RemovableRef } from '@vueuse/core';
-import type { Ref } from 'vue';
+import { Ref } from 'vue';
 
 type MyRef<T> = Ref<T, T | null | undefined>;
 
