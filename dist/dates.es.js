@@ -274,9 +274,36 @@ function diffInYears(date1, date2) {
 	return Math.abs(d1.getFullYear() - d2.getFullYear());
 }
 //#endregion
+//#region src/Helpers/Dates/timeAgo.ts
+function secondsAgo(value) {
+	const data = toValue(value);
+	if (!data) return null;
+	if (isNotValid(data)) return null;
+	const date = new Date(data);
+	const dataPassada = new Date(date);
+	const diferencaMs = (/* @__PURE__ */ new Date()).getTime() - dataPassada.getTime();
+	return parseInt(Math.floor(diferencaMs / 1e3) + "");
+}
+function minutesAgo(value) {
+	return parseInt((secondsAgo(value) || 0) / 60 + "");
+}
+function hoursAgo(value) {
+	return parseInt((secondsAgo(value) || 0) / 60 / 60 + "");
+}
+function daysAgo(value) {
+	return parseInt((secondsAgo(value) || 0) / 60 / 60 / 24 + "");
+}
+function monthsAgo(value) {
+	return parseInt((secondsAgo(value) || 0) / 60 / 60 / 24 / 30 + "");
+}
+function yearsAgo(value) {
+	return parseInt((secondsAgo(value) || 0) / 60 / 60 / 24 / 30 / 12 + "");
+}
+//#endregion
 //#region src/Helpers/Dates/index.ts
 var Dates_exports = /* @__PURE__ */ __exportAll({
 	addTime: () => addTime,
+	daysAgo: () => daysAgo,
 	diffInDays: () => diffInDays,
 	diffInHours: () => diffInHours,
 	diffInMinutes: () => diffInMinutes,
@@ -286,6 +313,7 @@ var Dates_exports = /* @__PURE__ */ __exportAll({
 	hasPassedDays: () => hasPassedDays,
 	hasPassedHours: () => hasPassedHours,
 	hasPassedMinutes: () => hasPassedMinutes,
+	hoursAgo: () => hoursAgo,
 	inDateInterval: () => inDateInterval,
 	isDate: () => isDate,
 	isFuture: () => isFuture,
@@ -293,9 +321,13 @@ var Dates_exports = /* @__PURE__ */ __exportAll({
 	isPast: () => isPast,
 	isSameDay: () => isSameDay,
 	isWeekend: () => isWeekend,
-	now: () => now
+	minutesAgo: () => minutesAgo,
+	monthsAgo: () => monthsAgo,
+	now: () => now,
+	secondsAgo: () => secondsAgo,
+	yearsAgo: () => yearsAgo
 });
 //#endregion
-export { addTime, diffInDays, diffInHours, diffInMinutes, diffInMonths, diffInSeconds, diffInYears, hasPassedDays, hasPassedHours, hasPassedMinutes, inDateInterval, isDate, isFuture, isInDateInterval, isPast, isSameDay, isWeekend, now, Dates_exports as t };
+export { addTime, daysAgo, diffInDays, diffInHours, diffInMinutes, diffInMonths, diffInSeconds, diffInYears, hasPassedDays, hasPassedHours, hasPassedMinutes, hoursAgo, inDateInterval, isDate, isFuture, isInDateInterval, isPast, isSameDay, isWeekend, minutesAgo, monthsAgo, now, secondsAgo, Dates_exports as t, yearsAgo };
 
 //# sourceMappingURL=dates.es.js.map

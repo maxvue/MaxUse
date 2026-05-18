@@ -10,4 +10,5 @@ export * from './isFuture';
 export * from './addTime';
 export * from './isWeekend';
 export * from './differences';
+export * from './timeAgo';
 //# sourceMappingURL=index.d.ts.map

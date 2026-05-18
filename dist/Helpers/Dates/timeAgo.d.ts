@@ -7,4 +7,4 @@ export declare function daysAgo(value: RefDate): number | null;
 export declare function monthsAgo(value: RefDate): number | null;
 export declare function yearsAgo(value: RefDate): number | null;
 export {};
-//# sourceMappingURL=minutesAgo.d.ts.map
+//# sourceMappingURL=timeAgo.d.ts.map
