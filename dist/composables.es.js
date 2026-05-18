@@ -27,7 +27,7 @@ function useDefaultReset(initialData, timer = null) {
 var refAutoReset = useDefaultReset;
 //#endregion
 //#region src/Composables/useRefStorage.ts
-function useRefStorage(key, default_value = null) {
+function useCached(key, default_value = null) {
 	localforage.config({
 		name: "caches",
 		storeName: "use-ref-storages"
@@ -37,10 +37,10 @@ function useRefStorage(key, default_value = null) {
 	watchDebounced(state, () => localforage.setItem(key, JSON.parse(JSON.stringify(state.value))), { debounce: 600 });
 	return state;
 }
-var useCached = useRefStorage;
-var useRefCached = useRefStorage;
-var useSharedCache = useRefStorage;
-var useStorage = useRefStorage;
+var useRefStorage = useCached;
+var useRefCached = useCached;
+var useSharedCache = useCached;
+var useStorage = useCached;
 //#endregion
 //#region src/Composables/useTimeAgo.ts
 var ptBr = {

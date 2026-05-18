@@ -721,11 +721,11 @@ export declare const _: {
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     useDefaultReset<T>(initialData: T, timer?: number | null): Composables.DefaultResetRef<T>;
     refAutoReset: typeof Composables.useDefaultReset;
-    useRefStorage(key: string, default_value?: any): any;
-    useCached: typeof Composables.useRefStorage;
-    useRefCached: typeof Composables.useRefStorage;
-    useSharedCache: typeof Composables.useRefStorage;
-    useStorage: typeof Composables.useRefStorage;
+    useCached(key: string, default_value?: any): any;
+    useRefStorage: typeof Composables.useCached;
+    useRefCached: typeof Composables.useCached;
+    useSharedCache: typeof Composables.useCached;
+    useStorage: typeof Composables.useCached;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string>, format?: string) => vueUseCore.UseTimeAgoReturn;
     useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string>, format?: string) => vueUseCore.UseTimeAgoReturn;
 };
