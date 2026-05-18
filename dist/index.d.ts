@@ -733,7 +733,7 @@ export declare const _: {
     useRefCachedApi: typeof Composables.useCachedApi;
     useSharedCacheApi: typeof Composables.useCachedApi;
     useInCacheApi: typeof Composables.useCachedApi;
-    useRefCached<T>(key: string, default_value: T): import('vue').Ref<T>;
+    useRefCached(key: string, default_value: string | number | boolean | any[] | Record<string, any> | null | undefined): import('vue').Ref;
     useRefStorage: typeof Composables.useRefCached;
     useCached: typeof Composables.useRefCached;
     useSharedCache: typeof Composables.useRefCached;
