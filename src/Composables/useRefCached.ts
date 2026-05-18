@@ -3,7 +3,7 @@ import { watchDebounced, useStorage as vueUseStorage, type RemovableRef } from '
 import type { Ref } from 'vue';
 import { ref } from 'vue';
 
-export type RefCached<T> = Ref<T> & {
+export interface RefCached<T> extends Ref<T> {
     key: string;
     clearCache: () => void;
 };
