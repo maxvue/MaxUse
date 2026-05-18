@@ -1,2 +1,2 @@
-import { n as getColorFromVar, r as isTouchDevice } from "./Browser-Bg-6ylK8.js";
+import { n as getColorFromVar, r as isTouchDevice } from "./Browser-Ch4-GjXZ.js";
 export { getColorFromVar, isTouchDevice };

@@ -1,4 +1,4 @@
-import { t as __exportAll } from "./chunk-DDJX3-wc.js";
+import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { toValue } from "vue";
 //#region src/Helpers/Browser/isTouchDevice.ts
 /**
@@ -33,4 +33,4 @@ var Browser_exports = /* @__PURE__ */ __exportAll({
 //#endregion
 export { getColorFromVar as n, isTouchDevice as r, Browser_exports as t };
 
-//# sourceMappingURL=Browser-Bg-6ylK8.js.map
+//# sourceMappingURL=Browser-Ch4-GjXZ.js.map
