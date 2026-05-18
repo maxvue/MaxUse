@@ -3,7 +3,6 @@ import { $n as useTimeAgo$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { computed, ref, watch } from "vue";
 import { ulid } from "ulid";
-import localforage from "localforage";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
 	const state = ref();
@@ -51,13 +50,17 @@ var useInCacheApi = useCachedApi;
 //#endregion
 //#region src/Composables/useRefCached.ts
 function useRefCached(key, default_value) {
-	localforage.config({
-		name: "caches",
-		storeName: "use-ref-storages"
-	});
 	const state = ref(default_value);
-	localforage.getItem(key).then((value) => state.value = value ? value : default_value);
-	watchDebounced(state, () => localforage.setItem(key, JSON.parse(JSON.stringify(state.value))), { debounce: 600 });
+	const raw = localStorage.getItem(key);
+	if (raw !== null) try {
+		state.value = JSON.parse(raw);
+	} catch {
+		state.value = default_value;
+	}
+	watchDebounced(state, () => localStorage.setItem(key, JSON.stringify(state.value)), {
+		debounce: 600,
+		deep: true
+	});
 	return state;
 }
 var useRefStorage = useRefCached;
