@@ -50,7 +50,7 @@
         },
         "./vueUseCore": {
             "types": "./dist/Helpers/VueUse/core.ts",
-            "import": "./dist/Helpers/VueUse/vueUseCore.ts"
+            "import": "./dist/vueUseCore.ts"
         },
         "./format": {
             "types": "./dist/Helpers/Format/index.d.ts",
