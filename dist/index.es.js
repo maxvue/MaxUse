@@ -17,17 +17,6 @@ import { refAutoReset, t as Composables_exports, timeAgo, useCached, useCachedAp
 import { apiDeleteRoute, apiPostRoute, apiPutRoute, apiUploadRoute, getRoute, getRouteByName, goToRoute, goToRouteByName, setLibraryRouter, t as Routes_exports } from "./routes.es.js";
 import { t as VueUse_exports } from "./vueuse.es.js";
 import * as lodash from "lodash-es";
-import fs from "node:fs";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
-//#region src/scripts/generateList.ts
-var __filename = fileURLToPath(import.meta.url);
-var __dirname = path.dirname(__filename);
-function saveInJson(relative_path, data) {
-	const outputFile = path.resolve(__dirname, relative_path);
-	fs.writeFileSync(outputFile, JSON.stringify(data, null, 2));
-}
-//#endregion
 //#region src/Helpers/maxUseItems.ts
 /**
 * Retorna a lista de todos os nomes de exports disponíveis na biblioteca MaxUse.
@@ -87,8 +76,7 @@ var ownHelpers = {
 * Helpers do VueUse (filtrados para evitar duplicatas com os próprios).
 */
 var filteredVueUse = {};
-var vueUseKeys = Object.keys(dist_exports);
-saveInJson("./vueuse-items.json", vueUseKeys);
+var vueUseKeys = Object.keys(dist_exports).filter((key) => key !== "vueUse");
 for (const key of vueUseKeys) if (!(key in ownHelpers)) filteredVueUse[key] = dist_exports[key];
 /**
 * Helpers do Lodash (filtrados para evitar duplicatas com ownHelpers e filteredVueUse).

@@ -1,6 +1,5 @@
 import * as vueUse from '@vueuse/core';
 import * as lodash from 'lodash-es';
-import { saveInJson } from './scripts/generateList';
 
 import * as Browser from './Helpers/Browser';
 import * as Dates from './Helpers/Dates';
@@ -54,9 +53,8 @@ const ownHelpers = {
 /**
  * Helpers do VueUse (filtrados para evitar duplicatas com os próprios).
  */
-const filteredVueUse = {};
-const vueUseKeys = Object.keys(vueUse);
-saveInJson('./vueuse-items.json', vueUseKeys);
+const filteredVueUse = {} as Omit<typeof vueUse, keyof typeof ownHelpers | 'vueUse'>;
+const vueUseKeys = Object.keys(vueUse).filter((key) => key !== 'vueUse');
 
 for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Record<string, any>)[key] = (vueUse as Record<string, any>)[key];
 

@@ -57,8 +57,8 @@
             "import": "./dist/format.es.js"
         },
         "./vueuse": {
-            "types": "./dist/Helpers/VueUse/index.d.ts",
-            "import": "./dist/vueuse.es.js"
+            "types": "./dist/Helpers/VueUse/core.d.ts",
+            "import": "./dist/core.es.js"
         },
         "./composables": {
             "types": "./dist/Composables/index.d.ts",
