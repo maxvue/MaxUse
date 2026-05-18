@@ -287,30 +287,6 @@ function size(value, allow_number = true) {
 	if (typeof data === "object") return Object.keys(data).length;
 	return data.length;
 }
-function notEmpty(value) {
-	return size(value) > 0;
-}
-function isNotEmpty(value) {
-	return size(value) > 0;
-}
-function noEmpty(value) {
-	return size(value) > 0;
-}
-function isEmpty(value) {
-	return size(value) === 0;
-}
-function empty(value) {
-	return size(value) === 0;
-}
-function isValid(value) {
-	return value !== null && value !== void 0;
-}
-function isNotValid(value) {
-	return !isValid(value);
-}
-function notHasValidContent(value) {
-	return !isValid(value);
-}
 //#endregion
 //#region src/Helpers/Iterables/sample.ts
 /**
@@ -460,22 +436,14 @@ function last(array) {
 var Iterables_exports = /* @__PURE__ */ __exportAll({
 	chunk: () => chunk,
 	countBy: () => countBy,
-	empty: () => empty,
 	filter: () => filter,
 	filterBy: () => filterBy,
 	filterByNot: () => filterByNot,
 	findLast: () => findLast,
 	first: () => first,
 	groupBy: () => groupBy,
-	isEmpty: () => isEmpty,
-	isNotEmpty: () => isNotEmpty,
-	isNotValid: () => isNotValid,
-	isValid: () => isValid,
 	keyBy: () => keyBy,
 	last: () => last,
-	noEmpty: () => noEmpty,
-	notEmpty: () => notEmpty,
-	notHasValidContent: () => notHasValidContent,
 	orderBy: () => orderBy,
 	orderByWithKey: () => orderByWithKey,
 	sample: () => sample,
@@ -490,6 +458,6 @@ var Iterables_exports = /* @__PURE__ */ __exportAll({
 	valuesInKey: () => valuesInKey
 });
 //#endregion
-export { chunk, countBy, empty, filter, filterBy, filterByNot, findLast, first, groupBy, isEmpty, isNotEmpty, isNotValid, isValid, keyBy, last, noEmpty, notEmpty, notHasValidContent, orderBy, orderByWithKey, sample, shuffle, size, sortBy, sortByMulti, sum, sumBy, Iterables_exports as t, uniq, uniqueBy, valuesInKey };
+export { chunk, countBy, filter, filterBy, filterByNot, findLast, first, groupBy, keyBy, last, orderBy, orderByWithKey, sample, shuffle, size, sortBy, sortByMulti, sum, sumBy, Iterables_exports as t, uniq, uniqueBy, valuesInKey };
 
 //# sourceMappingURL=iterables.es.js.map

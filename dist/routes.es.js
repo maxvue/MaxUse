@@ -1,6 +1,6 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { n as isBlank } from "./isBlank-DrIS5hlK.js";
-import { n as apiRoute, r as u, t as apiGetRoute } from "./apiGetRoute-7ZXCGNaa.js";
+import { n as apiRoute, r as u, t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { toValue } from "vue";
 import axios from "axios";
 //#region src/Routes/apiPostRoute.ts

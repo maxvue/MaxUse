@@ -1,23 +1,20 @@
 export * from './documents';
 export * from './isEmail';
 export * from './cepIsValid';
+export * from './isValid';
 
-import { isCpf, isCnpj, isCpfCnpj } from './documents';
-import { isEmail } from './isEmail';
-import { cepIsValid } from './cepIsValid';
-import { phone } from './phone';
+import * as documents from './documents';
+import * as email from './isEmail';
+import * as cep from './cepIsValid';
+import * as phone from './phone';
+import * as isValid from './isValid';
 
 export const validate = {
-    isCpf,
-    cpf: isCpf,
-    isCnpj,
-    cnpj: isCnpj,
-    isCpfCnpj,
-    cpfcnpj: isCpfCnpj,
-    isEmail,
-    email: isEmail,
-    cepIsValid,
-    cep: cepIsValid,
-    phone
+    ...documents,
+    ...email,
+    ...cep,
+    ...phone,
+    ...isValid
 };
+
 

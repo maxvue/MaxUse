@@ -6,4 +6,8 @@ import { MaybeRefOrGetter } from 'vue';
  * @returns True se for um CEP válido, false caso contrário.
  */
 export declare function cepIsValid(value: MaybeRefOrGetter<string | number | null | undefined>): boolean;
+export declare const cep: typeof cepIsValid;
+export declare const isValidCep: typeof cepIsValid;
+export declare const isCepValid: typeof cepIsValid;
+export declare const hasValidCep: typeof cepIsValid;
 //# sourceMappingURL=cepIsValid.d.ts.map

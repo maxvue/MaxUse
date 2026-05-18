@@ -8,3 +8,11 @@ export function phone(value: MaybeRefOrGetter<string | number | null | undefined
 
     return PhoneLib.isValidPhoneNumber(String(data));
 }
+
+export const isValidPhone = phone;
+export const isPhoneValid = phone;
+export const hasValidPhone = phone;
+export const validPhone = phone;
+export const isPhone = phone;
+export const hasPhone = phone;
+export const phoneIsValid = phone;

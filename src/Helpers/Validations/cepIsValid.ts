@@ -11,3 +11,8 @@ export function cepIsValid(value: MaybeRefOrGetter<string | number | null | unde
     const data = toValue(value);
     return validateBr.cep(data);
 }
+
+export const cep = cepIsValid;
+export const isValidCep = cepIsValid;
+export const isCepValid = cepIsValid;
+export const hasValidCep = cepIsValid;

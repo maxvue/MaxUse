@@ -17,3 +17,17 @@ export function isEmail(value: MaybeRefOrGetter<string | null | undefined>): boo
 
     return emailRegex.test(data);
 }
+
+export const email = isEmail;
+export const emailIsValid = isEmail;
+export const isValidEmail = isEmail;
+export const hasValidEmail = isEmail;
+export const validEmail = isEmail;
+export const hasEmail = isEmail;
+export const isEMail = isEmail;
+export const eMail = isEmail;
+export const eMailIsValid = isEmail;
+export const isValidEMail = isEmail;
+export const hasValidEMail = isEmail;
+export const validEMail = isEmail;
+export const hasEMail = isEmail;
