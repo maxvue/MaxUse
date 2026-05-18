@@ -164,7 +164,6 @@ export declare const _: {
     useBreakpoints: typeof vueUseCore.useBreakpoints;
     useBroadcastChannel: typeof vueUseCore.useBroadcastChannel;
     useBrowserLocation: typeof vueUseCore.useBrowserLocation;
-    useCached: typeof vueUseCore.useCached;
     useClipboard: typeof vueUseCore.useClipboard;
     useClipboardItems: typeof vueUseCore.useClipboardItems;
     useCloned: typeof vueUseCore.useCloned;
@@ -257,7 +256,6 @@ export declare const _: {
     useSpeechRecognition: typeof vueUseCore.useSpeechRecognition;
     useSpeechSynthesis: typeof vueUseCore.useSpeechSynthesis;
     useStepper: typeof vueUseCore.useStepper;
-    useStorage: typeof vueUseCore.useStorage;
     useStorageAsync: typeof vueUseCore.useStorageAsync;
     useStyleTag: typeof vueUseCore.useStyleTag;
     useSupported: typeof vueUseCore.useSupported;
@@ -723,14 +721,10 @@ export declare const _: {
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     useDefaultReset<T>(initialData: T, timer?: number | null): Composables.DefaultResetRef<T>;
     refAutoReset: typeof Composables.useDefaultReset;
-    useInCache: (route_name: string, data_get: any, key: string) => Promise<any>;
-    useRefCached<T>(route_name: string, options?: {
-        data_get?: any;
-        data?: any;
-        key?: string | null;
-        defaultValue?: any;
-    }): import('vue').Ref<T | null>;
     useRefStorage(key: string, default_value?: any): any;
+    useCached: typeof Composables.useRefStorage;
+    useSharedCache: typeof Composables.useRefStorage;
+    useStorage: typeof Composables.useRefStorage;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string>, format?: string) => vueUseCore.UseTimeAgoReturn;
     useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string>, format?: string) => vueUseCore.UseTimeAgoReturn;
 };

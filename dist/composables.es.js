@@ -1,7 +1,5 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
-import { Oi as watchDebounced, jn as useTimeAgo$1, xn as useStorage } from "./dist-D5gA03iC.js";
-import { r as hasContent } from "./isBlank-DrIS5hlK.js";
-import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
+import { An as useTimeAgo$1, Di as watchDebounced, bn as useStorage$1 } from "./dist-BQ0OUEAh.js";
 import { ref } from "vue";
 import { ulid } from "ulid";
 import localforage from "localforage";
@@ -28,48 +26,20 @@ function useDefaultReset(initialData, timer = null) {
 }
 var refAutoReset = useDefaultReset;
 //#endregion
-//#region src/Composables/useInCache.ts
-var useInCache = async (route_name, data_get, key) => {
-	localforage.config({
-		name: "caches",
-		storeName: "cache-api"
-	});
-	const data = await localforage.getItem(key);
-	if (hasContent(data)) return data;
-	const data_api = await apiGetRoute(route_name, data_get);
-	const cleanData = JSON.parse(JSON.stringify(data_api));
-	await localforage.setItem(key, cleanData).catch((error) => console.error("[useInCache.ts] SAVE CACHE ERROR: " + error.name, error));
-	return data_api;
-};
-//#endregion
-//#region src/Composables/useRefCached.ts
-function useRefCached(route_name, options = {}) {
-	const state = ref(options.defaultValue ?? null);
-	const key = options.key ?? route_name;
-	const data = localStorage.getItem(key);
-	if (data) state.value = JSON.parse(data);
-	apiGetRoute(route_name, options.data_get ?? options.data ?? {}).then((value) => {
-		if (value) {
-			state.value = value;
-			const cleanData = JSON.parse(JSON.stringify(value));
-			localStorage.setItem(key, JSON.stringify(cleanData));
-		}
-	});
-	console.log("GETTED SERVER?");
-	return state;
-}
-//#endregion
 //#region src/Composables/useRefStorage.ts
 function useRefStorage(key, default_value = null) {
 	localforage.config({
 		name: "caches",
 		storeName: "use-ref-storages"
 	});
-	const state = useStorage(key, default_value);
+	const state = useStorage$1(key, default_value);
 	localforage.getItem(key).then((value) => state.value = value ? value : default_value);
 	watchDebounced(state, () => localforage.setItem(key, JSON.parse(JSON.stringify(state.value))), { debounce: 600 });
 	return state;
 }
+var useCached = useRefStorage;
+var useSharedCache = useRefStorage;
+var useStorage = useRefStorage;
 //#endregion
 //#region src/Composables/useTimeAgo.ts
 var ptBr = {
@@ -147,13 +117,14 @@ var useTimeAgo = (initialDate, format = "br") => timeAgo(initialDate, format);
 var Composables_exports = /* @__PURE__ */ __exportAll({
 	refAutoReset: () => refAutoReset,
 	timeAgo: () => timeAgo,
+	useCached: () => useCached,
 	useDefaultReset: () => useDefaultReset,
-	useInCache: () => useInCache,
-	useRefCached: () => useRefCached,
 	useRefStorage: () => useRefStorage,
+	useSharedCache: () => useSharedCache,
+	useStorage: () => useStorage,
 	useTimeAgo: () => useTimeAgo
 });
 //#endregion
-export { refAutoReset, Composables_exports as t, timeAgo, useDefaultReset, useInCache, useRefCached, useRefStorage, useTimeAgo };
+export { refAutoReset, Composables_exports as t, timeAgo, useCached, useDefaultReset, useRefStorage, useSharedCache, useStorage, useTimeAgo };
 
 //# sourceMappingURL=composables.es.js.map
