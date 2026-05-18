@@ -4,7 +4,7 @@ import { Ref } from 'vue';
 import { ref } from 'vue';
 
 
-export function useRefCached<T>(key: string, default_value: T): Ref<T | undefined> {
+export function useRefCached<T>(key: string, default_value: T): Ref<T> {
     localforage.config({ name: 'caches', storeName: 'use-ref-storages' });
 
     const state = ref(default_value);
