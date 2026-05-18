@@ -56,7 +56,7 @@ const ownHelpers = {
  */
 const filteredVueUse = {} as Omit<typeof vueUse, keyof typeof ownHelpers | 'vueUse'>;
 const vueUseKeys = Object.keys(vueUse).filter((key) => key !== 'vueUse');
-saveInJson('../vue-use-items.json', vueUseKeys);
+saveInJson('./vue-use-items.json', vueUseKeys);
 
 for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Record<string, any>)[key] = (vueUse as Record<string, any>)[key];
 

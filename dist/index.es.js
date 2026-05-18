@@ -88,7 +88,7 @@ var ownHelpers = {
 */
 var filteredVueUse = {};
 var vueUseKeys = Object.keys(dist_exports).filter((key) => key !== "vueUse");
-saveInJson("../vue-use-items.json", vueUseKeys);
+saveInJson("./vue-use-items.json", vueUseKeys);
 for (const key of vueUseKeys) if (!(key in ownHelpers)) filteredVueUse[key] = dist_exports[key];
 /**
 * Helpers do Lodash (filtrados para evitar duplicatas com ownHelpers e filteredVueUse).
