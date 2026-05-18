@@ -58,7 +58,11 @@ const autoImport = () => {
         ]
     };
 
-    saveInJson('./all-modules.json', valueReturn);
+    // APENAS PARA DEBUGAR ESTOU GERANDO ESTE JSON... PRA VER SE ESTÁ APARECENDO REALMENTE TUDO...
+    saveInJson('./all-modules.json', {
+        types: types,
+        modules: items
+    });
 
     return valueReturn;
 };

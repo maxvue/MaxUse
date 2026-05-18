@@ -65,7 +65,10 @@ var autoImport = () => {
 	];
 	const types = getVueUseTypes();
 	const valueReturn = { "@maxvue/max-use": [...items, ...types] };
-	saveInJson("./all-modules.json", valueReturn);
+	saveInJson("./all-modules.json", {
+		types,
+		modules: items
+	});
 	return valueReturn;
 };
 var getVueUseTypes = () => {
