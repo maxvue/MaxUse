@@ -723,6 +723,7 @@ export declare const _: {
     refAutoReset: typeof Composables.useDefaultReset;
     useRefStorage(key: string, default_value?: any): any;
     useCached: typeof Composables.useRefStorage;
+    useRefCached: typeof Composables.useRefStorage;
     useSharedCache: typeof Composables.useRefStorage;
     useStorage: typeof Composables.useRefStorage;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string>, format?: string) => vueUseCore.UseTimeAgoReturn;

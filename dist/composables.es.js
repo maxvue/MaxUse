@@ -38,6 +38,7 @@ function useRefStorage(key, default_value = null) {
 	return state;
 }
 var useCached = useRefStorage;
+var useRefCached = useRefStorage;
 var useSharedCache = useRefStorage;
 var useStorage = useRefStorage;
 //#endregion
@@ -119,12 +120,13 @@ var Composables_exports = /* @__PURE__ */ __exportAll({
 	timeAgo: () => timeAgo,
 	useCached: () => useCached,
 	useDefaultReset: () => useDefaultReset,
+	useRefCached: () => useRefCached,
 	useRefStorage: () => useRefStorage,
 	useSharedCache: () => useSharedCache,
 	useStorage: () => useStorage,
 	useTimeAgo: () => useTimeAgo
 });
 //#endregion
-export { refAutoReset, Composables_exports as t, timeAgo, useCached, useDefaultReset, useRefStorage, useSharedCache, useStorage, useTimeAgo };
+export { refAutoReset, Composables_exports as t, timeAgo, useCached, useDefaultReset, useRefCached, useRefStorage, useSharedCache, useStorage, useTimeAgo };
 
 //# sourceMappingURL=composables.es.js.map

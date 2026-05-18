@@ -13,5 +13,6 @@ export function useRefStorage(key: string, default_value: any = null): any {
 }
 
 export const useCached = useRefStorage;
+export const useRefCached = useRefStorage;
 export const useSharedCache = useRefStorage;
 export const useStorage = useRefStorage;
