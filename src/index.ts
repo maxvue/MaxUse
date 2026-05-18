@@ -1,5 +1,6 @@
-import * as vueUseCore from '@vueuse/core';
+import * as vueUse from '@vueuse/core';
 import * as lodash from 'lodash-es';
+import { saveInJson } from './scripts/generateList';
 
 import * as Browser from './Helpers/Browser';
 import * as Dates from './Helpers/Dates';
@@ -30,14 +31,7 @@ export * from './Helpers/Validations';
 export * from './Helpers/Electrical';
 export * from './Helpers/Format';
 
-export * from './Helpers/VueUse';
-
 export { maxUseItems, maxUseAutoImport } from './Helpers/maxUseItems';
-
-/**
- * Exporta um objeto contendo todos os itens do VueUse sem exceção.
- */
-export const vueUse = vueUseCore;
 
 /**
  * Helpers Próprios da MaxUse.
@@ -60,10 +54,11 @@ const ownHelpers = {
 /**
  * Helpers do VueUse (filtrados para evitar duplicatas com os próprios).
  */
-const filteredVueUse = {} as Omit<typeof vueUseCore, keyof typeof ownHelpers | 'vueUse'>;
-const vueUseKeys = Object.keys(vueUseCore).filter((key) => key !== 'vueUse');
+const filteredVueUse = {} as Omit<typeof vueUse, keyof typeof ownHelpers | 'vueUse'>;
+const vueUseKeys = Object.keys(vueUse).filter((key) => key !== 'vueUse');
+saveInJson('../vue-use-items.json', vueUseKeys);
 
-for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Record<string, any>)[key] = (vueUseCore as Record<string, any>)[key];
+for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Record<string, any>)[key] = (vueUse as Record<string, any>)[key];
 
 /**
  * Helpers do Lodash (filtrados para evitar duplicatas com ownHelpers e filteredVueUse).
