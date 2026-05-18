@@ -1,5 +1,5 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
-import { $n as useTimeAgo$1, Un as useStorage$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
+import { $n as useTimeAgo$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { computed, ref, watch } from "vue";
 import { ulid } from "ulid";
@@ -55,7 +55,10 @@ function useRefCached(key, default_value) {
 		name: "caches",
 		storeName: "use-ref-storages"
 	});
-	const state = useStorage$1(key, default_value);
+	const state = ref();
+	state.key = key;
+	state.clearCache = () => localforage.removeItem(key);
+	state.value = default_value;
 	localforage.getItem(key).then((value) => state.value = value ? value : default_value);
 	watchDebounced(state, () => localforage.setItem(key, JSON.parse(JSON.stringify(state.value))), { debounce: 600 });
 	return state;

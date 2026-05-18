@@ -1,5 +1,9 @@
 import { Ref } from 'vue';
-export declare function useRefCached(key: string, default_value: any): Ref;
+export type RefCached<T> = Ref<T> & {
+    key: string;
+    clearCache: () => void;
+};
+export declare function useRefCached<T>(key: string, default_value: T): RefCached<T>;
 export declare const useRefStorage: typeof useRefCached;
 export declare const useCached: typeof useRefCached;
 export declare const useSharedCache: typeof useRefCached;
