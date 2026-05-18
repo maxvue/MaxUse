@@ -1,7 +1,9 @@
-import { RemovableRef } from '@vueuse/core';
-export declare function useRefCached<T>(key: string, default_value: T): RemovableRef<T>;
+import { Ref } from 'vue';
+type MyRef<T> = Ref<T, T | null | undefined>;
+export declare function useRefCached<T>(key: string, default_value: T): MyRef<T>;
 export declare const useRefStorage: typeof useRefCached;
 export declare const useCached: typeof useRefCached;
 export declare const useSharedCache: typeof useRefCached;
 export declare const useStorage: typeof useRefCached;
+export {};
 //# sourceMappingURL=useRefCached.d.ts.map
