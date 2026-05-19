@@ -1,8 +1,10 @@
 import { ref, type Ref, watch, computed } from 'vue';
 import { apiGetRoute } from '../Routes/apiGetRoute';
 
-export function useCachedApi<T>(route_name: string, options: { data_get?: any; data?: any; key?: string | null; defaultValue?: any; sync?: boolean; watch?: boolean } = {}): Ref<T | null> {
-    const state = ref(options.defaultValue ?? null);
+export type ToRefCachedApi<T> = T extends Ref ? T : Ref<T>;
+
+export function useCachedApi<T>(route_name: string, options: { data_get?: any; data?: any; key?: string | null; defaultValue?: T; sync?: boolean; watch?: boolean } = {}): ToRefCachedApi<T> {
+    const state = ref(options.defaultValue ?? null) as ToRefCachedApi<T>;
     const key = options.key ?? route_name;
 
     const data = localStorage.getItem(key);
@@ -28,7 +30,6 @@ export function useCachedApi<T>(route_name: string, options: { data_get?: any; d
             }
         });
     }
-
 
     return state;
 }

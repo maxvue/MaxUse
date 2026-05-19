@@ -725,10 +725,10 @@ export declare const _: {
         data_get?: any;
         data?: any;
         key?: string | null;
-        defaultValue?: any;
+        defaultValue?: T;
         sync?: boolean;
         watch?: boolean;
-    }): import('vue').Ref<T | null>;
+    }): Composables.ToRefCachedApi<T>;
     useRefCachedApi: typeof Composables.useCachedApi;
     useSharedCacheApi: typeof Composables.useCachedApi;
     useInCacheApi: typeof Composables.useCachedApi;
