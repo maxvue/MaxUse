@@ -1,7 +1,8 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
+import { o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
-import { computed, ref, watch } from "vue";
+import { computed, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
@@ -137,8 +138,11 @@ var FORMAT_MAP = {
 	limit_abbrev: timeAgoLimitAbrev,
 	future: timeAgoLimitAbrev
 };
-var timeAgo = (initialDate, format = "br") => useTimeAgo$1(initialDate, { messages: FORMAT_MAP[format] ?? ptBr });
-var useTimeAgo = (initialDate, format = "br") => timeAgo(initialDate, format);
+var timeAgo = (initialDate, format = "br") => {
+	if (isNotValid(toValue(initialDate))) return useTimeAgo$1(/* @__PURE__ */ new Date(), { messages: FORMAT_MAP[format] ?? ptBr });
+	return useTimeAgo$1(initialDate, { messages: FORMAT_MAP[format] ?? ptBr });
+};
+var useTimeAgo = timeAgo;
 //#endregion
 //#region src/Composables/index.ts
 var Composables_exports = /* @__PURE__ */ __exportAll({

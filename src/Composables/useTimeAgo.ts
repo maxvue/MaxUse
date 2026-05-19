@@ -1,5 +1,6 @@
+import { isNotValid, isValid } from '@/Helpers/Validations';
 import { UseTimeAgoReturn, useTimeAgo as vueUseTimeAgo } from '@vueuse/core';
-import { MaybeRefOrGetter } from 'vue';
+import { MaybeRefOrGetter, toValue } from 'vue';
 
 type n = number;
 type past = boolean;
@@ -79,6 +80,9 @@ const FORMAT_MAP: Record<string, any> = {
     future: timeAgoLimitAbrev
 };
 
-export const timeAgo = (initialDate: MaybeRefOrGetter<Date | number | string>, format: string = 'br'): UseTimeAgoReturn => vueUseTimeAgo(initialDate, { messages: FORMAT_MAP[format] ?? ptBr });
+export const timeAgo = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string = 'br'): UseTimeAgoReturn => {
+    if (isNotValid(toValue(initialDate))) return vueUseTimeAgo(new Date(), { messages: FORMAT_MAP[format] ?? ptBr });
+    return vueUseTimeAgo(initialDate as any, { messages: FORMAT_MAP[format] ?? ptBr });
+};
 
-export const useTimeAgo = (initialDate: MaybeRefOrGetter<Date | number | string>, format: string = 'br'): UseTimeAgoReturn => timeAgo(initialDate, format);
+export const useTimeAgo = timeAgo;
