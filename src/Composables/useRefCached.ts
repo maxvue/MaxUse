@@ -1,10 +1,10 @@
 import { watchDebounced } from '@vueuse/core';
 import { ref, Ref } from 'vue';
 
-export type ToRefCached<T> = T extends Ref ? T : Ref<T>;
+export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 
 export function useRefCached<T>(key: string, default_value: T): ToRefCached<T> {
-    const state = ref(default_value) as ToRefCached<T>;
+    const state = ref<T>(default_value) as ToRefCached<T>;
 
     // Leitura síncrona do localStorage
     const raw = localStorage.getItem(key);
