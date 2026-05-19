@@ -7,7 +7,6 @@ import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
 	const state = ref(initialData);
-	if (!state) return state;
 	state.initialData = JSON.stringify(initialData);
 	state.reset = () => {
 		const reset_data = JSON.parse(state.initialData);
