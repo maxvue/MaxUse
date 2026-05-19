@@ -12,6 +12,7 @@ export interface DefaultReset<T> extends Ref {
 export type DefaultResetRef<T> = T extends DefaultReset<T> ? T : DefaultReset<T>;
 
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultResetRef<T> {
+
     const state = ref<T>() as DefaultResetRef<T>;
     state.initialData = JSON.parse(JSON.stringify(initialData));
 
