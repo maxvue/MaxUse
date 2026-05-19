@@ -3,11 +3,11 @@ import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
 export type Reset = { reset(): void; initialData: string; timer?: number | null };
-export type DefaultRefReset<T> = (T extends Ref ? T : Ref<T>) & Reset;
+export type DefaultReset<T> = (T extends Ref ? T : Ref<T>) & Reset;
 
-export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultRefReset<T> {
+export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
 
-    const state = ref<T>(initialData) as DefaultRefReset<T>;
+    const state = ref<T>(initialData) as DefaultReset<T>;
     state.initialData = JSON.stringify(initialData);
 
     state.reset = () => {
@@ -28,7 +28,7 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
         setTimeout(() => state.reset(), timer);
     }, { debounce: timer });
 
-    return state as DefaultRefReset<T>;
+    return state as DefaultReset<T>;
 }
 
 export const refAutoReset = useDefaultReset;
