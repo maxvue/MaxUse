@@ -3,7 +3,7 @@ import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
 export interface DefaultResetExtends<T> extends Ref<T> { reset(): void; initialData: string; timer?: number | null };
-export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? T : DefaultResetExtends<T> | null;
+export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? false | T : DefaultResetExtends<T> | null;
 
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
 
