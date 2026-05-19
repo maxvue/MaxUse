@@ -1,19 +1,13 @@
-import { ref, type Ref } from 'vue';
+import { ref, Ref } from 'vue';
 import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
+export type Reset = { reset(): void; initialData: any; timer?: number | null };
+export type DefaultRefReset<T> = T extends Ref ? T & Reset : Ref & Reset;
 
-export interface DefaultReset<T> extends Ref {
-    reset(): void;
-    initialData?: T;
-    timer?: number | null;
-}
+export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultRefReset<T> {
 
-export type DefaultResetRef<T> = T extends DefaultReset<T> ? T : DefaultReset<T>;
-
-export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultResetRef<T> {
-
-    const state = ref<T>() as DefaultResetRef<T>;
+    const state = ref<T>() as DefaultRefReset<T>;
     state.initialData = JSON.parse(JSON.stringify(initialData));
 
     state.reset = () => {
@@ -35,7 +29,7 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
     }, { debounce: timer });
 
 
-    return state as DefaultResetRef<T>;
+    return state;
 }
 
 export const refAutoReset = useDefaultReset;

@@ -1,10 +1,10 @@
 import { Ref } from 'vue';
-export interface DefaultReset<T> extends Ref {
+export type Reset = {
     reset(): void;
-    initialData?: T;
+    initialData: any;
     timer?: number | null;
-}
-export type DefaultResetRef<T> = T extends DefaultReset<T> ? T : DefaultReset<T>;
-export declare function useDefaultReset<T>(initialData: T, timer?: number | null): DefaultResetRef<T>;
+};
+export type DefaultRefReset<T> = T extends Ref ? T & Reset : Ref & Reset;
+export declare function useDefaultReset<T>(initialData: T, timer?: number | null): DefaultRefReset<T>;
 export declare const refAutoReset: typeof useDefaultReset;
 //# sourceMappingURL=useDefaultReset.d.ts.map
