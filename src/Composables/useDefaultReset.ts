@@ -9,7 +9,6 @@ export interface DefaultReset<T> extends Ref {
     timer?: number | null;
 }
 
-
 export type DefaultResetRef<T> = T extends DefaultReset<T> ? T : DefaultReset<T>;
 
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultResetRef<T> {
