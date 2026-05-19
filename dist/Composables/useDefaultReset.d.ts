@@ -5,6 +5,6 @@ export type Reset = {
     timer?: number | null;
 };
 export type DefaultReset<T> = (T extends Ref ? T : Ref<T>) & Reset;
-export declare function useDefaultReset<T>(initialData: any, timer?: number | null): DefaultReset<T>;
+export declare function useDefaultReset<T>(initialData: T, timer?: number | null): DefaultReset<T>;
 export declare const refAutoReset: typeof useDefaultReset;
 //# sourceMappingURL=useDefaultReset.d.ts.map

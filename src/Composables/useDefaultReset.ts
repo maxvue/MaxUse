@@ -5,9 +5,9 @@ import { watchDebounced } from '@vueuse/core';
 export type Reset = { reset(): void; initialData: string; timer?: number | null };
 export type DefaultReset<T> = (T extends Ref ? T : Ref<T>) & Reset;
 
-export function useDefaultReset<T>(initialData: any, timer: number | null = null): DefaultReset<T> {
+export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
 
-    const state = ref<T>(initialData as T) as DefaultReset<T>;
+    const state = ref(initialData as T) as DefaultReset<T>;
     state.initialData = JSON.stringify(initialData);
 
     state.reset = () => {
