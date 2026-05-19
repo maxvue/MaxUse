@@ -721,7 +721,7 @@ export declare const _: {
     setLibraryRouter: (router: import('vue-router').Router) => void;
     goToRoute: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
-    useDefaultReset<T>(defaultValue: import('vue').MaybeRefOrGetter<T>, delay?: number): import('vue').Ref<T>;
+    useDefaultReset<T>(defaultValue: import('vue').MaybeRefOrGetter<T>, delay?: number): Composables.ToRefReset<T>;
     refAutoReset: typeof Composables.useDefaultReset;
     useCachedApi<T>(route_name: string, options?: {
         data_get?: any;

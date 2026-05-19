@@ -1,17 +1,17 @@
 import { type MaybeRefOrGetter, customRef, toValue, Ref } from 'vue';
 import { ulid } from 'ulid';
-import type { ManualResetRefReturn, Fn } from '@vueuse/core';
 import { isObjectValid } from '../Helpers/Iterables';
 
+export type ToRefReset<T> = T extends Ref ? T : Ref<T>;
 
-export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: number = 0): Ref<T> {
+export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: number = 0): ToRefReset<T> {
     const raw_default_value = toValue(defaultValue);
 
     let value: T = raw_default_value;
 
     let timeout: any;
 
-    let trigger: Fn;
+    let trigger: () => void;
 
     const reset = () => {
 
@@ -51,7 +51,7 @@ export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: num
 
     // refValue.reset = reset;
 
-    return refValue;
+    return refValue as ToRefReset<T>;
 }
 
 export const refAutoReset = useDefaultReset;
