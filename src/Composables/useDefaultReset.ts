@@ -3,11 +3,14 @@ import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
 export interface DefaultResetExtends<T> extends Ref<T> { reset(): void; initialData: string; timer?: number | null };
-export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? T : DefaultResetExtends<[T]>;
+export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? T : DefaultResetExtends<T> | null;
 
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
 
     const state = ref<T>(initialData) as DefaultReset<T>;
+
+    if (!state) return state;
+
     state.initialData = JSON.stringify(initialData);
 
     state.reset = () => {
