@@ -1,4 +1,4 @@
-import { isNotValid, isValid } from '@/Helpers/Validations';
+import { isNotValid } from '../Helpers/Validations';
 import { UseTimeAgoReturn, useTimeAgo as vueUseTimeAgo } from '@vueuse/core';
 import { MaybeRefOrGetter, toValue } from 'vue';
 
