@@ -1,10 +1,10 @@
 import { Ref } from 'vue';
-export interface DefaultResetExtends extends Ref {
+export interface DefaultResetExtends<T> extends Ref<T> {
     reset(): void;
     initialData: string;
     timer?: number | null;
 }
-export type DefaultReset<T> = [T] extends [DefaultResetExtends] ? T : Ref & {
+export type DefaultReset<T> = T extends DefaultResetExtends<T> ? T : Ref<T> & {
     reset(): void;
     initialData: string;
     timer?: number | null;
