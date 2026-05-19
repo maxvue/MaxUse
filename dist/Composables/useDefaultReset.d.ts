@@ -1,7 +1,7 @@
 import { Ref } from 'vue';
 export type Reset = {
     reset(): void;
-    initialData: any;
+    initialData: string;
     timer?: number | null;
 };
 export type DefaultRefReset<T> = (T extends Ref ? T : Ref<T>) & Reset;

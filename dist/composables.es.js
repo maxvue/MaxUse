@@ -6,15 +6,15 @@ import { computed, nextTick, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
-	const state = ref();
-	state.initialData = JSON.parse(JSON.stringify(initialData));
+	const state = ref(initialData);
+	state.initialData = JSON.stringify(initialData);
 	state.reset = () => {
-		const new_data = JSON.parse(JSON.stringify(state.initialData));
-		if (typeof state.initialData === "object") {
-			if (state.initialData?.id === "ulid") new_data.id = ulid().toLowerCase();
-			if (state.initialData?.created_at === "now") new_data.created_at = (/* @__PURE__ */ new Date()).toISOString();
+		const reset_data = JSON.parse(state.initialData);
+		if (typeof reset_data === "object") for (const k in reset_data) {
+			if (reset_data[k] === "ulid") reset_data[k] = ulid().toLowerCase();
+			if (reset_data[k] === "now") reset_data[k] = (/* @__PURE__ */ new Date()).toISOString();
 		}
-		state.value = new_data;
+		state.value = reset_data;
 	};
 	state.reset();
 	state.timer = timer;
