@@ -19,7 +19,7 @@ function useDefaultReset(initialData, timer = null) {
 	state.reset();
 	state.timer = timer;
 	if (timer) watchDebounced(state, () => {
-		setTimeout(() => state.reset(), timer);
+		state.reset();
 	}, { debounce: timer });
 	return state;
 }
