@@ -1,7 +1,7 @@
-import { ref, Ref, customRef,CustomRefFactory } from 'vue';
+import { Ref, customRef } from 'vue';
 import { ulid } from 'ulid';
 
-export function useDefaultReset(value: any, delay: number = 0) {
+export function useDefaultReset(value: any, delay: number = 0): Ref & { reset: () => void } {
     let timeout: any;
     const default_value = JSON.stringify(value);
     return customRef((track, trigger) => {
@@ -32,6 +32,7 @@ export function useDefaultReset(value: any, delay: number = 0) {
                 value = reset_data;
             }
         };
-    });
+    }) as Ref & { reset: () => void };
 }
+
 export const refAutoReset = useDefaultReset;
