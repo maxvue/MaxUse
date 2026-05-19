@@ -3,7 +3,8 @@ import { ulid } from 'ulid';
 import type { Fn } from '@vueuse/core';
 import { isObjectValid } from '../Helpers/Iterables';
 
-export interface DefaultReset<T> extends Ref<T> {}
+export interface DefaultResetExtends<T> extends Ref<T> { reset(): void };
+export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? T : DefaultResetExtends<T>;
 
 export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: number = 0): DefaultReset<T> {
     const raw_default_value = toValue(defaultValue);
@@ -27,7 +28,7 @@ export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: num
         trigger();
     };
 
-    return customRef<T>((track, _trigger) => {
+    const refValue = customRef<T>((track, _trigger) => {
         trigger = _trigger;
         return {
             get() {
@@ -50,9 +51,9 @@ export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: num
         };
     }) as DefaultReset<T>;
 
-    // refValue.reset = reset;
+    refValue.reset = reset;
 
-    // return refValue;
+    return refValue;
 }
 
 export const refAutoReset = useDefaultReset;
