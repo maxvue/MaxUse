@@ -19,7 +19,7 @@ function useDefaultReset(defaultValue, delay = 0) {
 		value = raw_default_value;
 		trigger();
 	};
-	const refValue = customRef((track, _trigger) => {
+	return customRef((track, _trigger) => {
 		trigger = _trigger;
 		return {
 			get() {
@@ -27,18 +27,18 @@ function useDefaultReset(defaultValue, delay = 0) {
 				return value;
 			},
 			set(newValue) {
+				value = newValue;
+				trigger();
 				if (delay > 0) {
 					clearTimeout(timeout);
 					timeout = setTimeout(() => {
-						value = newValue;
+						reset();
 						trigger();
 					}, delay);
 				}
 			}
 		};
 	});
-	refValue.reset = reset;
-	return refValue;
 }
 var refAutoReset = useDefaultReset;
 //#endregion
