@@ -1,5 +1,5 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
-import { $n as useTimeAgo$1, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
+import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { computed, ref, toValue, watch } from "vue";
@@ -151,6 +151,11 @@ var timeAgo = (initialDate, format = "br") => {
 };
 var useTimeAgo = timeAgo;
 //#endregion
+//#region src/Composables/watchTrue.ts
+var watchTrue = whenever;
+var watchValid = whenever;
+var watchComputed = whenever;
+//#endregion
 //#region src/Composables/index.ts
 var Composables_exports = /* @__PURE__ */ __exportAll({
 	dateFormat: () => dateFormat,
@@ -167,9 +172,12 @@ var Composables_exports = /* @__PURE__ */ __exportAll({
 	useSharedCache: () => useSharedCache,
 	useSharedCacheApi: () => useSharedCacheApi,
 	useStorage: () => useStorage,
-	useTimeAgo: () => useTimeAgo
+	useTimeAgo: () => useTimeAgo,
+	watchComputed: () => watchComputed,
+	watchTrue: () => watchTrue,
+	watchValid: () => watchValid
 });
 //#endregion
-export { dateFormat, refAutoReset, Composables_exports as t, timeAgo, useCached, useCachedApi, useDateFormat, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo };
+export { dateFormat, refAutoReset, Composables_exports as t, timeAgo, useCached, useCachedApi, useDateFormat, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo, watchComputed, watchTrue, watchValid };
 
 //# sourceMappingURL=composables.es.js.map

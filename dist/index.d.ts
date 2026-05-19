@@ -741,5 +741,8 @@ export declare const _: {
     dateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
     useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
+    watchTrue: typeof vueUse.whenever;
+    watchValid: typeof vueUse.whenever;
+    watchComputed: typeof vueUse.whenever;
 };
 //# sourceMappingURL=index.d.ts.map

@@ -3,3 +3,4 @@ export * from './useRefCachedApi';
 export * from './useRefCached';
 export * from './useDateFormat';
 export * from './useTimeAgo';
+export * from './watchTrue';
