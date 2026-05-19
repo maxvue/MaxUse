@@ -737,9 +737,9 @@ export declare const _: {
     useCached: typeof Composables.useRefCached;
     useSharedCache: typeof Composables.useRefCached;
     useStorage: typeof Composables.useRefCached;
-    timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
-    useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
     useDateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
     dateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
+    timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
+    useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
 };
 //# sourceMappingURL=index.d.ts.map

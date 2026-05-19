@@ -69,6 +69,13 @@ var useCached = useRefCached;
 var useSharedCache = useRefCached;
 var useStorage = useRefCached;
 //#endregion
+//#region src/Composables/useDateFormat.ts
+var useDateFormat = (initialDate, format) => {
+	if (isNotValid(toValue(initialDate))) return useDateFormat$1(/* @__PURE__ */ new Date(), format);
+	return useDateFormat$1(initialDate, format);
+};
+var dateFormat = useDateFormat;
+//#endregion
 //#region src/Composables/useTimeAgo.ts
 var ptBr = {
 	justNow: "agora",
@@ -143,13 +150,6 @@ var timeAgo = (initialDate, format = "br") => {
 	return useTimeAgo$1(initialDate, { messages: FORMAT_MAP[format] ?? ptBr });
 };
 var useTimeAgo = timeAgo;
-//#endregion
-//#region src/Composables/useDateFormat.ts
-var useDateFormat = (initialDate, format) => {
-	if (isNotValid(toValue(initialDate))) return useDateFormat$1(/* @__PURE__ */ new Date(), format);
-	return useDateFormat$1(initialDate, format);
-};
-var dateFormat = useDateFormat;
 //#endregion
 //#region src/Composables/index.ts
 var Composables_exports = /* @__PURE__ */ __exportAll({
