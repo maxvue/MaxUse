@@ -1,59 +1,39 @@
-import { type MaybeRefOrGetter, customRef, toValue, Ref } from 'vue';
+import { ref, type Ref } from 'vue';
 import { ulid } from 'ulid';
-import type { Fn } from '@vueuse/core';
-import { isObjectValid } from '../Helpers/Iterables';
+import { watchDebounced } from '@vueuse/core';
 
-export interface DefaultResetExtends<T> extends Ref<T> { reset(): void };
-export type DefaultReset<T> = [T] extends [DefaultResetExtends<T>] ? T : DefaultResetExtends<T>;
+export interface DefaultResetRef<T> extends Ref<T> {
+    reset(): void;
+    initialData?: T;
+    timer?: number | null;
+}
 
-export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: number = 0): DefaultReset<T> {
-    const raw_default_value = toValue(defaultValue);
+export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultResetRef<T> {
+    const state = ref<T>() as DefaultResetRef<T>;
+    state.initialData = JSON.parse(JSON.stringify(initialData));
 
-    let value: T = raw_default_value;
-
-    let timeout: any;
-
-    let trigger: Fn;
-
-    const reset = () => {
-
-        if (isObjectValid(raw_default_value)){
-            Object.values(raw_default_value).forEach((value) => {
-                if (value === 'ulid') value = ulid().toLowerCase();
-                if (value === 'now') value = new Date().toISOString();
-            });
+    state.reset = () => {
+        const new_data = JSON.parse(JSON.stringify(state.initialData));
+        if (typeof state.initialData === 'object') {
+            if ((state.initialData as any)?.id === 'ulid') (new_data as any).id = ulid().toLowerCase();
+            if ((state.initialData as any)?.created_at === 'now') (new_data as any).created_at = new Date().toISOString();
         }
-
-        value = raw_default_value;
-        trigger();
+        state.value = new_data;
     };
 
-    const refValue = customRef<T>((track, _trigger) => {
-        trigger = _trigger;
-        return {
-            get() {
-                track();
-                return value;
-            },
-            set(newValue) {
-                value = newValue;
-                trigger();
+    state.reset();
+    state.timer = timer;
 
-                if (delay > 0) {
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => {
-                        reset();
-                        trigger();
-                    }, delay);
-                }
+    if (timer) {
+        watchDebounced(state, () => {
+            setTimeout(() => {
+                state.reset();''
+            }, timer);
+        }, { debounce: timer });
+    }
 
-            }
-        };
-    }) as DefaultReset<T>;
 
-    refValue.reset = reset;
-
-    return refValue;
+    return state as DefaultResetRef<T>;
 }
 
 export const refAutoReset = useDefaultReset;

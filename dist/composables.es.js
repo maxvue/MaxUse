@@ -1,46 +1,29 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { a as isNotEmpty, o as isNotValid } from "./Validations-DRaR7BG2.js";
-import { isObjectValid } from "./iterables.es.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
-import { computed, customRef, nextTick, ref, toValue, watch } from "vue";
+import { computed, nextTick, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
-function useDefaultReset(defaultValue, delay = 0) {
-	const raw_default_value = toValue(defaultValue);
-	let value = raw_default_value;
-	let timeout;
-	let trigger;
-	const reset = () => {
-		if (isObjectValid(raw_default_value)) Object.values(raw_default_value).forEach((value) => {
-			if (value === "ulid") value = ulid().toLowerCase();
-			if (value === "now") value = (/* @__PURE__ */ new Date()).toISOString();
-		});
-		value = raw_default_value;
-		trigger();
+function useDefaultReset(initialData, timer = null) {
+	const state = ref();
+	state.initialData = JSON.parse(JSON.stringify(initialData));
+	state.reset = () => {
+		const new_data = JSON.parse(JSON.stringify(state.initialData));
+		if (typeof state.initialData === "object") {
+			if (state.initialData?.id === "ulid") new_data.id = ulid().toLowerCase();
+			if (state.initialData?.created_at === "now") new_data.created_at = (/* @__PURE__ */ new Date()).toISOString();
+		}
+		state.value = new_data;
 	};
-	const refValue = customRef((track, _trigger) => {
-		trigger = _trigger;
-		return {
-			get() {
-				track();
-				return value;
-			},
-			set(newValue) {
-				value = newValue;
-				trigger();
-				if (delay > 0) {
-					clearTimeout(timeout);
-					timeout = setTimeout(() => {
-						reset();
-						trigger();
-					}, delay);
-				}
-			}
-		};
-	});
-	refValue.reset = reset;
-	return refValue;
+	state.reset();
+	state.timer = timer;
+	if (timer) watchDebounced(state, () => {
+		setTimeout(() => {
+			state.reset();
+		}, timer);
+	}, { debounce: timer });
+	return state;
 }
 var refAutoReset = useDefaultReset;
 //#endregion
