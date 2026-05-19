@@ -1,12 +1,12 @@
 import { watchDebounced, type WatchDebouncedOptions, whenever, type WheneverOptions } from '@vueuse/core';
 import { watch, nextTick, type WatchSource, type WatchOptions, type WatchHandle } from 'vue';
-import { isNotValid } from '../Helpers/Validations';
+import { isNotEmpty } from '../Helpers/Validations';
 
 export const watchTrue = whenever;
 
 export function watchIfValid<T, Immediate extends Readonly<boolean> = false>( source: WatchSource<T>, callback: (value: NonNullable<T>, oldValue: T | undefined) => void, options?: WheneverOptions<Immediate> ): WatchHandle {
     const handle = watch( source, (value, oldValue) => {
-        if (isNotValid(value)) return;
+        if (isNotEmpty(value)) return;
 
         if (options?.once) nextTick(() => handle.stop());
 
@@ -23,7 +23,7 @@ export const watchComputedIsValid = watchIfValid;
 
 export function watchDebounceIfValid<T, Immediate extends Readonly<boolean> = false>( source: WatchSource<T>, callback: (value: NonNullable<T>, oldValue: T | undefined) => void, options?: WatchDebouncedOptions<Immediate> ): WatchHandle {
     const handle = watchDebounced( source, (value, oldValue) => {
-        if (isNotValid(value)) return;
+        if (isNotEmpty(value)) return;
 
         if (options?.once) nextTick(() => handle.stop());
 
