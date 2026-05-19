@@ -28,7 +28,7 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
         setTimeout(() => state.reset(), timer);
     }, { debounce: timer });
 
-    return state;
+    return state as DefaultRefReset<T>;
 }
 
 export const refAutoReset = useDefaultReset;
