@@ -2,7 +2,7 @@ import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
-import { computed, ref, toValue, watch } from "vue";
+import { computed, nextTick, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
@@ -153,8 +153,37 @@ var useTimeAgo = timeAgo;
 //#endregion
 //#region src/Composables/watchTrue.ts
 var watchTrue = whenever;
-var watchValid = whenever;
-var watchComputed = whenever;
+function watchIfValid(source, callback, options) {
+	const handle = watch(source, (value, oldValue) => {
+		if (isNotValid(value)) return;
+		if (options?.once) nextTick(() => handle.stop());
+		callback(value, oldValue);
+	}, {
+		...options,
+		once: false
+	});
+	return handle;
+}
+var watchValid = watchIfValid;
+var watchIsValid = watchIfValid;
+var watchIsValidComputed = watchIfValid;
+var watchComputedIsValid = watchIfValid;
+function watchDebounceIfValid(source, callback, options) {
+	const handle = watchDebounced(source, (value, oldValue) => {
+		if (isNotValid(value)) return;
+		if (options?.once) nextTick(() => handle.stop());
+		callback(value, oldValue);
+	}, {
+		...options,
+		once: false
+	});
+	return handle;
+}
+var watchDebouncedValid = watchDebounceIfValid;
+var watchDebouncedIsValid = watchDebounceIfValid;
+var watchDebounceValid = watchDebounceIfValid;
+var watchComputedDebounceValid = watchDebounceIfValid;
+var watchComputedDebounceIsValid = watchDebounceIfValid;
 //#endregion
 //#region src/Composables/index.ts
 var Composables_exports = /* @__PURE__ */ __exportAll({
@@ -173,11 +202,20 @@ var Composables_exports = /* @__PURE__ */ __exportAll({
 	useSharedCacheApi: () => useSharedCacheApi,
 	useStorage: () => useStorage,
 	useTimeAgo: () => useTimeAgo,
-	watchComputed: () => watchComputed,
+	watchComputedDebounceIsValid: () => watchComputedDebounceIsValid,
+	watchComputedDebounceValid: () => watchComputedDebounceValid,
+	watchComputedIsValid: () => watchComputedIsValid,
+	watchDebounceIfValid: () => watchDebounceIfValid,
+	watchDebounceValid: () => watchDebounceValid,
+	watchDebouncedIsValid: () => watchDebouncedIsValid,
+	watchDebouncedValid: () => watchDebouncedValid,
+	watchIfValid: () => watchIfValid,
+	watchIsValid: () => watchIsValid,
+	watchIsValidComputed: () => watchIsValidComputed,
 	watchTrue: () => watchTrue,
 	watchValid: () => watchValid
 });
 //#endregion
-export { dateFormat, refAutoReset, Composables_exports as t, timeAgo, useCached, useCachedApi, useDateFormat, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo, watchComputed, watchTrue, watchValid };
+export { dateFormat, refAutoReset, Composables_exports as t, timeAgo, useCached, useCachedApi, useDateFormat, useDefaultReset, useInCacheApi, useRefCached, useRefCachedApi, useRefStorage, useSharedCache, useSharedCacheApi, useStorage, useTimeAgo, watchComputedDebounceIsValid, watchComputedDebounceValid, watchComputedIsValid, watchDebounceIfValid, watchDebounceValid, watchDebouncedIsValid, watchDebouncedValid, watchIfValid, watchIsValid, watchIsValidComputed, watchTrue, watchValid };
 
 //# sourceMappingURL=composables.es.js.map

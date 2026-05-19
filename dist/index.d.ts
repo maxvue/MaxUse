@@ -741,8 +741,17 @@ export declare const _: {
     dateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
     useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
+    watchIfValid<T, Immediate extends Readonly<boolean> = false>(source: import('vue').WatchSource<T>, callback: (value: NonNullable<T>, oldValue: T | undefined) => void, options?: vueUse.WheneverOptions<Immediate>): import('vue').WatchHandle;
+    watchDebounceIfValid<T, Immediate extends Readonly<boolean> = false>(source: import('vue').WatchSource<T>, callback: (value: NonNullable<T>, oldValue: T | undefined) => void, options?: vueUse.WatchDebouncedOptions<Immediate>): import('vue').WatchHandle;
     watchTrue: typeof vueUse.whenever;
-    watchValid: typeof vueUse.whenever;
-    watchComputed: typeof vueUse.whenever;
+    watchValid: typeof Composables.watchIfValid;
+    watchIsValid: typeof Composables.watchIfValid;
+    watchIsValidComputed: typeof Composables.watchIfValid;
+    watchComputedIsValid: typeof Composables.watchIfValid;
+    watchDebouncedValid: typeof Composables.watchDebounceIfValid;
+    watchDebouncedIsValid: typeof Composables.watchDebounceIfValid;
+    watchDebounceValid: typeof Composables.watchDebounceIfValid;
+    watchComputedDebounceValid: typeof Composables.watchDebounceIfValid;
+    watchComputedDebounceIsValid: typeof Composables.watchDebounceIfValid;
 };
 //# sourceMappingURL=index.d.ts.map
