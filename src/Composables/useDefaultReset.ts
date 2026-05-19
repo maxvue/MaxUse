@@ -2,8 +2,8 @@ import { ref, Ref } from 'vue';
 import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
-export type Reset = { reset(): void; initialData: string; timer?: number | null };
-export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & Reset;
+export interface DefaultResetExtends extends Ref { reset(): void; initialData: string; timer?: number | null };
+export type DefaultReset<T> = [T] extends [DefaultResetExtends] ? T : DefaultResetExtends;
 
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
 
