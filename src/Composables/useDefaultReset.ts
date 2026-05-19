@@ -2,7 +2,7 @@ import { ref, type Ref } from 'vue';
 import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
-export type DefaultReset<T> = (T extends Ref ? T : Ref<T>) & {
+export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
     reset(): void;
     initialData?: any;
     timer?: number | null;

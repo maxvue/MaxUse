@@ -1,5 +1,5 @@
 import { Ref } from 'vue';
-export type DefaultReset<T> = (T extends Ref ? T : Ref<T>) & {
+export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
     reset(): void;
     initialData?: any;
     timer?: number | null;
