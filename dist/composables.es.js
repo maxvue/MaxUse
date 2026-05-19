@@ -2,26 +2,37 @@ import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { a as isNotEmpty, o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
-import { computed, nextTick, ref, toValue, watch } from "vue";
+import { computed, customRef, nextTick, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
-function useDefaultReset(initialData, timer = null) {
-	const state = ref(initialData);
-	state.initialData = JSON.stringify(initialData);
-	state.reset = () => {
-		const reset_data = JSON.parse(state.initialData);
-		if (typeof reset_data === "object") for (const k in reset_data) {
-			if (reset_data[k] === "ulid") reset_data[k] = ulid().toLowerCase();
-			if (reset_data[k] === "now") reset_data[k] = (/* @__PURE__ */ new Date()).toISOString();
-		}
-		state.value = reset_data;
-	};
-	state.reset();
-	state.timer = timer;
-	if (timer) watchDebounced(state, () => {
-		state.reset();
-	}, { debounce: timer });
-	return state;
+function useDefaultReset(value, delay = 0) {
+	let timeout;
+	const default_value = JSON.stringify(value);
+	return customRef((track, trigger) => {
+		return {
+			get() {
+				track();
+				return value;
+			},
+			set(newValue) {
+				if (delay > 0) {
+					clearTimeout(timeout);
+					timeout = setTimeout(() => {
+						value = newValue;
+						trigger();
+					}, delay);
+				}
+			},
+			reset() {
+				const reset_data = JSON.parse(default_value);
+				if (typeof reset_data === "object") for (const k in reset_data) {
+					if (reset_data[k] === "ulid") reset_data[k] = ulid().toLowerCase();
+					if (reset_data[k] === "now") reset_data[k] = (/* @__PURE__ */ new Date()).toISOString();
+				}
+				value = reset_data;
+			}
+		};
+	});
 }
 var refAutoReset = useDefaultReset;
 //#endregion

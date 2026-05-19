@@ -1,36 +1,37 @@
-import { ref, Ref } from 'vue';
+import { ref, Ref, customRef,CustomRefFactory } from 'vue';
 import { ulid } from 'ulid';
-import { watchDebounced } from '@vueuse/core';
 
-export interface DefaultResetExtendsA<T> extends Ref<T> { reset(): void; initialData: string; timer?: number | null };
-export interface DefaultResetExtendsB<T> extends Ref<T> { reset(): void; initialData: string; timer?: number | null };
-export type DefaultReset<T> = [T] extends [DefaultResetExtendsA<T>] ? T : DefaultResetExtendsB<T>;
+export function useDefaultReset(value: any, delay: number = 0) {
+    let timeout: any;
+    const default_value = JSON.stringify(value);
+    return customRef((track, trigger) => {
+        return {
+            get() {
+                track();
+                return value;
+            },
+            set(newValue) {
 
-export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
+                if (delay > 0) {
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => {
+                        value = newValue;
+                        trigger();
+                    }, delay);
+                }
 
-    const state = ref<T>(initialData) as DefaultReset<T>;
+            },
+            reset() {
+                const reset_data = JSON.parse(default_value);
 
-    state.initialData = JSON.stringify(initialData);
+                if (typeof reset_data === 'object') for (const k in reset_data){
+                    if (reset_data[k] === 'ulid') reset_data[k] = ulid().toLowerCase();
+                    if (reset_data[k] === 'now') reset_data[k] = new Date().toISOString();
+                }
 
-    state.reset = () => {
-        const reset_data = JSON.parse(state.initialData);
-
-        if (typeof reset_data === 'object') for (const k in reset_data){
-            if (reset_data[k] === 'ulid') reset_data[k] = ulid().toLowerCase();
-            if (reset_data[k] === 'now') reset_data[k] = new Date().toISOString();
-        }
-
-        state.value = reset_data;
-    };
-
-    state.reset();
-    state.timer = timer;
-
-    if (timer) watchDebounced(state, () => {
-        state.reset();
-    }, { debounce: timer });
-
-    return state as DefaultReset<T>;
+                value = reset_data;
+            }
+        };
+    });
 }
-
 export const refAutoReset = useDefaultReset;
