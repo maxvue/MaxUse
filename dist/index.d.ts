@@ -677,6 +677,8 @@ export declare const _: {
     sortByMulti<T>(collection: import('vue').MaybeRefOrGetter<T[] | null | undefined>, criteria: ((item: T) => any | string)[], orders?: ("asc" | "desc")[]): T[];
     first<T>(array: import('vue').MaybeRefOrGetter<T[] | null | undefined>): T | undefined;
     last<T>(array: import('vue').MaybeRefOrGetter<T[] | null | undefined>): T | undefined;
+    objectSize(object: import('vue').MaybeRefOrGetter<any>): number;
+    isObjectValid<V>(value: V): value is NonNullable<V>;
     now(): number;
     isDate(valor: import('vue').MaybeRef<string | number | null | undefined> | import('vue').ComputedRef<string | number | null | undefined> | (() => string | number | null | undefined)): boolean;
     inDateInterval(value: import('vue').MaybeRefOrGetter<string | Date | null | undefined>, interval: import('vue').MaybeRefOrGetter<{
@@ -719,9 +721,7 @@ export declare const _: {
     setLibraryRouter: (router: import('vue-router').Router) => void;
     goToRoute: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
-    useDefaultReset(value: any, delay?: number): import('vue').Ref & {
-        reset: () => void;
-    };
+    useDefaultReset<T>(defaultValue: import('vue').MaybeRefOrGetter<T>, delay?: number): vueUse.ManualResetRefReturn<T>;
     refAutoReset: typeof Composables.useDefaultReset;
     useCachedApi<T>(route_name: string, options?: {
         data_get?: any;

@@ -432,6 +432,19 @@ function last(array) {
 	return data[data.length - 1];
 }
 //#endregion
+//#region src/Helpers/Iterables/objectSize.ts
+function objectSize(object) {
+	const value = toValue(object);
+	if (!value) return 0;
+	if (isBlank(value)) return 0;
+	if (Array.isArray(object)) return 0;
+	if (typeof value === "object") return Object.keys(value).length;
+	return 0;
+}
+function isObjectValid(value) {
+	return objectSize(value) > 0;
+}
+//#endregion
 //#region src/Helpers/Iterables/index.ts
 var Iterables_exports = /* @__PURE__ */ __exportAll({
 	chunk: () => chunk,
@@ -442,8 +455,10 @@ var Iterables_exports = /* @__PURE__ */ __exportAll({
 	findLast: () => findLast,
 	first: () => first,
 	groupBy: () => groupBy,
+	isObjectValid: () => isObjectValid,
 	keyBy: () => keyBy,
 	last: () => last,
+	objectSize: () => objectSize,
 	orderBy: () => orderBy,
 	orderByWithKey: () => orderByWithKey,
 	sample: () => sample,
@@ -458,6 +473,6 @@ var Iterables_exports = /* @__PURE__ */ __exportAll({
 	valuesInKey: () => valuesInKey
 });
 //#endregion
-export { chunk, countBy, filter, filterBy, filterByNot, findLast, first, groupBy, keyBy, last, orderBy, orderByWithKey, sample, shuffle, size, sortBy, sortByMulti, sum, sumBy, Iterables_exports as t, uniq, uniqueBy, valuesInKey };
+export { chunk, countBy, filter, filterBy, filterByNot, findLast, first, groupBy, isObjectValid, keyBy, last, objectSize, orderBy, orderByWithKey, sample, shuffle, size, sortBy, sortByMulti, sum, sumBy, Iterables_exports as t, uniq, uniqueBy, valuesInKey };
 
 //# sourceMappingURL=iterables.es.js.map

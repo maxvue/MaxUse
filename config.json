@@ -1,0 +1,129 @@
+{
+  "linterOptions": {
+    "reportUnusedDisableDirectives": 1
+  },
+  "rules": {
+    "curly": [
+      2,
+      "multi-or-nest"
+    ],
+    "@stylistic/nonblock-statement-body-position": [
+      2,
+      "beside"
+    ],
+    "@stylistic/object-curly-spacing": [
+      2,
+      "always"
+    ],
+    "@stylistic/indent": [
+      2,
+      4,
+      {
+        "SwitchCase": 1,
+        "flatTernaryExpressions": false,
+        "ignoredNodes": []
+      }
+    ],
+    "@stylistic/quotes": [
+      2,
+      "single",
+      {
+        "allowTemplateLiterals": "never",
+        "avoidEscape": false,
+        "ignoreStringLiterals": false
+      }
+    ],
+    "@stylistic/no-trailing-spaces": [
+      1,
+      {
+        "skipBlankLines": false,
+        "ignoreComments": false
+      }
+    ],
+    "@stylistic/no-multi-spaces": [
+      1,
+      {
+        "exceptions": {
+          "Property": true,
+          "ImportAttribute": true
+        },
+        "ignoreEOLComments": false,
+        "includeTabs": true
+      }
+    ],
+    "@stylistic/semi": [
+      2,
+      "always"
+    ],
+    "@stylistic/no-multiple-empty-lines": [
+      2,
+      {
+        "max": 2
+      }
+    ],
+    "@stylistic/comma-dangle": [
+      2,
+      "never"
+    ],
+    "@stylistic/arrow-parens": [
+      2,
+      "always"
+    ],
+    "@stylistic/member-delimiter-style": [
+      2,
+      {
+        "multiline": {
+          "delimiter": "semi",
+          "requireLast": true
+        },
+        "singleline": {
+          "delimiter": "semi",
+          "requireLast": false
+        },
+        "multilineDetection": "brackets"
+      }
+    ],
+    "vue/block-order": [
+      2,
+      {
+        "order": [
+          "template",
+          "script",
+          "style"
+        ]
+      }
+    ],
+    "vue/html-indent": [
+      2,
+      4
+    ],
+    "vue/multi-word-component-names": [
+      0
+    ],
+    "vue/no-unused-vars": [
+      1
+    ],
+    "@typescript-eslint/no-unused-vars": [
+      1
+    ]
+  },
+  "plugins": [
+    "@",
+    "@stylistic:@stylistic/eslint-plugin@5.10.0",
+    "@typescript-eslint:@typescript-eslint/eslint-plugin@8.59.4",
+    "vue:eslint-plugin-vue@9.33.0"
+  ],
+  "language": "@/js",
+  "languageOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2026,
+    "parser": "vue-eslint-parser@10.4.0",
+    "parserOptions": {
+      "parser": "typescript-eslint/parser@8.59.4",
+      "extraFileExtensions": {
+        "0": ".vue"
+      },
+      "sourceType": "module"
+    }
+  }
+}

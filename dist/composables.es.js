@@ -1,14 +1,26 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { a as isNotEmpty, o as isNotValid } from "./Validations-DRaR7BG2.js";
+import { isObjectValid } from "./iterables.es.js";
 import { t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
 import { computed, customRef, nextTick, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
-function useDefaultReset(value, delay = 0) {
+function useDefaultReset(defaultValue, delay = 0) {
+	const raw_default_value = toValue(defaultValue);
+	let value = raw_default_value;
 	let timeout;
-	const default_value = JSON.stringify(value);
-	return customRef((track, trigger) => {
+	let trigger;
+	const reset = () => {
+		if (isObjectValid(raw_default_value)) Object.values(raw_default_value).forEach((value) => {
+			if (value === "ulid") value = ulid().toLowerCase();
+			if (value === "now") value = (/* @__PURE__ */ new Date()).toISOString();
+		});
+		value = raw_default_value;
+		trigger();
+	};
+	const refValue = customRef((track, _trigger) => {
+		trigger = _trigger;
 		return {
 			get() {
 				track();
@@ -22,17 +34,11 @@ function useDefaultReset(value, delay = 0) {
 						trigger();
 					}, delay);
 				}
-			},
-			reset() {
-				const reset_data = JSON.parse(default_value);
-				if (typeof reset_data === "object") for (const k in reset_data) {
-					if (reset_data[k] === "ulid") reset_data[k] = ulid().toLowerCase();
-					if (reset_data[k] === "now") reset_data[k] = (/* @__PURE__ */ new Date()).toISOString();
-				}
-				value = reset_data;
 			}
 		};
 	});
+	refValue.reset = reset;
+	return refValue;
 }
 var refAutoReset = useDefaultReset;
 //#endregion

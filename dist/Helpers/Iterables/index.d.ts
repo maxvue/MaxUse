@@ -20,4 +20,5 @@ export * from './findLast';
 export * from './sortByMulti';
 export * from './first';
 export * from './last';
+export * from './objectSize';
 //# sourceMappingURL=index.d.ts.map

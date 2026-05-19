@@ -1,17 +1,38 @@
-import { Ref, customRef } from 'vue';
+import { type MaybeRefOrGetter, customRef, toValue } from 'vue';
 import { ulid } from 'ulid';
+import type { ManualResetRefReturn, Fn } from '@vueuse/core';
+import { isObjectValid } from '../Helpers/Iterables';
 
-export function useDefaultReset(value: any, delay: number = 0): Ref & { reset: () => void } {
+export function useDefaultReset<T>(defaultValue: MaybeRefOrGetter<T>, delay: number = 0): ManualResetRefReturn<T> {
+    const raw_default_value = toValue(defaultValue);
+
+    let value: T = raw_default_value;
+
     let timeout: any;
-    const default_value = JSON.stringify(value);
-    return customRef((track, trigger) => {
+
+    let trigger: Fn;
+
+    const reset = () => {
+
+        if (isObjectValid(raw_default_value)){
+            Object.values(raw_default_value).forEach((value) => {
+                if (value === 'ulid') value = ulid().toLowerCase();
+                if (value === 'now') value = new Date().toISOString();
+            });
+        }
+
+        value = raw_default_value;
+        trigger();
+    };
+
+    const refValue = customRef<T>((track, _trigger) => {
+        trigger = _trigger;
         return {
             get() {
                 track();
                 return value;
             },
             set(newValue) {
-
                 if (delay > 0) {
                     clearTimeout(timeout);
                     timeout = setTimeout(() => {
@@ -20,19 +41,13 @@ export function useDefaultReset(value: any, delay: number = 0): Ref & { reset: (
                     }, delay);
                 }
 
-            },
-            reset() {
-                const reset_data = JSON.parse(default_value);
-
-                if (typeof reset_data === 'object') for (const k in reset_data){
-                    if (reset_data[k] === 'ulid') reset_data[k] = ulid().toLowerCase();
-                    if (reset_data[k] === 'now') reset_data[k] = new Date().toISOString();
-                }
-
-                value = reset_data;
             }
         };
-    }) as Ref & { reset: () => void };
+    }) as ManualResetRefReturn<T>;
+
+    refValue.reset = reset;
+
+    return refValue;
 }
 
 export const refAutoReset = useDefaultReset;

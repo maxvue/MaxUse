@@ -22,8 +22,10 @@ export default [
             }
         },
         rules: {
-            'curly': ['error', 'multi'],
+            'curly': ['error', 'multi-or-nest'],
             '@stylistic/nonblock-statement-body-position': ['error', 'beside'],
+            '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: false }],
+
             // Regras Estilísticas Gerais
             '@stylistic/object-curly-spacing': ['error', 'always'],
             '@stylistic/indent': ['error', 4], // Ativa 4 espaços para arquivos .ts e .js
