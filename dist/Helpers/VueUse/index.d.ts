@@ -119,7 +119,6 @@ export declare const useCssVar: typeof vueUseCore.useCssVar;
 export declare const useCurrentElement: typeof vueUseCore.useCurrentElement;
 export declare const useCycleList: typeof vueUseCore.useCycleList;
 export declare const useDark: typeof vueUseCore.useDark;
-export declare const useDateFormat: typeof vueUseCore.useDateFormat;
 export declare const useDebounceFn: typeof vueUseCore.useDebounceFn;
 export declare const useDebouncedRefHistory: typeof vueUseCore.useDebouncedRefHistory;
 export declare const useDeviceMotion: typeof vueUseCore.useDeviceMotion;

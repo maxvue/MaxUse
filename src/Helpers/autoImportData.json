@@ -51,6 +51,7 @@
       "createSingletonPromise",
       "createTemplatePromise",
       "createUnrefFn",
+      "dateFormat",
       "daysAgo",
       "debounceFilter",
       "deepClone",
@@ -973,6 +974,7 @@
       "throttledWatch",
       "toRef",
       "toRefs",
+      "useDateFormat",
       "useDebounce",
       "useThrottle",
       "watchPausable"

@@ -51,6 +51,7 @@ declare const _default: [
       "createSingletonPromise",
       "createTemplatePromise",
       "createUnrefFn",
+      "dateFormat",
       "daysAgo",
       "debounceFilter",
       "deepClone",
@@ -973,6 +974,7 @@ declare const _default: [
       "throttledWatch",
       "toRef",
       "toRefs",
+      "useDateFormat",
       "useDebounce",
       "useThrottle",
       "watchPausable"

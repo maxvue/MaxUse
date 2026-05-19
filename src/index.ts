@@ -34,7 +34,7 @@ export * from './Helpers/Format';
 export * from './Helpers/VueUse';
 
 // Resolução de ambiguidade
-export { refAutoReset, useCached, useStorage, useTimeAgo } from './Composables';
+export { refAutoReset, useCached, useStorage, useTimeAgo, useDateFormat } from './Composables';
 export { now } from './Helpers/Dates';
 export { get, set } from './Helpers/Objects';
 export { isObject } from './Helpers/Types';

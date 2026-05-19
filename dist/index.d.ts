@@ -22,7 +22,7 @@ export * from './Helpers/Validations';
 export * from './Helpers/Electrical';
 export * from './Helpers/Format';
 export * from './Helpers/VueUse';
-export { refAutoReset, useCached, useStorage, useTimeAgo } from './Composables';
+export { refAutoReset, useCached, useStorage, useTimeAgo, useDateFormat } from './Composables';
 export { now } from './Helpers/Dates';
 export { get, set } from './Helpers/Objects';
 export { isObject } from './Helpers/Types';
@@ -149,7 +149,6 @@ export declare const _: {
     useCurrentElement: typeof vueUse.useCurrentElement;
     useCycleList: typeof vueUse.useCycleList;
     useDark: typeof vueUse.useDark;
-    useDateFormat: typeof vueUse.useDateFormat;
     useDebounceFn: typeof vueUse.useDebounceFn;
     useDebouncedRefHistory: typeof vueUse.useDebouncedRefHistory;
     useDeviceMotion: typeof vueUse.useDeviceMotion;
@@ -740,5 +739,7 @@ export declare const _: {
     useStorage: typeof Composables.useRefCached;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
     useTimeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;
+    useDateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
+    dateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
 };
 //# sourceMappingURL=index.d.ts.map

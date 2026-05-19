@@ -122,7 +122,6 @@ export const useCssVar = vueUseCore.useCssVar;
 export const useCurrentElement = vueUseCore.useCurrentElement;
 export const useCycleList = vueUseCore.useCycleList;
 export const useDark = vueUseCore.useDark;
-export const useDateFormat = vueUseCore.useDateFormat;
 export const useDebounceFn = vueUseCore.useDebounceFn;
 export const useDebouncedRefHistory = vueUseCore.useDebouncedRefHistory;
 export const useDeviceMotion = vueUseCore.useDeviceMotion;
