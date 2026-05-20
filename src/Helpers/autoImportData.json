@@ -89,6 +89,7 @@
       "formatTimeAgoIntl",
       "formatTimeAgoIntlParts",
       "get",
+      "getCachedApi",
       "getColorFromVar",
       "getLifeCycleTarget",
       "getRoute",

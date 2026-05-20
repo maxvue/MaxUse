@@ -15,6 +15,6 @@ export function objectSize(object: MaybeRefOrGetter<any>): number {
     return 0;
 }
 
-export function isObjectValid<V>(value: V): value is NonNullable<V> {
+export function isObjectValid<V>(value: V): value is Object & NonNullable<V> {
     return objectSize(value as any) > 0;
 }

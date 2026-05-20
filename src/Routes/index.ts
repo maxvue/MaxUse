@@ -5,3 +5,4 @@ export * from './apiDeleteRoute';
 export * from './apiUploadRoute';
 export * from './getRoute';
 export * from './goToRoute';
+export * from './getCachedApi';

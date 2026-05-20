@@ -8,10 +8,12 @@ export function useRefCached<T>(key: string, default_value: T): ToRefCached<T> {
 
     // Leitura síncrona do localStorage
     const raw = localStorage.getItem(key);
-    if (raw !== null) try {
-        state.value = JSON.parse(raw);
-    } catch {
-        state.value = default_value;
+    if (raw !== null) {
+        try {
+            state.value = JSON.parse(raw);
+        } catch {
+            state.value = default_value;
+        }
     }
 
     watchDebounced(state, () => localStorage.setItem(key, JSON.stringify(state.value)), { debounce: 600, deep: true });

@@ -14,7 +14,7 @@ export async function apiGetRoute(RouteName: string | null, data: any = {}, opti
             .then((response) => response.data)
             .catch((error) => console.error('[apiGetRoute.ts] AXIOS GET ERROR: ' + error.name, system_options.routeURL, error));
     } catch (error: any) {
-        if (options?.error !== false) console.error('>> Erro ao fazer a requisição:', error?.message);
+        if (options?.error !== false) console.error('>> Erro apiGetRoute - URL: "' + system_options.routeURL + '"', error?.message);
 
         return null;
     }

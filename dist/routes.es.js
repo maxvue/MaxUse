@@ -1,6 +1,7 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
+import { o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { n as isBlank } from "./isBlank-DrIS5hlK.js";
-import { n as apiRoute, r as u, t as apiGetRoute } from "./apiGetRoute-Fr_1fuYK.js";
+import { n as apiRoute, r as u, t as apiGetRoute } from "./apiGetRoute-DO3vNqcz.js";
 import { toValue } from "vue";
 import axios from "axios";
 //#region src/Routes/apiPostRoute.ts
@@ -137,6 +138,22 @@ var goToRoute = (route = null, data = {}) => {
 };
 var goToRouteByName = goToRoute;
 //#endregion
+//#region src/Routes/getCachedApi.ts
+async function getCachedApi(routeName, dataToRequest = null, keyCache = null) {
+	const route_name = toValue(routeName);
+	if (isNotValid(route_name)) return null;
+	const data_request = toValue(dataToRequest) ?? {};
+	const key = toValue(keyCache) ?? route_name + "_" + JSON.stringify(data_request);
+	const data = localStorage.getItem(key);
+	if (data) return JSON.parse(data);
+	const routeUrl = u()(route_name, data_request);
+	const config = { responseType: "json" };
+	axios.defaults.withCredentials = true;
+	const data_return = (await axios.get(routeUrl, config)).data;
+	localStorage.setItem(key, JSON.stringify(data_return));
+	return data_return;
+}
+//#endregion
 //#region src/Routes/index.ts
 var Routes_exports = /* @__PURE__ */ __exportAll({
 	apiDeleteRoute: () => apiDeleteRoute,
@@ -144,6 +161,7 @@ var Routes_exports = /* @__PURE__ */ __exportAll({
 	apiPostRoute: () => apiPostRoute,
 	apiPutRoute: () => apiPutRoute,
 	apiUploadRoute: () => apiUploadRoute,
+	getCachedApi: () => getCachedApi,
 	getRoute: () => getRoute,
 	getRouteByName: () => getRouteByName,
 	goToRoute: () => goToRoute,
@@ -151,6 +169,6 @@ var Routes_exports = /* @__PURE__ */ __exportAll({
 	setLibraryRouter: () => setLibraryRouter
 });
 //#endregion
-export { apiDeleteRoute, apiGetRoute, apiPostRoute, apiPutRoute, apiUploadRoute, getRoute, getRouteByName, goToRoute, goToRouteByName, setLibraryRouter, Routes_exports as t };
+export { apiDeleteRoute, apiGetRoute, apiPostRoute, apiPutRoute, apiUploadRoute, getCachedApi, getRoute, getRouteByName, goToRoute, goToRouteByName, setLibraryRouter, Routes_exports as t };
 
 //# sourceMappingURL=routes.es.js.map

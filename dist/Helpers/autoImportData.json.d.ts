@@ -89,6 +89,7 @@ declare const _default: [
       "formatTimeAgoIntl",
       "formatTimeAgoIntlParts",
       "get",
+      "getCachedApi",
       "getColorFromVar",
       "getLifeCycleTarget",
       "getRoute",

@@ -678,7 +678,7 @@ export declare const _: {
     first<T>(array: import('vue').MaybeRefOrGetter<T[] | null | undefined>): T | undefined;
     last<T>(array: import('vue').MaybeRefOrGetter<T[] | null | undefined>): T | undefined;
     objectSize(object: import('vue').MaybeRefOrGetter<any>): number;
-    isObjectValid<V>(value: V): value is NonNullable<V>;
+    isObjectValid<V>(value: V): value is Object & NonNullable<V>;
     now(): number;
     isDate(valor: import('vue').MaybeRef<string | number | null | undefined> | import('vue').ComputedRef<string | number | null | undefined> | (() => string | number | null | undefined)): boolean;
     inDateInterval(value: import('vue').MaybeRefOrGetter<string | Date | null | undefined>, interval: import('vue').MaybeRefOrGetter<{
@@ -721,6 +721,7 @@ export declare const _: {
     setLibraryRouter: (router: import('vue-router').Router) => void;
     goToRoute: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
     goToRouteByName: (route?: import('vue').MaybeRefOrGetter<string | null>, data?: any) => boolean;
+    getCachedApi(routeName: import('vue').MaybeRef<string | null | undefined> | import('vue').ComputedRef<string | null | undefined> | (() => string | null | undefined), dataToRequest?: any, keyCache?: import('vue').MaybeRef<string | null | undefined> | import('vue').ComputedRef<string | null | undefined> | (() => string | null | undefined)): Promise<any>;
     useDefaultReset<T>(initialData: T, timer?: number | null): Composables.DefaultReset<T>;
     refAutoReset: typeof Composables.useDefaultReset;
     useCachedApi<T>(route_name: string, options?: {
