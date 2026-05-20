@@ -12,7 +12,7 @@ export async function apiGetRoute(RouteName: string | null, data: any = {}, opti
         const response = await axios.get(system_options.routeURL, config);
         return response.data;
     } catch (error: any) {
-        if (options?.error !== false) console.error('>> Erro apiGetRoute - URL: "' + system_options.routeURL + '"', error?.message);
+        if (options?.error !== false) console.error('>> Request ERRO - URL: "' + system_options.routeURL + '"', error?.message);
 
         return null;
     }

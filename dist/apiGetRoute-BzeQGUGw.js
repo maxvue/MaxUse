@@ -708,11 +708,11 @@ async function apiGetRoute(RouteName, data = {}, options = null) {
 		axios.defaults.withCredentials = true;
 		return (await axios.get(system_options.routeURL, config)).data;
 	} catch (error) {
-		if (options?.error !== false) console.error(">> Erro apiGetRoute - URL: \"" + system_options.routeURL + "\"", error?.message);
+		if (options?.error !== false) console.error(">> Request ERRO - URL: \"" + system_options.routeURL + "\"", error?.message);
 		return null;
 	}
 }
 //#endregion
 export { apiRoute as n, u as r, apiGetRoute as t };
 
-//# sourceMappingURL=apiGetRoute-OanlNAmJ.js.map
+//# sourceMappingURL=apiGetRoute-BzeQGUGw.js.map
