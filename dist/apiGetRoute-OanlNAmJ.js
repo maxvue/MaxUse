@@ -706,7 +706,7 @@ async function apiGetRoute(RouteName, data = {}, options = null) {
 	if (options?.file === true) config.responseType = "blob";
 	try {
 		axios.defaults.withCredentials = true;
-		return axios.get(system_options.routeURL, config).then((response) => response.data).catch((error) => console.error("[apiGetRoute.ts] AXIOS GET ERROR: " + error.name, system_options.routeURL, error));
+		return (await axios.get(system_options.routeURL, config)).data;
 	} catch (error) {
 		if (options?.error !== false) console.error(">> Erro apiGetRoute - URL: \"" + system_options.routeURL + "\"", error?.message);
 		return null;
@@ -715,4 +715,4 @@ async function apiGetRoute(RouteName, data = {}, options = null) {
 //#endregion
 export { apiRoute as n, u as r, apiGetRoute as t };
 
-//# sourceMappingURL=apiGetRoute-DO3vNqcz.js.map
+//# sourceMappingURL=apiGetRoute-OanlNAmJ.js.map

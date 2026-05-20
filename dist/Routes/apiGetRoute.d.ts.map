@@ -1,1 +1,1 @@
-{"version":3,"file":"apiGetRoute.d.ts","sourceRoot":"","sources":["../../src/Routes/apiGetRoute.ts"],"names":[],"mappings":"AAGA,wBAAsB,WAAW,CAAC,SAAS,EAAE,MAAM,GAAG,IAAI,EAAE,IAAI,GAAE,GAAQ,EAAE,OAAO,GAAE,GAAU,GAAG,OAAO,CAAC,GAAG,CAAC,CAiB7G"}
+{"version":3,"file":"apiGetRoute.d.ts","sourceRoot":"","sources":["../../src/Routes/apiGetRoute.ts"],"names":[],"mappings":"AAGA,wBAAsB,WAAW,CAAC,SAAS,EAAE,MAAM,GAAG,IAAI,EAAE,IAAI,GAAE,GAAQ,EAAE,OAAO,GAAE,GAAU,GAAG,OAAO,CAAC,GAAG,CAAC,CAe7G"}
