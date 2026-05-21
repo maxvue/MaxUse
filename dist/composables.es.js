@@ -51,30 +51,24 @@ var useInCacheApi = useCachedApi;
 //#endregion
 //#region src/Composables/useRefCached.ts
 function useRefCached(key, default_value) {
-	const raw_key = computed(() => toValue(key));
+	const raw_key = computed(() => toValue(key) ? String(toValue(key)) : "no-key");
 	const state = ref(default_value);
 	watch(raw_key, (new_key, old_key) => {
 		if (!raw_key.value) return;
-		const raw = localStorage.getItem(String(raw_key.value));
-		if (raw !== null) try {
-			state.value = JSON.parse(raw);
-		} catch {
-			state.value = default_value;
+		const raw = localStorage.getItem(raw_key.value);
+		if (raw !== null) {
+			try {
+				state.value = JSON.parse(raw);
+			} catch {
+				state.value = default_value;
+			}
+			return;
 		}
-		console.log({
-			Key: raw_key.value,
-			new_key,
-			old_key
-		});
+		state.value = default_value;
 	}, { immediate: true });
-	watch(state, (new_value, old_value) => {
-		console.log({
-			Key: raw_key.value,
-			old_value,
-			new_value
-		});
+	watch(state, (new_value) => {
 		if (!raw_key.value) return;
-		localStorage.setItem(String(raw_key), JSON.stringify(new_value));
+		localStorage.setItem(raw_key.value, JSON.stringify(new_value));
 	}, { immediate: true });
 	return state;
 }

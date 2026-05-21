@@ -4,7 +4,7 @@ export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
 
 export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T> {
-    const raw_key = computed(() => toValue(key));
+    const raw_key = computed(() => toValue(key) ? String(toValue(key)) : 'no-key');
 
     const state = ref<T>(default_value) as ToRefCached<T>;
 
@@ -13,22 +13,23 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
         if (!raw_key.value) return;
 
         // Leitura síncrona do localStorage
-        const raw = localStorage.getItem(String(raw_key.value));
+        const raw = localStorage.getItem(raw_key.value);
         if (raw !== null) {
             try {
                 state.value = JSON.parse(raw);
             } catch {
                 state.value = default_value;
             }
+            return;
         }
 
-        console.log({ Key: raw_key.value, new_key: new_key, old_key: old_key });
+        state.value = default_value;
+
     }, { immediate: true });
 
-    watch(state, (new_value, old_value) => {
-        console.log({ Key: raw_key.value, old_value: old_value, new_value: new_value });
+    watch(state, (new_value) => {
         if (!raw_key.value) return;
-        localStorage.setItem(String(raw_key), JSON.stringify(new_value));
+        localStorage.setItem(raw_key.value, JSON.stringify(new_value));
     }, { immediate: true });
 
     return state;
