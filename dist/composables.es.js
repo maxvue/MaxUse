@@ -53,7 +53,7 @@ var useInCacheApi = useCachedApi;
 function useRefCached(key, default_value) {
 	const raw_key = computed(() => toValue(key) ? String(toValue(key)) : "no-key");
 	const state = ref(default_value);
-	watch(raw_key, (new_key, old_key) => {
+	watch(raw_key, () => {
 		if (!raw_key.value) return;
 		const raw = localStorage.getItem(raw_key.value);
 		if (raw !== null) {

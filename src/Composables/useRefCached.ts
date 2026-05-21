@@ -8,7 +8,7 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
 
     const state = ref<T>(default_value) as ToRefCached<T>;
 
-    watch(raw_key, (new_key, old_key) => {
+    watch(raw_key, () => {
 
         if (!raw_key.value) return;
 
