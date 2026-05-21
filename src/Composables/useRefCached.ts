@@ -10,8 +10,8 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     const state = ref<T>(default_value) as ToRefCached<T>;
 
     watch(raw_key, () => {
-
-        if (!raw_key) return;
+        console.log('Key', raw_key.value);
+        if (!raw_key.value) return;
 
         // Leitura síncrona do localStorage
         const raw = localStorage.getItem(String(raw_key.value));

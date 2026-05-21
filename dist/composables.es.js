@@ -54,7 +54,8 @@ function useRefCached(key, default_value) {
 	const raw_key = computed(() => toValue(key));
 	const state = ref(default_value);
 	watch(raw_key, () => {
-		if (!raw_key) return;
+		console.log("Key", raw_key.value);
+		if (!raw_key.value) return;
 		const raw = localStorage.getItem(String(raw_key.value));
 		if (raw !== null) try {
 			state.value = JSON.parse(raw);
