@@ -5,7 +5,6 @@ export declare function useRefCached<T>(key: KeyCached, default_value: T): ToRef
 export declare const useRefStorage: typeof useRefCached;
 export declare const useCached: typeof useRefCached;
 export declare const useSharedCache: typeof useRefCached;
-export type UseStoreCached<T> = [T] extends [Ref] ? T : Ref<T>;
-export declare function useStorage<T>(key: KeyCached, default_value: T): ToRefCached<T>;
+export declare const useStorage: typeof useRefCached;
 export {};
 //# sourceMappingURL=useRefCached.d.ts.map
