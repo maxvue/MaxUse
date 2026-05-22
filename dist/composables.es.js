@@ -2,7 +2,7 @@ import { t as __exportAll } from "./chunk-pbuEa-1d.js";
 import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { a as isNotEmpty, o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-BzeQGUGw.js";
-import { computed, nextTick, ref, toValue, watch } from "vue";
+import { computed, nextTick, onScopeDispose, ref, toValue, watch } from "vue";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
@@ -53,6 +53,17 @@ var useInCacheApi = useCachedApi;
 function useRefCached(key, default_value) {
 	const raw_key = computed(() => toValue(key) ? String(toValue(key)) : "no-key");
 	const state = ref(default_value);
+	const onStorageEvent = (event) => {
+		if (event.key !== raw_key.value || event.storageArea !== localStorage) return;
+		if (event.newValue !== null) try {
+			state.value = JSON.parse(event.newValue);
+		} catch {
+			state.value = default_value;
+		}
+		else state.value = default_value;
+	};
+	window.addEventListener("storage", onStorageEvent);
+	onScopeDispose(() => window.removeEventListener("storage", onStorageEvent));
 	watch(raw_key, () => {
 		if (!raw_key.value) return;
 		const raw = localStorage.getItem(raw_key.value);
