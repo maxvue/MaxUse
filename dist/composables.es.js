@@ -1,8 +1,9 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
-import { $n as useTimeAgo$1, Aa as whenever, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
+import { $n as useTimeAgo$1, Aa as whenever, Un as useStorage$1, oa as useDateFormat$1, xa as watchDebounced } from "./dist-CVecz8iT.js";
 import { a as isNotEmpty, o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { t as apiGetRoute } from "./apiGetRoute-BzeQGUGw.js";
 import { computed, nextTick, onScopeDispose, ref, toValue, watch } from "vue";
+import { isEqual } from "lodash-es";
 import { ulid } from "ulid";
 //#region src/Composables/useDefaultReset.ts
 function useDefaultReset(initialData, timer = null) {
@@ -86,7 +87,21 @@ function useRefCached(key, default_value) {
 var useRefStorage = useRefCached;
 var useCached = useRefCached;
 var useSharedCache = useRefCached;
-var useStorage = useRefCached;
+function useStorage(key, default_value) {
+	const storaged_data = useStorage$1(computed(() => toValue(key) ? String(toValue(key)) : "no-key"), computed(() => JSON.stringify(toValue(default_value))));
+	const ref_data = ref(JSON.parse(storaged_data.value));
+	watch(storaged_data, () => {
+		const data_parse = JSON.parse(storaged_data.value);
+		if (!isEqual(data_parse, ref_data.value)) ref_data.value = data_parse;
+	});
+	watch(() => ref_data.value, () => {
+		if (!isEqual(JSON.parse(storaged_data.value), ref_data.value)) storaged_data.value = JSON.stringify(ref_data.value);
+	}, {
+		deep: true,
+		immediate: true
+	});
+	return ref_data;
+}
 //#endregion
 //#region src/Composables/useDateFormat.ts
 var useDateFormat = (initialDate, format) => {

@@ -736,10 +736,10 @@ export declare const _: {
     useSharedCacheApi: typeof Composables.useCachedApi;
     useInCacheApi: typeof Composables.useCachedApi;
     useRefCached<T>(key: import('vue').MaybeRef<string | number | null | undefined> | import('vue').ComputedRef<string | number | null | undefined> | (() => string | number | null | undefined), default_value: T): Composables.ToRefCached<T>;
+    useStorage<T>(key: import('vue').MaybeRef<string | number | null | undefined> | import('vue').ComputedRef<string | number | null | undefined> | (() => string | number | null | undefined), default_value: T): Composables.ToRefCached<T>;
     useRefStorage: typeof Composables.useRefCached;
     useCached: typeof Composables.useRefCached;
     useSharedCache: typeof Composables.useRefCached;
-    useStorage: typeof Composables.useRefCached;
     useDateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
     dateFormat: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format: string) => vueUse.UseDateFormatReturn;
     timeAgo: (initialDate: import('vue').MaybeRefOrGetter<Date | number | string | undefined | null>, format?: string) => vueUse.UseTimeAgoReturn;

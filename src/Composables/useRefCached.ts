@@ -1,4 +1,6 @@
 import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose } from 'vue';
+import { useStorage as vueUseStore } from '@vueuse/core';
+import { isEqual } from 'lodash-es';
 
 export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
@@ -18,9 +20,8 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
             } catch {
                 state.value = default_value;
             }
-        } else {
-            state.value = default_value;
-        }
+        } else state.value = default_value;
+
     };
 
     window.addEventListener('storage', onStorageEvent);
@@ -56,4 +57,26 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
 export const useRefStorage = useRefCached;
 export const useCached = useRefCached;
 export const useSharedCache = useRefCached;
-export const useStorage = useRefCached;
+
+export type UseStoreCached<T> = [T] extends [Ref] ? T : Ref<T>;
+export function useStorage<T>(key: KeyCached, default_value: T) {
+    const raw_key = computed(() => toValue(key) ? String(toValue(key)) : 'no-key');
+
+    // Como o vueUseStore
+    const default_value_str = computed(() => JSON.stringify(toValue(default_value)));
+    const storaged_data = vueUseStore(raw_key, default_value_str);
+
+    const ref_data = ref(JSON.parse(storaged_data.value)) as ToRefCached<T>;
+
+    watch(storaged_data, () => {
+        const data_parse = JSON.parse(storaged_data.value);
+        if (!isEqual(data_parse, ref_data.value)) ref_data.value = data_parse;
+    });
+
+    watch(() => ref_data.value, () => {
+        const data_parse = JSON.parse(storaged_data.value);
+        if (!isEqual(data_parse, ref_data.value)) storaged_data.value = JSON.stringify(ref_data.value);
+    }, { deep: true, immediate: true });
+
+    return ref_data;
+}

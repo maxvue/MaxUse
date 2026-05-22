@@ -30,7 +30,7 @@ function Random(arg1 = 20, arg2 = "letter lower") {
 	const charactersLength = chars.length;
 	for (let i = 0; i < length; i++) {
 		const randomIndex = Math.floor(Math.random() * charactersLength);
-		result += chars.charAt(randomIndex);
+		result += String(chars.charAt(randomIndex));
 	}
 	return result;
 }
