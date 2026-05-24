@@ -113,80 +113,39 @@ function keyBy(collection, key) {
 //#endregion
 //#region src/Helpers/Iterables/orderBy.ts
 /**
-* Ordena uma coleção de objetos com base em um ou mais critérios.
+* Ordena uma coleção por um ou mais critérios com direção configurável.
+* Unifica as funcionalidades de sortBy, sortByMulti e orderBy.
 *
-* @param collection A coleção de objetos a ser ordenada.
-* @param criteria O(s) critério(s) de ordenação (string, array de strings ou objeto com chaves e direções).
-* @param defaultOrder A direção de ordenação padrão se não for especificada (padrão é 'desc').
-* @returns Um novo array contendo a coleção ordenada.
+* - Aceita arrays e objetos (Record → converte com Object.values).
+* - Critérios podem ser strings (nome da propriedade) ou funções de extração.
+* - Direção pode ser uma string única (aplica a todos) ou um array por critério.
+* - Valores null/undefined são empurrados para o final da lista.
+*
+* @param collection A coleção a ser ordenada (array, Record ou ref/getter de ambos).
+* @param criteria Critério(s) de ordenação: string, função, ou array misto de ambos.
+* @param orders Direção: 'asc' | 'desc' (global) ou array de direções por critério. Padrão: 'asc'.
+* @returns Um novo array ordenado.
 */
-function orderBy(collection, criteria, defaultOrder = "desc") {
+function orderBy(collection, criteria, orders) {
 	const data = toValue(collection);
 	if (!data || typeof data !== "object") return [];
-	const items = Array.isArray(data) ? data : Object.values(data);
-	const rules = [];
-	if (typeof criteria === "string") rules.push({
-		key: criteria,
-		order: defaultOrder
-	});
-	else if (Array.isArray(criteria)) criteria.forEach((k) => rules.push({
-		key: k,
-		order: defaultOrder
-	}));
-	else if (typeof criteria === "object" && criteria !== null) for (const key in criteria) rules.push({
-		key,
-		order: criteria[key]
-	});
-	return [...items].sort((a, b) => {
-		for (const rule of rules) {
-			const valA = a[rule.key];
-			const valB = b[rule.key];
-			if (valA < valB) return rule.order === "asc" ? -1 : 1;
-			if (valA > valB) return rule.order === "asc" ? 1 : -1;
-		}
-		return 0;
-	});
-}
-//#endregion
-//#region src/Helpers/Iterables/orderByWithKey.ts
-/**
-* Ordena uma coleção de objetos com base em critérios e, em seguida, mapeia os resultados para um objeto indexado por uma chave específica.
-*
-* @param collection A coleção de objetos a ser ordenada e indexada.
-* @param criteria O(s) critério(s) de ordenação.
-* @param object_keyBy A chave a ser usada como índice do objeto retornado.
-* @param order A direção de ordenação (padrão é 'asc').
-* @param defaultOrder A direção de ordenação padrão.
-* @returns Um objeto mapeado pela chave e ordenado de acordo com os critérios.
-*/
-function orderByWithKey(collection, criteria, object_keyBy, order = "asc", defaultOrder = "asc") {
-	return keyBy(orderBy(collection, criteria, defaultOrder), object_keyBy);
-}
-//#endregion
-//#region src/Helpers/Iterables/sortBy.ts
-/**
-* Cria um array de elementos, ordenados em ordem crescente pelos resultados da execução de cada iteratee.
-* Semelhante ao _.sortBy do Lodash.
-*
-* @param collection A coleção para iterar.
-* @param iteratees Os iteratees para ordenar.
-* @returns Retorna o novo array ordenado.
-*/
-function sortBy(collection, iteratees = [(x) => x]) {
-	const data = toValue(collection);
-	if (!data) return [];
 	const items = Array.isArray(data) ? [...data] : Object.values(data);
-	const iters = Array.isArray(iteratees) ? iteratees : [iteratees];
+	if (criteria === void 0 || criteria === null) return items;
+	const rules = Array.isArray(criteria) ? criteria : [criteria];
+	const dirs = Array.isArray(orders) ? orders : [];
+	const globalDir = typeof orders === "string" ? orders : "asc";
 	return items.sort((a, b) => {
-		for (const iteratee of iters) {
+		for (let i = 0; i < rules.length; i++) {
+			const rule = rules[i];
+			const dir = dirs[i] ?? globalDir;
 			let valA;
 			let valB;
-			if (typeof iteratee === "function") {
-				valA = iteratee(a);
-				valB = iteratee(b);
-			} else if (typeof iteratee === "string") {
-				valA = a[iteratee];
-				valB = b[iteratee];
+			if (typeof rule === "function") {
+				valA = rule(a);
+				valB = rule(b);
+			} else if (typeof rule === "string") {
+				valA = a[rule];
+				valB = b[rule];
 			} else {
 				valA = a;
 				valB = b;
@@ -196,11 +155,36 @@ function sortBy(collection, iteratees = [(x) => x]) {
 				if (valB === void 0) return -1;
 				if (valA === null) return 1;
 				if (valB === null) return -1;
-				return valA < valB ? -1 : 1;
+				return dir === "asc" ? valA < valB ? -1 : 1 : valA < valB ? 1 : -1;
 			}
 		}
 		return 0;
 	});
+}
+var sortBy = orderBy;
+var sortByMulti = orderBy;
+//#endregion
+//#region src/Helpers/Iterables/orderByWithKey.ts
+/**
+* Ordena uma coleção de objetos com base em critérios e, em seguida, mapeia os resultados para um objeto indexado por uma chave específica.
+*
+* @param collection A coleção de objetos a ser ordenada e indexada.
+* @param criteria O(s) critério(s) de ordenação.
+* @param object_keyBy A chave a ser usada como índice do objeto retornado.
+* @param order A direção de ordenação (padrão é 'asc').
+* @returns Um objeto mapeado pela chave e ordenado de acordo com os critérios.
+*/
+function orderByWithKey(collection, criteria, object_keyBy, order = "asc") {
+	let keys;
+	let orders;
+	if (typeof criteria === "object" && !Array.isArray(criteria) && criteria !== null) {
+		keys = Object.keys(criteria);
+		orders = keys.map((k) => criteria[k] ?? order);
+	} else {
+		keys = Array.isArray(criteria) ? criteria : [criteria];
+		orders = keys.map(() => order);
+	}
+	return keyBy(orderBy(collection, keys, orders), object_keyBy);
 }
 //#endregion
 //#region src/Helpers/Iterables/sum.ts
@@ -368,42 +352,6 @@ function findLast(collection, predicate) {
 	const data = toValue(collection);
 	if (!data || !Array.isArray(data)) return void 0;
 	for (let i = data.length - 1; i >= 0; i--) if (predicate(data[i], i, data)) return data[i];
-}
-//#endregion
-//#region src/Helpers/Iterables/sortByMulti.ts
-/**
-* Ordena um array por múltiplos critérios.
-*
-* @param collection A coleção para ordenar.
-* @param criteria Lista de critérios (string de chave ou função de extração de valor).
-* @param orders Lista de ordens ('asc' ou 'desc') correspondente aos critérios.
-* @returns Retorna o novo array ordenado.
-*/
-function sortByMulti(collection, criteria, orders = []) {
-	const data = toValue(collection);
-	if (!data || !Array.isArray(data)) return [];
-	return [...data].sort((a, b) => {
-		for (let i = 0; i < criteria.length; i++) {
-			const criterion = criteria[i];
-			const order = orders[i] || "asc";
-			let valA;
-			let valB;
-			if (typeof criterion === "function") {
-				valA = criterion(a);
-				valB = criterion(b);
-			} else {
-				valA = a[criterion];
-				valB = b[criterion];
-			}
-			if (valA !== valB) {
-				if (valA === void 0 || valA === null) return 1;
-				if (valB === void 0 || valB === null) return -1;
-				if (order === "asc") return valA < valB ? -1 : 1;
-				else return valA < valB ? 1 : -1;
-			}
-		}
-		return 0;
-	});
 }
 //#endregion
 //#region src/Helpers/Iterables/first.ts

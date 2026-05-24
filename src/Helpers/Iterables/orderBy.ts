@@ -1,38 +1,73 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
-type T = Record<string, any> | any[] | null | undefined | string;
-type OrderCriteria = string | null | any | any[] | Record<string, 'asc' | 'desc'>;
+type Criterion<T> = string | ((item: T) => any);
+type OrderDirection = 'asc' | 'desc';
 
 /**
- * Ordena uma coleção de objetos com base em um ou mais critérios.
+ * Ordena uma coleção por um ou mais critérios com direção configurável.
+ * Unifica as funcionalidades de sortBy, sortByMulti e orderBy.
  *
- * @param collection A coleção de objetos a ser ordenada.
- * @param criteria O(s) critério(s) de ordenação (string, array de strings ou objeto com chaves e direções).
- * @param defaultOrder A direção de ordenação padrão se não for especificada (padrão é 'desc').
- * @returns Um novo array contendo a coleção ordenada.
+ * - Aceita arrays e objetos (Record → converte com Object.values).
+ * - Critérios podem ser strings (nome da propriedade) ou funções de extração.
+ * - Direção pode ser uma string única (aplica a todos) ou um array por critério.
+ * - Valores null/undefined são empurrados para o final da lista.
+ *
+ * @param collection A coleção a ser ordenada (array, Record ou ref/getter de ambos).
+ * @param criteria Critério(s) de ordenação: string, função, ou array misto de ambos.
+ * @param orders Direção: 'asc' | 'desc' (global) ou array de direções por critério. Padrão: 'asc'.
+ * @returns Um novo array ordenado.
  */
-export function orderBy(collection: MaybeRefOrGetter<T>, criteria: OrderCriteria, defaultOrder: 'asc' | 'desc' = 'desc'): T[] {
+export function orderBy<T>(
+    collection: MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>,
+    criteria?: Criterion<T> | Criterion<T>[],
+    orders?: OrderDirection | OrderDirection[]
+): T[] {
     const data = toValue(collection);
-
     if (!data || typeof data !== 'object') return [];
 
-    const items = Array.isArray(data) ? data : Object.values(data);
+    const items: T[] = Array.isArray(data) ? [...data] : Object.values(data);
 
-    const rules: { key: any; order: 'asc' | 'desc' }[] = [];
+    // Sem critério → retorna cópia sem ordenar
+    if (criteria === undefined || criteria === null) return items;
 
-    if (typeof criteria === 'string') rules.push({ key: criteria, order: defaultOrder });
-    else if (Array.isArray(criteria)) criteria.forEach((k) => rules.push({ key: k, order: defaultOrder }));
-    else if (typeof criteria === 'object' && criteria !== null) for (const key in criteria) rules.push({ key: key, order: (criteria as any)[key] as 'asc' | 'desc' });
+    const rules = Array.isArray(criteria) ? criteria : [criteria];
+    const dirs = Array.isArray(orders) ? orders : [];
+    const globalDir: OrderDirection = typeof orders === 'string' ? orders : 'asc';
 
-    return [...items].sort((a, b) => {
-        for (const rule of rules) {
-            const valA = a[rule.key];
-            const valB = b[rule.key];
+    return items.sort((a, b) => {
+        for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            const dir = dirs[i] ?? globalDir;
 
-            if (valA < valB) return rule.order === 'asc' ? -1 : 1;
-            if (valA > valB) return rule.order === 'asc' ? 1 : -1;
+            let valA: any;
+            let valB: any;
+
+            if (typeof rule === 'function') {
+                valA = rule(a);
+                valB = rule(b);
+            } else if (typeof rule === 'string') {
+                valA = (a as any)[rule];
+                valB = (b as any)[rule];
+            } else {
+                valA = a;
+                valB = b;
+            }
+
+            if (valA !== valB) {
+                // Null/undefined vão para o final independente da direção
+                if (valA === undefined) return 1;
+                if (valB === undefined) return -1;
+                if (valA === null) return 1;
+                if (valB === null) return -1;
+
+                return dir === 'asc'
+                    ? (valA < valB ? -1 : 1)
+                    : (valA < valB ? 1 : -1);
+            }
         }
-
         return 0;
     });
 }
+
+export const sortBy = orderBy;
+export const sortByMulti = orderBy;

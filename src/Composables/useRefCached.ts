@@ -1,6 +1,4 @@
 import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose } from 'vue';
-import { useStorage as vueUseStore } from '@vueuse/core';
-import { isEqual } from 'lodash-es';
 
 export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
@@ -21,6 +19,7 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
                 state.value = default_value;
             }
         } else state.value = default_value;
+
 
     };
 
@@ -49,7 +48,7 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     watch(state, (new_value) => {
         if (!raw_key.value) return;
         localStorage.setItem(raw_key.value, JSON.stringify(new_value));
-    }, { immediate: true });
+    }, { immediate: true, deep: true });
 
     return state;
 }

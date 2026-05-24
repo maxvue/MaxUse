@@ -80,7 +80,10 @@ function useRefCached(key, default_value) {
 	watch(state, (new_value) => {
 		if (!raw_key.value) return;
 		localStorage.setItem(raw_key.value, JSON.stringify(new_value));
-	}, { immediate: true });
+	}, {
+		immediate: true,
+		deep: true
+	});
 	return state;
 }
 var useRefStorage = useRefCached;

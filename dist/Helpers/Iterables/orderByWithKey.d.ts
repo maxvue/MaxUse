@@ -10,9 +10,8 @@ type OrderCriteria<T> = keyof T | (keyof T)[] | {
  * @param criteria O(s) critério(s) de ordenação.
  * @param object_keyBy A chave a ser usada como índice do objeto retornado.
  * @param order A direção de ordenação (padrão é 'asc').
- * @param defaultOrder A direção de ordenação padrão.
  * @returns Um objeto mapeado pela chave e ordenado de acordo com os critérios.
  */
-export declare function orderByWithKey(collection: MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>, criteria: OrderCriteria<T>, object_keyBy: keyof T, order?: 'asc' | 'desc', defaultOrder?: 'asc' | 'desc'): Record<string, T>;
+export declare function orderByWithKey(collection: MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>, criteria: OrderCriteria<T>, object_keyBy: keyof T, order?: 'asc' | 'desc'): Record<string, T>;
 export {};
 //# sourceMappingURL=orderByWithKey.d.ts.map

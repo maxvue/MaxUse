@@ -1,5 +1,4 @@
 import { t as __exportAll } from "./chunk-pbuEa-1d.js";
-import { o as isNotValid } from "./Validations-DRaR7BG2.js";
 import { n as isBlank } from "./isBlank-DrIS5hlK.js";
 import { n as apiRoute, r as u, t as apiGetRoute } from "./apiGetRoute-BzeQGUGw.js";
 import { toValue } from "vue";
@@ -141,15 +140,19 @@ var goToRouteByName = goToRoute;
 //#region src/Routes/getCachedApi.ts
 async function getCachedApi(routeName, dataToRequest = null, keyCache = null) {
 	const route_name = toValue(routeName);
-	if (isNotValid(route_name)) return null;
+	if (isBlank(route_name)) return null;
 	const data_request = toValue(dataToRequest) ?? {};
 	const key = toValue(keyCache) ?? route_name + "_" + JSON.stringify(data_request);
 	const data = localStorage.getItem(key);
 	if (data) return JSON.parse(data);
-	const routeUrl = u()(route_name, data_request);
+	const routeUrl = u()(String(route_name), data_request);
 	const config = { responseType: "json" };
 	axios.defaults.withCredentials = true;
 	const data_return = (await axios.get(routeUrl, config)).data;
+	console.log({
+		key,
+		return: data_return
+	});
 	localStorage.setItem(key, JSON.stringify(data_return));
 	return data_return;
 }

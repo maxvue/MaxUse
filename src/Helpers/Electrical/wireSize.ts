@@ -97,8 +97,7 @@ export async function wireSize(current: T, options: WireOptions) {
             if (item && item.wire >= data_return.wire) {
                 data_return.wire = item.wire;
                 data_return.max_current = Number((item.max_current * fca * fct).toFixed(2));
-            }
-            else if (item) {
+            } else if (item) {
                 const wire_table = dados.find((c: { wire: number; max_current: number }) => c.wire === data_return.wire);
                 if (wire_table) data_return.max_current = Number((wire_table.max_current * fca * fct).toFixed(2));
             }
