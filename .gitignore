@@ -17,6 +17,7 @@ tsconfig.tsbuildinfo
 
 # IA / Agentes
 GEMINI.md
+.gemini/
 .agents/
 .windsurf/
 .cursor/
@@ -32,12 +33,23 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Source maps gerados
+*.js.map
+
+# Imagens do repositório (usar CDN ou links externos)
+maxvue-big.png
+maxvue.jpeg
+
 # Arquivos de teste/scratch avulsos (raiz)
 /scratch.*
 /test-build.js
 /test-eslint.ts
 /test_*.ts
+eslint.test.config.js
 
 # Ambiente
 .env
 .env.*
+
+# Outros
+.valet-phoenix.json
