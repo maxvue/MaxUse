@@ -1,1 +1,0 @@
-{"version":3,"file":"getRoute.d.ts","sourceRoot":"","sources":["../../src/Routes/getRoute.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,KAAK,gBAAgB,EAAW,MAAM,KAAK,CAAC;AAGrD,eAAO,MAAM,QAAQ,eAAe,gBAAgB,CAAC,MAAM,GAAG,IAAI,CAAC,SAAe,GAAG,KAAQ,MAAM,GAAG,IASrG,CAAC;AAEF,eAAO,MAAM,cAAc,eAXS,gBAAgB,CAAC,MAAM,GAAG,IAAI,CAAC,SAAe,GAAG,KAAQ,MAAM,GAAG,IAWhE,CAAC"}

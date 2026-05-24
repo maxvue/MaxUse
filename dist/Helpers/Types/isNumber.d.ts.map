@@ -1,1 +1,0 @@
-{"version":3,"file":"isNumber.d.ts","sourceRoot":"","sources":["../../../src/Helpers/Types/isNumber.ts"],"names":[],"mappings":"AAAA,OAAO,EAAW,KAAK,gBAAgB,EAAE,MAAM,KAAK,CAAC;AAGrD,KAAK,MAAM,GAAG,gBAAgB,CAAC,GAAG,CAAC,CAAC;AAEpC;;;;;GAKG;AACH,wBAAgB,QAAQ,CAAC,KAAK,EAAE,MAAM,GAAG,OAAO,CAM/C;AAED,eAAO,MAAM,SAAS,iBAAW,CAAC;AAClC,eAAO,MAAM,OAAO,iBAAW,CAAC"}
