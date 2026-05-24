@@ -51,6 +51,10 @@ export default defineConfig({
                 globals: {
                     vue: 'Vue'
                 }
+            },
+            onLog(level, log, handler) {
+                if (log.code === 'INVALID_ANNOTATION') return;
+                handler(level, log);
             }
         },
         sourcemap: true,

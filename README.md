@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./maxvue.jpeg" alt="MaxUse Logo" width="120" />
+  <img src="https://raw.githubusercontent.com/maxvue/MaxUse/main/maxvue.jpeg" alt="MaxUse Logo" width="120" />
 </p>
 
 <h1 align="center">@maxvue/max-use</h1>

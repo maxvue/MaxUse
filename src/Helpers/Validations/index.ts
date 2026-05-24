@@ -2,6 +2,7 @@ export * from './documents';
 export * from './isEmail';
 export * from './cepIsValid';
 export * from './isValid';
+export * from './phone';
 
 import * as documents from './documents';
 import * as email from './isEmail';

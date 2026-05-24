@@ -1,5 +1,6 @@
 import { validateBr } from 'js-brasil';
 import { type MaybeRefOrGetter, toValue } from 'vue';
+import { isBlank } from '../Types/isBlank';
 
 /**
  * Valida se uma string é um CEP válido.
@@ -9,6 +10,7 @@ import { type MaybeRefOrGetter, toValue } from 'vue';
  */
 export function cepIsValid(value: MaybeRefOrGetter<string | number | null | undefined>): boolean {
     const data = toValue(value);
+    if (isBlank(data)) return false;
     return validateBr.cep(data);
 }
 
