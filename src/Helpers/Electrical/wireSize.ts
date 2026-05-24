@@ -8,6 +8,22 @@ type Temperature = '90' | '70' | 90 | 70;
 type Isolation = 'pvc' | 'epr' | 'xlpe';
 type Phases = 1 | 2 |3 | '1' | '2' | '3';
 
+/**
+ * Opções de configuração para o cálculo de bitola de cabos elétricos.
+ *
+ * @property current - Corrente elétrica do circuito (A).
+ * @property material - Material do condutor ('copper'/'cu' ou 'aluminum'/'al').
+ * @property isolation - Tipo de isolação ou temperatura ('70', '90', 'pvc', 'epr', 'xlpe').
+ * @property method - Método de instalação conforme NBR 5410 ('a1', 'a2', 'b1', 'b2', 'c', 'd', 'e', 'f', 'g').
+ * @property length - Comprimento do circuito em metros.
+ * @property voltage - Tensão do circuito em volts.
+ * @property phases - Número de fases (1, 2 ou 3).
+ * @property max_loss - Percentual máximo de queda de tensão permitido.
+ * @property voltage_drop - Queda de tensão máxima permitida (V).
+ * @property fca - Fator de correção de agrupamento.
+ * @property fct - Fator de correção de temperatura.
+ * @property circuit_type - Tipo do circuito ('lighting'/'iluminacao' ou 'power'/'tomada'/'forca').
+ */
 export type WireOptions = {
     current?: T;
     material?: Material;
@@ -23,6 +39,12 @@ export type WireOptions = {
     circuit_type?: 'lighting' | 'power' | 'iluminacao' | 'tomada' | 'forca' | string;
 };
 
+/**
+ * Converte tensão fase-neutro para tensão fase-fase, arredondando para o valor comercial mais próximo.
+ *
+ * @param phaseNeutralVoltage - Tensão fase-neutro em volts.
+ * @returns Tensão fase-fase comercial mais próxima.
+ */
 function toPhasePhase(phaseNeutralVoltage: number): number {
     const array = [110, 120, 127, 210, 220, 240, 380, 440, 480];
     const valor = phaseNeutralVoltage * Math.sqrt(3);
@@ -121,4 +143,5 @@ export async function wireSize(current: T, options: WireOptions) {
     return data_return;
 }
 
+/** Alias de {@link wireSize}. */
 export const calculaCabo = wireSize;

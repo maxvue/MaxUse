@@ -1,6 +1,15 @@
 import axios from 'axios';
 import { apiRoute } from './apiRoute';
 
+/**
+ * Realiza uma requisição HTTP POST para uma rota Ziggy nomeada.
+ * Inclui automaticamente o token CSRF do meta tag e headers padrão para Laravel.
+ *
+ * @param RouteName - Nome da rota Ziggy (ex: 'api.usuarios.store').
+ * @param data - Corpo da requisição (JSON).
+ * @param options - Opções extras passadas para `apiRoute`.
+ * @returns Os dados da resposta ou null em caso de erro. Retorna false se a rota for inválida.
+ */
 export async function apiPostRoute(RouteName: string | null, data: any | null = null, options: any = null) {
     const system_options: any = apiRoute(RouteName, data, options, 'POST');
 

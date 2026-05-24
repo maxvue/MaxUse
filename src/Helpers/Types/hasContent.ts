@@ -22,6 +22,14 @@ export function hasContentFn(value: RefString, if_zero: boolean = false): boolea
     return data.length > 0;
 }
 
+/**
+ * Type-guard que verifica se um valor possui conteúdo.
+ * Retorna true e restringe o tipo para `NonNullable<V>` quando o valor tem dados.
+ *
+ * @param value - O valor a ser verificado.
+ * @param if_zero - Se true, considera o número 0 como tendo conteúdo (padrão: false).
+ * @returns true se o valor contiver dados (narrowing para NonNullable).
+ */
 export function hasContent<V>(value: V, if_zero: boolean = false): value is NonNullable<V> {
     return hasContentFn(value as any, if_zero);
 }

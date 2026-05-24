@@ -983,7 +983,6 @@
       "isWorker",
       "now",
       "pausableWatch",
-      "refAutoReset",
       "set",
       "throttledRef",
       "throttledWatch",

@@ -17,5 +17,7 @@ export function isNumber(value: RefAny): boolean {
     return !Number.isNaN(Number(data));
 }
 
+/** Alias de {@link isNumber}. */
 export const isNumeric = isNumber;
+/** Alias de {@link isNumber}. */
 export const numeric = isNumber;

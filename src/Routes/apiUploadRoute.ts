@@ -1,6 +1,16 @@
 import { apiRoute } from './apiRoute';
 import axios from 'axios';
 
+/**
+ * Realiza upload de arquivos via requisição HTTP POST (multipart/form-data) para uma rota Ziggy nomeada.
+ * Converte automaticamente dados em FormData, incluindo serialização de objetos aninhados via JSON.
+ *
+ * @param RouteName - Nome da rota Ziggy (ex: 'api.documentos.upload').
+ * @param files - Arquivos a serem enviados. Aceita `{ files: File[] }` ou `File[]` diretamente.
+ * @param data - Dados adicionais enviados junto com os arquivos.
+ * @param options - Opções extras passadas para `apiRoute`.
+ * @returns Os dados da resposta ou false em caso de erro/rota inválida.
+ */
 export async function apiUploadRoute(RouteName: string, files: any = null, data: any = {}, options = null) {
     const system_options: any = apiRoute(RouteName, data, options, 'POST');
 

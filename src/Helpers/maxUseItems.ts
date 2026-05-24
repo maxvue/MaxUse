@@ -47,4 +47,14 @@ export const maxUseItems = (): string[] => {
     return Array.from(allKeys).sort();
 };
 
+/**
+ * Helper para facilitar a importação automática de funções no `unplugin-auto-import`.
+ * Contém a lista gerada de exportações organizadas do pacote.
+ *
+ * @example
+ * ```typescript
+ * import { maxUseAutoImport } from 'max-use';
+ * AutoImport({ imports: [ maxUseAutoImport() ] });
+ * ```
+ */
 export const maxUseAutoImport = autoImportData as any;

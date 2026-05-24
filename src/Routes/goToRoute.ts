@@ -5,10 +5,35 @@ import type { Router } from 'vue-router';
 
 let activeRouter: Router | null = null;
 
+/**
+ * Configura a instância do Vue Router para uso interno na biblioteca.
+ * Deve ser chamado uma vez na inicialização da aplicação (ex: no `main.ts`).
+ *
+ * @param router - A instância do Vue Router da aplicação.
+ *
+ * @example
+ * ```typescript
+ * import { createApp } from 'vue';
+ * import { createRouter } from 'vue-router';
+ * import { setLibraryRouter } from 'max-use';
+ *
+ * const router = createRouter({ ... });
+ * setLibraryRouter(router);
+ * ```
+ */
 export const setLibraryRouter = (router: Router): void => {
     activeRouter = router;
 };
 
+/**
+ * Navega programaticamente para uma rota Ziggy ou Vue Router pelo nome.
+ * Tenta resolver primeiro via Ziggy; se não encontrar, usa `router.push` com `name`.
+ *
+ * @param route - Nome da rota (Ziggy ou Vue Router).
+ * @param data - Parâmetros da rota (usados como params e query no fallback Vue Router).
+ * @returns true se a navegação foi disparada, false se o nome for vazio.
+ * @throws Error se `setLibraryRouter` não tiver sido chamado antes.
+ */
 export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: any = {}): boolean => {
     if (!activeRouter) throw new Error('Router não configurado na biblioteca.');
 
@@ -29,4 +54,5 @@ export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: a
     return true;
 };
 
+/** Alias de {@link goToRoute}. */
 export const goToRouteByName = goToRoute;

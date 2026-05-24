@@ -80,9 +80,34 @@ const FORMAT_MAP: Record<string, any> = {
     future: timeAgoLimitAbrev
 };
 
+/**
+ * Retorna uma string reativa indicando quanto tempo se passou desde uma data (ou falta para ela).
+ * Wrapper do VueUse `useTimeAgo` com mensagens traduzidas para pt-BR e múltiplos formatos.
+ *
+ * Formatos disponíveis:
+ * - `'br'` — Padrão completo em pt-BR ("Ontem", "2 dias", "Mês passado").
+ * - `'abbrev'` — Abreviado ("1 Sem", "2h", "3m").
+ * - `'action'` — Orientado a ação ("Realizar Hoje", "Atrasado: 2 dias").
+ * - `'limit'` — Similar a action com estilo de prazo.
+ * - `'limitAbbrev'` / `'limit_abbrev'` / `'future'` — Abreviado com estilo de prazo.
+ *
+ * @param initialDate - A data de referência (aceita Date, timestamp, string ISO ou valores reativos).
+ * @param format - O formato das mensagens (padrão: 'br').
+ * @returns Um objeto reativo `UseTimeAgoReturn` com a string formatada.
+ *
+ * @example
+ * ```typescript
+ * const tempoAtras = timeAgo('2026-05-20');
+ * // tempoAtras.value → '4 dias'
+ *
+ * const prazo = timeAgo('2026-05-30', 'action');
+ * // prazo.value → 'Realizar em 6 dias'
+ * ```
+ */
 export const timeAgo = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string = 'br'): UseTimeAgoReturn => {
     if (isNotValid(toValue(initialDate))) return vueUseTimeAgo(new Date(), { messages: FORMAT_MAP[format] ?? ptBr });
     return vueUseTimeAgo(initialDate as any, { messages: FORMAT_MAP[format] ?? ptBr });
 };
 
+/** Alias de {@link timeAgo}. */
 export const useTimeAgo = timeAgo;
