@@ -21,11 +21,13 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
     const formData = new FormData();
 
     // Adicionando os dados ao FormData
-    for (const key in data) if (Object.prototype.hasOwnProperty.call(data, key)) {
-        const value = data[key];
-        if (typeof value === 'object' && value !== null) formData.append(key, JSON.stringify(value));
-        else formData.append(key, value);
+    for (const key in data) {
+        if (Object.prototype.hasOwnProperty.call(data, key)) {
+            const value = data[key];
+            if (typeof value === 'object' && value !== null) formData.append(key, JSON.stringify(value));
+            else formData.append(key, value);
 
+        }
     }
 
 

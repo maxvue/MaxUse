@@ -11,7 +11,7 @@ export function phone(value: MaybeRefOrGetter<string | number | null | undefined
     const data = toValue(value);
     if (!data) return false;
 
-    return PhoneLib.isValidPhoneNumber(String(data));
+    return PhoneLib.isValidPhoneNumber(String(data), { defaultCountry: 'BR', defaultCallingCode: '55' });
 }
 
 /** Alias de {@link phone}. */
