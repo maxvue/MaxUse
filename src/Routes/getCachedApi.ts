@@ -22,7 +22,6 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     if (isBlank(route_name)) return null;
 
-
     const data_request = toValue(dataToRequest) ?? {};
 
     const key = toValue(keyCache) ?? route_name + '_' + JSON.stringify(data_request);
