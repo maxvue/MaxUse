@@ -1,7 +1,7 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useRoute } from 'ziggy-js';
-import { isBlank } from '../Helpers/Types';
+import { hasContent, isBlank } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
@@ -20,7 +20,7 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     const route_name = toValue(routeName);
 
-    if (isBlank(route_name)) return null;
+    if (!hasContent(route_name)) return null;
 
     const data_request = toValue(dataToRequest) ?? {};
 
