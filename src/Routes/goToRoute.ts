@@ -48,7 +48,7 @@ export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: a
         return true;
     };
 
-    console.log('router', activeRouter);
+
     activeRouter.push({ name: route_value, params: data_value, query: data_value });
 
     return true;

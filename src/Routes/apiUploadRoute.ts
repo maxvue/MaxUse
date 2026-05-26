@@ -15,10 +15,9 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
 
     const system_options: any = apiRoute(RouteName, data, options, 'POST');
 
-    console.log(1);
 
     if (!system_options) return false;
-    console.log(2);
+
 
     // Criando o FormData
     const formData = new FormData();
@@ -33,13 +32,11 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
         }
     }
 
-    console.log(3);
 
     files = {
         files: files['files'] ?? files
     };
 
-    console.log(4);
 
     // Adicionando os arquivos ao FormData
     files['files'].forEach((fileItem: any, index: number) => {

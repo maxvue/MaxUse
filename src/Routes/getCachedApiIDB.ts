@@ -167,8 +167,6 @@ export async function getCachedApiIDB(
     const response = await axios.get(routeUrl, config);
     const data_return = response.data;
 
-    console.log({ key: key, return: data_return });
-
     // Salva no IndexedDB
     await setToIDB(key, data_return);
 

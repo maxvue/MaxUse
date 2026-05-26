@@ -37,7 +37,6 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
     axios.defaults.withCredentials = true;
     const response = await axios.get(routeUrl, config);
     const data_return = response.data;
-    console.log({ key: key, return: data_return });
     localStorage.setItem(key, JSON.stringify(data_return));
     return data_return;
 }
