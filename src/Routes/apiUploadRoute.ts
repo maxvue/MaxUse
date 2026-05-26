@@ -12,10 +12,13 @@ import axios from 'axios';
  * @returns Os dados da resposta ou false em caso de erro/rota inválida.
  */
 export async function apiUploadRoute(RouteName: string, files: any = null, data: any = {}, options = null) {
+
     const system_options: any = apiRoute(RouteName, data, options, 'POST');
 
-    if (!system_options) return false;
+    console.log(1);
 
+    if (!system_options) return false;
+    console.log(2);
 
     // Criando o FormData
     const formData = new FormData();
@@ -30,10 +33,13 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
         }
     }
 
+    console.log(3);
 
     files = {
         files: files['files'] ?? files
     };
+
+    console.log(4);
 
     // Adicionando os arquivos ao FormData
     files['files'].forEach((fileItem: any, index: number) => {
@@ -45,19 +51,14 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
         formData.append(`files[${index}]`, file.blob, file.name);
     });
 
-    try {
-        const token: string = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
-        const message_response = await axios.post(system_options.routeURL, formData, {
-            headers: {
-                Accept: 'application/json',
-                'X-CSRF-TOKEN': token,
-                'X-Requested-With': 'XMLHttpRequest'
-            },
-            withCredentials: true
-        });
-        return message_response.data;
-    } catch (error: any) {
-        error.value = true;
-        return false;
-    }
+    const token: string = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    const message_response = await axios.post(system_options.routeURL, formData, {
+        headers: {
+            Accept: 'application/json',
+            'X-CSRF-TOKEN': token,
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        withCredentials: true
+    });
+    return message_response.data;
 }
