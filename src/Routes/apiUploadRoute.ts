@@ -45,6 +45,7 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
         file['blob'] = new Blob([file], { type: file.type });
         file['objectURL'] = URL.createObjectURL(file.blob);
 
+        
         formData.append(`files[${index}]`, file.blob, file.name);
     });
 
