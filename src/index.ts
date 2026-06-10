@@ -33,7 +33,7 @@ export * from './Helpers/Electrical';
 export * from './Helpers/Format';
 export * from './Helpers/VueUse';
 
-// Resolução de ambiguidade
+// Resolução de ambiguidades
 export { refAutoReset, useCached, useStorage, useTimeAgo, useDateFormat } from './Composables';
 export { now } from './Helpers/Dates';
 export { get, set } from './Helpers/Objects';
