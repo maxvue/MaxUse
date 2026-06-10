@@ -1,2 +1,2 @@
 export { isTouchDevice } from './isTouchDevice';
-export { getColorFromVar } from './getColorFromVar';
+export * from './getColorFromVar';

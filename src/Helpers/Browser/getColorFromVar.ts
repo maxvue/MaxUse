@@ -41,7 +41,7 @@ export const contrastColor = (color_var_value: MaybeRefOrGetter<string>): string
     if (colorInstance.isLight()) return colorInstance.darken(0.5).hexa();
 
 
-    return colorInstance.lighten(0.6).hexa();
+    return colorInstance.lighten(0.9).hexa();
 };
 
 export const getContrastColor = contrastColor;
