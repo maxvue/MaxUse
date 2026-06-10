@@ -27,6 +27,6 @@ export function size(value: MaybeRefOrGetter<T>, allow_number: boolean = true): 
 
     if (typeof data === 'object') return Object.keys(data).length;
 
-    return data.length;
+    return data.length ?? 0;
 }
 

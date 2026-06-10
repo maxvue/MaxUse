@@ -17,5 +17,6 @@ export * from './chunk';
 export * from './uniqueBy';
 export * from './findLast';
 export * from './first';
+export * from './getFirst';
 export * from './last';
 export * from './objectSize';

@@ -8,6 +8,7 @@ import { size } from '../Iterables';
  * @returns true se o valor tiver conteúdo (size > 0).
  */
 export function notEmpty<V>(value: V): value is NonNullable<V> {
+    if (typeof value === 'boolean' || typeof value === 'number') return true;
     return size(value as any) > 0;
 }
 
@@ -19,6 +20,7 @@ export function notEmpty<V>(value: V): value is NonNullable<V> {
  * @returns true se o valor tiver conteúdo (size > 0).
  */
 export function isNotEmpty<V>(value: V): value is NonNullable<V> {
+    if (typeof value === 'boolean' || typeof value === 'number') return true;
     return size(value as any) > 0;
 }
 
@@ -30,6 +32,7 @@ export function isNotEmpty<V>(value: V): value is NonNullable<V> {
  * @returns true se o valor tiver conteúdo (size > 0).
  */
 export function noEmpty<V>(value: V): value is NonNullable<V> {
+    if (typeof value === 'boolean' || typeof value === 'number') return true;
     return size(value as any) > 0;
 }
 
@@ -41,6 +44,7 @@ export function noEmpty<V>(value: V): value is NonNullable<V> {
  * @returns true se o valor estiver vazio (size === 0).
  */
 export function isEmpty<V>(value: V): value is NonNullable<V> {
+    if (typeof value === 'boolean' || typeof value === 'number') return false;
     return size(value as any) === 0;
 }
 
@@ -52,6 +56,7 @@ export function isEmpty<V>(value: V): value is NonNullable<V> {
  * @returns true se o valor estiver vazio (size === 0).
  */
 export function empty<V>(value: V): boolean {
+    if (typeof value === 'boolean' || typeof value === 'number') return false;
     return size(value as any) === 0;
 }
 

@@ -8,8 +8,9 @@ import { pick, omit } from './manipulations';
 import { mapValues } from './mapValues';
 import { set } from './set';
 import { diff } from './diff';
+import { keyExists } from './keyExists';
 
-export { deepClone, get, set, unset, isEqual, deepMerge, renameKeys, pick, omit, mapValues, diff };
+export { deepClone, get, set, unset, isEqual, deepMerge, renameKeys, pick, omit, mapValues, diff, keyExists };
 export { deepClone as cloneDeep };
 
 export const Obj = {
@@ -24,5 +25,6 @@ export const Obj = {
     pick,
     omit,
     mapValues,
-    diff
+    diff,
+    keyExists
 };

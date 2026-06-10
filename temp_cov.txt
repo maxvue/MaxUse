@@ -1,0 +1,119 @@
+
+ RUN  v4.1.7 /home/johnattas/GitHub/engeapp/storage/libs/MaxUse
+      Coverage enabled with v8
+
+ ✓ src/Helpers/Objects/unset.test.ts (8 tests) 22ms
+ ✓ src/Helpers/Strings/random.test.ts (18 tests) 22ms
+ ✓ src/Helpers/Iterables/groupBy.test.ts (5 tests) 9ms
+ ✓ src/Helpers/Validations/phone.test.ts (5 tests) 14ms
+ ✓ src/Helpers/Iterables/filterByNot.test.ts (6 tests) 21ms
+ ✓ src/Routes/apiPostRoute.test.ts (4 tests) 21ms
+ ✓ src/Routes/apiUploadRoute.test.ts (4 tests) 24ms
+ ✓ src/Helpers/Strings/filters.test.ts (21 tests) 16ms
+ ✓ src/Helpers/Dates/hasPassedHours.test.ts (4 tests) 39ms
+ ❯ src/Composables/useDefaultReset.test.ts (10 tests | 1 failed) 32ms
+     ✓ inicializa com o valor fornecido 7ms
+     ✓ reset restaura valor original 1ms
+     ✓ reset com primitivo funciona 0ms
+     ✓ gera novo ULID quando id === "ulid" 3ms
+     ✓ define created_at como data atual quando created_at === "now" 1ms
+     ✓ clona valor inicial (sem compartilhar referência) 1ms
+     ✓ expõe initialData e timer 0ms
+     ✓ é funcional como alias de useDefaultReset 0ms
+     × inicializa watcher debounced quando timer é passado 8ms
+     ✓ reset funciona com array de objetos 1ms
+ ✓ src/Helpers/Format/currency.test.ts (8 tests) 57ms
+ ✓ src/Helpers/Iterables/filterBy.test.ts (6 tests) 21ms
+ ✓ src/Helpers/Objects/isEqual.test.ts (29 tests) 64ms
+ ✓ src/Helpers/Math/round.test.ts (10 tests) 28ms
+ ✓ src/Helpers/Browser/getColorFromVar.test.ts (6 tests) 29ms
+ ✓ src/Routes/apiDeleteRoute.test.ts (4 tests) 55ms
+ ✓ src/Helpers/Objects/deepMerge.test.ts (9 tests) 15ms
+ ✓ src/Helpers/Objects/set.test.ts (9 tests) 59ms
+ ✓ src/Routes/apiPutRoute.test.ts (4 tests) 76ms
+ ✓ src/Helpers/Strings/masks.test.ts (29 tests) 18ms
+ ✓ src/Routes/goToRoute.test.ts (7 tests) 13ms
+ ✓ src/Routes/getRoute.test.ts (7 tests) 26ms
+ ✓ src/Helpers/Electrical/wireSize.test.ts (18 tests) 280ms
+ ✓ src/Routes/getCachedApi.test.ts (5 tests) 28ms
+ ✓ src/Helpers/Iterables/size.test.ts (11 tests) 18ms
+ ✓ src/Routes/getCachedApiIDB.test.ts (6 tests) 71ms
+ ✓ src/Helpers/Types/isBlank.test.ts (11 tests) 8ms
+ ✓ src/Composables/useRefCached.test.ts (10 tests) 49ms
+ ✓ src/Helpers/Iterables/orderBy.test.ts (18 tests) 28ms
+ ✓ src/Routes/apiGetRoute.test.ts (4 tests) 17ms
+ ✓ src/Helpers/Objects/deepClone.test.ts (16 tests) 24ms
+ ✓ src/Helpers/Format/bytes.test.ts (14 tests) 9ms
+ ✓ src/Routes/apiRoute.test.ts (5 tests) 12ms
+ ✓ src/Helpers/Validations/isValid.test.ts (15 tests) 17ms
+ ✓ src/Helpers/Strings/manipulations.test.ts (29 tests) 27ms
+ ✓ src/Helpers/Strings/cases.test.ts (24 tests) 15ms
+ ✓ src/Helpers/Iterables/uniq.test.ts (4 tests) 17ms
+ ✓ src/Helpers/Dates/differences.test.ts (14 tests) 11ms
+ ✓ src/Helpers/Objects/get.test.ts (11 tests) 13ms
+ ✓ src/Helpers/Iterables/first.test.ts (4 tests) 7ms
+ ✓ src/Helpers/Validations/documents.test.ts (10 tests) 12ms
+ ❯ src/Composables/watchTrue.test.ts (12 tests | 1 failed) 34ms
+     ✓ não dispara callback para valor null sem immediate 7ms
+     ✓ não dispara callback para string vazia sem mudança 1ms
+     ✓ dispara callback quando valor muda para null/vazio 2ms
+     ✓ NÃO dispara quando valor muda para algo com conteúdo 1ms
+     ✓ suporta option once (para na primeira execução) 1ms
+     ✓ dispara callback com debounce quando valor fica vazio 6ms
+     ✓ NÃO dispara quando valor tem conteúdo 1ms
+     × suporta option once (para na primeira execução) 9ms
+     ✓ watchTrue é whenever do VueUse 1ms
+     ✓ watchValid é alias de watchIfValid 0ms
+     ✓ watchIsValid é alias de watchIfValid 0ms
+     ✓ watchDebouncedValid é alias de watchDebounceIfValid 0ms
+ ✓ src/Composables/useDateFormat.test.ts (5 tests) 26ms
+ ✓ src/Helpers/Types/isObject.test.ts (15 tests) 15ms
+ ✓ src/Helpers/Iterables/chunk.test.ts (6 tests) 16ms
+ ✓ src/Helpers/Iterables/sum.test.ts (5 tests) 8ms
+ ✓ src/Helpers/Types/canIterate.test.ts (13 tests) 22ms
+ ✓ src/Composables/useTimeAgo.test.ts (75 tests) 87ms
+ ✓ src/Helpers/Objects/manipulations.test.ts (10 tests) 12ms
+ ✓ src/Helpers/Objects/diff.test.ts (9 tests) 30ms
+ ✓ src/Helpers/Iterables/valuesInKey.test.ts (7 tests) 10ms
+ ✓ src/Helpers/Dates/timeAgo.test.ts (8 tests) 13ms
+ ✓ src/Helpers/Strings/converters.test.ts (14 tests) 12ms
+ ✓ src/Helpers/Objects/renameKeys.test.ts (4 tests) 10ms
+ ✓ src/Helpers/Iterables/uniqueBy.test.ts (3 tests) 39ms
+ ✓ src/Helpers/Dates/addTime.test.ts (12 tests) 14ms
+ ✓ src/Helpers/Dates/inDateInterval.test.ts (13 tests) 44ms
+ ✓ src/Helpers/Iterables/objectSize.test.ts (9 tests) 18ms
+ ✓ src/Helpers/Objects/mapValues.test.ts (4 tests) 9ms
+ ✓ src/Helpers/Validations/cepIsValid.test.ts (5 tests) 19ms
+ ✓ src/Helpers/Math/median.test.ts (7 tests) 14ms
+ ✓ src/Helpers/Types/isArray.test.ts (11 tests) 12ms
+ ✓ src/Helpers/Dates/isWeekend.test.ts (6 tests) 18ms
+ ✓ src/Helpers/Validations/isEmail.test.ts (6 tests) 8ms
+ ✓ src/Helpers/Iterables/sample.test.ts (5 tests) 11ms
+ ✓ src/Helpers/Iterables/last.test.ts (4 tests) 7ms
+ ✓ src/Helpers/Types/isNumber.test.ts (17 tests) 11ms
+ ✓ src/Helpers/Dates/hasPassedMinutes.test.ts (4 tests) 5ms
+ ✓ src/Helpers/Iterables/findLast.test.ts (5 tests) 6ms
+ ✓ src/Helpers/Dates/isFuture.test.ts (5 tests) 10ms
+ ✓ src/Helpers/Iterables/orderByWithKey.test.ts (5 tests) 8ms
+ ✓ src/Helpers/Iterables/sumBy.test.ts (5 tests) 14ms
+ ✓ src/Helpers/Browser/isTouchDevice.test.ts (2 tests) 15ms
+ ✓ src/Helpers/Iterables/keyBy.test.ts (5 tests) 7ms
+ ✓ src/Helpers/Math/average.test.ts (7 tests) 9ms
+ ✓ src/Helpers/Types/hasContent.test.ts (18 tests) 17ms
+ ✓ src/Helpers/Dates/isDate.test.ts (7 tests) 7ms
+ ✓ src/Helpers/Dates/isPast.test.ts (5 tests) 15ms
+ ✓ src/Helpers/Dates/isSameDay.test.ts (5 tests) 8ms
+ ✓ src/Helpers/Iterables/filter.test.ts (6 tests) 11ms
+ ✓ src/Helpers/Iterables/shuffle.test.ts (2 tests) 7ms
+ ✓ src/Helpers/Iterables/sortByMulti.test.ts (2 tests) 7ms
+ ✓ src/Helpers/Dates/now.test.ts (2 tests) 6ms
+ ✓ src/Helpers/Iterables/countBy.test.ts (4 tests) 5ms
+ ✓ src/Helpers/Iterables/sortBy.test.ts (2 tests) 4ms
+ ✓ src/Helpers/Dates/hasPassedDays.test.ts (4 tests) 5ms
+ ✓ src/Helpers/maxUseItems.test.ts (6 tests) 11ms
+
+ Test Files  2 failed | 85 passed (87)
+      Tests  2 failed | 826 passed (828)
+   Start at  21:54:13
+   Duration  5.09s (transform 24.89s, setup 0ms, import 46.42s, tests 2.04s, environment 39.71s)
+

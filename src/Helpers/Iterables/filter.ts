@@ -12,7 +12,7 @@ type T = Record<string, any> | any[] | null | undefined;
 export function filter(collection: MaybeRefOrGetter<T>, callback: (card: any) => void): T[] | Record<string, T> {
     const data = toValue(collection);
 
-    if (!data || typeof data !== 'object') return Array.isArray(data) ? [] : {};
+    if (!data || typeof data !== 'object') return {};
 
     if (Array.isArray(data)) return data.filter((item) => callback(item));
 

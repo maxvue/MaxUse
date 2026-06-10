@@ -1,0 +1,206 @@
+
+ RUN  v4.1.7 /home/johnattas/GitHub/engeapp/storage/libs/MaxUse
+      Coverage enabled with v8
+
+ ✓ src/Helpers/Objects/mapValues.test.ts (4 tests) 8ms
+ ✓ src/Helpers/Strings/random.test.ts (18 tests) 17ms
+ ✓ src/Composables/useRefCached.test.ts (13 tests) 16ms
+ ✓ src/Helpers/Iterables/filterBy.test.ts (6 tests) 7ms
+ ✓ src/Helpers/Strings/cases.test.ts (24 tests) 10ms
+ ✓ src/Helpers/Strings/manipulations.test.ts (29 tests) 10ms
+ ✓ src/Helpers/Format/currency.test.ts (8 tests) 19ms
+ ✓ src/Composables/useRefCachedApi.test.ts (7 tests) 34ms
+ ✓ src/Helpers/Objects/unset.test.ts (8 tests) 7ms
+ ✓ src/Routes/apiPostRoute.test.ts (4 tests) 14ms
+ ✓ src/Helpers/Browser/getColorFromVar.test.ts (6 tests) 12ms
+ ✓ src/Helpers/Iterables/filterByNot.test.ts (6 tests) 8ms
+ ✓ src/Composables/useDefaultReset.test.ts (10 tests) 15ms
+ ✓ src/Helpers/Objects/get.test.ts (11 tests) 7ms
+ ✓ src/Routes/apiUploadRoute.test.ts (5 tests) 19ms
+ ✓ src/Routes/apiGetRoute.test.ts (4 tests) 11ms
+ ✓ src/Helpers/Objects/isEqual.test.ts (29 tests) 10ms
+ ✓ src/Routes/apiDeleteRoute.test.ts (4 tests) 17ms
+ ✓ src/Helpers/Strings/filters.test.ts (21 tests) 8ms
+ ✓ src/Routes/apiPutRoute.test.ts (4 tests) 19ms
+ ✓ src/Helpers/Strings/masks.test.ts (29 tests) 14ms
+ ✓ src/Routes/getRoute.test.ts (7 tests) 16ms
+ ✓ src/Routes/getCachedApi.test.ts (5 tests) 15ms
+ ✓ src/Routes/goToRoute.test.ts (7 tests) 19ms
+ ✓ src/Helpers/Electrical/wireSize.test.ts (24 tests) 256ms
+ ✓ src/Routes/getCachedApiIDB.test.ts (12 tests) 81ms
+ ✓ src/Helpers/Validations/isValid.test.ts (19 tests) 12ms
+ ✓ src/Composables/watchTrue.test.ts (13 tests) 23ms
+ ✓ src/Helpers/Dates/differences.test.ts (14 tests) 17ms
+ ✓ src/Composables/useDateFormat.test.ts (5 tests) 22ms
+ ✓ src/Helpers/Dates/isWeekend.test.ts (6 tests) 5ms
+ ✓ src/Helpers/Iterables/orderBy.test.ts (18 tests) 9ms
+ ✓ src/Routes/apiRoute.test.ts (5 tests) 10ms
+ ✓ src/Composables/useTimeAgo.test.ts (86 tests) 215ms
+ ✓ src/Helpers/Validations/documents.test.ts (10 tests) 10ms
+ ✓ src/Helpers/Iterables/keyBy.test.ts (5 tests) 19ms
+ ✓ src/Helpers/Types/isNumber.test.ts (17 tests) 9ms
+ ✓ src/Helpers/Iterables/filter.test.ts (6 tests) 10ms
+ ✓ src/Helpers/Types/canIterate.test.ts (13 tests) 11ms
+ ✓ src/Helpers/Iterables/sum.test.ts (5 tests) 9ms
+ ✓ src/Helpers/Iterables/groupBy.test.ts (5 tests) 7ms
+ ✓ src/Helpers/Types/isBlank.test.ts (11 tests) 12ms
+ ✓ src/Helpers/Iterables/sumBy.test.ts (5 tests) 7ms
+ ✓ src/Helpers/Iterables/size.test.ts (14 tests) 9ms
+ ✓ src/Helpers/Validations/phone.test.ts (5 tests) 10ms
+ ✓ src/Helpers/Types/hasContent.test.ts (23 tests) 10ms
+ ✓ src/Helpers/Iterables/findLast.test.ts (5 tests) 7ms
+ ✓ src/Helpers/Types/isObject.test.ts (15 tests) 9ms
+ ✓ src/Helpers/Objects/set.test.ts (9 tests) 11ms
+ ✓ src/Helpers/Dates/hasPassedHours.test.ts (4 tests) 7ms
+ ✓ src/Helpers/Objects/deepMerge.test.ts (9 tests) 12ms
+ ✓ src/Helpers/Iterables/uniq.test.ts (4 tests) 14ms
+ ✓ src/Helpers/Dates/timeAgo.test.ts (13 tests) 11ms
+ ✓ src/Helpers/Format/bytes.test.ts (15 tests) 9ms
+ ✓ src/Helpers/Math/median.test.ts (7 tests) 9ms
+ ✓ src/Helpers/Dates/addTime.test.ts (14 tests) 11ms
+ ✓ src/Helpers/Objects/renameKeys.test.ts (4 tests) 11ms
+ ✓ src/Helpers/Objects/deepClone.test.ts (16 tests) 20ms
+ ✓ src/Helpers/Iterables/valuesInKey.test.ts (7 tests) 8ms
+ ✓ src/Helpers/Iterables/sortByMulti.test.ts (2 tests) 7ms
+ ✓ src/Helpers/Objects/diff.test.ts (9 tests) 10ms
+ ✓ src/Helpers/Iterables/objectSize.test.ts (9 tests) 6ms
+ ✓ src/Helpers/Dates/inDateInterval.test.ts (13 tests) 9ms
+ ✓ src/Helpers/Iterables/sample.test.ts (5 tests) 9ms
+ ✓ src/Helpers/Strings/converters.test.ts (14 tests) 8ms
+ ✓ src/Helpers/Types/isArray.test.ts (11 tests) 8ms
+ ✓ src/Helpers/Dates/isSameDay.test.ts (5 tests) 9ms
+ ✓ src/Helpers/Validations/isEmail.test.ts (6 tests) 7ms
+ ✓ src/Helpers/Objects/manipulations.test.ts (10 tests) 9ms
+ ✓ src/Helpers/Iterables/uniqueBy.test.ts (3 tests) 7ms
+ ✓ src/Helpers/Iterables/chunk.test.ts (6 tests) 6ms
+ ✓ src/Helpers/Dates/isDate.test.ts (7 tests) 7ms
+ ✓ src/Helpers/Dates/hasPassedMinutes.test.ts (4 tests) 5ms
+ ✓ src/Helpers/Iterables/first.test.ts (4 tests) 5ms
+ ✓ src/Helpers/Math/average.test.ts (7 tests) 5ms
+ ✓ src/Helpers/Iterables/last.test.ts (4 tests) 4ms
+ ✓ src/Helpers/Validations/cepIsValid.test.ts (5 tests) 5ms
+ ✓ src/Helpers/Iterables/orderByWithKey.test.ts (5 tests) 6ms
+ ✓ src/Helpers/Math/round.test.ts (10 tests) 5ms
+ ✓ src/Helpers/Iterables/countBy.test.ts (4 tests) 4ms
+ ✓ src/Helpers/Dates/hasPassedDays.test.ts (4 tests) 4ms
+ ✓ src/Helpers/Dates/now.test.ts (2 tests) 4ms
+ ✓ src/Helpers/Browser/isTouchDevice.test.ts (2 tests) 3ms
+ ✓ src/Helpers/Dates/isFuture.test.ts (5 tests) 4ms
+ ✓ src/Helpers/Iterables/shuffle.test.ts (2 tests) 4ms
+ ✓ src/Helpers/Dates/isPast.test.ts (5 tests) 3ms
+ ✓ src/Helpers/Iterables/sortBy.test.ts (2 tests) 3ms
+ ✓ src/Helpers/maxUseItems.test.ts (6 tests) 6ms
+
+ Test Files  88 passed (88)
+      Tests  883 passed (883)
+   Start at  22:13:33
+   Duration  3.33s (transform 10.73s, setup 0ms, import 22.02s, tests 1.42s, environment 34.42s)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.92 |      100 |     100 |     100 |                   
+ Composables       |     100 |      100 |     100 |     100 |                   
+  useDateFormat.ts |     100 |      100 |     100 |     100 |                   
+  ...faultReset.ts |     100 |      100 |     100 |     100 |                   
+  useRefCached.ts  |     100 |      100 |     100 |     100 |                   
+  ...fCachedApi.ts |     100 |      100 |     100 |     100 |                   
+  useTimeAgo.ts    |     100 |      100 |     100 |     100 |                   
+  watchTrue.ts     |     100 |      100 |     100 |     100 |                   
+ Helpers           |     100 |      100 |     100 |     100 |                   
+  maxUseItems.ts   |     100 |      100 |     100 |     100 |                   
+ Helpers/Browser   |     100 |      100 |     100 |     100 |                   
+  ...lorFromVar.ts |     100 |      100 |     100 |     100 |                   
+  isTouchDevice.ts |     100 |      100 |     100 |     100 |                   
+ Helpers/Dates     |     100 |      100 |     100 |     100 |                   
+  addTime.ts       |     100 |      100 |     100 |     100 |                   
+  differences.ts   |     100 |      100 |     100 |     100 |                   
+  hasPassedDays.ts |     100 |      100 |     100 |     100 |                   
+  ...assedHours.ts |     100 |      100 |     100 |     100 |                   
+  ...sedMinutes.ts |     100 |      100 |     100 |     100 |                   
+  ...teInterval.ts |     100 |      100 |     100 |     100 |                   
+  isDate.ts        |     100 |      100 |     100 |     100 |                   
+  isFuture.ts      |     100 |      100 |     100 |     100 |                   
+  isPast.ts        |     100 |      100 |     100 |     100 |                   
+  isSameDay.ts     |     100 |      100 |     100 |     100 |                   
+  isWeekend.ts     |     100 |      100 |     100 |     100 |                   
+  now.ts           |     100 |      100 |     100 |     100 |                   
+  timeAgo.ts       |     100 |      100 |     100 |     100 |                   
+ ...ers/Electrical |   98.48 |      100 |     100 |     100 |                   
+  wireSize.ts      |   98.48 |      100 |     100 |     100 |                   
+ Helpers/Format    |     100 |      100 |     100 |     100 |                   
+  bytes.ts         |     100 |      100 |     100 |     100 |                   
+  currency.ts      |     100 |      100 |     100 |     100 |                   
+ Helpers/Iterables |     100 |      100 |     100 |     100 |                   
+  chunk.ts         |     100 |      100 |     100 |     100 |                   
+  countBy.ts       |     100 |      100 |     100 |     100 |                   
+  filter.ts        |     100 |      100 |     100 |     100 |                   
+  filterBy.ts      |     100 |      100 |     100 |     100 |                   
+  filterByNot.ts   |     100 |      100 |     100 |     100 |                   
+  findLast.ts      |     100 |      100 |     100 |     100 |                   
+  first.ts         |     100 |      100 |     100 |     100 |                   
+  groupBy.ts       |     100 |      100 |     100 |     100 |                   
+  keyBy.ts         |     100 |      100 |     100 |     100 |                   
+  last.ts          |     100 |      100 |     100 |     100 |                   
+  objectSize.ts    |     100 |      100 |     100 |     100 |                   
+  orderBy.ts       |     100 |      100 |     100 |     100 |                   
+  ...rByWithKey.ts |     100 |      100 |     100 |     100 |                   
+  sample.ts        |     100 |      100 |     100 |     100 |                   
+  shuffle.ts       |     100 |      100 |     100 |     100 |                   
+  size.ts          |     100 |      100 |     100 |     100 |                   
+  sortBy.ts        |     100 |      100 |     100 |     100 |                   
+  sortByMulti.ts   |     100 |      100 |     100 |     100 |                   
+  sum.ts           |     100 |      100 |     100 |     100 |                   
+  sumBy.ts         |     100 |      100 |     100 |     100 |                   
+  uniq.ts          |     100 |      100 |     100 |     100 |                   
+  uniqueBy.ts      |     100 |      100 |     100 |     100 |                   
+  valuesInKey.ts   |     100 |      100 |     100 |     100 |                   
+ Helpers/Math      |     100 |      100 |     100 |     100 |                   
+  average.ts       |     100 |      100 |     100 |     100 |                   
+  median.ts        |     100 |      100 |     100 |     100 |                   
+  roundDown.ts     |     100 |      100 |     100 |     100 |                   
+  roundUp.ts       |     100 |      100 |     100 |     100 |                   
+ Helpers/Objects   |     100 |      100 |     100 |     100 |                   
+  deepClone.ts     |     100 |      100 |     100 |     100 |                   
+  deepMerge.ts     |     100 |      100 |     100 |     100 |                   
+  diff.ts          |     100 |      100 |     100 |     100 |                   
+  get.ts           |     100 |      100 |     100 |     100 |                   
+  isEqual.ts       |     100 |      100 |     100 |     100 |                   
+  manipulations.ts |     100 |      100 |     100 |     100 |                   
+  mapValues.ts     |     100 |      100 |     100 |     100 |                   
+  renameKeys.ts    |     100 |      100 |     100 |     100 |                   
+  set.ts           |     100 |      100 |     100 |     100 |                   
+  unset.ts         |     100 |      100 |     100 |     100 |                   
+ Helpers/Strings   |     100 |      100 |     100 |     100 |                   
+  cases.ts         |     100 |      100 |     100 |     100 |                   
+  converters.ts    |     100 |      100 |     100 |     100 |                   
+  filters.ts       |     100 |      100 |     100 |     100 |                   
+  manipulations.ts |     100 |      100 |     100 |     100 |                   
+  masks.ts         |     100 |      100 |     100 |     100 |                   
+  random.ts        |     100 |      100 |     100 |     100 |                   
+ Helpers/Types     |     100 |      100 |     100 |     100 |                   
+  canIterate.ts    |     100 |      100 |     100 |     100 |                   
+  hasContent.ts    |     100 |      100 |     100 |     100 |                   
+  isArray.ts       |     100 |      100 |     100 |     100 |                   
+  isBlank.ts       |     100 |      100 |     100 |     100 |                   
+  isNumber.ts      |     100 |      100 |     100 |     100 |                   
+  isObject.ts      |     100 |      100 |     100 |     100 |                   
+ ...rs/Validations |     100 |      100 |     100 |     100 |                   
+  cepIsValid.ts    |     100 |      100 |     100 |     100 |                   
+  documents.ts     |     100 |      100 |     100 |     100 |                   
+  isEmail.ts       |     100 |      100 |     100 |     100 |                   
+  isValid.ts       |     100 |      100 |     100 |     100 |                   
+  phone.ts         |     100 |      100 |     100 |     100 |                   
+ Routes            |     100 |      100 |     100 |     100 |                   
+  ...eleteRoute.ts |     100 |      100 |     100 |     100 |                   
+  apiGetRoute.ts   |     100 |      100 |     100 |     100 |                   
+  apiPostRoute.ts  |     100 |      100 |     100 |     100 |                   
+  apiPutRoute.ts   |     100 |      100 |     100 |     100 |                   
+  apiRoute.ts      |     100 |      100 |     100 |     100 |                   
+  ...ploadRoute.ts |     100 |      100 |     100 |     100 |                   
+  getCachedApi.ts  |     100 |      100 |     100 |     100 |                   
+  ...chedApiIDB.ts |     100 |      100 |     100 |     100 |                   
+  getRoute.ts      |     100 |      100 |     100 |     100 |                   
+  goToRoute.ts     |     100 |      100 |     100 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------

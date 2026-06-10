@@ -1,1 +1,3 @@
-export { sortBy } from './orderBy';
+import { orderBy } from './orderBy';
+
+export const sortBy = orderBy;

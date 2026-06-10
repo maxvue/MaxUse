@@ -1,0 +1,34 @@
+import { describe, it, expect } from 'vitest';
+import { ref } from 'vue';
+import { isDate } from './isDate';
+
+describe('isDate', () => {
+    it('valida instância de Date', () => {
+        expect(isDate(new Date() as any)).toBe(true);
+    });
+
+    it('valida string ISO', () => {
+        expect(isDate('2026-01-15')).toBe(true);
+    });
+
+    it('valida timestamp numérico', () => {
+        expect(isDate(Date.now())).toBe(true);
+    });
+
+    it('rejeita string inválida', () => {
+        expect(isDate('not-a-date')).toBe(false);
+    });
+
+    it('rejeita null', () => {
+        expect(isDate(null)).toBe(false);
+    });
+
+    it('rejeita undefined', () => {
+        expect(isDate(undefined)).toBe(false);
+    });
+
+    it('funciona com Ref', () => {
+        expect(isDate(ref('2026-06-15'))).toBe(true);
+        expect(isDate(ref('invalid'))).toBe(false);
+    });
+});

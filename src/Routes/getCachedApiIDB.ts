@@ -138,12 +138,7 @@ export async function clearCacheIDB(): Promise<void> {
  * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
  * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
  */
-export async function getCachedApiIDB(
-    routeName: RefStringOrNull,
-    dataToRequest: MayBeRefData = null,
-    keyCache: RefStringOrNull = null,
-    ttl?: number
-): Promise<any> {
+export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest: MayBeRefData = null, keyCache: RefStringOrNull = null, ttl?: number ): Promise<any> {
 
     const route_name = toValue(routeName);
 

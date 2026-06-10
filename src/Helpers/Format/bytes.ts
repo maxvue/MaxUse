@@ -10,7 +10,9 @@ export function formatBytes(
     bytes: MaybeRefOrGetter<number | string>,
     decimals: MaybeRefOrGetter<number> = 2
 ): string {
-    const rawBytes = Number(toValue(bytes));
+    const raw = toValue(bytes);
+    const sanitized = typeof raw === 'string' ? raw.replace(/[^0-9.]/g, '') : raw;
+    const rawBytes = Number(sanitized);
     const rawDecimals = toValue(decimals);
 
     if (isNaN(rawBytes) || rawBytes === 0) return '0 Bytes';
