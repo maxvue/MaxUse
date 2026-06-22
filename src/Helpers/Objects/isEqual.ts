@@ -42,9 +42,8 @@ export function isEqual(value: MaybeRefOrGetter<any>, other: MaybeRefOrGetter<an
     if (a instanceof Set && b instanceof Set) {
         if (a.size !== b.size) return false;
         const arrayB = Array.from(b);
-        for (const valA of a)
-            // Verificação lenta para Set de objetos, mas necessária para comparação profunda
-            if (!arrayB.some((valB) => isEqual(valA, valB))) return false;
+        // Verificação lenta para Set de objetos, mas necessária para comparação profunda
+        for (const valA of a) if (!arrayB.some((valB) => isEqual(valA, valB))) return false;
 
         return true;
     }

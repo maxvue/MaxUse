@@ -78,7 +78,7 @@ describe('watchIfValid', () => {
 
             source.value = 'content';
             await nextTick();
-            
+
             source.value = 'other-content';
             await nextTick();
 
@@ -140,12 +140,12 @@ describe('watchDebounceIfValid', () => {
         await scope.run(async () => {
             const source = ref<string>('valid');
             const callback = vi.fn();
-            
+
             watchDebounceIfValid(source, callback, { debounce: 50, immediate: true });
             await nextTick();
             vi.runAllTimers();
             await nextTick();
-            
+
             expect(callback).toHaveBeenCalled();
         });
     });

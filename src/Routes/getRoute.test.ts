@@ -13,7 +13,7 @@ describe('getRoute', () => {
 
     beforeEach(() => {
         vi.clearAllMocks();
-        
+
         mockHas = vi.fn();
         mockRoute = vi.fn((name, params) => {
             if (!name) return { has: mockHas };

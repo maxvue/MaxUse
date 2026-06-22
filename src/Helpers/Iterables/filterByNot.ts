@@ -13,7 +13,7 @@ type T = Record<string, any> | any[] | null | undefined;
 export function filterByNot(collection: MaybeRefOrGetter<T>, key: string, value: any = true): T[] | Record<string, T> {
     const data = toValue(collection);
 
-    if (!data || typeof data !== 'object') return {};
+    if (!data || typeof data !== 'object') return [];
 
     const isExcluded = (item: any) => {
         const itemValue = item?.[key];

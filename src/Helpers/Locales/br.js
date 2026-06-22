@@ -101,5 +101,5 @@ export default {
     'Project home': 'Início do Projeto',
     'Follow on GitHub': 'Seguir no GitHub',
     'Customize your experience with the following settings': 'Personalize sua experiência com as seguintes configurações',
-    uppy: uppyLocalePtbr,
+    uppy: uppyLocalePtbr
 };

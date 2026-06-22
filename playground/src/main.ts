@@ -10,7 +10,7 @@ const app = createApp(App);
 
 // Configurar MaxComponentsUi (inclui PrimeVue automaticamente)
 app.use(MaxComponentsUi, {
-    locale: ptBR,
+    locale: ptBR
 });
 
 app.mount('#app');

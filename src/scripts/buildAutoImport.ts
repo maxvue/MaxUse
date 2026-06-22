@@ -44,9 +44,11 @@ const maxUseItems = (): string[] => {
         VueUse
     ];
 
-    for (const mod of modules) for (const key of Object.keys(mod)) {
-        if (['vueUse'].includes(key)) continue;
-        allKeys.add(key);
+    for (const mod of modules) {
+        for (const key of Object.keys(mod)) {
+            if (['vueUse'].includes(key)) continue;
+            allKeys.add(key);
+        }
     }
 
 
@@ -58,7 +60,7 @@ const getVueUseTypes = (): string[] => {
         let corePkgPath;
         try {
             corePkgPath = require.resolve('@vueuse/core/package.json');
-        } catch (e) {
+        } catch {
             console.error('getVueUseTypes: Could not resolve @vueuse/core/package.json');
             return [];
         }
@@ -92,7 +94,7 @@ const getVueUseTypes = (): string[] => {
         let sharedPkgPath;
         try {
             sharedPkgPath = require.resolve('@vueuse/shared/package.json');
-        } catch (e) {}
+        } catch {}
 
         if (sharedPkgPath) {
             const sharedDtsPath = path.resolve(path.dirname(sharedPkgPath), 'dist/index.d.ts');

@@ -27,7 +27,7 @@ describe('goToRoute', () => {
         });
 
         (ziggy.useRoute as any).mockReturnValue(mockZiggyRoute);
-        
+
         setLibraryRouter(mockRouter as unknown as Router);
     });
 

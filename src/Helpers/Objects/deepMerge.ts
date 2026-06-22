@@ -17,17 +17,19 @@ export function deepMerge<T extends object>(target: MaybeRefOrGetter<T>, ...sour
 
     const dataSource = toValue(source);
 
-    if (isObject(dataTarget) && !isArray(dataTarget) && isObject(dataSource) && !isArray(dataSource)) Object.keys(dataSource).forEach((key) => {
-        const targetValue = dataTarget[key];
-        const sourceValue = dataSource[key];
+    if (isObject(dataTarget) && !isArray(dataTarget) && isObject(dataSource) && !isArray(dataSource)) {
+        Object.keys(dataSource).forEach((key) => {
+            const targetValue = dataTarget[key];
+            const sourceValue = dataSource[key];
 
-        if (isObject(sourceValue) && !isArray(sourceValue)) {
-            if (!targetValue || !isObject(targetValue) || isArray(targetValue)) dataTarget[key] = {};
+            if (isObject(sourceValue) && !isArray(sourceValue)) {
+                if (!targetValue || !isObject(targetValue) || isArray(targetValue)) dataTarget[key] = {};
 
-            deepMerge(dataTarget[key], sourceValue);
-        } else dataTarget[key] = sourceValue;
+                deepMerge(dataTarget[key], sourceValue);
+            } else dataTarget[key] = sourceValue;
 
-    });
+        });
+    }
 
 
     return deepMerge(dataTarget, ...sources);

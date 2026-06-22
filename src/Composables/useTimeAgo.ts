@@ -14,8 +14,8 @@ const ptBr = {
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? 'Semana passada' : 'Próxima semana') : `${n} semana${n > 1 ? 's' : ''}`),
     hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
-    minute: (n: n) => `${n}m${n > 1 ? '' : ''}`,
-    second: (n: n) => `${n}s${n > 1 ? 's' : ''}`
+    minute: (n: n) => `${n}m`,
+    second: (n: n) => `${n}s`
 };
 
 const timeAgoAbbrev = {
@@ -25,10 +25,10 @@ const timeAgoAbbrev = {
     month: (n: n, past: past) => (n === 1 ? (past ? '1 mês' : 'Próx. mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
     year: (n: n, past: past) => (n === 1 ? (past ? '1 ano' : 'Próx. ano') : `${n} year${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
-    week: (n: n, past: past) => (n === 1 ? (past ? '1 Sem' : 'Próx. sem.') : `${n} sem.${n > 1 ? '' : ''}`),
+    week: (n: n, past: past) => (n === 1 ? (past ? '1 Sem' : 'Próx. sem.') : `${n} sem.`),
     hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
-    minute: (n: n) => `${n}m${n > 1 ? 'm' : ''}`,
-    second: (n: n) => `${n}s${n > 1 ? 's' : ''}`
+    minute: (n: n) => `${n}m`,
+    second: (n: n) => `${n}s`
 };
 
 const timeAgoAction = {
@@ -40,8 +40,8 @@ const timeAgoAction = {
     day: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (Ontem)' : 'Realizar até amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
     hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
-    minute: (n: n) => `${n}m${n > 1 ? '' : ''}`,
-    second: (n: n) => `${n}s${n > 1 ? 's' : ''}`
+    minute: (n: n) => `${n}m`,
+    second: (n: n) => `${n}s`
 };
 
 const timeAgoLimitAbrev = {
@@ -53,8 +53,8 @@ const timeAgoLimitAbrev = {
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
     hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
-    minute: (n: n) => `${n}m${n > 1 ? '' : ''}`,
-    second: (n: n) => `${n}s${n > 1 ? 's' : ''}`
+    minute: (n: n) => `${n}m`,
+    second: (n: n) => `${n}s`
 };
 
 const timeAgoLimit = {
@@ -66,8 +66,8 @@ const timeAgoLimit = {
     day: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (Ontem)' : 'Realizar até amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
     hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
-    minute: (n: n) => `${n}m${n > 1 ? '' : ''}`,
-    second: (n: n) => `${n}s${n > 1 ? 's' : ''}`
+    minute: (n: n) => `${n}m`,
+    second: (n: n) => `${n}s`
 };
 
 const FORMAT_MAP: Record<string, any> = {

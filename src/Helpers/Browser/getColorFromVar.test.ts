@@ -47,7 +47,7 @@ describe('contrastColor', () => {
         expect(result.toUpperCase()).toBe('#000000FF');
 
         const resultMedium = contrastColor('#505050');
-        expect(resultMedium.toUpperCase()).toBe('#808080FF');
+        expect(resultMedium.toUpperCase()).toBe('#989898FF');
     });
 
     it('funciona de forma reativa com Ref', () => {

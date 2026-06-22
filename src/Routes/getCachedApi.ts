@@ -1,7 +1,7 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 import { useRoute } from 'ziggy-js';
-import { hasContent, isBlank } from '../Helpers/Types';
+import { hasContent } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
@@ -28,13 +28,18 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     const data = localStorage.getItem(key);
 
-    if (data) return JSON.parse(data);
+    if (data) {
+        try {
+            return JSON.parse(data);
+        } catch {
+            localStorage.removeItem(key);
+        }
+    }
 
     const route = useRoute();
     const routeUrl = route(String(route_name), data_request);
 
-    const config: AxiosRequestConfig = { responseType: 'json' };
-    axios.defaults.withCredentials = true;
+    const config: AxiosRequestConfig = { responseType: 'json', withCredentials: true };
     const response = await axios.get(routeUrl, config);
     const data_return = response.data;
     localStorage.setItem(key, JSON.stringify(data_return));

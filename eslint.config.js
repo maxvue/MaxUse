@@ -5,6 +5,10 @@ import eslintPluginVue from 'eslint-plugin-vue';
 
 
 export default [
+    {
+        ignores: ['dist/**', 'coverage/**', 'node_modules/**', '*.tsbuildinfo', 'src/Helpers/Locales/**', 'scratch.*', 'test-build.js', 'test-eslint.ts', 'test_*.ts', 'eslint.test.config.js']
+    },
+
     // 1º Bloco: Configuração Base (Aplica-se a TS, JS e Vue)
     {
         files: ['**/*.{ts,js,mts,vue}'],
@@ -48,7 +52,7 @@ export default [
             'vue/html-indent': ['error', 4],
             'vue/multi-word-component-names': 'off',
             'vue/no-unused-vars': 'warn',
-            '@typescript-eslint/no-unused-vars': 'warn'
+            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
         }
     },
 

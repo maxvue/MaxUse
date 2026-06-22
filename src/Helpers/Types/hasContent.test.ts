@@ -84,7 +84,7 @@ describe('hasContentFn', () => {
     });
 
     it('retorna length para objeto disfarçado de Object que não é typeof object', () => {
-        const fn = function(a: any) {};
+        const fn = function(_a: any) {};
         fn.toString = () => '[object Object]';
         // Passar como getter para o toValue retornar a função ao invés de executá-la e retornar undefined
         expect(hasContentFn(() => fn)).toBe(true);

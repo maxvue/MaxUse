@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { effectScope, ref, nextTick } from 'vue';
+import { effectScope, nextTick } from 'vue';
 import { useDefaultReset, refAutoReset } from './useDefaultReset';
 
 describe('useDefaultReset', () => {

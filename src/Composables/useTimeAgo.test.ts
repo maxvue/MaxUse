@@ -691,7 +691,7 @@ describe('timeAgo', () => {
         it('extrai mensagens usando um mock temporário no spy para cobertura total', async () => {
             // Mock inline do vueUseTimeAgo para interceptar e testar os formatadores de mensagens
             const mockFn = vi.fn((date, options) => options.messages);
-            
+
             vi.doMock('@vueuse/core', async (importOriginal) => {
                 const actual = await importOriginal<typeof import('@vueuse/core')>();
                 return {
@@ -708,7 +708,7 @@ describe('timeAgo', () => {
 
             for (const format of formats) {
                 const messages = localTimeAgo(new Date(), format) as any;
-                
+
                 // Testa unidades numéricas em todos os branches: n=1, n=2 (plural), n=0 (edge case), past=true/false
                 ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'].forEach((unit) => {
                     if (messages[unit]) {

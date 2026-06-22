@@ -91,7 +91,7 @@ describe('useRefCached', () => {
             const event = new StorageEvent('storage', {
                 key: 'sync-key',
                 newValue: JSON.stringify('from-other-tab'),
-                storageArea: localStorage,
+                storageArea: localStorage
             });
             window.dispatchEvent(event);
 
@@ -108,7 +108,7 @@ describe('useRefCached', () => {
             const event = new StorageEvent('storage', {
                 key: 'remove-key',
                 newValue: null,
-                storageArea: localStorage,
+                storageArea: localStorage
             });
             window.dispatchEvent(event);
 
@@ -124,7 +124,7 @@ describe('useRefCached', () => {
             const event = new StorageEvent('storage', {
                 key: 'other-key',
                 newValue: JSON.stringify('other-value'),
-                storageArea: localStorage,
+                storageArea: localStorage
             });
             window.dispatchEvent(event);
 
@@ -140,7 +140,7 @@ describe('useRefCached', () => {
             const event = new StorageEvent('storage', {
                 key: 'error-sync-key',
                 newValue: 'valor-invalido-json',
-                storageArea: localStorage,
+                storageArea: localStorage
             });
             window.dispatchEvent(event);
 
@@ -169,7 +169,7 @@ describe('useRefCached', () => {
             // Testa o watch do state, forçando uma mudança
             state.value = 'changed';
             await nextTick();
-            
+
             // Não deve ter salvo no localStorage com chave vazia
             expect(localStorage.getItem('')).toBeNull();
         });

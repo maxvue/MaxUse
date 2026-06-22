@@ -40,13 +40,7 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
 
     // Adicionando os arquivos ao FormData
     files['files'].forEach((fileItem: any, index: number) => {
-        const file = fileItem;
-        file['target'] = null;
-        file['blob'] = new Blob([file], { type: file.type });
-        file['objectURL'] = URL.createObjectURL(file.blob);
-
-        
-        formData.append(`files[${index}]`, file.blob, file.name);
+        formData.append(`files[${index}]`, fileItem, fileItem.name);
     });
 
     const token: string = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';

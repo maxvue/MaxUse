@@ -62,9 +62,9 @@ describe('useRefCachedApi', () => {
 
         await scope.run(async () => {
             const state = useCachedApi('api.sync', { data: { parametro: 1 } });
-            
+
             // Aguardar a promise da mock ser resolvida
-            await new Promise(resolve => setTimeout(resolve, 10));
+            await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(mockApiGetRoute).toHaveBeenCalledWith('api.sync', { parametro: 1 });
             expect(state.value).toEqual(fakeData);
@@ -77,8 +77,8 @@ describe('useRefCachedApi', () => {
 
         await scope.run(async () => {
             const state = useCachedApi('api.null', { defaultValue: 'inicial' });
-            
-            await new Promise(resolve => setTimeout(resolve, 10));
+
+            await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(mockApiGetRoute).toHaveBeenCalled();
             expect(state.value).toBe('inicial');

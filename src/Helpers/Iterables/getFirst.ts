@@ -8,12 +8,12 @@ import { hasContent } from '../Types/hasContent';
  * @param values Array de valores possivelmente reativos a serem verificados.
  * @returns O primeiro valor com conteúdo ou undefined se nenhum for válido.
  */
-export function getFirst<T>(...values: MaybeRefOrGetter<T>[]): NonNullable<T> | null {
+export function getFirst<T>(...values: MaybeRefOrGetter<T>[]): NonNullable<T> | undefined {
 
     for (const item of values) {
         const resolved = toValue(item);
         if (hasContent(resolved)) return resolved;
     }
 
-    return null;
+    return undefined;
 }

@@ -51,5 +51,9 @@ eslint.test.config.js
 .env
 .env.*
 
+# Coverage outputs
+coverage*.txt
+temp_cov.txt
+
 # Outros
 .valet-phoenix.json

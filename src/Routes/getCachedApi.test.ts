@@ -37,7 +37,7 @@ describe('getCachedApi', () => {
         const result = await getCachedApi('test.route', { id: 1 });
 
         expect(mockRoute).toHaveBeenCalledWith('test.route', { id: 1 });
-        expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', { responseType: 'json' });
+        expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', { responseType: 'json', withCredentials: true });
         expect(result).toEqual({ id: 1, name: 'Test' });
 
         const cached = localStorage.getItem('test.route_{"id":1}');

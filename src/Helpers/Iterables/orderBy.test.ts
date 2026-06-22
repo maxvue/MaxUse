@@ -6,7 +6,7 @@ describe('orderBy', () => {
     const users = [
         { name: 'Carlos', age: 30 },
         { name: 'Ana', age: 25 },
-        { name: 'Bruno', age: 35 },
+        { name: 'Bruno', age: 35 }
     ];
 
     it('ordena por string key asc', () => {
@@ -29,7 +29,7 @@ describe('orderBy', () => {
         const items = [
             { dept: 'TI', name: 'Carlos' },
             { dept: 'TI', name: 'Ana' },
-            { dept: 'RH', name: 'Bruno' },
+            { dept: 'RH', name: 'Bruno' }
         ];
         const result = orderBy(items, ['dept', 'name']);
         expect(result[0].dept).toBe('RH');
@@ -40,7 +40,7 @@ describe('orderBy', () => {
         const items = [
             { dept: 'TI', age: 25 },
             { dept: 'TI', age: 35 },
-            { dept: 'RH', age: 30 },
+            { dept: 'RH', age: 30 }
         ];
         const result = orderBy(items, ['dept', 'age'], ['asc', 'desc']);
         expect(result[0].dept).toBe('RH');

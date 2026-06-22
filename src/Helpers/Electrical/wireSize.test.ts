@@ -25,7 +25,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 10,
             phases: 2,
-            max_loss: 5,
+            max_loss: 5
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -39,7 +39,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 10,
             phases: 2,
-            max_loss: 5,
+            max_loss: 5
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -51,7 +51,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 20,
             phases: 3,
-            max_loss: 4,
+            max_loss: 4
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -63,7 +63,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 5,
             phases: 2,
-            circuit_type: 'lighting',
+            circuit_type: 'lighting'
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThanOrEqual(1.5);
@@ -75,7 +75,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 5,
             phases: 2,
-            circuit_type: 'power',
+            circuit_type: 'power'
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThanOrEqual(2.5);
@@ -86,7 +86,7 @@ describe('wireSize', () => {
             material: 'copper',
             voltage: 220,
             length: 10,
-            phases: 2,
+            phases: 2
         });
 
         const comCorrecao = await wireSize(30, {
@@ -95,7 +95,7 @@ describe('wireSize', () => {
             length: 10,
             phases: 2,
             fca: 0.7,
-            fct: 0.87,
+            fct: 0.87
         });
 
         // Com fatores de correção menor que 1, a corrente corrigida sobe
@@ -109,7 +109,7 @@ describe('wireSize', () => {
             isolation: 'epr',
             voltage: 220,
             length: 10,
-            phases: 2,
+            phases: 2
         });
         expect(result).not.toBeNull();
     });
@@ -120,7 +120,7 @@ describe('wireSize', () => {
             material: 'copper',
             voltage: 220,
             length: 15,
-            phases: 2,
+            phases: 2
         });
         expect(result).not.toBeNull();
         expect(bitolasValidas).toContain(result!.wire);
@@ -132,7 +132,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 10,
             phases: 2,
-            method: 'z99',
+            method: 'z99'
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -144,7 +144,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 15,
             phases: 3,
-            method: 'b1',
+            method: 'b1'
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -158,7 +158,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 5,
             phases: 2,
-            method: 'b1',
+            method: 'b1'
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThanOrEqual(240);
@@ -173,7 +173,7 @@ describe('wireSize', () => {
             length: 200,
             phases: 2,
             method: 'b1',
-            max_loss: 3,
+            max_loss: 3
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBeGreaterThan(0);
@@ -185,7 +185,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 10,
             phases: 2,
-            method: 'b1',
+            method: 'b1'
         });
         expect(result).not.toBeNull();
     });
@@ -197,7 +197,7 @@ describe('wireSize', () => {
             voltage: 220,
             length: 10,
             phases: 2,
-            method: 'b1',
+            method: 'b1'
         });
         expect(result).not.toBeNull();
     });
@@ -263,7 +263,7 @@ describe('wireSize', () => {
             phases: 2,
             method: 'falsy'
         });
-        
+
         expect(result).not.toBeNull();
     });
 });

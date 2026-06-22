@@ -1,5 +1,4 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
-import { isBlank } from '../Types/isBlank';
 import { isEqual } from './isEqual';
 
 /**

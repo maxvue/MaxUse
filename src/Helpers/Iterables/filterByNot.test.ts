@@ -28,11 +28,11 @@ describe('filterByNot', () => {
     });
 
     it('retorna vazio para null', () => {
-        expect(filterByNot(null, 'key')).toEqual({});
+        expect(filterByNot(null, 'key')).toEqual([]);
     });
 
-    it('retorna objeto vazio para tipos primitivos', () => {
-        expect(filterByNot('string' as any, 'key')).toEqual({});
-        expect(filterByNot(42 as any, 'key')).toEqual({});
+    it('retorna array vazio para tipos primitivos', () => {
+        expect(filterByNot('string' as any, 'key')).toEqual([]);
+        expect(filterByNot(42 as any, 'key')).toEqual([]);
     });
 });

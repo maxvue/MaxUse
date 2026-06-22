@@ -2,7 +2,7 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 
 /**
  * Verifica se um objeto é iterável.
- * 
+ *
  * @param obj O objeto a ser verificado.
  * @returns Retorna true se for iterável.
  */

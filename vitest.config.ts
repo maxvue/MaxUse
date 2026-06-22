@@ -17,11 +17,11 @@ export default defineConfig({
                 'src/**/*.test.ts',
                 'src/Helpers/autoImportData.json',
                 'src/Helpers/VueUse/**',
-                'src/Helpers/Locales/**',
-            ],
-        },
+                'src/Helpers/Locales/**'
+            ]
+        }
     },
     resolve: {
-        alias: { '@': '/src' },
-    },
+        alias: { '@': '/src' }
+    }
 });
