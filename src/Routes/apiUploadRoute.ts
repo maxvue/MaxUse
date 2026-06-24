@@ -47,8 +47,10 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
     const message_response = await axios.post(system_options.routeURL, formData, {
         headers: {
             Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
             'X-CSRF-TOKEN': token,
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
         },
         withCredentials: true
     });

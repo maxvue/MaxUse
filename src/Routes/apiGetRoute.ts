@@ -12,7 +12,11 @@ import { apiRoute } from './apiRoute';
  */
 export async function apiGetRoute(RouteName: string | null, data: any = {}, options: any = null): Promise<any> {
     const system_options: any = apiRoute(RouteName, data, options, 'GET');
-    const config: AxiosRequestConfig = { responseType: 'json' };
+    const config: AxiosRequestConfig = { responseType: 'json', headers: {} };
+    if (typeof localStorage !== 'undefined') {
+        const clientId = localStorage.getItem('selected.client.id');
+        if (clientId && config.headers) config.headers['X-Client-Id'] = clientId;
+    }
 
     if (options?.file === true) config.responseType = 'blob';
 
