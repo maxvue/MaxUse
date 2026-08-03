@@ -1,11 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { postCachedApiIDB } from './postCachedApiIDB';
 import axios from 'axios';
-import * as ziggy from 'ziggy-js';
+import * as config from './config';
 
 vi.mock('axios');
-vi.mock('ziggy-js', () => ({
-    useRoute: vi.fn()
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
 }));
 
 // Mock manual simplificado do IndexedDB
@@ -82,19 +86,7 @@ global.indexedDB = {
     })
 } as any;
 
-// Mock do meta tag CSRF
-const mockMetaElement = { getAttribute: vi.fn().mockReturnValue('test-csrf-token') };
-
-Object.defineProperty(document, 'head', {
-    value: {
-        querySelector: vi.fn().mockReturnValue(mockMetaElement)
-    },
-    writable: true
-});
-
 describe('postCachedApiIDB', () => {
-    let mockRoute: any;
-
     beforeEach(async () => {
         vi.clearAllMocks();
         mockStore.clear();
@@ -104,9 +96,11 @@ describe('postCachedApiIDB', () => {
         mockPutError = false;
         mockDeleteError = false;
 
-        mockRoute = vi.fn((name, params) => `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`);
-        (ziggy.useRoute as any).mockReturnValue(mockRoute);
-        mockMetaElement.getAttribute.mockReturnValue('test-csrf-token');
+        (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
+            `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
+        );
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
     });
 
     it('retorna null se routeName for vazio', async () => {
@@ -119,7 +113,7 @@ describe('postCachedApiIDB', () => {
 
         const result = await postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' });
 
-        expect(mockRoute).toHaveBeenCalledWith('test.post', { id: 1 });
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.post', { id: 1 });
         expect(axios.post).toHaveBeenCalledWith(
             'https://example.com/test.post/1',
             { campo: 'valor' },
@@ -127,7 +121,6 @@ describe('postCachedApiIDB', () => {
                 responseType: 'json',
                 withCredentials: true,
                 headers: expect.objectContaining({
-                    'X-CSRF-TOKEN': 'test-csrf-token',
                     'Content-Type': 'application/json'
                 })
             })
@@ -187,7 +180,7 @@ describe('postCachedApiIDB', () => {
 
         const result = await postCachedApiIDB('test.post', null, null);
 
-        expect(mockRoute).toHaveBeenCalledWith('test.post', {});
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.post', {});
         expect(axios.post).toHaveBeenCalledWith(
             'https://example.com/test.post',
             {},
@@ -196,9 +189,9 @@ describe('postCachedApiIDB', () => {
         expect(result).toEqual({ id: 99, name: 'StoreExists' });
     });
 
-    it('inclui token CSRF vazio quando meta tag não existe', async () => {
-        (document.head.querySelector as any).mockReturnValue(null);
-        (axios.post as any).mockResolvedValue({ data: { id: 5, name: 'NoToken' } });
+    it('inclui headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ 'Authorization': 'Bearer test-token' });
+        (axios.post as any).mockResolvedValue({ data: { id: 5, name: 'WithAuth' } });
 
         await postCachedApiIDB('test.post', null, { campo: 'valor5' });
 
@@ -207,7 +200,7 @@ describe('postCachedApiIDB', () => {
             { campo: 'valor5' },
             expect.objectContaining({
                 headers: expect.objectContaining({
-                    'X-CSRF-TOKEN': ''
+                    'Authorization': 'Bearer test-token'
                 })
             })
         );

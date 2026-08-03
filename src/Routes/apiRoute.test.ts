@@ -1,18 +1,21 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { apiRoute } from './apiRoute';
-import * as ziggy from 'ziggy-js';
+import * as config from './config';
 
-vi.mock('ziggy-js', () => ({
-    useRoute: vi.fn()
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
 }));
 
 describe('apiRoute', () => {
-    let mockRoute: any;
-
     beforeEach(() => {
         vi.clearAllMocks();
-        mockRoute = vi.fn((name, params) => `https://example.com/${name}${params && Object.keys(params).length ? '/' + params.id : ''}`);
-        (ziggy.useRoute as any).mockReturnValue(mockRoute);
+        (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
+            `https://example.com/${name}${params && Object.keys(params).length ? '/' + params.id : ''}`
+        );
     });
 
     it('retorna null se RouteName for nulo', () => {
@@ -22,16 +25,16 @@ describe('apiRoute', () => {
 
     it('resolve a rota GET com data incluída', () => {
         const result = apiRoute('test.get', { id: 1 }, null, 'GET');
-        expect(mockRoute).toHaveBeenCalledWith('test.get', { id: 1 });
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.get', { id: 1 });
         expect(result).toEqual({
             option_load_screen: null,
             routeURL: 'https://example.com/test.get/1'
         });
     });
 
-    it('resolve a rota POST ignorando data no useRoute', () => {
+    it('resolve a rota POST ignorando data no resolveRoute', () => {
         const result = apiRoute('test.post', { id: 1 }, null, 'POST');
-        expect(mockRoute).toHaveBeenCalledWith('test.post');
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.post');
         expect(result).toEqual({
             option_load_screen: null,
             routeURL: 'https://example.com/test.post'
@@ -48,6 +51,6 @@ describe('apiRoute', () => {
 
     it('faz fallback para GET se method não for especificado', () => {
         apiRoute('test.default', { id: 42 });
-        expect(mockRoute).toHaveBeenCalledWith('test.default', { id: 42 });
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.default', { id: 42 });
     });
 });

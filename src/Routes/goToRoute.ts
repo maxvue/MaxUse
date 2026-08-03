@@ -1,6 +1,6 @@
-import { useRoute as ziggyRoute } from 'ziggy-js';
 import { type MaybeRefOrGetter, toValue } from 'vue';
 import { isBlank } from '../Helpers/Types';
+import { resolveRoute, hasRoute } from './config';
 import type { Router } from 'vue-router';
 
 let activeRouter: Router | null = null;
@@ -26,10 +26,10 @@ export const setLibraryRouter = (router: Router): void => {
 };
 
 /**
- * Navega programaticamente para uma rota Ziggy ou Vue Router pelo nome.
- * Tenta resolver primeiro via Ziggy; se não encontrar, usa `router.push` com `name`.
+ * Navega programaticamente para uma rota registrada ou Vue Router pelo nome.
+ * Tenta resolver primeiro via o resolvedor configurado; se não encontrar, usa `router.push` com `name`.
  *
- * @param route - Nome da rota (Ziggy ou Vue Router).
+ * @param route - Nome da rota (registrada ou Vue Router).
  * @param data - Parâmetros da rota (usados como params e query no fallback Vue Router).
  * @returns true se a navegação foi disparada, false se o nome for vazio.
  * @throws Error se `setLibraryRouter` não tiver sido chamado antes.
@@ -42,9 +42,8 @@ export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: a
 
     const data_value = toValue(data) ?? {};
 
-    const ziggy_route = ziggyRoute();
-    if (ziggy_route().has(route_value)) {
-        activeRouter.push(ziggy_route(route_value, data_value));
+    if (hasRoute(route_value)) {
+        activeRouter.push(resolveRoute(route_value, data_value)!);
         return true;
     };
 

@@ -1,17 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { goToRoute, goToRouteByName, setLibraryRouter } from './goToRoute';
-import * as ziggy from 'ziggy-js';
+import * as config from './config';
 import { ref } from 'vue';
 import type { Router } from 'vue-router';
 
-vi.mock('ziggy-js', () => ({
-    useRoute: vi.fn()
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
 }));
 
 describe('goToRoute', () => {
     let mockRouter: any;
-    let mockZiggyRoute: any;
-    let mockHas: any;
 
     beforeEach(() => {
         vi.clearAllMocks();
@@ -20,13 +22,9 @@ describe('goToRoute', () => {
             push: vi.fn()
         };
 
-        mockHas = vi.fn();
-        mockZiggyRoute = vi.fn((name, params) => {
-            if (!name) return { has: mockHas };
-            return `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`;
-        });
-
-        (ziggy.useRoute as any).mockReturnValue(mockZiggyRoute);
+        (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
+            `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
+        );
 
         setLibraryRouter(mockRouter as unknown as Router);
     });
@@ -45,21 +43,21 @@ describe('goToRoute', () => {
     });
 
     it('funciona com dados nulos (fallback para objeto vazio)', () => {
-        mockHas.mockReturnValue(true);
+        (config.hasRoute as any).mockReturnValue(true);
         expect(goToRoute('home', null)).toBe(true);
         expect(mockRouter.push).toHaveBeenCalledWith('https://example.com/home');
     });
 
-    it('navega via Ziggy se a rota existir', () => {
-        mockHas.mockReturnValue(true);
+    it('navega via resolver se a rota existir', () => {
+        (config.hasRoute as any).mockReturnValue(true);
         const result = goToRoute('users.show', { id: 1 });
         expect(result).toBe(true);
-        expect(mockHas).toHaveBeenCalledWith('users.show');
+        expect(config.hasRoute).toHaveBeenCalledWith('users.show');
         expect(mockRouter.push).toHaveBeenCalledWith('https://example.com/users.show/1');
     });
 
-    it('faz fallback para vue-router se a rota não existir no Ziggy', () => {
-        mockHas.mockReturnValue(false);
+    it('faz fallback para vue-router se a rota não existir no resolver', () => {
+        (config.hasRoute as any).mockReturnValue(false);
         const result = goToRoute('admin', { page: 2 });
         expect(result).toBe(true);
         expect(mockRouter.push).toHaveBeenCalledWith({
@@ -70,10 +68,10 @@ describe('goToRoute', () => {
     });
 
     it('aceita refs para rota', () => {
-        mockHas.mockReturnValue(true);
+        (config.hasRoute as any).mockReturnValue(true);
         const routeRef = ref('home');
         goToRoute(routeRef);
-        expect(mockHas).toHaveBeenCalledWith('home');
+        expect(config.hasRoute).toHaveBeenCalledWith('home');
         expect(mockRouter.push).toHaveBeenCalledWith('https://example.com/home');
     });
 

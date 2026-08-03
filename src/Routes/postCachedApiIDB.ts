@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { useRoute } from 'ziggy-js';
+import { resolveRoute, getConfiguredHeaders, getWithCredentials } from './config';
 import { isBlank } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
@@ -117,7 +117,7 @@ async function deleteFromIDB(key: string): Promise<void> {
  * Se já existir dado cacheado (e não expirado), retorna sem fazer requisição.
  * Caso contrário, faz o POST e armazena o resultado para futuras chamadas.
  *
- * @param routeName - Nome da rota Ziggy.
+ * @param routeName - Nome da rota.
  * @param routeParams - Parâmetros da rota (URL params).
  * @param postData - Corpo da requisição POST.
  * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_routeParams_postData`).
@@ -147,20 +147,17 @@ export async function postCachedApiIDB(
     if (cached) return cached;
 
     // Faz a requisição POST se não houver cache válido
-    const route = useRoute();
-    const routeUrl = route(String(route_name), route_params);
-
-    const token: string = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
+    const routeUrl = resolveRoute(String(route_name), route_params);
 
     const config: AxiosRequestConfig = {
         responseType: 'json',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
-            'X-CSRF-TOKEN': token,
-            'X-Requested-With': 'XMLHttpRequest'
+            'X-Requested-With': 'XMLHttpRequest',
+            ...getConfiguredHeaders()
         },
-        withCredentials: true
+        withCredentials: getWithCredentials()
     };
 
     const response = await axios.post(routeUrl, post_data, config);

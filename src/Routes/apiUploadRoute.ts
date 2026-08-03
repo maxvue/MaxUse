@@ -1,11 +1,12 @@
 import { apiRoute } from './apiRoute';
 import axios from 'axios';
+import { getConfiguredHeaders, getWithCredentials } from './config';
 
 /**
- * Realiza upload de arquivos via requisição HTTP POST (multipart/form-data) para uma rota Ziggy nomeada.
+ * Realiza upload de arquivos via requisição HTTP POST (multipart/form-data) para uma rota nomeada.
  * Converte automaticamente dados em FormData, incluindo serialização de objetos aninhados via JSON.
  *
- * @param RouteName - Nome da rota Ziggy (ex: 'api.documentos.upload').
+ * @param RouteName - Nome da rota (ex: 'api.documentos.upload').
  * @param files - Arquivos a serem enviados. Aceita `{ files: File[] }` ou `File[]` diretamente.
  * @param data - Dados adicionais enviados junto com os arquivos.
  * @param options - Opções extras passadas para `apiRoute`.
@@ -43,16 +44,15 @@ export async function apiUploadRoute(RouteName: string, files: any = null, data:
         formData.append(`files[${index}]`, fileItem, fileItem.name);
     });
 
-    const token: string = document.head.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
     const message_response = await axios.post(system_options.routeURL, formData, {
         headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            'X-CSRF-TOKEN': token,
             'X-Requested-With': 'XMLHttpRequest',
+            ...getConfiguredHeaders(),
             ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
         },
-        withCredentials: true
+        withCredentials: getWithCredentials()
     });
     return message_response.data;
 }

@@ -7,7 +7,7 @@ export type ToRefCachedApi<T> = T extends Ref ? T : Ref<T>;
  * Cria uma Ref com cache local (localStorage) que sincroniza automaticamente com uma rota de API (GET).
  * Na primeira chamada, carrega do cache local (se existir) e dispara a requisição em background para atualizar.
  *
- * @param route_name - Nome da rota Ziggy para a requisição GET.
+ * @param route_name - Nome da rota para a requisição GET.
  * @param options - Opções de configuração.
  * @param options.data_get - Dados enviados como parâmetros da rota (alternativo a `data`).
  * @param options.data - Dados enviados como parâmetros da rota.

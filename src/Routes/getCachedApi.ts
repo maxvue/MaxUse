@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { useRoute } from 'ziggy-js';
+import { resolveRoute } from './config';
 import { hasContent } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
@@ -11,7 +11,7 @@ type MayBeRefData = MaybeRefOrGetter<any>;
  * Se já existir dado cacheado, retorna imediatamente sem fazer requisição.
  * Caso contrário, faz o GET e armazena o resultado para futuras chamadas.
  *
- * @param routeName - Nome da rota Ziggy.
+ * @param routeName - Nome da rota.
  * @param dataToRequest - Parâmetros da rota.
  * @param keyCache - Chave do cache no localStorage (padrão: `routeName_params`).
  * @returns Os dados da API ou do cache local. Retorna null se `routeName` for vazio.
@@ -36,8 +36,7 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
         }
     }
 
-    const route = useRoute();
-    const routeUrl = route(String(route_name), data_request);
+    const routeUrl = resolveRoute(String(route_name), data_request);
 
     const config: AxiosRequestConfig = { responseType: 'json', withCredentials: true };
     const response = await axios.get(routeUrl, config);

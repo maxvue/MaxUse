@@ -1,12 +1,12 @@
-import { useRoute } from 'ziggy-js';
 import { type MaybeRefOrGetter, toValue } from 'vue';
 import { isBlank } from '../Helpers/Types';
+import { resolveRoute, hasRoute } from './config';
 
 /**
- * Resolve uma rota Ziggy pelo nome e retorna sua URL.
+ * Resolve uma rota nomeada e retorna sua URL.
  * Verifica se a rota existe antes de resolvê-la.
  *
- * @param routeName - Nome da rota Ziggy (ex: 'dashboard.index').
+ * @param routeName - Nome da rota (ex: 'dashboard.index').
  * @param data - Parâmetros da rota (substituídos na URL).
  * @returns A URL resolvida ou null se a rota não existir ou o nome for vazio.
  */
@@ -16,11 +16,9 @@ export const getRoute = (routeName: MaybeRefOrGetter<string | null> = null, data
 
     const data_value = toValue(data) ?? {};
 
-    const route = useRoute();
-    if (route().has(route_value)) return route(route_value, data_value);
+    if (hasRoute(route_value)) return resolveRoute(route_value, data_value);
     return null;
 };
 
 /** Alias de {@link getRoute}. */
 export const getRouteByName = getRoute;
-

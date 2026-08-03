@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { useRoute } from 'ziggy-js';
+import { resolveRoute } from './config';
 import { isBlank } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
@@ -128,17 +128,36 @@ export async function clearCacheIDB(): Promise<void> {
 }
 
 /**
- * Busca dados de uma rota API com cache via IndexedDB.
- * Se já existir dado cacheado (e não expirado), retorna sem fazer requisição.
- * Caso contrário, faz o GET e armazena o resultado para futuras chamadas.
+ * Faz o GET na rota e persiste o resultado no cache do IndexedDB.
+ */
+async function fetchAndStore(route_name: string, data_request: any, key: string): Promise<any> {
+    const routeUrl = resolveRoute(route_name, data_request);
+
+    const config: AxiosRequestConfig = { responseType: 'json' };
+    axios.defaults.withCredentials = true;
+    const response = await axios.get(routeUrl, config);
+    const data_return = response.data;
+
+    await setToIDB(key, data_return);
+
+    return data_return;
+}
+
+/**
+ * Busca dados de uma rota API com cache via IndexedDB (stale-while-revalidate).
+ * Se já existir dado cacheado (e não expirado), retorna imediatamente e revalida em background:
+ * a requisição é disparada mesmo assim e, se o dado do servidor for diferente do cacheado,
+ * o cache é atualizado e `onUpdate` é chamado com o dado fresco.
+ * Sem cache válido, faz o GET, armazena e retorna o resultado.
  *
- * @param routeName - Nome da rota Ziggy.
+ * @param routeName - Nome da rota.
  * @param dataToRequest - Parâmetros da rota.
  * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_params`).
  * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
+ * @param onUpdate - Callback chamado com o dado fresco quando a revalidação em background encontra diferença.
  * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
  */
-export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest: MayBeRefData = null, keyCache: RefStringOrNull = null, ttl?: number ): Promise<any> {
+export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest: MayBeRefData = null, keyCache: RefStringOrNull = null, ttl?: number, onUpdate?: (data: any) => void ): Promise<any> {
 
     const route_name = toValue(routeName);
 
@@ -151,19 +170,16 @@ export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest
     // Tenta buscar do IndexedDB
     const cached = await getFromIDB(key, ttl);
 
-    if (cached) return cached;
+    if (cached) {
+        // Revalida em background: atualiza o cache e notifica se o servidor tiver dado diferente
+        fetchAndStore(String(route_name), data_request, key)
+            .then((fresh) => {
+                if (onUpdate && JSON.stringify(fresh) !== JSON.stringify(cached)) onUpdate(fresh);
+            })
+            .catch(() => {});
 
-    // Faz a requisição se não houver cache válido
-    const route = useRoute();
-    const routeUrl = route(String(route_name), data_request);
+        return cached;
+    }
 
-    const config: AxiosRequestConfig = { responseType: 'json' };
-    axios.defaults.withCredentials = true;
-    const response = await axios.get(routeUrl, config);
-    const data_return = response.data;
-
-    // Salva no IndexedDB
-    await setToIDB(key, data_return);
-
-    return data_return;
+    return fetchAndStore(String(route_name), data_request, key);
 }

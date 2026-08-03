@@ -1,3 +1,4 @@
+export * from './config';
 export * from './apiGetRoute';
 export * from './apiPostRoute';
 export * from './apiPutRoute';

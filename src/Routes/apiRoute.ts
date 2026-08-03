@@ -1,10 +1,10 @@
-import { useRoute } from 'ziggy-js';
+import { resolveRoute } from './config';
 
 /**
- * Resolve uma rota Ziggy e prepara opções auxiliares para requisições HTTP.
+ * Resolve uma rota nomeada e prepara opções auxiliares para requisições HTTP.
  * Função base usada internamente por `apiGetRoute`, `apiPostRoute`, `apiPutRoute` e `apiDeleteRoute`.
  *
- * @param RouteName - Nome da rota Ziggy (ex: 'api.usuarios.index').
+ * @param RouteName - Nome da rota (ex: 'api.usuarios.index').
  * @param data - Parâmetros da rota (substituídos na URL para GET, ignorados para outros métodos).
  * @param options - Opções extras (ex: `{ load_screen: true }`).
  * @param method - Método HTTP ('GET', 'POST', 'PUT', 'DELETE'). Padrão: 'GET'.
@@ -15,8 +15,7 @@ export function apiRoute(RouteName: string | null, data: any | null = null, opti
 
     const option_load_screen = options?.load_screen ?? null;
 
-    const route = useRoute();
-    const routeURL: string = method === 'GET' ? route(RouteName, data) : route(RouteName);
+    const routeURL: string = method === 'GET' ? resolveRoute(RouteName, data) : resolveRoute(RouteName);
 
     const apiHelper = {
         option_load_screen,

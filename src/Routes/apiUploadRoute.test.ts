@@ -1,9 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { apiUploadRoute } from '../../src/Routes/apiUploadRoute';
+import { apiUploadRoute } from './apiUploadRoute';
 import axios from 'axios';
-import * as apiRouteModule from '../../src/Routes/apiRoute';
+import * as apiRouteModule from './apiRoute';
+import * as config from './config';
 
 vi.mock('axios');
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
+}));
 
 describe('apiUploadRoute', () => {
     let mockApiRoute: any;
@@ -17,8 +25,8 @@ describe('apiUploadRoute', () => {
         });
 
         (axios.post as any).mockResolvedValue({ data: { uploaded: true } });
-
-        document.head.innerHTML = '<meta name="csrf-token" content="fake-token-upload">';
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
 
         // Mock window.URL.createObjectURL since it's not present in basic JSDOM without polyfill
         global.URL.createObjectURL = vi.fn(() => 'blob:http://localhost/mock');
@@ -51,7 +59,6 @@ describe('apiUploadRoute', () => {
         // Arquivos
         expect(formData.get('files[0]')).toBeInstanceOf(Blob);
 
-        expect(args[2].headers['X-CSRF-TOKEN']).toBe('fake-token-upload');
         expect(result).toEqual({ uploaded: true });
     });
 
@@ -65,13 +72,13 @@ describe('apiUploadRoute', () => {
         expect(formData.get('files[0]')).toBeInstanceOf(Blob);
     });
 
-    it('funciona sem token csrf no header', async () => {
-        document.head.innerHTML = '';
+    it('inclui headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ 'Authorization': 'Bearer upload-token' });
         const fakeFile = new File([''], 'teste2.png', { type: 'image/png' });
         await apiUploadRoute('test.upload', [fakeFile]);
 
         const args = (axios.post as any).mock.calls[0];
-        expect(args[2].headers['X-CSRF-TOKEN']).toBe('');
+        expect(args[2].headers['Authorization']).toBe('Bearer upload-token');
     });
 
     it('ignora propriedades herdadas no prototype', async () => {

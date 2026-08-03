@@ -2,8 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { apiGetRoute } from './apiGetRoute';
 import axios from 'axios';
 import * as apiRouteModule from './apiRoute';
+import * as config from './config';
 
 vi.mock('axios');
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
+}));
 
 describe('apiGetRoute', () => {
     let mockApiRoute: any;
@@ -17,20 +25,22 @@ describe('apiGetRoute', () => {
         });
 
         (axios.get as any).mockResolvedValue({ data: { success: true } });
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
     });
 
     it('faz requisição GET com apiRoute e retorna dados', async () => {
         const result = await apiGetRoute('test.route', { id: 1 });
 
         expect(mockApiRoute).toHaveBeenCalledWith('test.route', { id: 1 }, null, 'GET');
-        expect(axios.get).toHaveBeenCalledWith('https://api.example.com/data', { responseType: 'json' });
+        expect(axios.get).toHaveBeenCalledWith('https://api.example.com/data', expect.objectContaining({ responseType: 'json' }));
         expect(result).toEqual({ success: true });
     });
 
     it('adiciona responseType blob quando options.file = true', async () => {
         await apiGetRoute('test.file', {}, { file: true });
 
-        expect(axios.get).toHaveBeenCalledWith('https://api.example.com/data', { responseType: 'blob' });
+        expect(axios.get).toHaveBeenCalledWith('https://api.example.com/data', expect.objectContaining({ responseType: 'blob' }));
     });
 
     it('retorna null e loga erro ao falhar (quando error !== false)', async () => {
@@ -56,5 +66,14 @@ describe('apiGetRoute', () => {
 
         expect(result).toBeNull();
         expect(consoleSpy).not.toHaveBeenCalled();
+    });
+
+    it('inclui headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ 'Authorization': 'Bearer abc' });
+
+        await apiGetRoute('test.route');
+
+        const callArgs = (axios.get as any).mock.calls[0];
+        expect(callArgs[1].headers['Authorization']).toBe('Bearer abc');
     });
 });

@@ -3,12 +3,7 @@ import typescriptEslint from 'typescript-eslint';
 import vueParser from 'vue-eslint-parser';
 import eslintPluginVue from 'eslint-plugin-vue';
 
-
 export default [
-    {
-        ignores: ['dist/**', 'coverage/**', 'node_modules/**', '*.tsbuildinfo', 'src/Helpers/Locales/**', 'scratch.*', 'test-build.js', 'test-eslint.ts', 'test_*.ts', 'eslint.test.config.js']
-    },
-
     // 1º Bloco: Configuração Base (Aplica-se a TS, JS e Vue)
     {
         files: ['**/*.{ts,js,mts,vue}'],
@@ -26,10 +21,8 @@ export default [
             }
         },
         rules: {
-            'curly': ['error', 'multi-or-nest'],
+            'curly': ['error', 'multi'],
             '@stylistic/nonblock-statement-body-position': ['error', 'beside'],
-            '@stylistic/brace-style': ['error', '1tbs', { allowSingleLine: false }],
-
             // Regras Estilísticas Gerais
             '@stylistic/object-curly-spacing': ['error', 'always'],
             '@stylistic/indent': ['error', 4], // Ativa 4 espaços para arquivos .ts e .js
@@ -52,7 +45,7 @@ export default [
             'vue/html-indent': ['error', 4],
             'vue/multi-word-component-names': 'off',
             'vue/no-unused-vars': 'warn',
-            '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }]
+            '@typescript-eslint/no-unused-vars': 'warn'
         }
     },
 
@@ -64,7 +57,12 @@ export default [
             'vue/script-indent': ['error', 4, {
                 'baseIndent': 1,
                 'switchCase': 1
-            }]
+            }],
+            '@stylistic/padding-line-between-statements': [
+                'error',
+                { blankLine: 'always', prev: 'import', next: '*' },
+                { blankLine: 'never', prev: 'import', next: 'import' }
+            ]
         }
     }
 ];

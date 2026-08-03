@@ -2,8 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { apiPostRoute } from './apiPostRoute';
 import axios from 'axios';
 import * as apiRouteModule from './apiRoute';
+import * as config from './config';
 
 vi.mock('axios');
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
+}));
 
 describe('apiPostRoute', () => {
     let mockApiRoute: any;
@@ -17,8 +25,8 @@ describe('apiPostRoute', () => {
         });
 
         (axios.post as any).mockResolvedValue({ data: { created: true } });
-
-        document.head.innerHTML = '<meta name="csrf-token" content="fake-token-123">';
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
     });
 
     it('retorna false se apiRoute falhar', async () => {
@@ -28,29 +36,28 @@ describe('apiPostRoute', () => {
         expect(axios.post).not.toHaveBeenCalled();
     });
 
-    it('faz requisição POST com CSRF token e headers corretos', async () => {
+    it('faz requisição POST com headers corretos', async () => {
         const result = await apiPostRoute('test.store', { title: 'Test' });
 
         expect(mockApiRoute).toHaveBeenCalledWith('test.store', { title: 'Test' }, null, 'POST');
-        expect(axios.post).toHaveBeenCalledWith('https://api.example.com/post', { title: 'Test' }, {
-            headers: {
+        expect(axios.post).toHaveBeenCalledWith('https://api.example.com/post', { title: 'Test' }, expect.objectContaining({
+            headers: expect.objectContaining({
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': 'fake-token-123',
                 'X-Requested-With': 'XMLHttpRequest'
-            },
+            }),
             withCredentials: true
-        });
+        }));
         expect(result).toEqual({ created: true });
     });
 
-    it('funciona mesmo se meta csrf-token não existir', async () => {
-        document.head.innerHTML = '';
+    it('inclui headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ 'Authorization': 'Bearer token-123' });
+
         await apiPostRoute('test.store', {});
 
-        expect(axios.post).toHaveBeenCalled();
         const callArgs = (axios.post as any).mock.calls[0];
-        expect(callArgs[2].headers['X-CSRF-TOKEN']).toBe('');
+        expect(callArgs[2].headers['Authorization']).toBe('Bearer token-123');
     });
 
     it('retorna null e loga erro ao falhar', async () => {

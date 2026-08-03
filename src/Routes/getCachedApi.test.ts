@@ -1,22 +1,25 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCachedApi } from './getCachedApi';
 import axios from 'axios';
-import * as ziggy from 'ziggy-js';
+import * as config from './config';
 
 vi.mock('axios');
-vi.mock('ziggy-js', () => ({
-    useRoute: vi.fn()
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
 }));
 
 describe('getCachedApi', () => {
-    let mockRoute: any;
-
     beforeEach(() => {
         vi.clearAllMocks();
         localStorage.clear();
 
-        mockRoute = vi.fn((name, params) => `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`);
-        (ziggy.useRoute as any).mockReturnValue(mockRoute);
+        (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
+            `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
+        );
     });
 
     it('retorna null se routeName for vazio', async () => {
@@ -28,7 +31,7 @@ describe('getCachedApi', () => {
         (axios.get as any).mockResolvedValue({ data: { success: true } });
         const result = await getCachedApi('test.route', null);
         expect(result).toEqual({ success: true });
-        expect(mockRoute).toHaveBeenCalledWith('test.route', {});
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.route', {});
     });
 
     it('faz requisição se cache estiver vazio e salva no localStorage', async () => {
@@ -36,7 +39,7 @@ describe('getCachedApi', () => {
 
         const result = await getCachedApi('test.route', { id: 1 });
 
-        expect(mockRoute).toHaveBeenCalledWith('test.route', { id: 1 });
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.route', { id: 1 });
         expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', { responseType: 'json', withCredentials: true });
         expect(result).toEqual({ id: 1, name: 'Test' });
 

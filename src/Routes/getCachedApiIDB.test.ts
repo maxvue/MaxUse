@@ -1,11 +1,15 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCachedApiIDB, clearCacheIDB, deleteFromIDB } from './getCachedApiIDB';
 import axios from 'axios';
-import * as ziggy from 'ziggy-js';
+import * as config from './config';
 
 vi.mock('axios');
-vi.mock('ziggy-js', () => ({
-    useRoute: vi.fn()
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
 }));
 
 // Mock manual simplificado do IndexedDB
@@ -98,8 +102,6 @@ global.indexedDB = {
 
 
 describe('getCachedApiIDB', () => {
-    let mockRoute: any;
-
     beforeEach(async () => {
         vi.clearAllMocks();
         mockStore.clear();
@@ -110,8 +112,9 @@ describe('getCachedApiIDB', () => {
         mockDeleteError = false;
         mockClearError = false;
 
-        mockRoute = vi.fn((name, params) => `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`);
-        (ziggy.useRoute as any).mockReturnValue(mockRoute);
+        (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
+            `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
+        );
     });
 
     it('retorna null se routeName for vazio', async () => {
@@ -124,7 +127,7 @@ describe('getCachedApiIDB', () => {
 
         const result = await getCachedApiIDB('test.idb', { id: 1 });
 
-        expect(mockRoute).toHaveBeenCalledWith('test.idb', { id: 1 });
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.idb', { id: 1 });
         expect(axios.get).toHaveBeenCalled();
         expect(result).toEqual({ id: 1, name: 'IDBTest' });
 
@@ -132,7 +135,9 @@ describe('getCachedApiIDB', () => {
         expect(cached.data).toEqual({ id: 1, name: 'IDBTest' });
     });
 
-    it('retorna do cache e não faz requisição', async () => {
+    it('retorna do cache imediatamente e revalida em background', async () => {
+        (axios.get as any).mockResolvedValue({ data: { id: 2, name: 'FreshIDB' } });
+
         mockStore.set('test.idb_{"id":2}', {
             key: 'test.idb_{"id":2}',
             data: { id: 2, name: 'CachedIDB' },
@@ -141,8 +146,68 @@ describe('getCachedApiIDB', () => {
 
         const result = await getCachedApiIDB('test.idb', { id: 2 });
 
-        expect(axios.get).not.toHaveBeenCalled();
+        // Retorna o dado cacheado sem esperar a revalidação
         expect(result).toEqual({ id: 2, name: 'CachedIDB' });
+
+        // A revalidação em background atualiza o cache com o dado fresco
+        await vi.waitFor(() => {
+            expect(axios.get).toHaveBeenCalled();
+            expect(mockStore.get('test.idb_{"id":2}').data).toEqual({ id: 2, name: 'FreshIDB' });
+        });
+    });
+
+    it('chama onUpdate quando a revalidação encontra dado diferente do cache', async () => {
+        (axios.get as any).mockResolvedValue({ data: { id: 5, name: 'FreshData' } });
+
+        mockStore.set('test.idb_{"id":5}', {
+            key: 'test.idb_{"id":5}',
+            data: { id: 5, name: 'StaleData' },
+            timestamp: Date.now()
+        });
+
+        const onUpdate = vi.fn();
+        const result = await getCachedApiIDB('test.idb', { id: 5 }, null, undefined, onUpdate);
+
+        expect(result).toEqual({ id: 5, name: 'StaleData' });
+
+        await vi.waitFor(() => {
+            expect(onUpdate).toHaveBeenCalledWith({ id: 5, name: 'FreshData' });
+        });
+    });
+
+    it('não chama onUpdate quando o dado do servidor é igual ao cache', async () => {
+        (axios.get as any).mockResolvedValue({ data: { id: 6, name: 'SameData' } });
+
+        mockStore.set('test.idb_{"id":6}', {
+            key: 'test.idb_{"id":6}',
+            data: { id: 6, name: 'SameData' },
+            timestamp: Date.now()
+        });
+
+        const onUpdate = vi.fn();
+        const result = await getCachedApiIDB('test.idb', { id: 6 }, null, undefined, onUpdate);
+
+        expect(result).toEqual({ id: 6, name: 'SameData' });
+
+        await vi.waitFor(() => expect(axios.get).toHaveBeenCalled());
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        expect(onUpdate).not.toHaveBeenCalled();
+    });
+
+    it('não propaga erro da revalidação em background', async () => {
+        (axios.get as any).mockRejectedValue(new Error('network fail'));
+
+        mockStore.set('test.idb_{"id":7}', {
+            key: 'test.idb_{"id":7}',
+            data: { id: 7, name: 'CachedOk' },
+            timestamp: Date.now()
+        });
+
+        const result = await getCachedApiIDB('test.idb', { id: 7 });
+        expect(result).toEqual({ id: 7, name: 'CachedOk' });
+
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        expect(mockStore.get('test.idb_{"id":7}').data).toEqual({ id: 7, name: 'CachedOk' });
     });
 
     it('invalida cache expirado e cobre o catch() da exclusão falha', async () => {
@@ -179,7 +244,7 @@ describe('getCachedApiIDB', () => {
 
         const result = await getCachedApiIDB('test.idb', null);
 
-        expect(mockRoute).toHaveBeenCalledWith('test.idb', {});
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.idb', {});
         expect(axios.get).toHaveBeenCalled();
         expect(result).toEqual({ id: 99, name: 'StoreExists' });
     });

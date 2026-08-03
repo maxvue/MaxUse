@@ -2,8 +2,16 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { apiPutRoute } from './apiPutRoute';
 import axios from 'axios';
 import * as apiRouteModule from './apiRoute';
+import * as config from './config';
 
 vi.mock('axios');
+vi.mock('./config', () => ({
+    resolveRoute: vi.fn(),
+    hasRoute: vi.fn(),
+    getConfiguredHeaders: vi.fn(() => ({})),
+    getWithCredentials: vi.fn(() => true),
+    resetConfig: vi.fn()
+}));
 
 describe('apiPutRoute', () => {
     let mockApiRoute: any;
@@ -17,8 +25,8 @@ describe('apiPutRoute', () => {
         });
 
         (axios.put as any).mockResolvedValue({ data: { updated: true } });
-
-        document.head.innerHTML = '<meta name="csrf-token" content="fake-token-put">';
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
     });
 
     it('retorna false se apiRoute falhar', async () => {
@@ -28,29 +36,28 @@ describe('apiPutRoute', () => {
         expect(axios.put).not.toHaveBeenCalled();
     });
 
-    it('faz requisição PUT com CSRF token e headers corretos', async () => {
+    it('faz requisição PUT com headers corretos', async () => {
         const result = await apiPutRoute('test.update', { title: 'New' });
 
         expect(mockApiRoute).toHaveBeenCalledWith('test.update', { title: 'New' }, null, 'PUT');
-        expect(axios.put).toHaveBeenCalledWith('https://api.example.com/put', { title: 'New' }, {
-            headers: {
+        expect(axios.put).toHaveBeenCalledWith('https://api.example.com/put', { title: 'New' }, expect.objectContaining({
+            headers: expect.objectContaining({
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': 'fake-token-put',
                 'X-Requested-With': 'XMLHttpRequest'
-            },
+            }),
             withCredentials: true
-        });
+        }));
         expect(result).toEqual({ updated: true });
     });
 
-    it('funciona mesmo se meta csrf-token não existir', async () => {
-        document.head.innerHTML = '';
+    it('inclui headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ 'Authorization': 'Bearer token-put' });
+
         await apiPutRoute('test.update', {});
 
-        expect(axios.put).toHaveBeenCalled();
         const callArgs = (axios.put as any).mock.calls[0];
-        expect(callArgs[2].headers['X-CSRF-TOKEN']).toBe('');
+        expect(callArgs[2].headers['Authorization']).toBe('Bearer token-put');
     });
 
     it('retorna null e loga erro ao falhar', async () => {
