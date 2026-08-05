@@ -22,6 +22,7 @@ GEMINI.md
 .windsurf/
 .cursor/
 .copilot/
+.claude/worktrees/
 
 # Sistema
 .DS_Store
