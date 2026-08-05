@@ -1,5 +1,5 @@
 /**
- * Manifesto de categorização dos 279 helpers do lodash-es faltantes na MaxUse.
+ * Manifesto de categorização dos 281 helpers do lodash-es faltantes na MaxUse.
  * Fonte da verdade para a geração de lodash_migrate/.
  *
  * fase 1: primitivos sem dependência (Lang, Math, Strings simples, Utils básicos)
@@ -124,6 +124,7 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'rangeRight', categoria: 'Utils', fase: 1, depende_de: ['range'] },
     { nome: 'times', categoria: 'Utils', fase: 1, depende_de: ['toInteger'] },
     { nome: 'nthArg', categoria: 'Utils', fase: 1, depende_de: ['toInteger'], nota: 'índice negativo conta do fim' },
+    { nome: 'negate', categoria: 'Functions', fase: 1, depende_de: [], nota: 'zero dependências; já implementado como semente da Task 2' },
 
     // ─────────────────────────────────────────────────────────────
     // FASE 2 — Iterables: arrays e coleções
@@ -212,7 +213,7 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'findLastIndex', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'] },
     { nome: 'every', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'], nota: 'array vazio => true' },
     { nome: 'some', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'], nota: 'array vazio => false' },
-    { nome: 'reject', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'] },
+    { nome: 'reject', categoria: 'Iterables', fase: 3, depende_de: ['iteratee', 'negate'], nota: 'composição real: filter com negate(iteratee(predicate))' },
     { nome: 'partition', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'] },
     { nome: 'remove', categoria: 'Iterables', fase: 3, depende_de: ['iteratee'], nota: 'MUTA; retorna removidos' },
     { nome: 'reduce', categoria: 'Iterables', fase: 3, depende_de: [], nota: 'sem acumulador usa 1º elemento' },
@@ -260,9 +261,9 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'assignInWith', categoria: 'Objects', fase: 3, depende_de: ['assignIn'] },
     { nome: 'extendWith', categoria: 'Objects', fase: 3, depende_de: ['assignInWith'], alias_de: 'assignInWith' },
     { nome: 'defaults', categoria: 'Objects', fase: 3, depende_de: ['keysIn'], nota: 'só preenche undefined' },
-    { nome: 'defaultsDeep', categoria: 'Objects', fase: 3, depende_de: ['defaults', 'mergeWith'] },
     { nome: 'merge', categoria: 'Objects', fase: 3, depende_de: [], nota: 'recursivo; ignora source undefined' },
     { nome: 'mergeWith', categoria: 'Objects', fase: 3, depende_de: ['merge'] },
+    { nome: 'defaultsDeep', categoria: 'Objects', fase: 3, depende_de: ['defaults', 'mergeWith'] },
     { nome: 'create', categoria: 'Objects', fase: 3, depende_de: ['assign'] },
     { nome: 'entries', categoria: 'Objects', fase: 3, depende_de: ['toPairs'], alias_de: 'toPairs' },
     { nome: 'entriesIn', categoria: 'Objects', fase: 3, depende_de: ['toPairsIn'], alias_de: 'toPairsIn' },
@@ -277,12 +278,12 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'invert', categoria: 'Objects', fase: 3, depende_de: [] },
     { nome: 'invertBy', categoria: 'Objects', fase: 3, depende_de: ['iteratee'] },
     { nome: 'mapKeys', categoria: 'Objects', fase: 3, depende_de: ['iteratee'] },
-    { nome: 'omitBy', categoria: 'Objects', fase: 3, depende_de: ['iteratee'] },
     { nome: 'pickBy', categoria: 'Objects', fase: 3, depende_de: ['iteratee'] },
+    { nome: 'omitBy', categoria: 'Objects', fase: 3, depende_de: ['iteratee', 'pickBy', 'negate'], nota: 'composição real: pickBy(object, negate(iteratee(predicate)))' },
     { nome: 'setWith', categoria: 'Objects', fase: 3, depende_de: ['toPath'] },
     { nome: 'update', categoria: 'Objects', fase: 3, depende_de: ['toPath'] },
     { nome: 'updateWith', categoria: 'Objects', fase: 3, depende_de: ['setWith'] },
-    { nome: 'transform', categoria: 'Objects', fase: 3, depende_de: ['forOwn'], nota: 'accumulator inferido do tipo' },
+    { nome: 'transform', categoria: 'Objects', fase: 3, depende_de: ['forOwn', 'isBuffer', 'isFunction', 'isTypedArray'], nota: 'accumulator inferido do tipo (isArray/isObject já são própria da MaxUse)' },
 
     // ─────────────────────────────────────────────────────────────
     // FASE 3 — Strings que dependem de words
@@ -297,10 +298,9 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'debounce', categoria: 'Functions', fase: 4, depende_de: [], nota: 'leading/trailing/maxWait + cancel/flush/pending' },
     { nome: 'throttle', categoria: 'Functions', fase: 4, depende_de: ['debounce'], nota: 'implementado sobre debounce com maxWait' },
     { nome: 'memoize', categoria: 'Functions', fase: 4, depende_de: [], nota: 'expõe .cache; resolver opcional' },
-    { nome: 'once', categoria: 'Functions', fase: 4, depende_de: ['before'] },
     { nome: 'after', categoria: 'Functions', fase: 4, depende_de: ['toInteger'] },
     { nome: 'before', categoria: 'Functions', fase: 4, depende_de: ['toInteger'], nota: 'guarda o último resultado' },
-    { nome: 'negate', categoria: 'Functions', fase: 4, depende_de: [] },
+    { nome: 'once', categoria: 'Functions', fase: 4, depende_de: ['before'] },
     { nome: 'defer', categoria: 'Functions', fase: 4, depende_de: [] },
     { nome: 'delay', categoria: 'Functions', fase: 4, depende_de: ['toNumber'] },
     { nome: 'ary', categoria: 'Functions', fase: 4, depende_de: ['toInteger'] },
@@ -308,10 +308,10 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'flip', categoria: 'Functions', fase: 4, depende_de: [] },
     { nome: 'rest', categoria: 'Functions', fase: 4, depende_de: ['toInteger'] },
     { nome: 'spread', categoria: 'Functions', fase: 4, depende_de: ['toInteger'] },
-    { nome: 'wrap', categoria: 'Functions', fase: 4, depende_de: ['partial'] },
     { nome: 'overArgs', categoria: 'Functions', fase: 4, depende_de: ['iteratee'] },
     { nome: 'rearg', categoria: 'Functions', fase: 4, depende_de: [] },
     { nome: 'partial', categoria: 'Functions', fase: 4, depende_de: [], nota: 'suporta placeholder _' },
+    { nome: 'wrap', categoria: 'Functions', fase: 4, depende_de: ['partial'] },
     { nome: 'partialRight', categoria: 'Functions', fase: 4, depende_de: ['partial'] },
     { nome: 'bind', categoria: 'Functions', fase: 4, depende_de: ['partial'], nota: 'suporta placeholder' },
     { nome: 'bindKey', categoria: 'Functions', fase: 4, depende_de: ['bind'] },
@@ -334,13 +334,6 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'chain', categoria: 'Seq', fase: 5, depende_de: [], nota: 'wrapper com chaining explícito' },
     { nome: 'tap', categoria: 'Seq', fase: 5, depende_de: [], nota: 'efeito colateral; retorna o valor' },
     { nome: 'thru', categoria: 'Seq', fase: 5, depende_de: [], nota: 'retorna o resultado do interceptor' },
-    { nome: 'value', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
-    { nome: 'commit', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperCommit'], alias_de: 'wrapperCommit' },
-    { nome: 'plant', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperPlant'], alias_de: 'wrapperPlant' },
-    { nome: 'next', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperNext'], alias_de: 'wrapperNext' },
-    { nome: 'toIterator', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperToIterator'], alias_de: 'wrapperToIterator' },
-    { nome: 'toJSON', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
-    { nome: 'valueOf', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
     { nome: 'wrapperAt', categoria: 'Seq', fase: 5, depende_de: ['chain', 'at'] },
     { nome: 'wrapperChain', categoria: 'Seq', fase: 5, depende_de: ['chain'] },
     { nome: 'wrapperCommit', categoria: 'Seq', fase: 5, depende_de: ['chain'] },
@@ -350,6 +343,13 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'wrapperReverse', categoria: 'Seq', fase: 5, depende_de: ['chain', 'reverse'] },
     { nome: 'wrapperToIterator', categoria: 'Seq', fase: 5, depende_de: ['chain'] },
     { nome: 'wrapperValue', categoria: 'Seq', fase: 5, depende_de: ['chain'] },
+    { nome: 'value', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
+    { nome: 'commit', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperCommit'], alias_de: 'wrapperCommit' },
+    { nome: 'plant', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperPlant'], alias_de: 'wrapperPlant' },
+    { nome: 'next', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperNext'], alias_de: 'wrapperNext' },
+    { nome: 'toIterator', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperToIterator'], alias_de: 'wrapperToIterator' },
+    { nome: 'toJSON', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
+    { nome: 'valueOf', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
     { nome: 'lodash', categoria: 'Seq', fase: 5, depende_de: ['chain'], nota: 'a própria função _ chamável' },
     { nome: 'default', categoria: 'Seq', fase: 5, depende_de: ['lodash'], alias_de: 'lodash', nota: 'export default do lodash-es' }
 ];
