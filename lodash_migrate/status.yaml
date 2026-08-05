@@ -19,7 +19,7 @@ helpers:
   - nome: isNil
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isNil.md
+    plano: lodash_migrate/plans/Lang/isNil.md
     depende_de: []
     tentativas: 0
     status_execucao: Concluído
@@ -27,7 +27,7 @@ helpers:
   - nome: isNull
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isNull.md
+    plano: lodash_migrate/plans/Lang/isNull.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -35,7 +35,7 @@ helpers:
   - nome: isUndefined
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isUndefined.md
+    plano: lodash_migrate/plans/Lang/isUndefined.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -43,7 +43,7 @@ helpers:
   - nome: isBoolean
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isBoolean.md
+    plano: lodash_migrate/plans/Lang/isBoolean.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -51,7 +51,7 @@ helpers:
   - nome: isString
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isString.md
+    plano: lodash_migrate/plans/Lang/isString.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -59,7 +59,7 @@ helpers:
   - nome: isFunction
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isFunction.md
+    plano: lodash_migrate/plans/Lang/isFunction.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -67,7 +67,7 @@ helpers:
   - nome: isSymbol
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isSymbol.md
+    plano: lodash_migrate/plans/Lang/isSymbol.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -75,7 +75,7 @@ helpers:
   - nome: isRegExp
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isRegExp.md
+    plano: lodash_migrate/plans/Lang/isRegExp.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -83,7 +83,7 @@ helpers:
   - nome: isError
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isError.md
+    plano: lodash_migrate/plans/Lang/isError.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -91,7 +91,7 @@ helpers:
   - nome: isElement
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isElement.md
+    plano: lodash_migrate/plans/Lang/isElement.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -99,7 +99,7 @@ helpers:
   - nome: isArguments
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isArguments.md
+    plano: lodash_migrate/plans/Lang/isArguments.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -107,7 +107,7 @@ helpers:
   - nome: isArrayBuffer
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isArrayBuffer.md
+    plano: lodash_migrate/plans/Lang/isArrayBuffer.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -115,7 +115,7 @@ helpers:
   - nome: isBuffer
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isBuffer.md
+    plano: lodash_migrate/plans/Lang/isBuffer.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -123,7 +123,7 @@ helpers:
   - nome: isTypedArray
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isTypedArray.md
+    plano: lodash_migrate/plans/Lang/isTypedArray.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -131,7 +131,7 @@ helpers:
   - nome: isMap
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isMap.md
+    plano: lodash_migrate/plans/Lang/isMap.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -139,7 +139,7 @@ helpers:
   - nome: isSet
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isSet.md
+    plano: lodash_migrate/plans/Lang/isSet.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -147,7 +147,7 @@ helpers:
   - nome: isWeakMap
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isWeakMap.md
+    plano: lodash_migrate/plans/Lang/isWeakMap.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -155,7 +155,7 @@ helpers:
   - nome: isWeakSet
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isWeakSet.md
+    plano: lodash_migrate/plans/Lang/isWeakSet.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -163,7 +163,7 @@ helpers:
   - nome: isNative
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isNative.md
+    plano: lodash_migrate/plans/Lang/isNative.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -171,7 +171,7 @@ helpers:
   - nome: isObjectLike
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isObjectLike.md
+    plano: lodash_migrate/plans/Lang/isObjectLike.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -179,7 +179,7 @@ helpers:
   - nome: isPlainObject
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isPlainObject.md
+    plano: lodash_migrate/plans/Lang/isPlainObject.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -187,7 +187,7 @@ helpers:
   - nome: isLength
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isLength.md
+    plano: lodash_migrate/plans/Lang/isLength.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -195,7 +195,7 @@ helpers:
   - nome: isArrayLike
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isArrayLike.md
+    plano: lodash_migrate/plans/Lang/isArrayLike.md
     depende_de:
       - isLength
     tentativas: 0
@@ -204,7 +204,7 @@ helpers:
   - nome: isArrayLikeObject
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isArrayLikeObject.md
+    plano: lodash_migrate/plans/Lang/isArrayLikeObject.md
     depende_de:
       - isArrayLike
       - isObjectLike
@@ -214,7 +214,7 @@ helpers:
   - nome: isFinite
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isFinite.md
+    plano: lodash_migrate/plans/Lang/isFinite.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -222,7 +222,7 @@ helpers:
   - nome: isInteger
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isInteger.md
+    plano: lodash_migrate/plans/Lang/isInteger.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -230,7 +230,7 @@ helpers:
   - nome: isSafeInteger
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isSafeInteger.md
+    plano: lodash_migrate/plans/Lang/isSafeInteger.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -238,7 +238,7 @@ helpers:
   - nome: isNaN
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isNaN.md
+    plano: lodash_migrate/plans/Lang/isNaN.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -246,7 +246,7 @@ helpers:
   - nome: eq
     categoria: Lang
     fase: 1
-    plano: plans/Lang/eq.md
+    plano: lodash_migrate/plans/Lang/eq.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -254,7 +254,7 @@ helpers:
   - nome: gt
     categoria: Lang
     fase: 1
-    plano: plans/Lang/gt.md
+    plano: lodash_migrate/plans/Lang/gt.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -262,7 +262,7 @@ helpers:
   - nome: gte
     categoria: Lang
     fase: 1
-    plano: plans/Lang/gte.md
+    plano: lodash_migrate/plans/Lang/gte.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -270,7 +270,7 @@ helpers:
   - nome: lt
     categoria: Lang
     fase: 1
-    plano: plans/Lang/lt.md
+    plano: lodash_migrate/plans/Lang/lt.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -278,7 +278,7 @@ helpers:
   - nome: lte
     categoria: Lang
     fase: 1
-    plano: plans/Lang/lte.md
+    plano: lodash_migrate/plans/Lang/lte.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -286,7 +286,7 @@ helpers:
   - nome: toFinite
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toFinite.md
+    plano: lodash_migrate/plans/Lang/toFinite.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -294,7 +294,7 @@ helpers:
   - nome: toInteger
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toInteger.md
+    plano: lodash_migrate/plans/Lang/toInteger.md
     depende_de:
       - toFinite
     tentativas: 0
@@ -303,7 +303,7 @@ helpers:
   - nome: toLength
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toLength.md
+    plano: lodash_migrate/plans/Lang/toLength.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -312,7 +312,7 @@ helpers:
   - nome: toSafeInteger
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toSafeInteger.md
+    plano: lodash_migrate/plans/Lang/toSafeInteger.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -321,7 +321,7 @@ helpers:
   - nome: castArray
     categoria: Lang
     fase: 1
-    plano: plans/Lang/castArray.md
+    plano: lodash_migrate/plans/Lang/castArray.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -329,7 +329,7 @@ helpers:
   - nome: toPath
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toPath.md
+    plano: lodash_migrate/plans/Lang/toPath.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -337,7 +337,7 @@ helpers:
   - nome: toPlainObject
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toPlainObject.md
+    plano: lodash_migrate/plans/Lang/toPlainObject.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -345,7 +345,7 @@ helpers:
   - nome: toString
     categoria: Lang
     fase: 1
-    plano: plans/Lang/toString.md
+    plano: lodash_migrate/plans/Lang/toString.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -353,7 +353,7 @@ helpers:
   - nome: clone
     categoria: Lang
     fase: 1
-    plano: plans/Lang/clone.md
+    plano: lodash_migrate/plans/Lang/clone.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -361,7 +361,7 @@ helpers:
   - nome: cloneWith
     categoria: Lang
     fase: 1
-    plano: plans/Lang/cloneWith.md
+    plano: lodash_migrate/plans/Lang/cloneWith.md
     depende_de:
       - clone
     tentativas: 0
@@ -370,7 +370,7 @@ helpers:
   - nome: cloneDeepWith
     categoria: Lang
     fase: 1
-    plano: plans/Lang/cloneDeepWith.md
+    plano: lodash_migrate/plans/Lang/cloneDeepWith.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -378,7 +378,7 @@ helpers:
   - nome: isEqualWith
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isEqualWith.md
+    plano: lodash_migrate/plans/Lang/isEqualWith.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -386,7 +386,7 @@ helpers:
   - nome: isMatch
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isMatch.md
+    plano: lodash_migrate/plans/Lang/isMatch.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -394,7 +394,7 @@ helpers:
   - nome: isMatchWith
     categoria: Lang
     fase: 1
-    plano: plans/Lang/isMatchWith.md
+    plano: lodash_migrate/plans/Lang/isMatchWith.md
     depende_de:
       - isMatch
     tentativas: 0
@@ -403,7 +403,7 @@ helpers:
   - nome: add
     categoria: Math
     fase: 1
-    plano: plans/Math/add.md
+    plano: lodash_migrate/plans/Math/add.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -411,7 +411,7 @@ helpers:
   - nome: subtract
     categoria: Math
     fase: 1
-    plano: plans/Math/subtract.md
+    plano: lodash_migrate/plans/Math/subtract.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -419,7 +419,7 @@ helpers:
   - nome: multiply
     categoria: Math
     fase: 1
-    plano: plans/Math/multiply.md
+    plano: lodash_migrate/plans/Math/multiply.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -427,7 +427,7 @@ helpers:
   - nome: divide
     categoria: Math
     fase: 1
-    plano: plans/Math/divide.md
+    plano: lodash_migrate/plans/Math/divide.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -435,7 +435,7 @@ helpers:
   - nome: ceil
     categoria: Math
     fase: 1
-    plano: plans/Math/ceil.md
+    plano: lodash_migrate/plans/Math/ceil.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -443,7 +443,7 @@ helpers:
   - nome: floor
     categoria: Math
     fase: 1
-    plano: plans/Math/floor.md
+    plano: lodash_migrate/plans/Math/floor.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -451,7 +451,7 @@ helpers:
   - nome: round
     categoria: Math
     fase: 1
-    plano: plans/Math/round.md
+    plano: lodash_migrate/plans/Math/round.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -459,7 +459,7 @@ helpers:
   - nome: inRange
     categoria: Math
     fase: 1
-    plano: plans/Math/inRange.md
+    plano: lodash_migrate/plans/Math/inRange.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -467,7 +467,7 @@ helpers:
   - nome: random
     categoria: Math
     fase: 1
-    plano: plans/Math/random.md
+    plano: lodash_migrate/plans/Math/random.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -475,7 +475,7 @@ helpers:
   - nome: parseInt
     categoria: Math
     fase: 1
-    plano: plans/Math/parseInt.md
+    plano: lodash_migrate/plans/Math/parseInt.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -483,7 +483,7 @@ helpers:
   - nome: toLower
     categoria: Strings
     fase: 1
-    plano: plans/Strings/toLower.md
+    plano: lodash_migrate/plans/Strings/toLower.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -491,7 +491,7 @@ helpers:
   - nome: toUpper
     categoria: Strings
     fase: 1
-    plano: plans/Strings/toUpper.md
+    plano: lodash_migrate/plans/Strings/toUpper.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -499,7 +499,7 @@ helpers:
   - nome: trim
     categoria: Strings
     fase: 1
-    plano: plans/Strings/trim.md
+    plano: lodash_migrate/plans/Strings/trim.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -507,7 +507,7 @@ helpers:
   - nome: trimStart
     categoria: Strings
     fase: 1
-    plano: plans/Strings/trimStart.md
+    plano: lodash_migrate/plans/Strings/trimStart.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -515,7 +515,7 @@ helpers:
   - nome: trimEnd
     categoria: Strings
     fase: 1
-    plano: plans/Strings/trimEnd.md
+    plano: lodash_migrate/plans/Strings/trimEnd.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -523,7 +523,7 @@ helpers:
   - nome: repeat
     categoria: Strings
     fase: 1
-    plano: plans/Strings/repeat.md
+    plano: lodash_migrate/plans/Strings/repeat.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -532,7 +532,7 @@ helpers:
   - nome: startsWith
     categoria: Strings
     fase: 1
-    plano: plans/Strings/startsWith.md
+    plano: lodash_migrate/plans/Strings/startsWith.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -540,7 +540,7 @@ helpers:
   - nome: endsWith
     categoria: Strings
     fase: 1
-    plano: plans/Strings/endsWith.md
+    plano: lodash_migrate/plans/Strings/endsWith.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -548,7 +548,7 @@ helpers:
   - nome: escape
     categoria: Strings
     fase: 1
-    plano: plans/Strings/escape.md
+    plano: lodash_migrate/plans/Strings/escape.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -556,7 +556,7 @@ helpers:
   - nome: unescape
     categoria: Strings
     fase: 1
-    plano: plans/Strings/unescape.md
+    plano: lodash_migrate/plans/Strings/unescape.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -564,7 +564,7 @@ helpers:
   - nome: escapeRegExp
     categoria: Strings
     fase: 1
-    plano: plans/Strings/escapeRegExp.md
+    plano: lodash_migrate/plans/Strings/escapeRegExp.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -572,7 +572,7 @@ helpers:
   - nome: deburr
     categoria: Strings
     fase: 1
-    plano: plans/Strings/deburr.md
+    plano: lodash_migrate/plans/Strings/deburr.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -580,7 +580,7 @@ helpers:
   - nome: words
     categoria: Strings
     fase: 1
-    plano: plans/Strings/words.md
+    plano: lodash_migrate/plans/Strings/words.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -588,7 +588,7 @@ helpers:
   - nome: split
     categoria: Strings
     fase: 1
-    plano: plans/Strings/split.md
+    plano: lodash_migrate/plans/Strings/split.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -596,7 +596,7 @@ helpers:
   - nome: replace
     categoria: Strings
     fase: 1
-    plano: plans/Strings/replace.md
+    plano: lodash_migrate/plans/Strings/replace.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -604,7 +604,7 @@ helpers:
   - nome: lowerFirst
     categoria: Strings
     fase: 1
-    plano: plans/Strings/lowerFirst.md
+    plano: lodash_migrate/plans/Strings/lowerFirst.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -612,7 +612,7 @@ helpers:
   - nome: upperFirst
     categoria: Strings
     fase: 1
-    plano: plans/Strings/upperFirst.md
+    plano: lodash_migrate/plans/Strings/upperFirst.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -620,7 +620,7 @@ helpers:
   - nome: pad
     categoria: Strings
     fase: 1
-    plano: plans/Strings/pad.md
+    plano: lodash_migrate/plans/Strings/pad.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -628,7 +628,7 @@ helpers:
   - nome: padStart
     categoria: Strings
     fase: 1
-    plano: plans/Strings/padStart.md
+    plano: lodash_migrate/plans/Strings/padStart.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -636,7 +636,7 @@ helpers:
   - nome: padEnd
     categoria: Strings
     fase: 1
-    plano: plans/Strings/padEnd.md
+    plano: lodash_migrate/plans/Strings/padEnd.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -644,7 +644,7 @@ helpers:
   - nome: stubArray
     categoria: Utils
     fase: 1
-    plano: plans/Utils/stubArray.md
+    plano: lodash_migrate/plans/Utils/stubArray.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -652,7 +652,7 @@ helpers:
   - nome: stubFalse
     categoria: Utils
     fase: 1
-    plano: plans/Utils/stubFalse.md
+    plano: lodash_migrate/plans/Utils/stubFalse.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -660,7 +660,7 @@ helpers:
   - nome: stubObject
     categoria: Utils
     fase: 1
-    plano: plans/Utils/stubObject.md
+    plano: lodash_migrate/plans/Utils/stubObject.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -668,7 +668,7 @@ helpers:
   - nome: stubString
     categoria: Utils
     fase: 1
-    plano: plans/Utils/stubString.md
+    plano: lodash_migrate/plans/Utils/stubString.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -676,7 +676,7 @@ helpers:
   - nome: stubTrue
     categoria: Utils
     fase: 1
-    plano: plans/Utils/stubTrue.md
+    plano: lodash_migrate/plans/Utils/stubTrue.md
     depende_de: []
     tentativas: 0
     status_execucao: Concluído
@@ -684,7 +684,7 @@ helpers:
   - nome: constant
     categoria: Utils
     fase: 1
-    plano: plans/Utils/constant.md
+    plano: lodash_migrate/plans/Utils/constant.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -692,7 +692,7 @@ helpers:
   - nome: defaultTo
     categoria: Utils
     fase: 1
-    plano: plans/Utils/defaultTo.md
+    plano: lodash_migrate/plans/Utils/defaultTo.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -700,7 +700,7 @@ helpers:
   - nome: uniqueId
     categoria: Utils
     fase: 1
-    plano: plans/Utils/uniqueId.md
+    plano: lodash_migrate/plans/Utils/uniqueId.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -708,7 +708,7 @@ helpers:
   - nome: range
     categoria: Utils
     fase: 1
-    plano: plans/Utils/range.md
+    plano: lodash_migrate/plans/Utils/range.md
     depende_de:
       - toFinite
     tentativas: 0
@@ -717,7 +717,7 @@ helpers:
   - nome: rangeRight
     categoria: Utils
     fase: 1
-    plano: plans/Utils/rangeRight.md
+    plano: lodash_migrate/plans/Utils/rangeRight.md
     depende_de:
       - range
     tentativas: 0
@@ -726,7 +726,7 @@ helpers:
   - nome: times
     categoria: Utils
     fase: 1
-    plano: plans/Utils/times.md
+    plano: lodash_migrate/plans/Utils/times.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -735,7 +735,7 @@ helpers:
   - nome: nthArg
     categoria: Utils
     fase: 1
-    plano: plans/Utils/nthArg.md
+    plano: lodash_migrate/plans/Utils/nthArg.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -744,7 +744,7 @@ helpers:
   - nome: negate
     categoria: Functions
     fase: 1
-    plano: plans/Functions/negate.md
+    plano: lodash_migrate/plans/Functions/negate.md
     depende_de: []
     tentativas: 0
     status_execucao: Concluído
@@ -752,7 +752,7 @@ helpers:
   - nome: compact
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/compact.md
+    plano: lodash_migrate/plans/Iterables/compact.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -760,7 +760,7 @@ helpers:
   - nome: concat
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/concat.md
+    plano: lodash_migrate/plans/Iterables/concat.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -768,7 +768,7 @@ helpers:
   - nome: head
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/head.md
+    plano: lodash_migrate/plans/Iterables/head.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -776,7 +776,7 @@ helpers:
   - nome: tail
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/tail.md
+    plano: lodash_migrate/plans/Iterables/tail.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -784,7 +784,7 @@ helpers:
   - nome: initial
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/initial.md
+    plano: lodash_migrate/plans/Iterables/initial.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -792,7 +792,7 @@ helpers:
   - nome: nth
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/nth.md
+    plano: lodash_migrate/plans/Iterables/nth.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -801,7 +801,7 @@ helpers:
   - nome: slice
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/slice.md
+    plano: lodash_migrate/plans/Iterables/slice.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -809,7 +809,7 @@ helpers:
   - nome: reverse
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/reverse.md
+    plano: lodash_migrate/plans/Iterables/reverse.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -817,7 +817,7 @@ helpers:
   - nome: fill
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/fill.md
+    plano: lodash_migrate/plans/Iterables/fill.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -825,7 +825,7 @@ helpers:
   - nome: join
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/join.md
+    plano: lodash_migrate/plans/Iterables/join.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -833,7 +833,7 @@ helpers:
   - nome: indexOf
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/indexOf.md
+    plano: lodash_migrate/plans/Iterables/indexOf.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -842,7 +842,7 @@ helpers:
   - nome: lastIndexOf
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/lastIndexOf.md
+    plano: lodash_migrate/plans/Iterables/lastIndexOf.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -851,7 +851,7 @@ helpers:
   - nome: includes
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/includes.md
+    plano: lodash_migrate/plans/Iterables/includes.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -859,7 +859,7 @@ helpers:
   - nome: drop
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/drop.md
+    plano: lodash_migrate/plans/Iterables/drop.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -868,7 +868,7 @@ helpers:
   - nome: dropRight
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/dropRight.md
+    plano: lodash_migrate/plans/Iterables/dropRight.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -877,7 +877,7 @@ helpers:
   - nome: take
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/take.md
+    plano: lodash_migrate/plans/Iterables/take.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -886,7 +886,7 @@ helpers:
   - nome: takeRight
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/takeRight.md
+    plano: lodash_migrate/plans/Iterables/takeRight.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -895,7 +895,7 @@ helpers:
   - nome: flatten
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/flatten.md
+    plano: lodash_migrate/plans/Iterables/flatten.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -903,7 +903,7 @@ helpers:
   - nome: flattenDeep
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/flattenDeep.md
+    plano: lodash_migrate/plans/Iterables/flattenDeep.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -911,7 +911,7 @@ helpers:
   - nome: flattenDepth
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/flattenDepth.md
+    plano: lodash_migrate/plans/Iterables/flattenDepth.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -920,7 +920,7 @@ helpers:
   - nome: fromPairs
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/fromPairs.md
+    plano: lodash_migrate/plans/Iterables/fromPairs.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -928,7 +928,7 @@ helpers:
   - nome: zip
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/zip.md
+    plano: lodash_migrate/plans/Iterables/zip.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -936,7 +936,7 @@ helpers:
   - nome: unzip
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/unzip.md
+    plano: lodash_migrate/plans/Iterables/unzip.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -944,7 +944,7 @@ helpers:
   - nome: zipObject
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/zipObject.md
+    plano: lodash_migrate/plans/Iterables/zipObject.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -952,7 +952,7 @@ helpers:
   - nome: without
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/without.md
+    plano: lodash_migrate/plans/Iterables/without.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -960,7 +960,7 @@ helpers:
   - nome: difference
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/difference.md
+    plano: lodash_migrate/plans/Iterables/difference.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -968,7 +968,7 @@ helpers:
   - nome: intersection
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/intersection.md
+    plano: lodash_migrate/plans/Iterables/intersection.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -976,7 +976,7 @@ helpers:
   - nome: union
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/union.md
+    plano: lodash_migrate/plans/Iterables/union.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -984,7 +984,7 @@ helpers:
   - nome: xor
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/xor.md
+    plano: lodash_migrate/plans/Iterables/xor.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -992,7 +992,7 @@ helpers:
   - nome: pull
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/pull.md
+    plano: lodash_migrate/plans/Iterables/pull.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1000,7 +1000,7 @@ helpers:
   - nome: pullAll
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/pullAll.md
+    plano: lodash_migrate/plans/Iterables/pullAll.md
     depende_de:
       - pull
     tentativas: 0
@@ -1009,7 +1009,7 @@ helpers:
   - nome: pullAt
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/pullAt.md
+    plano: lodash_migrate/plans/Iterables/pullAt.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1017,7 +1017,7 @@ helpers:
   - nome: sortedIndex
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sortedIndex.md
+    plano: lodash_migrate/plans/Iterables/sortedIndex.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1025,7 +1025,7 @@ helpers:
   - nome: sortedIndexOf
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sortedIndexOf.md
+    plano: lodash_migrate/plans/Iterables/sortedIndexOf.md
     depende_de:
       - sortedIndex
     tentativas: 0
@@ -1034,7 +1034,7 @@ helpers:
   - nome: sortedLastIndex
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sortedLastIndex.md
+    plano: lodash_migrate/plans/Iterables/sortedLastIndex.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1042,7 +1042,7 @@ helpers:
   - nome: sortedLastIndexOf
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sortedLastIndexOf.md
+    plano: lodash_migrate/plans/Iterables/sortedLastIndexOf.md
     depende_de:
       - sortedLastIndex
     tentativas: 0
@@ -1051,7 +1051,7 @@ helpers:
   - nome: sortedUniq
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sortedUniq.md
+    plano: lodash_migrate/plans/Iterables/sortedUniq.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1059,7 +1059,7 @@ helpers:
   - nome: sampleSize
     categoria: Iterables
     fase: 2
-    plano: plans/Iterables/sampleSize.md
+    plano: lodash_migrate/plans/Iterables/sampleSize.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1067,7 +1067,7 @@ helpers:
   - nome: keys
     categoria: Objects
     fase: 2
-    plano: plans/Objects/keys.md
+    plano: lodash_migrate/plans/Objects/keys.md
     depende_de:
       - isArrayLike
     tentativas: 0
@@ -1076,7 +1076,7 @@ helpers:
   - nome: keysIn
     categoria: Objects
     fase: 2
-    plano: plans/Objects/keysIn.md
+    plano: lodash_migrate/plans/Objects/keysIn.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1084,7 +1084,7 @@ helpers:
   - nome: values
     categoria: Objects
     fase: 2
-    plano: plans/Objects/values.md
+    plano: lodash_migrate/plans/Objects/values.md
     depende_de:
       - keys
     tentativas: 0
@@ -1093,7 +1093,7 @@ helpers:
   - nome: valuesIn
     categoria: Objects
     fase: 2
-    plano: plans/Objects/valuesIn.md
+    plano: lodash_migrate/plans/Objects/valuesIn.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1102,7 +1102,7 @@ helpers:
   - nome: has
     categoria: Objects
     fase: 2
-    plano: plans/Objects/has.md
+    plano: lodash_migrate/plans/Objects/has.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1111,7 +1111,7 @@ helpers:
   - nome: hasIn
     categoria: Objects
     fase: 2
-    plano: plans/Objects/hasIn.md
+    plano: lodash_migrate/plans/Objects/hasIn.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1120,7 +1120,7 @@ helpers:
   - nome: toPairs
     categoria: Objects
     fase: 2
-    plano: plans/Objects/toPairs.md
+    plano: lodash_migrate/plans/Objects/toPairs.md
     depende_de:
       - keys
     tentativas: 0
@@ -1129,7 +1129,7 @@ helpers:
   - nome: toPairsIn
     categoria: Objects
     fase: 2
-    plano: plans/Objects/toPairsIn.md
+    plano: lodash_migrate/plans/Objects/toPairsIn.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1138,7 +1138,7 @@ helpers:
   - nome: at
     categoria: Objects
     fase: 2
-    plano: plans/Objects/at.md
+    plano: lodash_migrate/plans/Objects/at.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1147,7 +1147,7 @@ helpers:
   - nome: property
     categoria: Utils
     fase: 3
-    plano: plans/Utils/property.md
+    plano: lodash_migrate/plans/Utils/property.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1156,7 +1156,7 @@ helpers:
   - nome: propertyOf
     categoria: Utils
     fase: 3
-    plano: plans/Utils/propertyOf.md
+    plano: lodash_migrate/plans/Utils/propertyOf.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1165,7 +1165,7 @@ helpers:
   - nome: matches
     categoria: Utils
     fase: 3
-    plano: plans/Utils/matches.md
+    plano: lodash_migrate/plans/Utils/matches.md
     depende_de:
       - isMatch
     tentativas: 0
@@ -1174,7 +1174,7 @@ helpers:
   - nome: matchesProperty
     categoria: Utils
     fase: 3
-    plano: plans/Utils/matchesProperty.md
+    plano: lodash_migrate/plans/Utils/matchesProperty.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1183,7 +1183,7 @@ helpers:
   - nome: iteratee
     categoria: Utils
     fase: 3
-    plano: plans/Utils/iteratee.md
+    plano: lodash_migrate/plans/Utils/iteratee.md
     depende_de:
       - property
       - matches
@@ -1194,7 +1194,7 @@ helpers:
   - nome: method
     categoria: Utils
     fase: 3
-    plano: plans/Utils/method.md
+    plano: lodash_migrate/plans/Utils/method.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1203,7 +1203,7 @@ helpers:
   - nome: methodOf
     categoria: Utils
     fase: 3
-    plano: plans/Utils/methodOf.md
+    plano: lodash_migrate/plans/Utils/methodOf.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1212,7 +1212,7 @@ helpers:
   - nome: result
     categoria: Utils
     fase: 3
-    plano: plans/Utils/result.md
+    plano: lodash_migrate/plans/Utils/result.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1221,7 +1221,7 @@ helpers:
   - nome: attempt
     categoria: Utils
     fase: 3
-    plano: plans/Utils/attempt.md
+    plano: lodash_migrate/plans/Utils/attempt.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1229,7 +1229,7 @@ helpers:
   - nome: cond
     categoria: Utils
     fase: 3
-    plano: plans/Utils/cond.md
+    plano: lodash_migrate/plans/Utils/cond.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1238,7 +1238,7 @@ helpers:
   - nome: conforms
     categoria: Utils
     fase: 3
-    plano: plans/Utils/conforms.md
+    plano: lodash_migrate/plans/Utils/conforms.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1246,7 +1246,7 @@ helpers:
   - nome: conformsTo
     categoria: Utils
     fase: 3
-    plano: plans/Utils/conformsTo.md
+    plano: lodash_migrate/plans/Utils/conformsTo.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1254,7 +1254,7 @@ helpers:
   - nome: over
     categoria: Utils
     fase: 3
-    plano: plans/Utils/over.md
+    plano: lodash_migrate/plans/Utils/over.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1263,7 +1263,7 @@ helpers:
   - nome: overEvery
     categoria: Utils
     fase: 3
-    plano: plans/Utils/overEvery.md
+    plano: lodash_migrate/plans/Utils/overEvery.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1272,7 +1272,7 @@ helpers:
   - nome: overSome
     categoria: Utils
     fase: 3
-    plano: plans/Utils/overSome.md
+    plano: lodash_migrate/plans/Utils/overSome.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1281,7 +1281,7 @@ helpers:
   - nome: map
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/map.md
+    plano: lodash_migrate/plans/Iterables/map.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1290,7 +1290,7 @@ helpers:
   - nome: forEach
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/forEach.md
+    plano: lodash_migrate/plans/Iterables/forEach.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1298,7 +1298,7 @@ helpers:
   - nome: forEachRight
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/forEachRight.md
+    plano: lodash_migrate/plans/Iterables/forEachRight.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1306,7 +1306,7 @@ helpers:
   - nome: each
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/each.md
+    plano: lodash_migrate/plans/Iterables/each.md
     depende_de:
       - forEach
     tentativas: 0
@@ -1315,7 +1315,7 @@ helpers:
   - nome: eachRight
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/eachRight.md
+    plano: lodash_migrate/plans/Iterables/eachRight.md
     depende_de:
       - forEachRight
     tentativas: 0
@@ -1324,7 +1324,7 @@ helpers:
   - nome: find
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/find.md
+    plano: lodash_migrate/plans/Iterables/find.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1333,7 +1333,7 @@ helpers:
   - nome: findIndex
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/findIndex.md
+    plano: lodash_migrate/plans/Iterables/findIndex.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1342,7 +1342,7 @@ helpers:
   - nome: findLastIndex
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/findLastIndex.md
+    plano: lodash_migrate/plans/Iterables/findLastIndex.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1351,7 +1351,7 @@ helpers:
   - nome: every
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/every.md
+    plano: lodash_migrate/plans/Iterables/every.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1360,7 +1360,7 @@ helpers:
   - nome: some
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/some.md
+    plano: lodash_migrate/plans/Iterables/some.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1369,7 +1369,7 @@ helpers:
   - nome: reject
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/reject.md
+    plano: lodash_migrate/plans/Iterables/reject.md
     depende_de:
       - iteratee
       - negate
@@ -1379,7 +1379,7 @@ helpers:
   - nome: partition
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/partition.md
+    plano: lodash_migrate/plans/Iterables/partition.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1388,7 +1388,7 @@ helpers:
   - nome: remove
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/remove.md
+    plano: lodash_migrate/plans/Iterables/remove.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1397,7 +1397,7 @@ helpers:
   - nome: reduce
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/reduce.md
+    plano: lodash_migrate/plans/Iterables/reduce.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1405,7 +1405,7 @@ helpers:
   - nome: reduceRight
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/reduceRight.md
+    plano: lodash_migrate/plans/Iterables/reduceRight.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1413,7 +1413,7 @@ helpers:
   - nome: flatMap
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/flatMap.md
+    plano: lodash_migrate/plans/Iterables/flatMap.md
     depende_de:
       - map
       - flatten
@@ -1423,7 +1423,7 @@ helpers:
   - nome: flatMapDeep
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/flatMapDeep.md
+    plano: lodash_migrate/plans/Iterables/flatMapDeep.md
     depende_de:
       - map
       - flattenDeep
@@ -1433,7 +1433,7 @@ helpers:
   - nome: flatMapDepth
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/flatMapDepth.md
+    plano: lodash_migrate/plans/Iterables/flatMapDepth.md
     depende_de:
       - map
       - flattenDepth
@@ -1443,7 +1443,7 @@ helpers:
   - nome: max
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/max.md
+    plano: lodash_migrate/plans/Iterables/max.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1451,7 +1451,7 @@ helpers:
   - nome: min
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/min.md
+    plano: lodash_migrate/plans/Iterables/min.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1459,7 +1459,7 @@ helpers:
   - nome: maxBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/maxBy.md
+    plano: lodash_migrate/plans/Iterables/maxBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1468,7 +1468,7 @@ helpers:
   - nome: minBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/minBy.md
+    plano: lodash_migrate/plans/Iterables/minBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1477,7 +1477,7 @@ helpers:
   - nome: mean
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/mean.md
+    plano: lodash_migrate/plans/Iterables/mean.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1485,7 +1485,7 @@ helpers:
   - nome: meanBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/meanBy.md
+    plano: lodash_migrate/plans/Iterables/meanBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1494,7 +1494,7 @@ helpers:
   - nome: uniqBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/uniqBy.md
+    plano: lodash_migrate/plans/Iterables/uniqBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1503,7 +1503,7 @@ helpers:
   - nome: uniqWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/uniqWith.md
+    plano: lodash_migrate/plans/Iterables/uniqWith.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1511,7 +1511,7 @@ helpers:
   - nome: sortedUniqBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/sortedUniqBy.md
+    plano: lodash_migrate/plans/Iterables/sortedUniqBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1520,7 +1520,7 @@ helpers:
   - nome: sortedIndexBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/sortedIndexBy.md
+    plano: lodash_migrate/plans/Iterables/sortedIndexBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1529,7 +1529,7 @@ helpers:
   - nome: sortedLastIndexBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/sortedLastIndexBy.md
+    plano: lodash_migrate/plans/Iterables/sortedLastIndexBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1538,7 +1538,7 @@ helpers:
   - nome: differenceBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/differenceBy.md
+    plano: lodash_migrate/plans/Iterables/differenceBy.md
     depende_de:
       - iteratee
       - difference
@@ -1548,7 +1548,7 @@ helpers:
   - nome: differenceWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/differenceWith.md
+    plano: lodash_migrate/plans/Iterables/differenceWith.md
     depende_de:
       - difference
     tentativas: 0
@@ -1557,7 +1557,7 @@ helpers:
   - nome: intersectionBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/intersectionBy.md
+    plano: lodash_migrate/plans/Iterables/intersectionBy.md
     depende_de:
       - iteratee
       - intersection
@@ -1567,7 +1567,7 @@ helpers:
   - nome: intersectionWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/intersectionWith.md
+    plano: lodash_migrate/plans/Iterables/intersectionWith.md
     depende_de:
       - intersection
     tentativas: 0
@@ -1576,7 +1576,7 @@ helpers:
   - nome: unionBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/unionBy.md
+    plano: lodash_migrate/plans/Iterables/unionBy.md
     depende_de:
       - iteratee
       - union
@@ -1586,7 +1586,7 @@ helpers:
   - nome: unionWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/unionWith.md
+    plano: lodash_migrate/plans/Iterables/unionWith.md
     depende_de:
       - union
     tentativas: 0
@@ -1595,7 +1595,7 @@ helpers:
   - nome: xorBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/xorBy.md
+    plano: lodash_migrate/plans/Iterables/xorBy.md
     depende_de:
       - iteratee
       - xor
@@ -1605,7 +1605,7 @@ helpers:
   - nome: xorWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/xorWith.md
+    plano: lodash_migrate/plans/Iterables/xorWith.md
     depende_de:
       - xor
     tentativas: 0
@@ -1614,7 +1614,7 @@ helpers:
   - nome: pullAllBy
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/pullAllBy.md
+    plano: lodash_migrate/plans/Iterables/pullAllBy.md
     depende_de:
       - iteratee
       - pullAll
@@ -1624,7 +1624,7 @@ helpers:
   - nome: pullAllWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/pullAllWith.md
+    plano: lodash_migrate/plans/Iterables/pullAllWith.md
     depende_de:
       - pullAll
     tentativas: 0
@@ -1633,7 +1633,7 @@ helpers:
   - nome: dropWhile
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/dropWhile.md
+    plano: lodash_migrate/plans/Iterables/dropWhile.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1642,7 +1642,7 @@ helpers:
   - nome: dropRightWhile
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/dropRightWhile.md
+    plano: lodash_migrate/plans/Iterables/dropRightWhile.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1651,7 +1651,7 @@ helpers:
   - nome: takeWhile
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/takeWhile.md
+    plano: lodash_migrate/plans/Iterables/takeWhile.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1660,7 +1660,7 @@ helpers:
   - nome: takeRightWhile
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/takeRightWhile.md
+    plano: lodash_migrate/plans/Iterables/takeRightWhile.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1669,7 +1669,7 @@ helpers:
   - nome: zipWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/zipWith.md
+    plano: lodash_migrate/plans/Iterables/zipWith.md
     depende_de:
       - zip
     tentativas: 0
@@ -1678,7 +1678,7 @@ helpers:
   - nome: unzipWith
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/unzipWith.md
+    plano: lodash_migrate/plans/Iterables/unzipWith.md
     depende_de:
       - unzip
     tentativas: 0
@@ -1687,7 +1687,7 @@ helpers:
   - nome: zipObjectDeep
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/zipObjectDeep.md
+    plano: lodash_migrate/plans/Iterables/zipObjectDeep.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1696,7 +1696,7 @@ helpers:
   - nome: invokeMap
     categoria: Iterables
     fase: 3
-    plano: plans/Iterables/invokeMap.md
+    plano: lodash_migrate/plans/Iterables/invokeMap.md
     depende_de:
       - toPath
       - map
@@ -1706,7 +1706,7 @@ helpers:
   - nome: assign
     categoria: Objects
     fase: 3
-    plano: plans/Objects/assign.md
+    plano: lodash_migrate/plans/Objects/assign.md
     depende_de:
       - keys
     tentativas: 0
@@ -1715,7 +1715,7 @@ helpers:
   - nome: assignIn
     categoria: Objects
     fase: 3
-    plano: plans/Objects/assignIn.md
+    plano: lodash_migrate/plans/Objects/assignIn.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1724,7 +1724,7 @@ helpers:
   - nome: extend
     categoria: Objects
     fase: 3
-    plano: plans/Objects/extend.md
+    plano: lodash_migrate/plans/Objects/extend.md
     depende_de:
       - assignIn
     tentativas: 0
@@ -1733,7 +1733,7 @@ helpers:
   - nome: assignWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/assignWith.md
+    plano: lodash_migrate/plans/Objects/assignWith.md
     depende_de:
       - assign
     tentativas: 0
@@ -1742,7 +1742,7 @@ helpers:
   - nome: assignInWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/assignInWith.md
+    plano: lodash_migrate/plans/Objects/assignInWith.md
     depende_de:
       - assignIn
     tentativas: 0
@@ -1751,7 +1751,7 @@ helpers:
   - nome: extendWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/extendWith.md
+    plano: lodash_migrate/plans/Objects/extendWith.md
     depende_de:
       - assignInWith
     tentativas: 0
@@ -1760,7 +1760,7 @@ helpers:
   - nome: defaults
     categoria: Objects
     fase: 3
-    plano: plans/Objects/defaults.md
+    plano: lodash_migrate/plans/Objects/defaults.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1769,7 +1769,7 @@ helpers:
   - nome: merge
     categoria: Objects
     fase: 3
-    plano: plans/Objects/merge.md
+    plano: lodash_migrate/plans/Objects/merge.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1777,7 +1777,7 @@ helpers:
   - nome: mergeWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/mergeWith.md
+    plano: lodash_migrate/plans/Objects/mergeWith.md
     depende_de:
       - merge
     tentativas: 0
@@ -1786,7 +1786,7 @@ helpers:
   - nome: defaultsDeep
     categoria: Objects
     fase: 3
-    plano: plans/Objects/defaultsDeep.md
+    plano: lodash_migrate/plans/Objects/defaultsDeep.md
     depende_de:
       - defaults
       - mergeWith
@@ -1796,7 +1796,7 @@ helpers:
   - nome: create
     categoria: Objects
     fase: 3
-    plano: plans/Objects/create.md
+    plano: lodash_migrate/plans/Objects/create.md
     depende_de:
       - assign
     tentativas: 0
@@ -1805,7 +1805,7 @@ helpers:
   - nome: entries
     categoria: Objects
     fase: 3
-    plano: plans/Objects/entries.md
+    plano: lodash_migrate/plans/Objects/entries.md
     depende_de:
       - toPairs
     tentativas: 0
@@ -1814,7 +1814,7 @@ helpers:
   - nome: entriesIn
     categoria: Objects
     fase: 3
-    plano: plans/Objects/entriesIn.md
+    plano: lodash_migrate/plans/Objects/entriesIn.md
     depende_de:
       - toPairsIn
     tentativas: 0
@@ -1823,7 +1823,7 @@ helpers:
   - nome: findKey
     categoria: Objects
     fase: 3
-    plano: plans/Objects/findKey.md
+    plano: lodash_migrate/plans/Objects/findKey.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1832,7 +1832,7 @@ helpers:
   - nome: findLastKey
     categoria: Objects
     fase: 3
-    plano: plans/Objects/findLastKey.md
+    plano: lodash_migrate/plans/Objects/findLastKey.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1841,7 +1841,7 @@ helpers:
   - nome: forIn
     categoria: Objects
     fase: 3
-    plano: plans/Objects/forIn.md
+    plano: lodash_migrate/plans/Objects/forIn.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1850,7 +1850,7 @@ helpers:
   - nome: forInRight
     categoria: Objects
     fase: 3
-    plano: plans/Objects/forInRight.md
+    plano: lodash_migrate/plans/Objects/forInRight.md
     depende_de:
       - keysIn
     tentativas: 0
@@ -1859,7 +1859,7 @@ helpers:
   - nome: forOwn
     categoria: Objects
     fase: 3
-    plano: plans/Objects/forOwn.md
+    plano: lodash_migrate/plans/Objects/forOwn.md
     depende_de:
       - keys
     tentativas: 0
@@ -1868,7 +1868,7 @@ helpers:
   - nome: forOwnRight
     categoria: Objects
     fase: 3
-    plano: plans/Objects/forOwnRight.md
+    plano: lodash_migrate/plans/Objects/forOwnRight.md
     depende_de:
       - keys
     tentativas: 0
@@ -1877,7 +1877,7 @@ helpers:
   - nome: functions
     categoria: Objects
     fase: 3
-    plano: plans/Objects/functions.md
+    plano: lodash_migrate/plans/Objects/functions.md
     depende_de:
       - keys
       - isFunction
@@ -1887,7 +1887,7 @@ helpers:
   - nome: functionsIn
     categoria: Objects
     fase: 3
-    plano: plans/Objects/functionsIn.md
+    plano: lodash_migrate/plans/Objects/functionsIn.md
     depende_de:
       - keysIn
       - isFunction
@@ -1897,7 +1897,7 @@ helpers:
   - nome: invert
     categoria: Objects
     fase: 3
-    plano: plans/Objects/invert.md
+    plano: lodash_migrate/plans/Objects/invert.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -1905,7 +1905,7 @@ helpers:
   - nome: invertBy
     categoria: Objects
     fase: 3
-    plano: plans/Objects/invertBy.md
+    plano: lodash_migrate/plans/Objects/invertBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1914,7 +1914,7 @@ helpers:
   - nome: mapKeys
     categoria: Objects
     fase: 3
-    plano: plans/Objects/mapKeys.md
+    plano: lodash_migrate/plans/Objects/mapKeys.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1923,7 +1923,7 @@ helpers:
   - nome: pickBy
     categoria: Objects
     fase: 3
-    plano: plans/Objects/pickBy.md
+    plano: lodash_migrate/plans/Objects/pickBy.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -1932,7 +1932,7 @@ helpers:
   - nome: omitBy
     categoria: Objects
     fase: 3
-    plano: plans/Objects/omitBy.md
+    plano: lodash_migrate/plans/Objects/omitBy.md
     depende_de:
       - iteratee
       - pickBy
@@ -1943,7 +1943,7 @@ helpers:
   - nome: setWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/setWith.md
+    plano: lodash_migrate/plans/Objects/setWith.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1952,7 +1952,7 @@ helpers:
   - nome: update
     categoria: Objects
     fase: 3
-    plano: plans/Objects/update.md
+    plano: lodash_migrate/plans/Objects/update.md
     depende_de:
       - toPath
     tentativas: 0
@@ -1961,7 +1961,7 @@ helpers:
   - nome: updateWith
     categoria: Objects
     fase: 3
-    plano: plans/Objects/updateWith.md
+    plano: lodash_migrate/plans/Objects/updateWith.md
     depende_de:
       - setWith
     tentativas: 0
@@ -1970,7 +1970,7 @@ helpers:
   - nome: transform
     categoria: Objects
     fase: 3
-    plano: plans/Objects/transform.md
+    plano: lodash_migrate/plans/Objects/transform.md
     depende_de:
       - forOwn
       - isBuffer
@@ -1982,7 +1982,7 @@ helpers:
   - nome: lowerCase
     categoria: Strings
     fase: 3
-    plano: plans/Strings/lowerCase.md
+    plano: lodash_migrate/plans/Strings/lowerCase.md
     depende_de:
       - words
       - deburr
@@ -1992,7 +1992,7 @@ helpers:
   - nome: upperCase
     categoria: Strings
     fase: 3
-    plano: plans/Strings/upperCase.md
+    plano: lodash_migrate/plans/Strings/upperCase.md
     depende_de:
       - words
       - deburr
@@ -2002,7 +2002,7 @@ helpers:
   - nome: startCase
     categoria: Strings
     fase: 3
-    plano: plans/Strings/startCase.md
+    plano: lodash_migrate/plans/Strings/startCase.md
     depende_de:
       - words
       - upperFirst
@@ -2012,7 +2012,7 @@ helpers:
   - nome: debounce
     categoria: Functions
     fase: 4
-    plano: plans/Functions/debounce.md
+    plano: lodash_migrate/plans/Functions/debounce.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2020,7 +2020,7 @@ helpers:
   - nome: throttle
     categoria: Functions
     fase: 4
-    plano: plans/Functions/throttle.md
+    plano: lodash_migrate/plans/Functions/throttle.md
     depende_de:
       - debounce
     tentativas: 0
@@ -2029,7 +2029,7 @@ helpers:
   - nome: memoize
     categoria: Functions
     fase: 4
-    plano: plans/Functions/memoize.md
+    plano: lodash_migrate/plans/Functions/memoize.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2037,7 +2037,7 @@ helpers:
   - nome: after
     categoria: Functions
     fase: 4
-    plano: plans/Functions/after.md
+    plano: lodash_migrate/plans/Functions/after.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -2046,7 +2046,7 @@ helpers:
   - nome: before
     categoria: Functions
     fase: 4
-    plano: plans/Functions/before.md
+    plano: lodash_migrate/plans/Functions/before.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -2055,7 +2055,7 @@ helpers:
   - nome: once
     categoria: Functions
     fase: 4
-    plano: plans/Functions/once.md
+    plano: lodash_migrate/plans/Functions/once.md
     depende_de:
       - before
     tentativas: 0
@@ -2064,7 +2064,7 @@ helpers:
   - nome: defer
     categoria: Functions
     fase: 4
-    plano: plans/Functions/defer.md
+    plano: lodash_migrate/plans/Functions/defer.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2072,7 +2072,7 @@ helpers:
   - nome: delay
     categoria: Functions
     fase: 4
-    plano: plans/Functions/delay.md
+    plano: lodash_migrate/plans/Functions/delay.md
     depende_de:
       - toNumber
     tentativas: 0
@@ -2081,7 +2081,7 @@ helpers:
   - nome: ary
     categoria: Functions
     fase: 4
-    plano: plans/Functions/ary.md
+    plano: lodash_migrate/plans/Functions/ary.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -2090,7 +2090,7 @@ helpers:
   - nome: unary
     categoria: Functions
     fase: 4
-    plano: plans/Functions/unary.md
+    plano: lodash_migrate/plans/Functions/unary.md
     depende_de:
       - ary
     tentativas: 0
@@ -2099,7 +2099,7 @@ helpers:
   - nome: flip
     categoria: Functions
     fase: 4
-    plano: plans/Functions/flip.md
+    plano: lodash_migrate/plans/Functions/flip.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2107,7 +2107,7 @@ helpers:
   - nome: rest
     categoria: Functions
     fase: 4
-    plano: plans/Functions/rest.md
+    plano: lodash_migrate/plans/Functions/rest.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -2116,7 +2116,7 @@ helpers:
   - nome: spread
     categoria: Functions
     fase: 4
-    plano: plans/Functions/spread.md
+    plano: lodash_migrate/plans/Functions/spread.md
     depende_de:
       - toInteger
     tentativas: 0
@@ -2125,7 +2125,7 @@ helpers:
   - nome: overArgs
     categoria: Functions
     fase: 4
-    plano: plans/Functions/overArgs.md
+    plano: lodash_migrate/plans/Functions/overArgs.md
     depende_de:
       - iteratee
     tentativas: 0
@@ -2134,7 +2134,7 @@ helpers:
   - nome: rearg
     categoria: Functions
     fase: 4
-    plano: plans/Functions/rearg.md
+    plano: lodash_migrate/plans/Functions/rearg.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2142,7 +2142,7 @@ helpers:
   - nome: partial
     categoria: Functions
     fase: 4
-    plano: plans/Functions/partial.md
+    plano: lodash_migrate/plans/Functions/partial.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2150,7 +2150,7 @@ helpers:
   - nome: wrap
     categoria: Functions
     fase: 4
-    plano: plans/Functions/wrap.md
+    plano: lodash_migrate/plans/Functions/wrap.md
     depende_de:
       - partial
     tentativas: 0
@@ -2159,7 +2159,7 @@ helpers:
   - nome: partialRight
     categoria: Functions
     fase: 4
-    plano: plans/Functions/partialRight.md
+    plano: lodash_migrate/plans/Functions/partialRight.md
     depende_de:
       - partial
     tentativas: 0
@@ -2168,7 +2168,7 @@ helpers:
   - nome: bind
     categoria: Functions
     fase: 4
-    plano: plans/Functions/bind.md
+    plano: lodash_migrate/plans/Functions/bind.md
     depende_de:
       - partial
     tentativas: 0
@@ -2177,7 +2177,7 @@ helpers:
   - nome: bindKey
     categoria: Functions
     fase: 4
-    plano: plans/Functions/bindKey.md
+    plano: lodash_migrate/plans/Functions/bindKey.md
     depende_de:
       - bind
     tentativas: 0
@@ -2186,7 +2186,7 @@ helpers:
   - nome: bindAll
     categoria: Functions
     fase: 4
-    plano: plans/Functions/bindAll.md
+    plano: lodash_migrate/plans/Functions/bindAll.md
     depende_de:
       - toPath
     tentativas: 0
@@ -2195,7 +2195,7 @@ helpers:
   - nome: curry
     categoria: Functions
     fase: 4
-    plano: plans/Functions/curry.md
+    plano: lodash_migrate/plans/Functions/curry.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2203,7 +2203,7 @@ helpers:
   - nome: curryRight
     categoria: Functions
     fase: 4
-    plano: plans/Functions/curryRight.md
+    plano: lodash_migrate/plans/Functions/curryRight.md
     depende_de:
       - curry
     tentativas: 0
@@ -2212,7 +2212,7 @@ helpers:
   - nome: flow
     categoria: Functions
     fase: 4
-    plano: plans/Functions/flow.md
+    plano: lodash_migrate/plans/Functions/flow.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2220,7 +2220,7 @@ helpers:
   - nome: flowRight
     categoria: Functions
     fase: 4
-    plano: plans/Functions/flowRight.md
+    plano: lodash_migrate/plans/Functions/flowRight.md
     depende_de:
       - flow
     tentativas: 0
@@ -2229,7 +2229,7 @@ helpers:
   - nome: templateSettings
     categoria: Utils
     fase: 4
-    plano: plans/Utils/templateSettings.md
+    plano: lodash_migrate/plans/Utils/templateSettings.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2237,7 +2237,7 @@ helpers:
   - nome: template
     categoria: Utils
     fase: 4
-    plano: plans/Utils/template.md
+    plano: lodash_migrate/plans/Utils/template.md
     depende_de:
       - templateSettings
       - escape
@@ -2247,7 +2247,7 @@ helpers:
   - nome: mixin
     categoria: Utils
     fase: 4
-    plano: plans/Utils/mixin.md
+    plano: lodash_migrate/plans/Utils/mixin.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2255,7 +2255,7 @@ helpers:
   - nome: chain
     categoria: Seq
     fase: 5
-    plano: plans/Seq/chain.md
+    plano: lodash_migrate/plans/Seq/chain.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2263,7 +2263,7 @@ helpers:
   - nome: tap
     categoria: Seq
     fase: 5
-    plano: plans/Seq/tap.md
+    plano: lodash_migrate/plans/Seq/tap.md
     depende_de: []
     tentativas: 0
     status_execucao: Concluído
@@ -2271,7 +2271,7 @@ helpers:
   - nome: thru
     categoria: Seq
     fase: 5
-    plano: plans/Seq/thru.md
+    plano: lodash_migrate/plans/Seq/thru.md
     depende_de: []
     tentativas: 0
     status_execucao: Aguardando
@@ -2279,7 +2279,7 @@ helpers:
   - nome: wrapperAt
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperAt.md
+    plano: lodash_migrate/plans/Seq/wrapperAt.md
     depende_de:
       - chain
       - at
@@ -2289,7 +2289,7 @@ helpers:
   - nome: wrapperChain
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperChain.md
+    plano: lodash_migrate/plans/Seq/wrapperChain.md
     depende_de:
       - chain
     tentativas: 0
@@ -2298,7 +2298,7 @@ helpers:
   - nome: wrapperCommit
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperCommit.md
+    plano: lodash_migrate/plans/Seq/wrapperCommit.md
     depende_de:
       - chain
     tentativas: 0
@@ -2307,7 +2307,7 @@ helpers:
   - nome: wrapperLodash
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperLodash.md
+    plano: lodash_migrate/plans/Seq/wrapperLodash.md
     depende_de:
       - chain
     tentativas: 0
@@ -2316,7 +2316,7 @@ helpers:
   - nome: wrapperNext
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperNext.md
+    plano: lodash_migrate/plans/Seq/wrapperNext.md
     depende_de:
       - chain
     tentativas: 0
@@ -2325,7 +2325,7 @@ helpers:
   - nome: wrapperPlant
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperPlant.md
+    plano: lodash_migrate/plans/Seq/wrapperPlant.md
     depende_de:
       - chain
     tentativas: 0
@@ -2334,7 +2334,7 @@ helpers:
   - nome: wrapperReverse
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperReverse.md
+    plano: lodash_migrate/plans/Seq/wrapperReverse.md
     depende_de:
       - chain
       - reverse
@@ -2344,7 +2344,7 @@ helpers:
   - nome: wrapperToIterator
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperToIterator.md
+    plano: lodash_migrate/plans/Seq/wrapperToIterator.md
     depende_de:
       - chain
     tentativas: 0
@@ -2353,7 +2353,7 @@ helpers:
   - nome: wrapperValue
     categoria: Seq
     fase: 5
-    plano: plans/Seq/wrapperValue.md
+    plano: lodash_migrate/plans/Seq/wrapperValue.md
     depende_de:
       - chain
     tentativas: 0
@@ -2362,7 +2362,7 @@ helpers:
   - nome: value
     categoria: Seq
     fase: 5
-    plano: plans/Seq/value.md
+    plano: lodash_migrate/plans/Seq/value.md
     depende_de:
       - chain
       - wrapperValue
@@ -2372,7 +2372,7 @@ helpers:
   - nome: commit
     categoria: Seq
     fase: 5
-    plano: plans/Seq/commit.md
+    plano: lodash_migrate/plans/Seq/commit.md
     depende_de:
       - chain
       - wrapperCommit
@@ -2382,7 +2382,7 @@ helpers:
   - nome: plant
     categoria: Seq
     fase: 5
-    plano: plans/Seq/plant.md
+    plano: lodash_migrate/plans/Seq/plant.md
     depende_de:
       - chain
       - wrapperPlant
@@ -2392,7 +2392,7 @@ helpers:
   - nome: next
     categoria: Seq
     fase: 5
-    plano: plans/Seq/next.md
+    plano: lodash_migrate/plans/Seq/next.md
     depende_de:
       - chain
       - wrapperNext
@@ -2402,7 +2402,7 @@ helpers:
   - nome: toIterator
     categoria: Seq
     fase: 5
-    plano: plans/Seq/toIterator.md
+    plano: lodash_migrate/plans/Seq/toIterator.md
     depende_de:
       - chain
       - wrapperToIterator
@@ -2412,7 +2412,7 @@ helpers:
   - nome: toJSON
     categoria: Seq
     fase: 5
-    plano: plans/Seq/toJSON.md
+    plano: lodash_migrate/plans/Seq/toJSON.md
     depende_de:
       - chain
       - wrapperValue
@@ -2422,7 +2422,7 @@ helpers:
   - nome: valueOf
     categoria: Seq
     fase: 5
-    plano: plans/Seq/valueOf.md
+    plano: lodash_migrate/plans/Seq/valueOf.md
     depende_de:
       - chain
       - wrapperValue
@@ -2432,7 +2432,7 @@ helpers:
   - nome: lodash
     categoria: Seq
     fase: 5
-    plano: plans/Seq/lodash.md
+    plano: lodash_migrate/plans/Seq/lodash.md
     depende_de:
       - chain
     tentativas: 0

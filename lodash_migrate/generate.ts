@@ -62,13 +62,22 @@ ${jaImplementado}
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 \`\`\`bash
-npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).${h.nome}.toString());"
+npx tsx -e "import * as lodash from 'lodash-es'; import { inspect } from 'node:util'; const v = (lodash as any).${h.nome}; console.log(typeof v === 'function' ? (v.toString() || '(corpo removido pelo build do lodash-es)') : inspect(v, { depth: 1 }));"
 \`\`\`
 
 A documentação oficial está em https://lodash.com/docs#${h.nome}
 
 O \`lodash-es\` ainda está instalado, então use-o como oráculo de paridade
 nos casos-limite durante o desenvolvimento.
+
+Alguns nomes não são funções (ex.: \`templateSettings\`, um objeto) ou têm o
+corpo removido pelo processo de build do \`lodash-es\` (ex.: \`lodash\` e seu
+alias \`wrapperLodash\`, o ponto de entrada do encadeamento — ambos retornam
+string vazia ao chamar \`.toString()\`). Se a saída do comando acima vier
+vazia, \`(corpo removido pelo build do lodash-es)\` ou não for código-fonte,
+consulte https://lodash.com/docs#${h.nome} e determine o comportamento de
+forma empírica, chamando a função com entradas reais e observando o
+resultado.
 ${alias}${nota}
 ## Dependências
 
@@ -119,7 +128,7 @@ export const gerar = (): void => {
                 nome: h.nome,
                 categoria: h.categoria,
                 fase: h.fase,
-                plano: `plans/${h.categoria}/${h.nome}.md`,
+                plano: `lodash_migrate/plans/${h.categoria}/${h.nome}.md`,
                 depende_de: h.depende_de,
                 tentativas: 0,
                 status_execucao: concluido ? 'Concluído' : 'Aguardando',

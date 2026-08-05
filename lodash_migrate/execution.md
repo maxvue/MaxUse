@@ -53,9 +53,23 @@ implementar) estejam com `status_execucao: Concluído` **e**
    (não 36 — número corrigido após a Task 2 adicionar `isNil`, `negate`,
    `stubTrue`, `tap` e outros nomes a `maxUseItems()`) onde a MaxUse já tem
    uma implementação própria (ou via VueUse) que **intencionalmente** vence o
-   Lodash dentro do objeto `_`. Se o helper que você for implementar aparece
-   nessa lista, **não** replique a semântica do Lodash — preserve o
-   comportamento já existente na MaxUse.
+   Lodash dentro do objeto `_`.
+
+   Na prática, **nenhum dos 276 itens da sua fila é um desses 45 nomes** — os
+   45 já estão cobertos por helpers pré-existentes ou pelos 4 concluídos na
+   Task 2, e não aparecem como itens `Aguardando` no `status.yaml`. Você não
+   vai encontrar essa situação ao escolher o próximo item pela regra normal.
+
+   A lista existe para proteger contra um risco diferente e real: você criar
+   por engano um arquivo `src/Helpers/<Categoria>/<nome>.ts` que **sobrescreve
+   ou duplica** um helper que já existe na MaxUse com semântica própria — por
+   exemplo, criar `src/Helpers/Iterables/filter.ts` do zero replicando o
+   `_.filter` do Lodash, quando `filter` já existe como helper próprio da
+   MaxUse e está listado em `DIVERGENCES.md`. Antes de criar qualquer arquivo
+   novo, confira rapidamente se `<nome>` já existe em
+   `lodash_migrate/DIVERGENCES.md` ou já é exportado por alguma categoria — se
+   for, pare e não sobrescreva: isso indicaria um erro na sua escolha de item
+   (releia "Escolha do próximo item"), não um novo helper a implementar.
 4. Abra `lodash_migrate/status.yaml`. É o estado da migração e a sua fila de
    trabalho. Campos por helper: `nome`, `categoria`, `fase`, `plano`,
    `depende_de`, `tentativas`, `status_execucao`, `status_verificacao`. No
@@ -76,7 +90,11 @@ condições:
 1. Pertence à **fase aberta** mais baixa (uma fase só abre quando a anterior
    fecha por completo — ver "Gate de fase" abaixo);
 2. Todas as suas `depende_de` estão com `status_verificacao: Concluído`
-   (ou já existiam na MaxUse antes da migração);
+   (ou já existiam na MaxUse antes da migração — o único caso disso no
+   manifesto é `toNumber`: ele aparece como dependência de outros helpers mas
+   não é um item da fila, porque já é um helper próprio da MaxUse desde antes
+   desta migração; trate qualquer `depende_de` que não exista como entrada em
+   `status.yaml` da mesma forma);
 3. Não está `Bloqueado`.
 
 Não siga ordem alfabética — a ordem de dependência é o que importa. O
@@ -104,14 +122,31 @@ perca o progresso.
 ## Processo de execução
 
 1. Leia o plano do helper (campo `plano` no `status.yaml`, ex.:
-   `lodash_migrate/plans/Lang/isNull.md`).
+   `lodash_migrate/plans/Lang/isNull.md`). **O campo já vem com o caminho
+   relativo à raiz do repositório** — abra-o exatamente como está gravado
+   (`lodash_migrate/plans/<Categoria>/<nome>.md`), sem prefixar nem remover
+   nada. Todos os comandos deste protocolo assumem que você está rodando a
+   partir da raiz do repositório (o worktree, ex.:
+   `/home/johnattas/GitHub/MaxUse-wt-lodash-migrate`), nunca de dentro de
+   `lodash_migrate/`.
 2. Leia a implementação original do Lodash como oráculo. **`lodash` (CJS) não
    está instalado neste projeto — só `lodash-es` (ESM).** Use:
    ```bash
-   npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).<nome>.toString());"
+   npx tsx -e "import * as lodash from 'lodash-es'; import { inspect } from 'node:util'; const v = (lodash as any).<nome>; console.log(typeof v === 'function' ? (v.toString() || '(corpo removido pelo build do lodash-es)') : inspect(v, { depth: 1 }));"
    ```
    Mapeie **todos** os comportamentos observáveis, incluindo `null`,
    `undefined`, tipos errados e valores-limite.
+
+   Alguns nomes não são funções (ex.: `templateSettings`, um objeto de
+   configuração) ou têm o corpo removido pelo processo de build do
+   `lodash-es` (ex.: `lodash` e seu alias `wrapperLodash` — os dois pontos de
+   entrada do encadeamento na fase 5 — retornam string vazia ao chamar
+   `.toString()`). Se a saída do comando vier vazia,
+   `(corpo removido pelo build do lodash-es)` ou não for código-fonte
+   reconhecível, **não trate isso como erro de ferramenta**: consulte
+   https://lodash.com/docs#<nome> e determine o comportamento de forma
+   empírica, chamando a função com entradas reais (`lodash.<nome>(...)`) e
+   observando o resultado, em vez de ler o corpo.
 3. Se o nome do helper está na lista de `DIVERGENCES.md`, ignore o passo
    acima como fonte de verdade de comportamento — implemente/preserve a
    semântica já documentada da MaxUse, não a do Lodash.
@@ -204,7 +239,53 @@ final.
 
 ## Gate de fase
 
-Ao concluir o último helper de uma fase, antes de abrir a fase seguinte:
+### O que conta como fase fechada
+
+Uma fase está **fechada** quando **todo** helper nela está em um destes dois
+estados — não existe um terceiro caminho:
+
+- `status_execucao: Concluído` **e** `status_verificacao: Concluído`; ou
+- `status_execucao: Bloqueado` (ver "Limite de tentativas" acima).
+
+**`Bloqueado` conta como fechado para fins de gate de fase.** Isso é
+proposital: a regra de "Escolha do próximo item" já exclui itens `Bloqueado`
+da seleção, então se um helper travado em `Bloqueado` também impedisse o
+fechamento da própria fase, a migração empacaria de vez — nenhum item
+selecionável, nenhuma fase seguinte se abrindo, sem saída. Não interprete
+"fecha por completo" (usado na seção "Escolha do próximo item") como "todos
+concluídos" — leia como "todos concluídos ou bloqueados".
+
+### Como detectar mecanicamente que uma fase fechou
+
+Não conte os itens à mão. Rode isto a partir da raiz do repositório sempre
+que suspeitar que uma fase terminou:
+
+```bash
+npx tsx -e "
+import fs from 'node:fs';
+import { load } from 'js-yaml';
+const s: any = load(fs.readFileSync('lodash_migrate/status.yaml', 'utf8'));
+const r: Record<string, number> = {};
+for (const h of s.helpers) {
+    const pend = !(h.status_execucao === 'Concluído' && h.status_verificacao === 'Concluído') && h.status_execucao !== 'Bloqueado';
+    if (pend) r['fase ' + h.fase] = (r['fase ' + h.fase] || 0) + 1;
+}
+console.log(r);
+"
+```
+
+A saída é um mapa `fase N → quantidade de itens ainda pendentes` (nem
+Concluído/Concluído, nem Bloqueado). Uma fase sem entrada no mapa está
+fechada. Exemplo de saída no início da migração (todas as 5 fases ainda
+abertas, com os 4 seeds já descontados):
+```
+{ 'fase 1': 87, 'fase 2': 47, 'fase 3': 95, 'fase 4': 28, 'fase 5': 19 }
+```
+
+### Antes de abrir a fase seguinte
+
+Ao fechar uma fase (todo item `Concluído`/`Concluído` ou `Bloqueado`), antes
+de abrir a próxima:
 
 ```bash
 npm run lint && npm run type-check && npm test
@@ -221,24 +302,28 @@ git commit -m "chore: fecha a fase <N> da migração do Lodash"
 
 ## Encerramento (só depois dos 280 — os 4 já prontos + os 276 migrados)
 
-Quando **todos** os itens estiverem `Concluído`/`Concluído`:
+### Se sobrar algum `Bloqueado`
 
-1. Remova o Lodash de `src/index.ts` ([src/index.ts](../src/index.ts)):
-   apague a linha `import * as lodash from 'lodash-es';` e todo o bloco
-   `filteredLodash` (comentário, declaração e laço), deixando o objeto `_`
-   assim:
-   ```typescript
-   export const _ = {
-       ...ownHelpers,
-       ...filteredVueUse
-   };
-   ```
-2. Remova `lodash-es` das dependências:
-   ```bash
-   npm uninstall lodash-es @types/lodash-es
-   ```
-3. Remova os imports de `lodash-es` que sobraram nos testes (o oráculo de
-   paridade), substituindo as asserções por valores literais:
+Rode o comando de contagem por fase da seção "Gate de fase" acima. Se **algum**
+helper estiver com `status_execucao: Bloqueado`, **não execute o
+encerramento abaixo**. Remover o `lodash-es` quebraria em runtime qualquer
+consumidor desse helper bloqueado (ele nunca ganhou uma implementação
+própria — se ainda existir, é porque hoje é servido pelo Lodash via `_`).
+Em vez disso: pare, liste em texto todos os helpers `Bloqueado` (nome,
+categoria, motivo registrado no comentário do `status.yaml`, número de
+tentativas) e reporte ao humano. A decisão de como resolver cada bloqueio
+(revisar manualmente, adiar, aceitar risco) é humana, não automática.
+
+Só prossiga com os passos abaixo quando **todos os 280** estiverem
+`Concluído`/`Concluído` — zero `Bloqueado`.
+
+### Passos
+
+1. Remova os imports de `lodash-es` que sobraram nos testes (o oráculo de
+   paridade), substituindo as asserções por valores literais. Faça isto
+   **antes** de desinstalar o pacote — os testes ainda importam `lodash-es`
+   e você precisa rodá-los para confirmar a reescrita antes de remover a
+   dependência que os sustenta:
    ```bash
    grep -rln "lodash-es" src/ lodash_migrate/
    ```
@@ -251,16 +336,45 @@ Quando **todos** os itens estiverem `Concluído`/`Concluído`:
      que hoje importe `lodash-es` para conferir o manifesto precisa passar a
      usar dados estáticos (o próprio `manifest.ts`, que já é a fonte de
      verdade).
-4. Regenere os dados de auto-import (script gerador — **nunca edite
+
+   Além disso, **mesmo não importando `lodash-es` e portanto não aparecendo
+   no grep acima**, revise `src/Helpers/precedence.test.ts`: o título do teste
+   ("mantém os helpers exclusivos do Lodash disponíveis") e o JSDoc partem da
+   premissa de que existem nomes que só o Lodash fornece. Depois deste
+   encerramento isso deixa de ser verdade — os 276 nomes agora são
+   implementações próprias da MaxUse. O teste continua passando tecnicamente
+   (a asserção em si não fica errada), mas o nome e o comentário passam a
+   descrever uma situação que não existe mais. Reescreva o título e o JSDoc
+   para refletir a realidade pós-migração antes de commitar.
+2. Rode a suíte para confirmar que as reescritas do passo 1 estão corretas
+   **enquanto o `lodash-es` ainda está instalado**:
+   ```bash
+   npm test
+   ```
+3. Remova o Lodash de `src/index.ts` ([src/index.ts](../src/index.ts)):
+   apague a linha `import * as lodash from 'lodash-es';` e todo o bloco
+   `filteredLodash` (comentário, declaração e laço), deixando o objeto `_`
+   assim:
+   ```typescript
+   export const _ = {
+       ...ownHelpers,
+       ...filteredVueUse
+   };
+   ```
+4. Só agora remova `lodash-es` das dependências:
+   ```bash
+   npm uninstall lodash-es @types/lodash-es
+   ```
+5. Regenere os dados de auto-import (script gerador — **nunca edite
    `src/Helpers/autoImportData.json` à mão**):
    ```bash
    npx tsx src/scripts/buildAutoImport.ts
    ```
-5. Validação final:
+6. Validação final:
    ```bash
    npm run lint && npm run type-check && npm test && npm run build
    ```
-6. Confirme que o `_` expõe os nomes esperados:
+7. Confirme que o `_` expõe os nomes esperados:
    ```bash
    npx tsx -e "
    import { _ } from './src/index';
@@ -270,7 +384,7 @@ Quando **todos** os itens estiverem `Concluído`/`Concluído`:
    console.log('OK');
    "
    ```
-7. Commit e integre no `main`:
+8. Commit e integre no `main`:
    ```bash
    git add -A
    git commit -m "feat!: remove a dependência do lodash-es"
