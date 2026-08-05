@@ -732,7 +732,7 @@ const planoDe = (h: HelperEntry): string => {
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 \`\`\`bash
-node -e "const _=require('lodash'); console.log(_.${h.nome}.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).${h.nome}.toString());"
 \`\`\`
 
 A documentação oficial está em https://lodash.com/docs#${h.nome}
@@ -1197,7 +1197,7 @@ Grave o `status.yaml` a cada transição, para que uma interrupção não perca 
 1. Leia o plano do helper (campo `plano` no `status.yaml`).
 2. Leia a implementação original do Lodash:
    ```bash
-   node -e "const _=require('lodash'); console.log(_.<nome>.toString())"
+   npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).<nome>.toString());"
    ```
    Mapeie **todos** os comportamentos observáveis, incluindo `null`, `undefined`,
    tipos errados e valores-limite.
