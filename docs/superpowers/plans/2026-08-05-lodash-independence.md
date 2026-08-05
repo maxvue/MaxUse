@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Produzir o conjunto de artefatos `lodash_migrate/` (281 planos individuais + `execution.md` + `status.yaml` + docs de apoio) e o scaffolding de código (4 categorias novas + correção de precedência), de modo que uma sessão separada do Claude Code consiga executar a migração em loop até eliminar o `lodash-es`.
+**Goal:** Produzir o conjunto de artefatos `lodash_migrate/` (280 planos individuais + `execution.md` + `status.yaml` + docs de apoio) e o scaffolding de código (4 categorias novas + correção de precedência), de modo que uma sessão separada do Claude Code consiga executar a migração em loop até eliminar o `lodash-es`.
 
-**Architecture:** Este plano **não implementa os 281 helpers**. Ele constrói: (a) o scaffolding das 4 categorias novas registrado nos 5 pontos de agregação; (b) a correção do bug de precedência em `src/index.ts`; (c) um gerador determinístico que produz os 281 arquivos `.md` de plano a partir de um manifesto categorizado versionado; (d) os documentos de controle (`execution.md`, `status.yaml`, `CONVENTIONS.md`, `DIVERGENCES.md`). A execução dos 281 helpers acontece depois, numa sessão separada, dirigida por `execution.md`.
+**Architecture:** Este plano **não implementa os 280 helpers**. Ele constrói: (a) o scaffolding das 4 categorias novas registrado nos 5 pontos de agregação; (b) a correção do bug de precedência em `src/index.ts`; (c) um gerador determinístico que produz os 280 arquivos `.md` de plano a partir de um manifesto categorizado versionado; (d) os documentos de controle (`execution.md`, `status.yaml`, `CONVENTIONS.md`, `DIVERGENCES.md`). A execução dos 280 helpers acontece depois, numa sessão separada, dirigida por `execution.md`.
 
 **Tech Stack:** TypeScript, Vue 3 (`toValue`/`MaybeRefOrGetter`), Vite (lib multi-entry), Vitest (`globals: true`, `happy-dom`), ESLint flat config, `tsx` para scripts, `js-yaml` para gerar YAML.
 
@@ -17,7 +17,7 @@
 - **Um helper por arquivo**, registrado no `index.ts` da sua categoria.
 - **Teste colocalizado** `<nome>.test.ts` ao lado do fonte, contendo obrigatoriamente um caso `funciona com Ref`.
 - **Worktree obrigatório** (CLAUDE.md): agentes que propõem mudanças de código rodam em worktree separado, nunca na árvore principal.
-- **Total imutável:** são exatamente **281** helpers. Qualquer divergência desse número indica erro e deve travar a geração.
+- **Total imutável:** são exatamente **280** helpers. Qualquer divergência desse número indica erro e deve travar a geração.
 - **Não editar à mão** `src/Helpers/autoImportData.json` — é gerado pelo `prebuild`.
 
 ## File Structure
@@ -26,13 +26,13 @@
 
 | Arquivo | Responsabilidade |
 |---|---|
-| `lodash_migrate/manifest.ts` | Fonte da verdade: os 281 helpers com categoria, fase, dependências, aliases e notas de peculiaridade. |
-| `lodash_migrate/generate.ts` | Gerador determinístico: lê `manifest.ts` → emite os 281 `plans/**/*.md` e o `status.yaml`. |
-| `lodash_migrate/CONVENTIONS.md` | Contrato de helper e de teste (evita repetir em 281 arquivos). |
+| `lodash_migrate/manifest.ts` | Fonte da verdade: os 280 helpers com categoria, fase, dependências, aliases e notas de peculiaridade. |
+| `lodash_migrate/generate.ts` | Gerador determinístico: lê `manifest.ts` → emite os 280 `plans/**/*.md` e o `status.yaml`. |
+| `lodash_migrate/CONVENTIONS.md` | Contrato de helper e de teste (evita repetir em 280 arquivos). |
 | `lodash_migrate/DIVERGENCES.md` | Os 36 nomes onde a MaxUse diverge do Lodash. |
 | `lodash_migrate/execution.md` | Protocolo do agente executor da sessão separada. |
-| `lodash_migrate/status.yaml` | Estado de execução/verificação dos 281 (gerado). |
-| `lodash_migrate/plans/<Cat>/<nome>.md` | 281 planos individuais (gerados). |
+| `lodash_migrate/status.yaml` | Estado de execução/verificação dos 280 (gerado). |
+| `lodash_migrate/plans/<Cat>/<nome>.md` | 280 planos individuais (gerados). |
 | `src/Helpers/{Functions,Lang,Seq,Utils}/index.ts` | Barrels das 4 categorias novas. |
 | `src/Helpers/divergences.test.ts` | Trava a divergência intencional dos 36 nomes. |
 
@@ -160,7 +160,7 @@ git commit -m "fix: corrige precedência do _ para helpers próprios sobre o Lod
 
 Cria `Functions`, `Lang`, `Seq` e `Utils` com o barrel vazio e as registra nos **5** pontos de agregação. Fazer isso agora — antes de gerar os planos — garante que o executor da sessão separada só precise criar arquivos de helper, nunca mexer em config.
 
-Cada categoria precisa de um helper real para o barrel não ser um módulo vazio (o Vite falha em entry sem exports). Uso `stubTrue`, `isNil`, `constant` e `tap` como sementes: são triviais, sem dependências, e já fazem parte dos 281.
+Cada categoria precisa de um helper real para o barrel não ser um módulo vazio (o Vite falha em entry sem exports). Uso `stubTrue`, `isNil`, `constant` e `tap` como sementes: são triviais, sem dependências, e já fazem parte dos 280.
 
 **Files:**
 - Create: `src/Helpers/Lang/index.ts`, `src/Helpers/Lang/isNil.ts`, `src/Helpers/Lang/isNil.test.ts`
@@ -539,9 +539,9 @@ git commit -m "feat: adiciona categorias Lang, Functions, Utils e Seq"
 
 ---
 
-### Task 3: Manifesto dos 281 helpers
+### Task 3: Manifesto dos 280 helpers
 
-O manifesto é a fonte da verdade da migração: define categoria, fase, dependências, aliases e peculiaridades de cada helper. Já foi construído e **validado** durante o planejamento (281 exatos, zero lacunas, zero extras, nenhuma dependência inválida ou apontando para fase posterior).
+O manifesto é a fonte da verdade da migração: define categoria, fase, dependências, aliases e peculiaridades de cada helper. Já foi construído e **validado** durante o planejamento (280 exatos, zero lacunas, zero extras, nenhuma dependência inválida ou apontando para fase posterior).
 
 **Files:**
 - Create: `lodash_migrate/manifest.ts`
@@ -549,7 +549,7 @@ O manifesto é a fonte da verdade da migração: define categoria, fase, depend�
 
 **Interfaces:**
 - Consumes: as categorias da Task 2.
-- Produces: `HELPERS: HelperEntry[]` (281 itens) e a interface `HelperEntry` com os campos `nome`, `categoria`, `fase`, `depende_de`, `alias_de?`, `nota?`. A Task 4 consome isto para gerar planos e `status.yaml`.
+- Produces: `HELPERS: HelperEntry[]` (280 itens) e a interface `HelperEntry` com os campos `nome`, `categoria`, `fase`, `depende_de`, `alias_de?`, `nota?`. A Task 4 consome isto para gerar planos e `status.yaml`.
 
 - [ ] **Step 1: Copiar o manifesto validado**
 
@@ -650,24 +650,24 @@ Expected: a suite completa passa e inclui os 5 testes do manifesto.
 
 ```bash
 git add lodash_migrate/manifest.ts lodash_migrate/manifest.test.ts vitest.config.ts
-git commit -m "feat: adiciona manifesto validado dos 281 helpers do Lodash"
+git commit -m "feat: adiciona manifesto validado dos 280 helpers do Lodash"
 ```
 
 ---
 
-### Task 4: Gerador dos 281 planos e do status.yaml
+### Task 4: Gerador dos 280 planos e do status.yaml
 
-Escrever 281 arquivos `.md` à mão é inviável e propenso a inconsistência. O gerador os produz a partir do manifesto, garantindo formato uniforme. Cada plano é curto e específico — o contrato comum vive em `CONVENTIONS.md` (Task 5), não repetido 281 vezes.
+Escrever 280 arquivos `.md` à mão é inviável e propenso a inconsistência. O gerador os produz a partir do manifesto, garantindo formato uniforme. Cada plano é curto e específico — o contrato comum vive em `CONVENTIONS.md` (Task 5), não repetido 280 vezes.
 
 **Files:**
 - Create: `lodash_migrate/generate.ts`
-- Create: `lodash_migrate/plans/<Categoria>/<nome>.md` (281, gerados)
+- Create: `lodash_migrate/plans/<Categoria>/<nome>.md` (280, gerados)
 - Create: `lodash_migrate/status.yaml` (gerado)
 - Modify: `package.json` (devDependency `js-yaml` + script)
 
 **Interfaces:**
 - Consumes: `HELPERS` e `HelperEntry` da Task 3.
-- Produces: `lodash_migrate/plans/**/*.md` (281 arquivos) e `lodash_migrate/status.yaml` com a chave `helpers[]` (campos `nome`, `categoria`, `fase`, `plano`, `depende_de`, `tentativas`, `status_execucao`, `status_verificacao`) mais a chave `fases[]`. A Task 6 (`execution.md`) documenta o consumo deste YAML.
+- Produces: `lodash_migrate/plans/**/*.md` (280 arquivos) e `lodash_migrate/status.yaml` com a chave `helpers[]` (campos `nome`, `categoria`, `fase`, `plano`, `depende_de`, `tentativas`, `status_execucao`, `status_verificacao`) mais a chave `fases[]`. A Task 6 (`execution.md`) documenta o consumo deste YAML.
 
 - [ ] **Step 1: Instalar a dependência de YAML**
 
@@ -688,7 +688,7 @@ import { HELPERS, type HelperEntry } from './manifest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const TOTAL_ESPERADO = 281;
+const TOTAL_ESPERADO = 280;
 
 const FASES = [
     { id: 1, nome: 'Primitivos sem dependência', detalhe: 'Lang, Math, Strings simples e Utils básicos.' },
@@ -810,7 +810,7 @@ if (import.meta.url === `file://${process.argv[1]}`) gerar();
 - [ ] **Step 3: Rodar o gerador**
 
 Run: `npx tsx lodash_migrate/generate.ts`
-Expected: `Gerados 281 planos em lodash_migrate/plans e o status.yaml`
+Expected: `Gerados 280 planos em lodash_migrate/plans e o status.yaml`
 
 - [ ] **Step 4: Verificar a saída**
 
@@ -822,15 +822,15 @@ npx tsx -e "
 import fs from 'node:fs';
 import yaml from 'js-yaml';
 const s: any = yaml.load(fs.readFileSync('lodash_migrate/status.yaml', 'utf8'));
-if (s.helpers.length !== 281) throw new Error('status.yaml com ' + s.helpers.length);
+if (s.helpers.length !== 280) throw new Error('status.yaml com ' + s.helpers.length);
 const pendentes = s.helpers.filter((h: any) => h.status_execucao !== 'Aguardando');
 if (pendentes.length) throw new Error('status inicial incorreto');
 for (const h of s.helpers) if (!fs.existsSync('lodash_migrate/' + h.plano)) throw new Error('plano ausente: ' + h.plano);
-console.log('OK — 281 planos, status.yaml íntegro, todos os caminhos resolvem');
+console.log('OK — 280 planos, status.yaml íntegro, todos os caminhos resolvem');
 "
 ```
 
-Expected: `281` seguido de `OK — 281 planos, status.yaml íntegro, todos os caminhos resolvem`
+Expected: `280` seguido de `OK — 280 planos, status.yaml íntegro, todos os caminhos resolvem`
 
 - [ ] **Step 5: Inspecionar dois planos gerados**
 
@@ -849,14 +849,14 @@ Em `scripts`, adicionar:
 
 ```bash
 git add lodash_migrate/generate.ts lodash_migrate/plans lodash_migrate/status.yaml package.json package-lock.json
-git commit -m "feat: gera os 281 planos de migração e o status.yaml"
+git commit -m "feat: gera os 280 planos de migração e o status.yaml"
 ```
 
 ---
 
 ### Task 5: CONVENTIONS.md e DIVERGENCES.md
 
-`CONVENTIONS.md` é o contrato que os 281 planos referenciam. `DIVERGENCES.md` documenta os 36 nomes onde a MaxUse diverge do Lodash, acompanhado de uma suite que trava essa divergência — sem ela, um agente futuro "consertaria" a divergência achando que é bug.
+`CONVENTIONS.md` é o contrato que os 280 planos referenciam. `DIVERGENCES.md` documenta os 36 nomes onde a MaxUse diverge do Lodash, acompanhado de uma suite que trava essa divergência — sem ela, um agente futuro "consertaria" a divergência achando que é bug.
 
 **Files:**
 - Create: `lodash_migrate/CONVENTIONS.md`
@@ -891,7 +891,7 @@ Criar `lodash_migrate/CONVENTIONS.md`:
 ````markdown
 # Convenções de implementação
 
-Contrato obrigatório para todos os 281 helpers da migração. Os planos individuais
+Contrato obrigatório para todos os 280 helpers da migração. Os planos individuais
 em `plans/` referenciam este arquivo em vez de repetir estas regras.
 
 ## Estilo (ESLint — `eslint.config.js`)
@@ -1147,7 +1147,7 @@ Criar `lodash_migrate/execution.md`:
 ````markdown
 # Execução — Independência do Lodash
 
-Você vai implementar, em loop, os 281 helpers que substituem o `lodash-es` na
+Você vai implementar, em loop, os 280 helpers que substituem o `lodash-es` na
 `@maxvue/max-use`. Rode até que **todos** estejam com `status_execucao: Concluído`
 e `status_verificacao: Concluído`.
 
@@ -1265,7 +1265,7 @@ conjunto compila nem que não houve colisão de nomes no `_`.
 git commit -m "chore: fecha a fase <N> da migração do Lodash"
 ```
 
-## Encerramento (só depois dos 281)
+## Encerramento (só depois dos 280)
 
 Quando todos os itens estiverem `Concluído`/`Concluído`:
 
@@ -1318,7 +1318,7 @@ Quando todos os itens estiverem `Concluído`/`Concluído`:
 ## Regras que não podem ser quebradas
 
 1. **Nunca** edite `src/Helpers/autoImportData.json` à mão — é gerado pelo `prebuild`.
-2. **Nunca** remova o `lodash-es` antes dos 281 concluídos — ele é a rede de
+2. **Nunca** remova o `lodash-es` antes dos 280 concluídos — ele é a rede de
    segurança e o oráculo dos testes.
 3. **Nunca** envolva callbacks/iteratees em `toValue`.
 4. Os 36 nomes conflitantes (ver `DIVERGENCES.md`) mantêm a semântica da MaxUse.
@@ -1515,7 +1515,7 @@ O conjunto está pronto para a sessão de execução. O CLAUDE.md exige integrar
 - [ ] **Step 1: Revisar o diff completo**
 
 Run: `git diff main --stat`
-Expected: mudanças em `src/index.ts`, `src/Helpers/maxUseItems.ts`, `src/scripts/buildAutoImport.ts`, `vite.config.ts`, `package.json`, `vitest.config.ts`; arquivos novos em `src/Helpers/{Lang,Functions,Utils,Seq}/` e `lodash_migrate/`. Nenhum helper dos 281 implementado além dos 4 semente — isso é esperado.
+Expected: mudanças em `src/index.ts`, `src/Helpers/maxUseItems.ts`, `src/scripts/buildAutoImport.ts`, `vite.config.ts`, `package.json`, `vitest.config.ts`; arquivos novos em `src/Helpers/{Lang,Functions,Utils,Seq}/` e `lodash_migrate/`. Nenhum helper dos 280 implementado além dos 4 semente — isso é esperado.
 
 - [ ] **Step 2: Validação final antes do merge**
 
@@ -1552,7 +1552,7 @@ O conjunto está pronto. Para executar a migração, abrir uma **nova sessão** 
 
 | Requisito da spec | Task |
 |---|---|
-| Mapear os helpers lodash faltantes | Task 3 (manifesto validado, 281) |
+| Mapear os helpers lodash faltantes | Task 3 (manifesto validado, 280) |
 | Criar a pasta `lodash_migrate` | Task 3, Step 1 |
 | Plano de implementação dos helpers | Tasks 3-4 |
 | Um `.md` por helper analisando o original | Task 4 (gerador; cada plano cita a fonte e a peculiaridade) |
@@ -1574,5 +1574,5 @@ O conjunto está pronto. Para executar a migração, abrir uma **nova sessão** 
 **3. Consistência de tipos:** `HelperEntry` (Task 3) tem os campos consumidos por `generate.ts` (Task 4: `nome`, `categoria`, `fase`, `depende_de`, `alias_de`, `nota`) e pelo `integrity.test.ts` (Task 7). A interface `StatusItem` (Task 7) espelha os campos emitidos pelo gerador. Os namespaces das 4 categorias (`lang`, `functions`, `utils`, `seq`) são consistentes entre a Task 2 e o `CONVENTIONS.md`.
 
 **Riscos conhecidos:**
-- `isNil`, `negate`, `stubTrue` e `tap` são implementados na Task 2 como sementes e **continuam no manifesto** (decisão do parceiro humano). O teste de integridade da Task 3 compara contra a **linha de base pré-migração**, descontando essas 4 sementes de `maxUseItems()`, e o `status.yaml` as emite já como `Concluído`/`Concluído`. Total permanece 281; a fila efetiva da sessão de execução tem 277.
+- `isNil`, `negate`, `stubTrue` e `tap` são implementados na Task 2 como sementes e **continuam no manifesto** (decisão do parceiro humano). O teste de integridade da Task 3 compara contra a **linha de base pré-migração**, descontando essas 4 sementes de `maxUseItems()`, e o `status.yaml` as emite já como `Concluído`/`Concluído`. Total permanece 280; a fila efetiva da sessão de execução tem 277.
 - `chain`/Seq depende de um registro de todos os helpers para montar os métodos do wrapper. A fase 5 é a mais arriscada e pode exigir refinamento do plano quando chegar a vez.
