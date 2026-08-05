@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { useMouse } from '@vueuse/core';
+import { asyncComputed } from '@vueuse/core';
 import { _ } from '../index';
 import { get as ownGet } from './Objects/get';
 import { chunk as ownChunk } from './Iterables/chunk';
@@ -26,6 +26,6 @@ describe('precedência do objeto _', () => {
     });
 
     it('mantém os helpers exclusivos do VueUse disponíveis', () => {
-        expect(_.useMouse).toBe(useMouse);
+        expect(_.asyncComputed).toBe(asyncComputed);
     });
 });
