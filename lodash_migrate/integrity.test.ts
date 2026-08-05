@@ -71,6 +71,38 @@ describe('integridade do conjunto lodash_migrate', () => {
         expect(incompletos).toEqual([]);
     });
 
+    it('status.yaml concorda com o manifesto em categoria e fase', () => {
+        const porNome = new Map(HELPERS.map((h) => [h.nome, h]));
+        const divergentes = status.helpers
+            .filter((h) => {
+                const m = porNome.get(h.nome);
+                return !m || m.categoria !== h.categoria || m.fase !== h.fase;
+            })
+            .map((h) => h.nome);
+
+        expect(divergentes).toEqual([]);
+    });
+
+    it('o total declarado bate com a contagem real em ambas as fontes', () => {
+        expect(status.total).toBe(status.helpers.length);
+        expect(status.total).toBe(HELPERS.length);
+    });
+
+    it('status.yaml concorda com o manifesto em depende_de', () => {
+        const porNome = new Map(HELPERS.map((h) => [h.nome, h]));
+        const divergentes = status.helpers
+            .filter((h) => {
+                const m = porNome.get(h.nome);
+                if (!m) return true;
+                const a = [...h.depende_de].sort();
+                const b = [...m.depende_de].sort();
+                return a.length !== b.length || a.some((d, i) => d !== b[i]);
+            })
+            .map((h) => h.nome);
+
+        expect(divergentes).toEqual([]);
+    });
+
     it('as 4 sementes da Task 2 estão Concluído/Concluído e as 276 restantes Aguardando/Aguardando, todas com 0 tentativas', () => {
         const semTentativasZero = status.helpers.filter((h) => h.tentativas !== 0).map((h) => h.nome);
         expect(semTentativasZero).toEqual([]);
