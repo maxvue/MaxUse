@@ -1,8 +1,17 @@
 import { describe, it, expect } from 'vitest';
+import { useMouse } from '@vueuse/core';
 import { _ } from '../index';
 import { get as ownGet } from './Objects/get';
 import { chunk as ownChunk } from './Iterables/chunk';
 import { isEqual as ownIsEqual } from './Objects/isEqual';
+
+/**
+ * Narrowing local apenas para este teste: permite verificar em runtime a
+ * presença de chaves exclusivas do Lodash (ex.: `curry`, `compact`) que não
+ * são estaticamente visíveis no tipo inferido de `_`, sem afetar o tipo
+ * público exportado em `src/index.ts`.
+ */
+const anyUnderscore = _ as Record<string, unknown>;
 
 describe('precedência do objeto _', () => {
     it('helpers próprios vencem os homônimos do Lodash', () => {
@@ -12,11 +21,11 @@ describe('precedência do objeto _', () => {
     });
 
     it('mantém os helpers exclusivos do Lodash disponíveis', () => {
-        expect(typeof _.curry).toBe('function');
-        expect(typeof _.compact).toBe('function');
+        expect(typeof anyUnderscore.curry).toBe('function');
+        expect(typeof anyUnderscore.compact).toBe('function');
     });
 
-    it('mantém os helpers do VueUse disponíveis', () => {
-        expect(typeof _.useStorage).toBe('function');
+    it('mantém os helpers exclusivos do VueUse disponíveis', () => {
+        expect(_.useMouse).toBe(useMouse);
     });
 });
