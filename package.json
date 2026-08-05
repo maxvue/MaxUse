@@ -56,6 +56,22 @@
             "types": "./dist/Helpers/Format/index.d.ts",
             "import": "./dist/format.es.js"
         },
+        "./lang": {
+            "types": "./dist/Helpers/Lang/index.d.ts",
+            "import": "./dist/lang.es.js"
+        },
+        "./functions": {
+            "types": "./dist/Helpers/Functions/index.d.ts",
+            "import": "./dist/functions.es.js"
+        },
+        "./utils": {
+            "types": "./dist/Helpers/Utils/index.d.ts",
+            "import": "./dist/utils.es.js"
+        },
+        "./seq": {
+            "types": "./dist/Helpers/Seq/index.d.ts",
+            "import": "./dist/seq.es.js"
+        },
         "./vueuse": {
             "types": "./dist/Helpers/VueUse/core.d.ts",
             "import": "./dist/core.es.js"
