@@ -7,15 +7,21 @@
 
 - `lodash-es` exporta **322** nomes. Destes:
   - **36** já são cobertos por helpers próprios da MaxUse (`camelCase`, `capitalize`, `chunk`, `cloneDeep`, `countBy`, `filter`, `findLast`, `first`, `get`, `groupBy`, `isArray`, `isDate`, `isEmpty`, `isEqual`, `isNumber`, `isObject`, `kebabCase`, `keyBy`, `last`, `mapValues`, `now`, `omit`, `orderBy`, `pick`, `sample`, `set`, `shuffle`, `size`, `snakeCase`, `sortBy`, `sum`, `sumBy`, `toNumber`, `truncate`, `uniq`, `unset`);
-  - **7** são cobertos pelo VueUse (`clamp`, `identity`, `invoke`, `noop`, `toArray`, `toString`, `valueOf`);
-  - **279** faltam e serão implementados (paridade total, incluindo chaining/Seq, FP e `template`).
+  - **5** são cobertos pelo VueUse (`clamp`, `identity`, `invoke`, `noop`, `toArray`);
+  - **281** faltam e serão implementados (paridade total, incluindo chaining/Seq, FP e `template`).
+
+  > **Correção (Task 3):** o levantamento inicial dizia 279 faltantes e 7 cobertos pelo
+  > VueUse, incluindo `toString` e `valueOf`. Isso estava errado: a checagem foi feita com
+  > `npx tsx -e`, cujo shim de interop CJS reporta `'toString' in vueUse === true`. Sob o
+  > runtime real (Vitest/ESM), o namespace de `@vueuse/core` tem protótipo nulo, então
+  > ambos são `false` — os dois são genuinamente não cobertos e entraram no manifesto.
 - **Bug de precedência encontrado:** em `src/index.ts:76`, `filteredLodash` não filtra nada e entra por último no spread de `_`, sobrescrevendo os helpers próprios e o VueUse — o oposto da precedência documentada no CLAUDE.md (próprios > VueUse > Lodash).
 
 ## Decisões
 
 | Questão | Decisão |
 |---|---|
-| Escopo | **Paridade total** — todos os 279 exports faltantes, incluindo Seq/chaining, FP pesado e `template`. |
+| Escopo | **Paridade total** — todos os 281 exports faltantes, incluindo Seq/chaining, FP pesado e `template`. |
 | Conflitos de nome (36) | **Próprios vencem.** Corrigir a precedência em `index.ts`. Divergências documentadas em `DIVERGENCES.md` + suite de testes que trava a divergência intencional. |
 | Reatividade | `toValue()` + `MaybeRefOrGetter` **apenas nos argumentos de dados** (arrays, objetos, strings, números). Callbacks/iteratees permanecem funções puras. Retorno é valor plano. |
 | `template`/`templateSettings` | Implementar com `new Function` (paridade real). O plano documenta o risco de CSP/segurança. |
@@ -103,8 +109,8 @@ Enquanto `lodash-es` estiver instalado, os testes podem importá-lo para compara
 ```
 lodash_migrate/
 ├── execution.md              # instruções para o agente executor
-├── status.yaml               # 279 itens + status de execução/verificação
-├── CONVENTIONS.md            # contrato da Seção 2 (evita repetir em 279 planos)
+├── status.yaml               # 281 itens + status de execução/verificação
+├── CONVENTIONS.md            # contrato da Seção 2 (evita repetir em 281 planos)
 ├── DIVERGENCES.md            # os 36 conflitos: semântica MaxUse vs Lodash
 └── plans/
     ├── Iterables/compact.md
@@ -161,9 +167,9 @@ Loop único até todos os itens estarem `Concluído`/`Concluído`.
 2. **Fases explícitas** — (1) primitivos sem dependência; (2) arrays/coleções; (3) objetos/strings/math; (4) functions/utils; (5) Seq/chaining. Fase só abre quando a anterior fecha.
 3. **Campo `tentativas`** — 3 reprovações na verificação → `status_execucao: Bloqueado`, seguir adiante; bloqueados revisados manualmente depois.
 4. **Gate de integração por fase** — `npm run lint && npm run type-check && npm test` ao fechar cada fase.
-5. **Remoção do Lodash só no final** — o import em `index.ts` sai apenas com os 279 Concluídos+Verificados; até lá serve de rede de segurança e oráculo de testes.
+5. **Remoção do Lodash só no final** — o import em `index.ts` sai apenas com os 281 Concluídos+Verificados; até lá serve de rede de segurança e oráculo de testes.
 6. **Worktree obrigatório** — conforme CLAUDE.md: `git worktree add ../MaxUse-wt-lodash-migrate -b lodash-migrate`; integração ao main após validação.
-7. **Dependência de fase para o Seq** — a fase 5 depende do fechamento da fase 4, sem listar 279 `depende_de` em `chain`.
+7. **Dependência de fase para o Seq** — a fase 5 depende do fechamento da fase 4, sem listar 281 `depende_de` em `chain`.
 
 ## Fora de escopo
 
@@ -177,6 +183,6 @@ Loop único até todos os itens estarem `Concluído`/`Concluído`.
 2. `lodash-es` removido de `package.json` e de `src/index.ts`;
 3. `npm run lint`, `npm run type-check` e `npm test` passam;
 4. Precedência de `_` corrigida: próprios > VueUse (Lodash eliminado);
-5. `status.yaml` com 279 itens em `Concluído`/`Concluído` (ou `Bloqueado` justificado);
+5. `status.yaml` com 281 itens em `Concluído`/`Concluído` (ou `Bloqueado` justificado);
 6. Suite de testes de divergência travando os 36 nomes conflitantes;
 7. Auto-import (`autoImportData.json`) regenerado incluindo as novas categorias.
