@@ -16,6 +16,16 @@ const TOTAL_ESPERADO = 280;
  */
 const JA_IMPLEMENTADOS = new Set(['isNil', 'negate', 'stubTrue', 'tap']);
 
+/**
+ * Categorias que têm objeto namespace de verdade (`lang`, `functionsHelpers`,
+ * `utils`, `seq`). Nestas, o registro exige export plano **e** entrada no
+ * namespace. Nas demais (`Iterables`, `Math`, `Objects`, `Strings`) não existe
+ * namespace exaustivo — o export plano sozinho satisfaz o registro; ver
+ * CONVENTIONS.md ("Registro no barrel") para o porquê (namespaces são
+ * cosméticos, `_` e o auto-import vêm dos exports planos).
+ */
+const CATEGORIAS_COM_NAMESPACE = new Set(['Lang', 'Functions', 'Utils', 'Seq']);
+
 const FASES = [
     { id: 1, nome: 'Primitivos sem dependência', detalhe: 'Lang, Math, Strings simples e Utils básicos.' },
     { id: 2, nome: 'Arrays e coleções', detalhe: 'Iterables sem iteratee e acesso básico a objetos.' },
@@ -90,7 +100,9 @@ Todas devem estar com \`status_verificacao: Concluído\` antes de iniciar este h
 1. Ler a implementação original e mapear **todos** os comportamentos observáveis,
    incluindo o tratamento de \`null\`, \`undefined\`, tipos errados e valores-limite.
 2. Criar \`${destino}\` seguindo o contrato do \`CONVENTIONS.md\`.
-3. Registrar o export em \`${barrel}\` (re-export flat **e** entrada no objeto namespace).
+3. Registrar o export em \`${barrel}\` (${CATEGORIAS_COM_NAMESPACE.has(h.categoria)
+    ? 're-export flat **e** entrada no objeto namespace'
+    : 're-export flat — esta categoria não tem objeto namespace, não crie um'}).
 4. Criar \`${teste}\` com a cobertura obrigatória descrita no \`CONVENTIONS.md\`.
 5. Rodar \`npx vitest run ${teste}\` até passar.
 6. Revisar o teste em busca de brechas: algum comportamento do original ficou sem asserção?
@@ -102,7 +114,9 @@ Todas devem estar com \`status_verificacao: Concluído\` antes de iniciar este h
 - [ ] Paridade com o Lodash confirmada nos casos-limite (comparada contra \`lodash-es\`).
 - [ ] Argumentos de dados aceitam \`MaybeRefOrGetter\` e usam \`toValue\`; callbacks **não**.
 - [ ] Existe um caso de teste \`funciona com Ref\`.
-- [ ] Exportado em \`${barrel}\` (flat + namespace).
+- [ ] Exportado em \`${barrel}\` (${CATEGORIAS_COM_NAMESPACE.has(h.categoria)
+    ? 'export plano **e** entrada no objeto namespace — ambos obrigatórios nesta categoria'
+    : 'export plano — esta categoria **não tem** objeto namespace; export plano sozinho já satisfaz o registro, não crie um namespace novo'}).
 - [ ] \`npm run lint\` e \`npm run type-check\` passam.
 ${h.nota ? `- [ ] Há teste dedicado para: ${h.nota}\n` : ''}`;
 };

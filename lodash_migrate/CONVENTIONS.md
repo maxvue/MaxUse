@@ -77,42 +77,58 @@ O retorno é sempre **valor plano**, nunca `ComputedRef`.
 
 ## Registro no barrel
 
-Cada categoria tem um `index.ts` que (1) reexporta cada função de forma plana
-e (2) monta um objeto namespace agregando-as (padrão de
-`src/Helpers/Validations/index.ts` → `validate`). **Os dois precisam ser
-atualizados** ao adicionar um helper:
+**Fato importante, vale para as 8 categorias:** os objetos namespace
+(`lang`, `functionsHelpers`, `utils`, `seq`, `Obj`, `Str`, `StrFilter`,
+`StrCase`) são **cosméticos**. O objeto `_` (`src/index.ts`) e os dados de
+auto-import são alimentados pelos **exports planos** de cada categoria
+(`...Iterables`, `...Math` etc. em `ownHelpers`) — nunca pelo conteúdo do
+namespace. **O export plano sozinho já é suficiente** para o helper chegar
+em `_` e no auto-import, em qualquer categoria.
 
-```typescript
-export * from './nomeDoHelper';
+As 8 categorias reais desta migração **não seguem um padrão único** de
+`index.ts`. Regra por categoria — siga o estilo de export plano já existente
+no arquivo, e não invente um novo:
 
-import * as nomeDoHelper from './nomeDoHelper';
+| Categoria    | Namespace                | Export plano — estilo real |
+|--------------|---------------------------|------------------------------|
+| `Lang`       | `lang`                    | `export * from './nome';` |
+| `Functions`  | `functionsHelpers` (⚠️ **não** `functions` — colide com `lodash.functions`) | `export * from './nome';` |
+| `Utils`      | `utils`                   | `export * from './nome';` |
+| `Seq`        | `seq`                     | `export * from './nome';` |
+| `Iterables`  | **NENHUM.** Não existe objeto namespace nesta categoria. | `export * from './nome';` |
+| `Math`       | **NENHUM.** Não existe objeto namespace nesta categoria. | `export { nome } from './nome';` (named re-export, não `export *`) |
+| `Objects`    | `Obj` — **curado e parcial**, não é exaustivo. | `import { nome } from './nome';` seguido de `export { nome, ... };` (padrão "importa-depois-exporta") |
+| `Strings`    | `Str` / `StrFilter` / `StrCase` — **curados e parciais**, três objetos, nenhum exaustivo. | 6 `export * from './arquivo';` por arquivo (nem sempre 1 arquivo por helper) |
 
-export const <namespace> = {
-    ...nomeDoHelper
-};
-```
+Regras de registro por grupo:
 
-Namespaces por categoria (nomes exatos — usar o nome errado quebra a
-precedência de `_` e o auto-import):
-
-| Categoria    | Namespace         |
-|--------------|-------------------|
-| `Lang`       | `lang`            |
-| `Functions`  | `functionsHelpers` (⚠️ **não** `functions` — colide com `lodash.functions`) |
-| `Utils`      | `utils`           |
-| `Seq`        | `seq`             |
-| `Iterables`  | ver `index.ts` da categoria (padrão já existente) |
-| `Objects`    | ver `index.ts` da categoria (padrão já existente) |
-| `Strings`    | ver `index.ts` da categoria (padrão já existente) |
-| `Math`       | ver `index.ts` da categoria (padrão já existente) |
+- **`Lang`, `Functions`, `Utils`, `Seq`:** atualize **os dois** — o export
+  plano **e** a entrada no objeto namespace (`lang`, `functionsHelpers`,
+  `utils`, `seq`). Estas 4 categorias já seguem o padrão
+  `export * from './nome'; import * as nome from './nome'; export const
+  <namespace> = { ...nome };` — replique exatamente esse padrão.
+- **`Iterables` e `Math`:** **NÃO existe** objeto namespace nestas duas
+  categorias. O export plano **sozinho** satisfaz o registro. **Não crie**
+  um objeto `iterables = {...}` ou `math = {...}` — isso inventaria uma
+  chave nova e não planejada no `_` (porque `export *`/`export {}` do
+  namespace inventado voltaria a ser reexportado). Siga o estilo de export
+  já usado no arquivo (`export *` em Iterables; `export { nome } from
+  './nome';` em Math).
+- **`Objects` e `Strings`:** os objetos existentes (`Obj`, `Str`,
+  `StrFilter`, `StrCase`) são **curados e parciais** — não foram feitos
+  para conter todo helper da categoria. **Não adicione** os novos helpers
+  da migração a esses objetos. O export plano sozinho satisfaz o registro;
+  siga o estilo de import-depois-export já usado em `Objects/index.ts` e o
+  `export * from './arquivo';` já usado em `Strings/index.ts`.
 
 Além do `index.ts` da categoria, toda categoria nova precisa ser registrada
 em **três** pontos de agregação (ver `CLAUDE.md` da raiz do repo):
 [`src/index.ts`](../src/index.ts), [`src/Helpers/maxUseItems.ts`](../src/Helpers/maxUseItems.ts)
 e [`src/scripts/buildAutoImport.ts`](../src/scripts/buildAutoImport.ts). As
-categorias `Lang`, `Functions`, `Utils` e `Seq` já existem e já estão
-registradas nos três — na maioria dos casos desta migração só é preciso
-adicionar o `export * from './nomeDoHelper'` no `index.ts` da categoria.
+8 categorias desta migração (`Iterables`, `Objects`, `Strings`, `Math`,
+`Lang`, `Functions`, `Utils`, `Seq`) já existem e já estão registradas nos
+três — em todos os casos desta migração só é preciso mexer no `index.ts` da
+categoria (mais o objeto namespace, quando ele existir).
 
 ## Teste colocalizado
 

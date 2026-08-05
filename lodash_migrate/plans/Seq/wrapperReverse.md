@@ -55,5 +55,5 @@ Todas devem estar com `status_verificacao: Concluído` antes de iniciar este hel
 - [ ] Paridade com o Lodash confirmada nos casos-limite (comparada contra `lodash-es`).
 - [ ] Argumentos de dados aceitam `MaybeRefOrGetter` e usam `toValue`; callbacks **não**.
 - [ ] Existe um caso de teste `funciona com Ref`.
-- [ ] Exportado em `src/Helpers/Seq/index.ts` (flat + namespace).
+- [ ] Exportado em `src/Helpers/Seq/index.ts` (export plano **e** entrada no objeto namespace — ambos obrigatórios nesta categoria).
 - [ ] `npm run lint` e `npm run type-check` passam.

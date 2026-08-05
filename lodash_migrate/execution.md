@@ -170,15 +170,31 @@ perca o progresso.
 9. Rode `npm run lint && npm run type-check`.
 
    **Atenção ao `npm run lint`:** ele roda `eslint . --fix` no repositório
-   inteiro, não só no arquivo novo. Duas pegadinhas conhecidas, sem relação
-   com esta migração — **não tente corrigi-las**:
-   - `src/Helpers/Locales/pt_BR.js` e
-     `src/Helpers/Types/hasContent.test.ts` já falham no lint em `main`
-     (erro pré-existente e não relacionado).
-   - `eslint --fix` pode restilizar outros arquivos não relacionados ao seu
-     helper (efeito da regra `curly: multi` combinada com código antigo).
-     Depois de rodar o lint, cheque `git status --short`: se aparecer algo
-     fora de `src/Helpers/<Categoria>/<nome>.ts`,
+   inteiro, não só no arquivo novo. Pegadinhas conhecidas, sem relação com
+   esta migração — **não tente corrigi-las**:
+   - No estado atual do repositório (antes de qualquer helper desta
+     migração), `npm run lint` já reporta **1 erro e 5 warnings**: o único
+     erro é `src/Helpers/Locales/pt_BR.js:149` (`Expected no linebreak
+     before this statement`, regra `@stylistic/nonblock-statement-body-position`).
+     `src/Helpers/Types/hasContent.test.ts:87` aparece só como **warning**
+     (`_a` não usado), não como erro. Os demais warnings vêm de arquivos
+     em `dist/` (build antigo, fora do código-fonte). Nenhum desses é
+     causado por esta migração — não gaste tentativas "corrigindo-os".
+   - `eslint --fix` **restiliza outros arquivos não relacionados ao seu
+     helper** — isso é esperado, não um efeito colateral do seu código.
+     No estado atual do repositório, um único `npm run lint` já reescreve
+     estes **8 arquivos** (efeito da regra `curly: multi` combinada com
+     código antigo que ainda não passou por `--fix`): `src/Composables/useDefaultReset.ts`,
+     `src/Composables/useRefCached.ts`, `src/Helpers/Objects/deepMerge.ts`,
+     `src/Helpers/maxUseItems.ts`, `src/Routes/apiUploadRoute.ts`,
+     `src/Routes/config.ts`, `src/Routes/getCachedApi.ts`,
+     `src/scripts/buildAutoImport.ts` (~38 inserções / 53 remoções ao todo).
+     Se você rodar o lint e ver esse mesmo conjunto de 8 arquivos mudar,
+     **não é o seu helper causando isso** — é esse lote pré-existente sendo
+     restilizado de novo porque `eslint --fix` não é idempotente-noop aqui
+     (ele reaplica a regra sempre que roda, mesmo sem mudança de conteúdo
+     relevante). Depois de rodar o lint, cheque `git status --short`: se
+     aparecer algo fora de `src/Helpers/<Categoria>/<nome>.ts`,
      `src/Helpers/<Categoria>/<nome>.test.ts`,
      `src/Helpers/<Categoria>/index.ts` e `lodash_migrate/status.yaml`,
      reverta com `git checkout -- <arquivo>` antes de commitar. Mantenha o
@@ -290,6 +306,36 @@ de abrir a próxima:
 ```bash
 npm run lint && npm run type-check && npm test
 ```
+
+### ⚠️ Aviso específico para a fase 5 (Seq / chaining)
+
+**Antes de implementar qualquer um dos 20 helpers da fase 5**, pare e leia
+isto. Os planos individuais em `lodash_migrate/plans/Seq/*.md` são, cada um,
+escopados a **um arquivo** (`src/Helpers/Seq/<nome>.ts`) — nenhum deles é
+dono de uma decisão de arquitetura compartilhada. Mas os 20 helpers de `Seq`
+não são independentes entre si: `chain`, `tap`, `thru`, `value`, `commit`,
+`plant`, `next` e todos os `wrapper*` giram em torno de **um único wrapper
+de encadeamento preguiçoso (lazy)** — a classe/estrutura que representa o
+"valor encadeado" do Lodash (equivalente ao `LodashWrapper` interno), com
+métodos como `.value()`, `.commit()`, `.plant()` e `.next()`.
+
+Isso é uma peça de **design arquitetural**, não um helper isolado. Nenhum
+plano de `plans/Seq/` contém esse desenho — cada um assume que o wrapper já
+existe e descreve apenas o método que expõe. Se você seguir o processo de
+execução normal (escolher o próximo item, ler só o plano dele, implementar)
+a partir do primeiro helper da fase 5, você vai tentar construir `chain.ts`
+sem uma definição prévia de que tipo de objeto ele retorna — e os helpers
+seguintes (que dependem de `chain` via `depende_de`) vão herdar esse
+projeto malfeito ou duplicar decisões de design de forma inconsistente
+entre arquivos.
+
+**Antes de implementar o primeiro helper individual da fase 5**, projete e
+implemente esse wrapper compartilhado (onde ele mora, sua interface pública,
+como `chain(value)` o instancia, como cada `wrapper*` se pendura nele) como
+um passo à parte, cobrindo em conjunto o que os helpers de encadeamento vão
+precisar. Só depois disso siga a máquina de estados normal, item a item, para
+os 20 helpers de `Seq`. Não abra chamado de verificação para um helper de
+`Seq` que dependa de um wrapper ainda não projetado.
 
 Os três precisam passar. Um helper passar no próprio teste não garante que o
 conjunto compila nem que não houve colisão de nomes no `_`. Se o `lint`

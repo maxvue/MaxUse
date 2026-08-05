@@ -50,7 +50,7 @@ Todas devem estar com `status_verificacao: Concluído` antes de iniciar este hel
 1. Ler a implementação original e mapear **todos** os comportamentos observáveis,
    incluindo o tratamento de `null`, `undefined`, tipos errados e valores-limite.
 2. Criar `src/Helpers/Objects/omitBy.ts` seguindo o contrato do `CONVENTIONS.md`.
-3. Registrar o export em `src/Helpers/Objects/index.ts` (re-export flat **e** entrada no objeto namespace).
+3. Registrar o export em `src/Helpers/Objects/index.ts` (re-export flat — esta categoria não tem objeto namespace, não crie um).
 4. Criar `src/Helpers/Objects/omitBy.test.ts` com a cobertura obrigatória descrita no `CONVENTIONS.md`.
 5. Rodar `npx vitest run src/Helpers/Objects/omitBy.test.ts` até passar.
 6. Revisar o teste em busca de brechas: algum comportamento do original ficou sem asserção?
@@ -62,6 +62,6 @@ Todas devem estar com `status_verificacao: Concluído` antes de iniciar este hel
 - [ ] Paridade com o Lodash confirmada nos casos-limite (comparada contra `lodash-es`).
 - [ ] Argumentos de dados aceitam `MaybeRefOrGetter` e usam `toValue`; callbacks **não**.
 - [ ] Existe um caso de teste `funciona com Ref`.
-- [ ] Exportado em `src/Helpers/Objects/index.ts` (flat + namespace).
+- [ ] Exportado em `src/Helpers/Objects/index.ts` (export plano — esta categoria **não tem** objeto namespace; export plano sozinho já satisfaz o registro, não crie um namespace novo).
 - [ ] `npm run lint` e `npm run type-check` passam.
 - [ ] Há teste dedicado para: composição real: pickBy(object, negate(iteratee(predicate)))
