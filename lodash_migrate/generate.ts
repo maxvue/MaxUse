@@ -6,11 +6,11 @@ import { HELPERS, type HelperEntry } from './manifest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const TOTAL_ESPERADO = 281;
+const TOTAL_ESPERADO = 280;
 
 /**
  * Helpers já implementados como sementes de categoria na Task 2. Permanecem
- * no manifesto (fazem parte dos 281), mas o status.yaml gerado deve refletir
+ * no manifesto (fazem parte dos 280), mas o status.yaml gerado deve refletir
  * que já estão concluídos — não devem ser reprocessados pela fila de execução.
  * Ruling do parceiro humano; não reabrir sem nova decisão explícita.
  */

@@ -3,14 +3,14 @@ import { HELPERS } from './manifest';
 import { maxUseItems } from '../src/Helpers/maxUseItems';
 
 /**
- * Helpers-semente implementados na Task 2 desta migração. Fazem parte dos 281
+ * Helpers-semente implementados na Task 2 desta migração. Fazem parte dos 280
  * e por isso precisam ser descontados ao reconstruir a linha de base
  * pré-migração a partir de maxUseItems().
  */
 const SEMENTES = ['isNil', 'negate', 'stubTrue', 'tap'];
 
 /**
- * Linha de base congelada: os 281 nomes do lodash-es que não existiam na MaxUse
+ * Linha de base congelada: os 280 nomes do lodash-es que não existiam na MaxUse
  * nem no VueUse antes desta migração. Congelada de propósito — `maxUseItems()`
  * cresce conforme os helpers são implementados, então recalcular a linha de base
  * dinamicamente faria este teste falhar assim que a execução começasse (o helper
@@ -20,12 +20,17 @@ const SEMENTES = ['isNil', 'negate', 'stubTrue', 'tap'];
  * Gerada uma única vez, dentro do runtime real do Vitest, a partir de:
  *   Object.keys(lodash-es) que não estão em maxUseItems() (descontadas as
  *   SEMENTES) nem em @vueuse/core. Ver task-3-report.md para o comando exato.
+ *
+ * `default` foi removido desta lista: era o export default do lodash-es (o
+ * próprio objeto `_` reexportado), inviável como export nomeado no padrão desta
+ * lib — a MaxUse já expõe `_` nomeado, tornando um default redundante. Ruling
+ * humana durante a revisão da Task 4; ver task-4-report.md.
  */
 const LINHA_BASE_PRE_MIGRACAO = [
     'add', 'after', 'ary', 'assign', 'assignIn', 'assignInWith', 'assignWith', 'at',
     'attempt', 'before', 'bind', 'bindAll', 'bindKey', 'castArray', 'ceil', 'chain',
     'clone', 'cloneDeepWith', 'cloneWith', 'commit', 'compact', 'concat', 'cond', 'conforms',
-    'conformsTo', 'constant', 'create', 'curry', 'curryRight', 'debounce', 'deburr', 'default',
+    'conformsTo', 'constant', 'create', 'curry', 'curryRight', 'debounce', 'deburr',
     'defaultTo', 'defaults', 'defaultsDeep', 'defer', 'delay', 'difference', 'differenceBy', 'differenceWith',
     'divide', 'drop', 'dropRight', 'dropRightWhile', 'dropWhile', 'each', 'eachRight', 'endsWith',
     'entries', 'entriesIn', 'eq', 'escape', 'escapeRegExp', 'every', 'extend', 'extendWith',
@@ -61,12 +66,12 @@ const LINHA_BASE_PRE_MIGRACAO = [
 ];
 
 describe('manifest', () => {
-    it('a linha de base congelada inclui as sementes da Task 2 (fazem parte dos 281)', () => {
+    it('a linha de base congelada inclui as sementes da Task 2 (fazem parte dos 280)', () => {
         expect(SEMENTES.every((s) => LINHA_BASE_PRE_MIGRACAO.includes(s))).toBe(true);
     });
 
-    it('a linha de base congelada tem exatamente 281 entradas', () => {
-        expect(LINHA_BASE_PRE_MIGRACAO.length).toBe(281);
+    it('a linha de base congelada tem exatamente 280 entradas', () => {
+        expect(LINHA_BASE_PRE_MIGRACAO.length).toBe(280);
     });
 
     it('cobre exatamente os helpers faltantes da linha de base pré-migração, sem lacunas nem extras', () => {

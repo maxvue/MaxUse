@@ -1,4 +1,4 @@
-total: 281
+total: 280
 fases:
   - id: 1
     nome: Primitivos sem dependência
@@ -2435,15 +2435,6 @@ helpers:
     plano: plans/Seq/lodash.md
     depende_de:
       - chain
-    tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
-  - nome: default
-    categoria: Seq
-    fase: 5
-    plano: plans/Seq/default.md
-    depende_de:
-      - lodash
     tentativas: 0
     status_execucao: Aguardando
     status_verificacao: Aguardando

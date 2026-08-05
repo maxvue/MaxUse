@@ -1,5 +1,5 @@
 /**
- * Manifesto de categorização dos 281 helpers do lodash-es faltantes na MaxUse.
+ * Manifesto de categorização dos 280 helpers do lodash-es faltantes na MaxUse.
  * Fonte da verdade para a geração de lodash_migrate/.
  *
  * fase 1: primitivos sem dependência (Lang, Math, Strings simples, Utils básicos)
@@ -350,6 +350,5 @@ export const HELPERS: HelperEntry[] = [
     { nome: 'toIterator', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperToIterator'], alias_de: 'wrapperToIterator' },
     { nome: 'toJSON', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
     { nome: 'valueOf', categoria: 'Seq', fase: 5, depende_de: ['chain', 'wrapperValue'], alias_de: 'wrapperValue' },
-    { nome: 'lodash', categoria: 'Seq', fase: 5, depende_de: ['chain'], nota: 'a própria função _ chamável' },
-    { nome: 'default', categoria: 'Seq', fase: 5, depende_de: ['lodash'], alias_de: 'lodash', nota: 'export default do lodash-es' }
+    { nome: 'lodash', categoria: 'Seq', fase: 5, depende_de: ['chain'], nota: 'a própria função _ chamável' }
 ];
