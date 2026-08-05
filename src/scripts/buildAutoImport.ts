@@ -23,6 +23,10 @@ import * as Types from '../Helpers/Types';
 import * as Validations from '../Helpers/Validations';
 import * as Electrical from '../Helpers/Electrical';
 import * as Format from '../Helpers/Format';
+import * as Lang from '../Helpers/Lang';
+import * as Functions from '../Helpers/Functions';
+import * as Utils from '../Helpers/Utils';
+import * as Seq from '../Helpers/Seq';
 import * as VueUse from '../Helpers/VueUse';
 
 const maxUseItems = (): string[] => {
@@ -41,6 +45,10 @@ const maxUseItems = (): string[] => {
         Validations,
         Electrical,
         Format,
+        Lang,
+        Functions,
+        Utils,
+        Seq,
         VueUse
     ];
 
