@@ -14,7 +14,7 @@
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 ```bash
-node -e "const _=require('lodash'); console.log(_.pullAt.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).pullAt.toString());"
 ```
 
 A documentação oficial está em https://lodash.com/docs#pullAt

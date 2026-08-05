@@ -14,7 +14,7 @@
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 ```bash
-node -e "const _=require('lodash'); console.log(_.divide.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).divide.toString());"
 ```
 
 A documentação oficial está em https://lodash.com/docs#divide

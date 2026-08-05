@@ -108,10 +108,7 @@ perca o progresso.
 2. Leia a implementação original do Lodash como oráculo. **`lodash` (CJS) não
    está instalado neste projeto — só `lodash-es` (ESM).** Use:
    ```bash
-   npx tsx -e "
-   import * as lodash from 'lodash-es';
-   console.log((lodash as any).<nome>.toString());
-   "
+   npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).<nome>.toString());"
    ```
    Mapeie **todos** os comportamentos observáveis, incluindo `null`,
    `undefined`, tipos errados e valores-limite.

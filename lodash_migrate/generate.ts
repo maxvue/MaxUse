@@ -62,7 +62,7 @@ ${jaImplementado}
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 \`\`\`bash
-node -e "const _=require('lodash'); console.log(_.${h.nome}.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).${h.nome}.toString());"
 \`\`\`
 
 A documentação oficial está em https://lodash.com/docs#${h.nome}

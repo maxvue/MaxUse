@@ -14,7 +14,7 @@
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 ```bash
-node -e "const _=require('lodash'); console.log(_.mixin.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).mixin.toString());"
 ```
 
 A documentação oficial está em https://lodash.com/docs#mixin

@@ -14,7 +14,7 @@
 Consulte a implementação e a documentação do Lodash antes de escrever:
 
 ```bash
-node -e "const _=require('lodash'); console.log(_.trimEnd.toString())"
+npx tsx -e "import * as lodash from 'lodash-es'; console.log((lodash as any).trimEnd.toString());"
 ```
 
 A documentação oficial está em https://lodash.com/docs#trimEnd
