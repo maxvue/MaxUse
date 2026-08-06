@@ -79,5 +79,5 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 
 ## Agent Execution in Worktrees
 
-- Any agent/subagent execution that proposes code changes in this repository must run in a **separate git worktree**, created specifically for the proposed changes (`git worktree add ../MaxUse-wt-<slug> -b <slug>`) — never directly in the main working tree.
+- Any agent/subagent execution that proposes code changes in this repository must run in a **separate git worktree**, created specifically for the proposed changes inside the hidden `.worktrees/` folder at the project root (`git worktree add .worktrees/wt-<slug> -b <slug>`) — never directly in the main working tree. The `.worktrees/` folder is ignored by Git (`.gitignore`).
 - Validate the changes in the isolated worktree, then integrate (merge) into the main branch.
