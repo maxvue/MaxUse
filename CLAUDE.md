@@ -2,6 +2,18 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Diretrizes de Idioma
+
+1. **Usar Português do Brasil (pt-BR) para:**
+   - Comunicação entre Usuário <=> Agente de IA
+   - Comentários no Código (comentários em inglês devem ser substituídos por comentários em português do Brasil)
+
+2. **Usar Inglês (en-US) para:**
+   - Nomes de funções
+   - Nomes de variáveis
+   - Nomes de tabelas do banco de dados
+   - Nomes de colunas do banco de dados
+
 ## Project Overview
 
 `@maxvue/max-use` is a tree-shakable Vue 3 utility library (published to npm) that unifies **VueUse + Lodash + custom helpers** behind a single dependency. It targets the Brazilian market (CPF/CNPJ/CEP/phone validations, pt-BR formatting) and Laravel/Adonis + Vue projects (named-route HTTP helpers). Source is TypeScript; comments and docs are in Portuguese.
