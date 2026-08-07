@@ -1,0 +1,26 @@
+export * from './stubTrue';
+export * from './stubArray';
+export * from './stubFalse';
+export * from './stubObject';
+export * from './stubString';
+export * from './constant';
+export * from './defaultTo';
+export * from './uniqueId';
+export * from './range';
+export * from './rangeRight';
+export * from './times';
+export * from './nthArg';
+
+import * as stubTrue from './stubTrue';
+import * as stubArray from './stubArray';
+import * as stubFalse from './stubFalse';
+import * as stubObject from './stubObject';
+import * as stubString from './stubString';
+import * as constant from './constant';
+import * as defaultTo from './defaultTo';
+import * as uniqueId from './uniqueId';
+import * as range from './range';
+import * as rangeRight from './rangeRight';
+import * as times from './times';
+import * as nthArg from './nthArg';
+export const utils = { ...stubTrue, ...stubArray, ...stubFalse, ...stubObject, ...stubString, ...constant, ...defaultTo, ...uniqueId, ...range, ...rangeRight, ...times, ...nthArg };

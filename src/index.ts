@@ -13,6 +13,10 @@ import * as Types from './Helpers/Types';
 import * as Validations from './Helpers/Validations';
 import * as Electrical from './Helpers/Electrical';
 import * as Format from './Helpers/Format';
+import * as Lang from './Helpers/Lang';
+import * as Functions from './Helpers/Functions';
+import * as Utils from './Helpers/Utils';
+import * as Seq from './Helpers/Seq';
 import * as Composables from './Composables';
 import * as Routes from './Routes';
 
@@ -31,6 +35,10 @@ export * from './Helpers/Types';
 export * from './Helpers/Validations';
 export * from './Helpers/Electrical';
 export * from './Helpers/Format';
+export * from './Helpers/Lang';
+export * from './Helpers/Functions';
+export * from './Helpers/Utils';
+export * from './Helpers/Seq';
 export * from './Helpers/VueUse';
 
 // Resolução de ambiguidade
@@ -56,7 +64,11 @@ const ownHelpers = {
     ...Types,
     ...Validations,
     ...Electrical,
-    ...Format
+    ...Format,
+    ...Lang,
+    ...Functions,
+    ...Utils,
+    ...Seq
 };
 
 /**
@@ -73,7 +85,7 @@ for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Recor
 const filteredLodash: Record<string, any> = {};
 const lodashKeys = Object.keys(lodash);
 
-for (const key of lodashKeys) filteredLodash[key] = (lodash as Record<string, any>)[key];
+for (const key of lodashKeys) if (!(key in ownHelpers) && !(key in filteredVueUse)) filteredLodash[key] = (lodash as Record<string, any>)[key];
 
 
 /**
