@@ -34,8 +34,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: startCase
     uso_confirmado: "MinhaBibliaOnline/resources/Vue/Sections/Auth/Pesquisa.vue:202 (_.startCase)"
     categoria: Strings

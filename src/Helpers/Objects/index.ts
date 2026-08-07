@@ -43,6 +43,7 @@ import { invert } from './invert';
 import { invertBy } from './invertBy';
 import { mapKeys } from './mapKeys';
 import { omitBy } from './omitBy';
+import { pickBy } from './pickBy';
 import { setWith } from './setWith';
 import { update } from './update';
 import { updateWith } from './updateWith';
@@ -52,7 +53,7 @@ export { deepClone, get, set, unset, isEqual, deepMerge, renameKeys, pick, omit,
 export { keys, keysIn, values, valuesIn, has, hasIn, toPairs, toPairsIn, at };
 export { deepClone as cloneDeep };
 export { assign, assignIn, extend, assignWith, assignInWith, extendWith, defaults, merge, mergeWith, defaultsDeep, create };
-export { entries, entriesIn, findKey, findLastKey, forIn, forInRight, forOwn, forOwnRight, functions, functionsIn, invert, invertBy, mapKeys, omitBy, setWith, update, updateWith, transform };
+export { entries, entriesIn, findKey, findLastKey, forIn, forInRight, forOwn, forOwnRight, functions, functionsIn, invert, invertBy, mapKeys, omitBy, pickBy, setWith, update, updateWith, transform };
 
 export const Obj = {
     deepClone,
