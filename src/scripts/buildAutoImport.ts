@@ -44,11 +44,9 @@ const maxUseItems = (): string[] => {
         VueUse
     ];
 
-    for (const mod of modules) {
-        for (const key of Object.keys(mod)) {
-            if (['vueUse'].includes(key)) continue;
-            allKeys.add(key);
-        }
+    for (const mod of modules) for (const key of Object.keys(mod)) {
+        if (['vueUse'].includes(key)) continue;
+        allKeys.add(key);
     }
 
 

@@ -28,13 +28,12 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     const data = localStorage.getItem(key);
 
-    if (data) {
-        try {
-            return JSON.parse(data);
-        } catch {
-            localStorage.removeItem(key);
-        }
+    if (data) try {
+        return JSON.parse(data);
+    } catch {
+        localStorage.removeItem(key);
     }
+
 
     const routeUrl = resolveRoute(String(route_name), data_request);
 
