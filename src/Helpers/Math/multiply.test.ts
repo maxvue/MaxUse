@@ -29,4 +29,9 @@ describe('multiply', () => {
     it('funciona com Ref', () => {
         expect(multiply(ref(6), ref(4))).toBe(24);
     });
+
+    it('converte null/undefined em texto literal ao aplicar baseToString em ambos operandos (peculiaridade)', () => {
+        expect(multiply(true, '1')).toBeNaN();
+        expect(multiply('1', null)).toBeNaN();
+    });
 });

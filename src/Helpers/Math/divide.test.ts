@@ -28,4 +28,8 @@ describe('divide', () => {
     it('funciona com Ref', () => {
         expect(divide(ref(6), ref(4))).toBe(1.5);
     });
+
+    it('converte null/undefined em texto literal ao aplicar baseToString em ambos operandos (peculiaridade)', () => {
+        expect(divide('1', null)).toBeNaN();
+    });
 });

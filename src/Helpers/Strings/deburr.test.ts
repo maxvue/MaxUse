@@ -26,4 +26,13 @@ describe('deburr', () => {
     it('funciona com Ref', () => {
         expect(deburr(ref('café'))).toBe('cafe');
     });
+
+    it('mapeia ŉ para o dígrafo apóstrofo+n, não apenas "n" (peculiaridade)', () => {
+        expect(deburr('ŉ')).toBe('\'n');
+    });
+
+    it('não altera caracteres fora do Latin-1 Supplement / Latin Extended-A, ainda que acentuados (peculiaridade: tabela fechada, não normalize NFD genérico)', () => {
+        expect(deburr('ș ț')).toBe('ș ț');
+        expect(deburr('Việt Nam')).toBe('Việt Nam');
+    });
 });

@@ -22,4 +22,8 @@ describe('ceil', () => {
     it('limita precisão a 292 casas decimais sem lançar erro (guarda de cap)', () => {
         expect(ceil(4.006, 500)).toBe(4.006);
     });
+
+    it('trunca precisão fracionária para inteiro antes de usar (peculiaridade)', () => {
+        expect(ceil(4006, -2.7)).toBe(4100);
+    });
 });

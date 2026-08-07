@@ -1,42 +1,76 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { toString } from '../Lang/toString';
 
-// Letras latinas que não se decompõem via Unicode NFD (ligaduras e o "ß"
-// alemão) — tratadas manualmente antes da normalização, igual ao Lodash.
+// Tabela de conversão letra-a-letra do Lodash (Latin-1 Supplement + Latin
+// Extended-A). Diferente de um `.normalize('NFD')` genérico, é uma tabela
+// fechada: caracteres fora dela (ex.: `ș`, `ț` do romeno, fora da faixa
+// `Ā-ſ`) **não** são alterados, mesmo tendo forma acentuada.
 const deburredLetters: Record<string, string> = {
-    'Æ': 'Ae', 'Ð': 'D', 'Ø': 'O', 'Þ': 'Th', 'ß': 'ss',
-    'æ': 'ae', 'ð': 'd', 'ø': 'o', 'þ': 'th',
-    'Ā': 'A', 'ā': 'a', 'Ă': 'A', 'ă': 'a', 'Ą': 'A', 'ą': 'a',
-    'Ć': 'C', 'ć': 'c', 'Ĉ': 'C', 'ĉ': 'c', 'Ċ': 'C', 'ċ': 'c',
-    'Č': 'C', 'č': 'c', 'Ď': 'D', 'ď': 'd', 'Đ': 'D', 'đ': 'd',
-    'Ē': 'E', 'ē': 'e', 'Ĕ': 'E', 'ĕ': 'e', 'Ė': 'E', 'ė': 'e',
-    'Ę': 'E', 'ę': 'e', 'Ě': 'E', 'ě': 'e', 'Ĝ': 'G', 'ĝ': 'g',
-    'Ğ': 'G', 'ğ': 'g', 'Ġ': 'G', 'ġ': 'g', 'Ģ': 'G', 'ģ': 'g',
-    'Ĥ': 'H', 'ĥ': 'h', 'Ħ': 'H', 'ħ': 'h', 'Ĩ': 'I', 'ĩ': 'i',
-    'Ī': 'I', 'ī': 'i', 'Ĭ': 'I', 'ĭ': 'i', 'Į': 'I', 'į': 'i',
-    'İ': 'I', 'ı': 'i', 'Ĳ': 'IJ', 'ĳ': 'ij', 'Ĵ': 'J', 'ĵ': 'j',
-    'Ķ': 'K', 'ķ': 'k', 'ĸ': 'k', 'Ĺ': 'L', 'ĺ': 'l', 'Ļ': 'L',
-    'ļ': 'l', 'Ľ': 'L', 'ľ': 'l', 'Ŀ': 'L', 'ŀ': 'l', 'Ł': 'L',
-    'ł': 'l', 'Ń': 'N', 'ń': 'n', 'Ņ': 'N', 'ņ': 'n', 'Ň': 'N',
-    'ň': 'n', 'ŉ': 'n', 'Ŋ': 'N', 'ŋ': 'n', 'Ō': 'O', 'ō': 'o',
-    'Ŏ': 'O', 'ŏ': 'o', 'Ő': 'O', 'ő': 'o', 'Œ': 'Oe', 'œ': 'oe',
-    'Ŕ': 'R', 'ŕ': 'r', 'Ŗ': 'R', 'ŗ': 'r', 'Ř': 'R', 'ř': 'r',
-    'Ś': 'S', 'ś': 's', 'Ŝ': 'S', 'ŝ': 's', 'Ş': 'S', 'ş': 's',
-    'Š': 'S', 'š': 's', 'Ţ': 'T', 'ţ': 't', 'Ť': 'T', 'ť': 't',
-    'Ŧ': 'T', 'ŧ': 't', 'Ũ': 'U', 'ũ': 'u', 'Ū': 'U', 'ū': 'u',
-    'Ŭ': 'U', 'ŭ': 'u', 'Ů': 'U', 'ů': 'u', 'Ű': 'U', 'ű': 'u',
-    'Ų': 'U', 'ų': 'u', 'Ŵ': 'W', 'ŵ': 'w', 'Ŷ': 'Y', 'ŷ': 'y',
-    'Ÿ': 'Y', 'Ź': 'Z', 'ź': 'z', 'Ż': 'Z', 'ż': 'z', 'Ž': 'Z',
-    'ž': 'z', 'ſ': 's'
+    'À': 'A', 'Á': 'A', 'Â': 'A', 'Ã': 'A', 'Ä': 'A', 'Å': 'A',
+    'à': 'a', 'á': 'a', 'â': 'a', 'ã': 'a', 'ä': 'a', 'å': 'a',
+    'Ç': 'C', 'ç': 'c',
+    'Ð': 'D', 'ð': 'd',
+    'È': 'E', 'É': 'E', 'Ê': 'E', 'Ë': 'E',
+    'è': 'e', 'é': 'e', 'ê': 'e', 'ë': 'e',
+    'Ì': 'I', 'Í': 'I', 'Î': 'I', 'Ï': 'I',
+    'ì': 'i', 'í': 'i', 'î': 'i', 'ï': 'i',
+    'Ñ': 'N', 'ñ': 'n',
+    'Ò': 'O', 'Ó': 'O', 'Ô': 'O', 'Õ': 'O', 'Ö': 'O', 'Ø': 'O',
+    'ò': 'o', 'ó': 'o', 'ô': 'o', 'õ': 'o', 'ö': 'o', 'ø': 'o',
+    'Ù': 'U', 'Ú': 'U', 'Û': 'U', 'Ü': 'U',
+    'ù': 'u', 'ú': 'u', 'û': 'u', 'ü': 'u',
+    'Ý': 'Y', 'ý': 'y', 'ÿ': 'y',
+    'Æ': 'Ae', 'æ': 'ae',
+    'Þ': 'Th', 'þ': 'th',
+    'ß': 'ss',
+    'Ā': 'A', 'Ă': 'A', 'Ą': 'A',
+    'ā': 'a', 'ă': 'a', 'ą': 'a',
+    'Ć': 'C', 'Ĉ': 'C', 'Ċ': 'C', 'Č': 'C',
+    'ć': 'c', 'ĉ': 'c', 'ċ': 'c', 'č': 'c',
+    'Ď': 'D', 'Đ': 'D', 'ď': 'd', 'đ': 'd',
+    'Ē': 'E', 'Ĕ': 'E', 'Ė': 'E', 'Ę': 'E', 'Ě': 'E',
+    'ē': 'e', 'ĕ': 'e', 'ė': 'e', 'ę': 'e', 'ě': 'e',
+    'Ĝ': 'G', 'Ğ': 'G', 'Ġ': 'G', 'Ģ': 'G',
+    'ĝ': 'g', 'ğ': 'g', 'ġ': 'g', 'ģ': 'g',
+    'Ĥ': 'H', 'Ħ': 'H', 'ĥ': 'h', 'ħ': 'h',
+    'Ĩ': 'I', 'Ī': 'I', 'Ĭ': 'I', 'Į': 'I', 'İ': 'I',
+    'ĩ': 'i', 'ī': 'i', 'ĭ': 'i', 'į': 'i', 'ı': 'i',
+    'Ĵ': 'J', 'ĵ': 'j',
+    'Ķ': 'K', 'ķ': 'k', 'ĸ': 'k',
+    'Ĺ': 'L', 'Ļ': 'L', 'Ľ': 'L', 'Ŀ': 'L', 'Ł': 'L',
+    'ĺ': 'l', 'ļ': 'l', 'ľ': 'l', 'ŀ': 'l', 'ł': 'l',
+    'Ń': 'N', 'Ņ': 'N', 'Ň': 'N', 'Ŋ': 'N',
+    'ń': 'n', 'ņ': 'n', 'ň': 'n', 'ŋ': 'n',
+    'ŉ': '\'n',
+    'Ō': 'O', 'Ŏ': 'O', 'Ő': 'O',
+    'ō': 'o', 'ŏ': 'o', 'ő': 'o',
+    'Œ': 'Oe', 'œ': 'oe',
+    'Ŕ': 'R', 'Ŗ': 'R', 'Ř': 'R',
+    'ŕ': 'r', 'ŗ': 'r', 'ř': 'r',
+    'Ś': 'S', 'Ŝ': 'S', 'Ş': 'S', 'Š': 'S',
+    'ś': 's', 'ŝ': 's', 'ş': 's', 'š': 's',
+    'Ţ': 'T', 'Ť': 'T', 'Ŧ': 'T',
+    'ţ': 't', 'ť': 't', 'ŧ': 't',
+    'Ũ': 'U', 'Ū': 'U', 'Ŭ': 'U', 'Ů': 'U', 'Ű': 'U', 'Ų': 'U',
+    'ũ': 'u', 'ū': 'u', 'ŭ': 'u', 'ů': 'u', 'ű': 'u', 'ų': 'u',
+    'Ŵ': 'W', 'ŵ': 'w',
+    'Ŷ': 'Y', 'ŷ': 'y', 'Ÿ': 'Y',
+    'Ź': 'Z', 'Ż': 'Z', 'Ž': 'Z',
+    'ź': 'z', 'ż': 'z', 'ž': 'z',
+    'Ĳ': 'IJ', 'ĳ': 'ij',
+    'ſ': 's'
 };
 
-const reLatin1 = /[\xc0-\xffĀ-ſ]/g;
-const reComboMark = /[̀-ͯ]/g;
+const reLatin = /[\xc0-\xd6\xd8-\xf6\xf8-\xffĀ-ſ]/g;
+const reComboMark = /[̀-ͯ︠-︯⃐-⃿]/g;
 
 /**
  * Remove diacríticos (acentos) de uma string, convertendo caracteres
  * latinos acentuados/ligados (ex.: `é`, `ã`, `æ`, `ß`) para seus
- * equivalentes ASCII mais próximos.
+ * equivalentes ASCII mais próximos, via tabela de conversão (não
+ * `.normalize('NFD')`) — igual ao Lodash, inclusive na peculiaridade de
+ * não alterar caracteres fora do Latin-1 Supplement / Latin Extended-A
+ * (ex.: `ș`, `ț` do romeno permanecem intocados).
  * Semelhante ao _.deburr do Lodash.
  *
  * @param value string a "desacentuar"
@@ -44,8 +78,8 @@ const reComboMark = /[̀-ͯ]/g;
  */
 export function deburr(value: MaybeRefOrGetter<unknown>): string {
     const str = toString(toValue(value));
+    if (!str) return str;
     return str
-        .replace(reLatin1, (char) => deburredLetters[char] || char)
-        .normalize('NFD')
+        .replace(reLatin, (char) => deburredLetters[char] || char)
         .replace(reComboMark, '');
 }

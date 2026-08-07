@@ -21,6 +21,11 @@ describe('endsWith', () => {
         expect(endsWith(null, 'a')).toBe(false);
     });
 
+    it('target null/undefined vira o literal "null"/"undefined", não string vazia (peculiaridade)', () => {
+        expect(endsWith('abc', null)).toBe(false);
+        expect(endsWith('abc-null', null)).toBe(true);
+    });
+
     it('funciona com Ref', () => {
         expect(endsWith(ref('abc'), ref('c'))).toBe(true);
     });

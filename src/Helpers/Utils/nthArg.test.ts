@@ -27,4 +27,9 @@ describe('nthArg', () => {
         const second = nthArg(ref(1));
         expect(second('a', 'b')).toBe('b');
     });
+
+    it('retorna undefined quando o índice negativo fica fora do alcance após somar length (peculiaridade)', () => {
+        const f = nthArg(-2);
+        expect(f('a')).toBeUndefined();
+    });
 });

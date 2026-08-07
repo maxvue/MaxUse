@@ -18,4 +18,8 @@ describe('floor', () => {
     it('limita precisão a 292 casas decimais sem lançar erro (guarda de cap)', () => {
         expect(floor(4.006, 500)).toBe(4.006);
     });
+
+    it('trunca precisão fracionária para inteiro antes de usar (peculiaridade)', () => {
+        expect(floor(0.046, 2.9)).toBe(0.04);
+    });
 });

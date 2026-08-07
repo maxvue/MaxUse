@@ -30,4 +30,13 @@ describe('isMatchWith', () => {
     it('funciona com Ref', () => {
         expect(isMatchWith(ref({ a: 1, b: 2 }), ref({ a: 1 }))).toBe(true);
     });
+
+    it('invoca o customizer com (objValue, srcValue, key, object, source) (peculiaridade)', () => {
+        let received: unknown[] = [];
+        isMatchWith({ a: 1 }, { a: 2 }, (...args) => {
+            received = args;
+            return undefined;
+        });
+        expect(received).toEqual([1, 2, 'a', { a: 1 }, { a: 2 }]);
+    });
 });

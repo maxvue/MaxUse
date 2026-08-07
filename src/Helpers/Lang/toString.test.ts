@@ -48,4 +48,8 @@ describe('toString', () => {
         expect(toString(ref(123))).toBe('123');
         expect(toString(ref(null))).toBe('');
     });
+
+    it('preserva -0 mesmo quando embrulhado em Object() (peculiaridade)', () => {
+        expect(toString(Object(-0))).toBe('-0');
+    });
 });

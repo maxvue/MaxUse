@@ -16,6 +16,11 @@ describe('startsWith', () => {
         expect(startsWith(null, 'a')).toBe(false);
     });
 
+    it('target null/undefined vira o literal "null"/"undefined", não string vazia (peculiaridade)', () => {
+        expect(startsWith('abc', null)).toBe(false);
+        expect(startsWith('null-abc', null)).toBe(true);
+    });
+
     it('funciona com Ref', () => {
         expect(startsWith(ref('abc'), ref('a'))).toBe(true);
     });

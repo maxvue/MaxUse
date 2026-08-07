@@ -22,4 +22,13 @@ describe('padStart', () => {
     it('conta por code point Unicode, não por unidade UTF-16 (peculiaridade: caracteres astrais)', () => {
         expect(padStart('🎉', 3, '_')).toBe('__🎉');
     });
+
+    it('converte chars não-string para string antes de usar como preenchimento', () => {
+        expect(padStart('abc', 8, 123 as unknown as string)).toBe('12312abc');
+    });
+
+    it('retorna a string original quando length é null ou undefined', () => {
+        expect(padStart('abc', null as unknown as number)).toBe('abc');
+        expect(padStart('abc')).toBe('abc');
+    });
 });

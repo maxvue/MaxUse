@@ -23,4 +23,8 @@ describe('trim', () => {
     it('funciona com Ref', () => {
         expect(trim(ref('  abc  '))).toBe('abc');
     });
+
+    it('converte chars não-string para string antes de usar como conjunto de remoção', () => {
+        expect(trim('0abc0', 0 as unknown as string)).toBe('abc');
+    });
 });

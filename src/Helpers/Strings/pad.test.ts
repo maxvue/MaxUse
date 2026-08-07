@@ -28,4 +28,8 @@ describe('pad', () => {
         expect(pad('🎉', 5, '_')).toBe('__🎉__');
         expect(pad('x', 4, '🎉')).toBe('🎉x🎉🎉');
     });
+
+    it('converte chars não-string para string antes de usar como preenchimento', () => {
+        expect(pad('abc', 8, 123 as unknown as string)).toBe('12abc123');
+    });
 });

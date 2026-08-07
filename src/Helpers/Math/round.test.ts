@@ -73,4 +73,12 @@ describe('round (Lodash)', () => {
         expect(round(4.006, 500)).toBe(4.006);
         expect(round(4.006, 1e6)).toBe(4.006);
     });
+
+    it('trunca precisão fracionária para inteiro antes de usar (peculiaridade)', () => {
+        expect(round(1.005, 2.7)).toBe(1.01);
+    });
+
+    it('trata precisão NaN como 0 (peculiaridade)', () => {
+        expect(round(1.005, NaN)).toBe(1);
+    });
 });

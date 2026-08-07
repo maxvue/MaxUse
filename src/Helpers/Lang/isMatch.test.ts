@@ -32,4 +32,18 @@ describe('isMatch', () => {
         expect(isMatch(ref({ a: 1, b: 2 }), ref({ a: 1 }))).toBe(true);
         expect(isMatch(ref({ a: 1 }), ref({ a: 2 }))).toBe(false);
     });
+
+    it('casa arrays por subconjunto não-ordenado, sem exigir os mesmos índices (peculiaridade)', () => {
+        expect(isMatch({ a: [1, 2] }, { a: [2] })).toBe(true);
+        expect(isMatch({ a: [1, 2] }, { a: [2, 1] })).toBe(true);
+        expect(isMatch({ a: [1, 2] }, { a: [3] })).toBe(false);
+        expect(isMatch({ a: [1, 2] }, { a: [1, 1] })).toBe(false);
+        expect(isMatch({ a: [1, 1, 2] }, { a: [1, 2] })).toBe(true);
+    });
+
+    it('trata primitivos não-nulos como objetos indexáveis (peculiaridade)', () => {
+        expect(isMatch('abc', { 0: 'a' })).toBe(true);
+        expect(isMatch('abc', { 0: 'z' })).toBe(false);
+        expect(isMatch(5, { toFixed: Number.prototype.toFixed })).toBe(true);
+    });
 });

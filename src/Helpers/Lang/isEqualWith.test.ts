@@ -60,4 +60,22 @@ describe('isEqualWith', () => {
         expect(isEqualWith(new Foo(), new Foo())).toBe(true);
         expect(isEqualWith(new Foo(), { x: 1 })).toBe(false);
     });
+
+    it('wrappers de primitivo com valores diferentes não são iguais (peculiaridade)', () => {
+        expect(isEqualWith(Object(1), Object(2))).toBe(false);
+        expect(isEqualWith(Object(1), Object(1))).toBe(true);
+    });
+
+    it('compara ArrayBuffer por conteúdo de bytes, não por referência', () => {
+        expect(isEqualWith(new ArrayBuffer(4), new ArrayBuffer(8))).toBe(false);
+        const a = new Uint8Array([1, 2, 3]).buffer;
+        const b = new Uint8Array([1, 2, 3]).buffer;
+        expect(isEqualWith(a, b)).toBe(true);
+    });
+
+    it('compara TypedArray por conteúdo, exigindo o mesmo tipo concreto', () => {
+        expect(isEqualWith(new Uint8Array([1, 2, 3]), new Uint8Array([1, 2, 3]))).toBe(true);
+        expect(isEqualWith(new Uint8Array([1, 2, 3]), new Uint8Array([1, 2, 4]))).toBe(false);
+        expect(isEqualWith(new Uint8Array([1, 2, 3]), new Int8Array([1, 2, 3]))).toBe(false);
+    });
 });

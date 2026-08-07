@@ -66,6 +66,15 @@ describe('clone', () => {
         expect(cloned).not.toBe(original);
     });
 
+    it('compartilha o buffer de TypedArray em clonagem rasa (peculiaridade)', () => {
+        const original = new Uint8Array([1, 2, 3]);
+        const cloned = clone(original) as Uint8Array;
+        expect(cloned).not.toBe(original);
+        expect(cloned.buffer).toBe(original.buffer);
+        original[0] = 99;
+        expect(cloned[0]).toBe(99);
+    });
+
     it('clona função como objeto sem executá-la (peculiaridade: não usa toValue)', () => {
         let called = false;
         const fn = () => { called = true; return 42; };
