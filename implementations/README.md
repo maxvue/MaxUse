@@ -12,7 +12,7 @@ runtime simples — todos exigem uma decisão de produto ou arquitetura antes de
 implementar, porque mudam comportamento observável de quem já consome a
 biblioteca.
 
-**Estado atual da suíte:** 92 arquivos, **1015 testes**, todos passando.
+**Estado atual da suíte:** 92 arquivos, **1020 testes**, todos passando.
 `vue-tsc` sem erros. Build ok. 15/15 subpath exports resolvem.
 
 ---
