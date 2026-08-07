@@ -65,6 +65,23 @@ Preencher conforme cada divergência for confirmada durante a migração. Format
   caracteres raro. Quem depende do comportamento exato do Lodash para
   `Ǣ`/`ǣ` (preservação sem alteração) verá uma saída diferente ao migrar.
 
+### `template`
+
+- **Lodash:** o identificador `_` disponível dentro do corpo do template
+  compilado (quando `options.imports` não o sobrescreve) é o objeto
+  `lodash` completo — chamável e com todos os métodos (`_.map`, `_.filter`
+  etc.).
+- **MaxUse:** `_` dentro do template é `{ escape }` — apenas o `escape`
+  desta biblioteca, não um objeto chamável nem com outros métodos.
+- **Impacto:** templates que usam `_.<qualquerMétodoQueNãoSejaEscape>(...)`
+  sem informar `options.imports` explicitamente lançam `TypeError` na
+  MaxUse (funcionavam no Lodash). Motivo: `template` não é o único ponto de
+  entrada de um `_` chamável e completo aqui — importar `_` de
+  `src/index.ts` dentro de `src/Helpers/Utils/template.ts` criaria uma
+  dependência circular, pois `_` é montado a partir de todas as
+  categorias, incluindo `Utils`. Quem precisa de outros helpers dentro do
+  template deve repassá-los via `options.imports`.
+
 ## Como esta divergência é protegida
 
 `src/Helpers/divergences.test.ts` calcula a lista de nomes conflitantes

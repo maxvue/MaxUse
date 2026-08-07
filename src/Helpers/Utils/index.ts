@@ -25,6 +25,9 @@ export * from './conformsTo';
 export * from './over';
 export * from './overEvery';
 export * from './overSome';
+export * from './templateSettings';
+export * from './template';
+export * from './mixin';
 
 import * as stubTrue from './stubTrue';
 import * as stubArray from './stubArray';
@@ -53,4 +56,7 @@ import * as conformsTo from './conformsTo';
 import * as over from './over';
 import * as overEvery from './overEvery';
 import * as overSome from './overSome';
-export const utils = { ...stubTrue, ...stubArray, ...stubFalse, ...stubObject, ...stubString, ...constant, ...defaultTo, ...uniqueId, ...range, ...rangeRight, ...times, ...nthArg, ...property, ...propertyOf, ...matches, ...matchesProperty, ...iteratee, ...method, ...methodOf, ...result, ...attempt, ...cond, ...conforms, ...conformsTo, ...over, ...overEvery, ...overSome };
+import * as templateSettings from './templateSettings';
+import * as template from './template';
+import * as mixin from './mixin';
+export const utils = { ...stubTrue, ...stubArray, ...stubFalse, ...stubObject, ...stubString, ...constant, ...defaultTo, ...uniqueId, ...range, ...rangeRight, ...times, ...nthArg, ...property, ...propertyOf, ...matches, ...matchesProperty, ...iteratee, ...method, ...methodOf, ...result, ...attempt, ...cond, ...conforms, ...conformsTo, ...over, ...overEvery, ...overSome, ...templateSettings, ...template, ...mixin };
