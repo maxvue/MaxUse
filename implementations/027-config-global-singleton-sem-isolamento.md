@@ -1,0 +1,141 @@
+# 027 — Configuração global em singletons sem isolamento por instância
+
+- **Severidade:** Média
+- **Tipo:** Sugestão de melhoria arquitetural
+- **Arquivo:** [src/Routes/config.ts:18-19](../src/Routes/config.ts#L18-L19)
+
+## Descrição
+
+Toda a configuração do módulo Routes vive em variáveis de módulo:
+
+```typescript
+let routeResolver: RouteResolver | null = null;
+let apiConfig: ApiRequestConfig = { withCredentials: true };
+```
+
+E o `goToRoute.ts` adiciona mais um:
+
+```typescript
+let activeRouter: Router | null = null;
+```
+
+O padrão funciona para o caso comum (uma aplicação, configurada uma vez no
+`main.ts`), mas tem consequências que valem ser conhecidas.
+
+## Consequência 1 — testes acoplados à ordem de execução
+
+O próprio código reconhece o problema ao expor `resetConfig()`:
+
+```typescript
+/**
+ * Reseta toda a configuração. Útil para testes.
+ * @internal
+ */
+export function resetConfig(): void {
+    routeResolver = null;
+    apiConfig = { withCredentials: true };
+}
+```
+
+Porém `resetConfig()` **não reseta `activeRouter`** de `goToRoute.ts`, que é um
+singleton em outro módulo. Um teste que chama `setLibraryRouter(mockRouter)`
+deixa esse mock ativo para todos os testes subsequentes do arquivo, sem forma
+suportada de limpar.
+
+Além disso, `resetConfig()` não desfaz a mutação de `axios.defaults` feita por
+`getCachedApiIDB` (ver [achado 005](./005-mutacao-global-axios-defaults.md)).
+
+## Consequência 2 — micro-frontends e múltiplos backends
+
+Uma aplicação que consome duas APIs com autenticações diferentes não consegue
+configurar as duas:
+
+```typescript
+setApiRequestConfig({ headers: { Authorization: () => tokenA } });
+// ...em outro módulo:
+setApiRequestConfig({ headers: { Authorization: () => tokenB } });
+// A segunda chamada sobrescreve; não há como ter as duas simultaneamente.
+```
+
+Em cenários de micro-frontend com múltiplas instâncias da lib compartilhando o
+mesmo bundle, as instâncias interferem entre si.
+
+## Consequência 3 — SSR: vazamento de configuração entre requisições
+
+Num servidor Node com SSR, o módulo é carregado **uma vez** e compartilhado por
+todas as requisições HTTP concorrentes. Se `setApiRequestConfig` for chamado por
+requisição (para injetar o token do usuário atual), há vazamento:
+
+```typescript
+// Requisição do usuário A
+setApiRequestConfig({ headers: { Authorization: () => tokenDoUsuarioA } });
+await renderPage();   // ← await cede o controle
+
+// Requisição do usuário B chega e sobrescreve
+setApiRequestConfig({ headers: { Authorization: () => tokenDoUsuarioB } });
+
+// A renderização de A retoma e usa o token de B → vazamento de dados entre usuários
+```
+
+Esse é o risco mais sério dos três. A mitigação atual — usar funções nos headers
+(`() => getToken()`) — só funciona se `getToken()` for ele próprio isolado por
+requisição (AsyncLocalStorage), o que a documentação não menciona.
+
+## Correção sugerida
+
+### Curto prazo (não quebra API)
+
+1. Fazer `resetConfig()` limpar também o `activeRouter`, exportando um
+   `resetRouter()` interno de `goToRoute.ts` e chamando-o:
+
+```typescript
+// goToRoute.ts
+/** @internal */
+export function resetRouter(): void { activeRouter = null; }
+
+// config.ts
+import { resetRouter } from './goToRoute';
+
+export function resetConfig(): void {
+    routeResolver = null;
+    apiConfig = { withCredentials: true };
+    resetRouter();
+}
+```
+
+2. Documentar no JSDoc de `setApiRequestConfig` que a config é **global ao
+   processo** e não deve ser usada por requisição em SSR:
+
+```
+ * ATENÇÃO: a configuração é global ao processo. Em ambientes SSR, NÃO chame esta
+ * função por requisição — use funções nos headers que leiam de um contexto
+ * isolado por requisição (ex.: AsyncLocalStorage).
+```
+
+### Longo prazo (major version)
+
+Oferecer uma API de instância, mantendo os singletons como conveniência:
+
+```typescript
+export function createMaxUseRoutes(config: { resolver: RouteResolver } & ApiRequestConfig) {
+    return {
+        apiGetRoute: (name, data, options) => { /* usa esta config */ },
+        apiPostRoute: (name, data, options) => { /* ... */ },
+        getRoute: (name, data) => { /* ... */ }
+        // ...
+    };
+}
+
+// Os helpers globais atuais passam a ser uma instância default:
+const defaultInstance = createMaxUseRoutes({ ... });
+export const apiGetRoute = defaultInstance.apiGetRoute;
+```
+
+Isso resolve as três consequências de uma vez, mantém a ergonomia atual para o
+caso simples, e torna os testes triviais de isolar (cada teste cria sua instância,
+sem `resetConfig`).
+
+## Relacionado
+
+- [005 — mutação global de axios.defaults](./005-mutacao-global-axios-defaults.md)
+- [004 — getCachedApi ignora config global](./004-getCachedApi-ignora-config-global.md)
