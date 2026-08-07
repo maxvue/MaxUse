@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
 import { tap } from './tap';
+import { chain } from './chain';
 
 describe('tap', () => {
     it('invoca o interceptor com o valor (efeito colateral)', () => {
@@ -27,5 +28,18 @@ describe('tap', () => {
         const result = tap(ref(10), (v) => spy.push(v));
         expect(result).toBe(10);
         expect(spy).toEqual([10]);
+    });
+
+    it('como método de instância do wrapper, empilha ação preguiçosa e repassa o mesmo valor', () => {
+        const spy: unknown[] = [];
+        const w = chain([1, 2, 3]).tap((v) => spy.push(v));
+        expect(spy).toEqual([]); // não roda até .value() ser chamado (avaliação preguiçosa)
+        expect(w.value()).toEqual([1, 2, 3]);
+        expect(spy).toEqual([[1, 2, 3]]);
+    });
+
+    it('método de instância .tap() repassa o valor, não o retorno do interceptor (diferente de .thru())', () => {
+        const w = chain([1, 2, 3]).tap(() => 'ignorado');
+        expect(w.value()).toEqual([1, 2, 3]);
     });
 });

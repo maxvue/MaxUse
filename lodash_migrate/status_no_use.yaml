@@ -2230,8 +2230,8 @@ helpers:
     plano: lodash_migrate/plans/Seq/chain.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: tap
     categoria: Seq
     fase: 5
@@ -2246,8 +2246,8 @@ helpers:
     plano: lodash_migrate/plans/Seq/thru.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperAt
     categoria: Seq
     fase: 5
@@ -2256,8 +2256,8 @@ helpers:
       - chain
       - at
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperChain
     categoria: Seq
     fase: 5
@@ -2265,8 +2265,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperCommit
     categoria: Seq
     fase: 5
@@ -2274,8 +2274,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperLodash
     categoria: Seq
     fase: 5
@@ -2283,8 +2283,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperNext
     categoria: Seq
     fase: 5
@@ -2292,8 +2292,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperPlant
     categoria: Seq
     fase: 5
@@ -2301,8 +2301,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperReverse
     categoria: Seq
     fase: 5
@@ -2311,8 +2311,8 @@ helpers:
       - chain
       - reverse
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperToIterator
     categoria: Seq
     fase: 5
@@ -2320,8 +2320,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: wrapperValue
     categoria: Seq
     fase: 5
@@ -2329,8 +2329,8 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: value
     categoria: Seq
     fase: 5
@@ -2339,8 +2339,8 @@ helpers:
       - chain
       - wrapperValue
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: commit
     categoria: Seq
     fase: 5
@@ -2349,8 +2349,8 @@ helpers:
       - chain
       - wrapperCommit
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: plant
     categoria: Seq
     fase: 5
@@ -2359,8 +2359,8 @@ helpers:
       - chain
       - wrapperPlant
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: next
     categoria: Seq
     fase: 5
@@ -2369,8 +2369,8 @@ helpers:
       - chain
       - wrapperNext
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: toIterator
     categoria: Seq
     fase: 5
@@ -2379,8 +2379,8 @@ helpers:
       - chain
       - wrapperToIterator
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: toJSON
     categoria: Seq
     fase: 5
@@ -2389,8 +2389,8 @@ helpers:
       - chain
       - wrapperValue
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: valueOf
     categoria: Seq
     fase: 5
@@ -2399,8 +2399,8 @@ helpers:
       - chain
       - wrapperValue
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: lodash
     categoria: Seq
     fase: 5
@@ -2408,5 +2408,5 @@ helpers:
     depende_de:
       - chain
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
