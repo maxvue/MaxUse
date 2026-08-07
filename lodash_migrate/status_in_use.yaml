@@ -24,8 +24,8 @@ helpers:
     depende_de:
       - keys
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: pickBy
     uso_confirmado: "MinhaBibliaOnline/resources/Stores/Planner/getListPlannerListsStore.ts:126 (_.pickBy)"
     categoria: Objects

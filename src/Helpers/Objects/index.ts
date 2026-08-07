@@ -11,6 +11,7 @@ import { diff } from './diff';
 import { keyExists } from './keyExists';
 import { keys } from './keys';
 import { keysIn } from './keysIn';
+import { values } from './values';
 import { valuesIn } from './valuesIn';
 import { has } from './has';
 import { hasIn } from './hasIn';
@@ -48,7 +49,7 @@ import { updateWith } from './updateWith';
 import { transform } from './transform';
 
 export { deepClone, get, set, unset, isEqual, deepMerge, renameKeys, pick, omit, mapValues, diff, keyExists };
-export { keys, keysIn, valuesIn, has, hasIn, toPairs, toPairsIn, at };
+export { keys, keysIn, values, valuesIn, has, hasIn, toPairs, toPairsIn, at };
 export { deepClone as cloneDeep };
 export { assign, assignIn, extend, assignWith, assignInWith, extendWith, defaults, merge, mergeWith, defaultsDeep, create };
 export { entries, entriesIn, findKey, findLastKey, forIn, forInRight, forOwn, forOwnRight, functions, functionsIn, invert, invertBy, mapKeys, omitBy, setWith, update, updateWith, transform };
