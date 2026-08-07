@@ -30,7 +30,7 @@ npx vitest run -t 'isCpf'
 ## Architecture
 
 ### Modular exports with a central `_` object
-The public API is assembled in [src/index.ts](src/index.ts). Everything is re-exported flat for named imports (`import { isCpf } from '@maxvue/max-use'`), **and** merged into a single `_` object mirroring Lodash's convention. The `_` object has a strict precedence when names collide: **own helpers > VueUse > Lodash** (VueUse and Lodash keys are filtered out if a name already exists higher in the chain). When adding a helper whose name might clash, be aware it will shadow the VueUse/Lodash version inside `_`.
+The public API is assembled in [src/index.ts](src/index.ts). Everything is re-exported flat for named imports (`import { isCpf } from '@maxvue/max-use'`), **and** merged into a single `_` object mirroring Lodash's convention. The `_` object is built by merging, in order: `ownHelpers`, the filtered VueUse, then lodash-es. **VueUse keys are filtered out when the name already exists in `ownHelpers`; lodash-es keys are NOT filtered**, so on a name collision the Lodash version wins inside `_` (e.g. `_.size(5)` → `0` from Lodash, while the named export `size(5)` → `5` from this library). Named/flat imports always resolve to this library's own helper. When adding a helper whose name collides with Lodash, be aware the two entry points will disagree — see `implementations/019`.
 
 Ambiguity between modules (e.g. `now`, `get`/`set`, `isObject`, `useTimeAgo`) is resolved with explicit `export { ... }` lines near the bottom of `index.ts` — add to that list if you introduce a name exported by more than one module.
 
@@ -40,7 +40,7 @@ Ambiguity between modules (e.g. `now`, `get`/`set`, `isObject`, `useTimeAgo`) is
 - **`Routes/`** — framework-agnostic named-route HTTP helpers (see below).
 
 ### Helper category convention
-Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every function flat and (2) builds a namespace object aggregating them (e.g. `Validations/index.ts` exports both the individual functions and a `validate` object). Follow this pattern for new categories, and register the new category in **all three** aggregation points: [src/index.ts](src/index.ts), [src/Helpers/maxUseItems.ts](src/Helpers/maxUseItems.ts), and [src/scripts/buildAutoImport.ts](src/scripts/buildAutoImport.ts).
+Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every function flat and (2) builds a namespace object aggregating them (e.g. `Validations/index.ts` exports both the individual functions and a `validate` object). For a **single new helper/composable**, exporting it from its category's `index.ts` is enough — nothing needs to be added by hand elsewhere. Only when creating a **new category** do you follow this pattern and register it in **all three** aggregation points: [src/index.ts](src/index.ts), [src/Helpers/maxUseItems.ts](src/Helpers/maxUseItems.ts), and [src/scripts/buildAutoImport.ts](src/scripts/buildAutoImport.ts).
 
 ### Multi-entry library build
 [vite.config.ts](vite.config.ts) declares one Rollup entry per subpath export (`browser`, `dates`, `math`, `routes`, etc.), ES format only, minify off, sourcemaps on. Each entry maps to a `./dist/*.es.js` + `.d.ts` pair listed under `exports` in [package.json](package.json) (e.g. `@maxvue/max-use/validations`). **Adding a new subpath export requires editing both** the `build.lib.entry` map in vite.config.ts and the `exports` map in package.json. Vue and all runtime `dependencies`/`peerDependencies` are externalized. A custom `generateExportsManifest` plugin emits `dist/exports.json` listing the public API surface.
@@ -54,7 +54,7 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 - `setApiRequestConfig({ headers, withCredentials })` — global headers (values may be functions resolved per-request, e.g. `Authorization`) and cookie behavior for mutating requests.
 - `resetConfig()` — `@internal`, used to reset singletons between tests.
 
-`apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants (`getCachedApi`, `getCachedApiIDB`, `postCachedApiIDB`) use `localforage` for IndexedDB caching. Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
+`apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants: `getCachedApi` caches in `localStorage`; `getCachedApiIDB` and `postCachedApiIDB` use the native `indexedDB` API directly (the IDB layer is currently duplicated between those two files — see `implementations/009`). Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
 
 ### Data-driven helpers
 `Helpers/Electrical/wireSize.ts` reads lookup tables from `src/json/*.json` (electrical wire-sizing tables like `al-70-bi-a1.json`). `resolveJsonModule` is enabled; these JSON files are bundled, not external.

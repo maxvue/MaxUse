@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import { isValid, isNotValid, isEmpty, notEmpty, isNotEmpty, empty, noEmpty, notHasValidContent } from './isValid';
 
 describe('isValid', () => {
@@ -110,5 +110,39 @@ describe('notHasValidContent', () => {
 
     it('retorna false para valor válido', () => {
         expect(notHasValidContent('hello')).toBe(false);
+    });
+});
+
+describe('isEmpty — regressão auditoria (achado 001)', () => {
+    it('retorna boolean puro, sem type-guard que estreite o argumento', () => {
+        // Um type-guard `value is NonNullable<V>` faria o retorno ser um predicado.
+        expectTypeOf(isEmpty).returns.toEqualTypeOf<boolean>();
+    });
+
+    it('não estreita o tipo para NonNullable dentro do if', () => {
+        const nome = (JSON.parse('null') as string | null);
+
+        // Sem o type-guard invertido, `nome` continua `string | null` dentro do if.
+        if (isEmpty(nome)) expectTypeOf(nome).toEqualTypeOf<string | null>();
+
+        expect(isEmpty(nome)).toBe(true);
+    });
+
+    it('não estreita para null/undefined no ramo else', () => {
+        const lista = (JSON.parse('[1,2,3]') as number[] | null);
+
+        if (!isEmpty(lista)) {
+            // Este ramo precisa continuar permitindo o uso do valor.
+            expectTypeOf(lista).toEqualTypeOf<number[] | null>();
+            expect(lista?.length).toBe(3);
+        }
+    });
+
+    it('mantém o comportamento de runtime inalterado', () => {
+        expect(isEmpty([])).toBe(true);
+        expect(isEmpty([1])).toBe(false);
+        expect(isEmpty('')).toBe(true);
+        expect(isEmpty(0)).toBe(false);
+        expect(isEmpty(false)).toBe(false);
     });
 });

@@ -28,6 +28,9 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
 
     const state = ref<T>(default_value) as ToRefCached<T>;
 
+    // Em SSR/Node não há storage: retorna a Ref com o valor padrão, sem persistência
+    const is_client = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+
     // Sincronização reativa entre abas via evento nativo "storage"
     const onStorageEvent = (event: StorageEvent) => {
         if (event.key !== raw_key.value || event.storageArea !== localStorage) return;
@@ -42,12 +45,14 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
 
     };
 
-    window.addEventListener('storage', onStorageEvent);
-    onScopeDispose(() => window.removeEventListener('storage', onStorageEvent));
+    if (is_client) {
+        window.addEventListener('storage', onStorageEvent);
+        onScopeDispose(() => window.removeEventListener('storage', onStorageEvent));
+    }
 
     watch(raw_key, () => {
 
-        if (!raw_key.value) return;
+        if (!is_client || !raw_key.value) return;
 
         // Leitura síncrona do localStorage
         const raw = localStorage.getItem(raw_key.value);
@@ -65,7 +70,7 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     }, { immediate: true });
 
     watch(state, (new_value) => {
-        if (!raw_key.value) return;
+        if (!is_client || !raw_key.value) return;
         localStorage.setItem(raw_key.value, JSON.stringify(new_value));
     }, { immediate: true, deep: true });
 

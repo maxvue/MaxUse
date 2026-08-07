@@ -32,3 +32,19 @@ describe('average', () => {
         expect(average(() => [100, 200])).toBe(150);
     });
 });
+
+describe('average — regressão auditoria (achado 023)', () => {
+    it.each([null, undefined])('retorna 0 sem lançar para %p', (input) => {
+        expect(() => average(input as any)).not.toThrow();
+        expect(average(input as any)).toBe(0);
+    });
+
+    it('ignora valores não numéricos em vez de retornar NaN', () => {
+        expect(average([2, null as any, 4])).toBe(3);
+        expect(average([1, 'a' as any, 3])).toBe(2);
+    });
+
+    it('retorna 0 quando nenhum valor é numérico', () => {
+        expect(average([null as any, undefined as any])).toBe(0);
+    });
+});

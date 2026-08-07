@@ -99,3 +99,38 @@ describe('apiUploadRoute', () => {
         expect(formData.get('ownProp')).toBe('proprio');
     });
 });
+
+describe('apiUploadRoute — regressão auditoria (achado 008)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue({
+            option_load_screen: null,
+            routeURL: 'https://api.example.com/upload'
+        });
+        (axios.post as any).mockResolvedValue({ data: { uploaded: true } });
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it('não lança quando files é null (valor padrão do parâmetro)', async () => {
+        await expect(apiUploadRoute('test.upload')).resolves.toEqual({ uploaded: true });
+    });
+
+    it('aceita um File único fora de array', async () => {
+        const fakeFile = new File(['x'], 'unico.txt', { type: 'text/plain' });
+
+        await expect(apiUploadRoute('test.upload', fakeFile)).resolves.toEqual({ uploaded: true });
+
+        const formData = (axios.post as any).mock.calls[0][1] as FormData;
+        expect(formData.get('files[0]')).toBeTruthy();
+    });
+
+    it('retorna null e loga em caso de erro de rede, em vez de propagar', async () => {
+        (axios.post as any).mockRejectedValue(new Error('Network error'));
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const fakeFile = new File(['x'], 'a.txt');
+
+        await expect(apiUploadRoute('test.upload', [fakeFile])).resolves.toBeNull();
+        expect(consoleSpy).toHaveBeenCalled();
+    });
+});

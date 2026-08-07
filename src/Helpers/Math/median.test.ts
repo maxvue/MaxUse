@@ -34,3 +34,18 @@ describe('median', () => {
         expect(median(ref([10, 20, 30]))).toBe(20);
     });
 });
+
+describe('median — regressão auditoria (achado 023)', () => {
+    it.each([null, undefined])('retorna 0 sem lançar para %p', (input) => {
+        expect(() => median(input as any)).not.toThrow();
+        expect(median(input as any)).toBe(0);
+    });
+
+    it('ignora valores não numéricos em vez de ordenar com null', () => {
+        expect(median([3, null as any, 1])).toBe(2);
+    });
+
+    it('retorna 0 quando nenhum valor é numérico', () => {
+        expect(median([null as any, undefined as any])).toBe(0);
+    });
+});

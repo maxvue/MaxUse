@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { resolveRoute } from './config';
+import { resolveRoute, getConfiguredHeaders, getWithCredentials } from './config';
 import { hasContent } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
@@ -26,7 +26,9 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     const key = toValue(keyCache) ?? route_name + '_' + JSON.stringify(data_request);
 
-    const data = localStorage.getItem(key);
+    const is_client = typeof localStorage !== 'undefined';
+
+    const data = is_client ? localStorage.getItem(key) : null;
 
     if (data) try {
         return JSON.parse(data);
@@ -37,9 +39,13 @@ export async function getCachedApi(routeName: RefStringOrNull, dataToRequest: Ma
 
     const routeUrl = resolveRoute(String(route_name), data_request);
 
-    const config: AxiosRequestConfig = { responseType: 'json', withCredentials: true };
+    const config: AxiosRequestConfig = {
+        responseType: 'json',
+        headers: { ...getConfiguredHeaders() },
+        withCredentials: getWithCredentials()
+    };
     const response = await axios.get(routeUrl, config);
     const data_return = response.data;
-    localStorage.setItem(key, JSON.stringify(data_return));
+    if (is_client) localStorage.setItem(key, JSON.stringify(data_return));
     return data_return;
 }

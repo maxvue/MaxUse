@@ -275,3 +275,38 @@ describe('getCachedApiIDB', () => {
         await expect(clearCacheIDB()).rejects.toThrow('clear error');
     });
 });
+
+describe('getCachedApiIDB — regressão auditoria (achados 004 e 005)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        mockStore.clear();
+        (config.resolveRoute as any).mockReturnValue('https://example.com/rota');
+        (axios.get as any).mockResolvedValue({ data: { ok: true } });
+    });
+
+    it('envia os headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ Authorization: 'Bearer abc' });
+
+        await getCachedApiIDB('api.rota');
+
+        const callArgs = (axios.get as any).mock.calls[0];
+        expect(callArgs[1].headers.Authorization).toBe('Bearer abc');
+    });
+
+    it('respeita withCredentials configurado como false', async () => {
+        (config.getWithCredentials as any).mockReturnValue(false);
+
+        await getCachedApiIDB('api.rota');
+
+        const callArgs = (axios.get as any).mock.calls[0];
+        expect(callArgs[1].withCredentials).toBe(false);
+    });
+
+    it('não muta axios.defaults.withCredentials (efeito colateral global)', async () => {
+        (axios as any).defaults = { withCredentials: false };
+
+        await getCachedApiIDB('api.rota');
+
+        expect((axios as any).defaults.withCredentials).toBe(false);
+    });
+});

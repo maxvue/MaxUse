@@ -94,3 +94,44 @@ describe('useRefCachedApi', () => {
         });
     });
 });
+
+describe('useCachedApi — regressão auditoria (achado 012)', () => {
+    let scope: ReturnType<typeof effectScope>;
+
+    beforeEach(() => {
+        localStorage.clear();
+        scope = effectScope();
+        vi.clearAllMocks();
+        (apiGetRouteModule.apiGetRoute as any).mockResolvedValue(null);
+    });
+
+    afterEach(() => scope.stop());
+
+    it('não lança quando o cache do localStorage está corrompido', () => {
+        localStorage.setItem('api.corrompida', '{json invalido');
+
+        scope.run(() => {
+            expect(() => useCachedApi('api.corrompida', { defaultValue: [] })).not.toThrow();
+        });
+    });
+
+    it('cai para o defaultValue e limpa a chave corrompida', () => {
+        localStorage.setItem('api.corrompida', 'nao-e-json');
+
+        scope.run(() => {
+            const state = useCachedApi<string[]>('api.corrompida', { defaultValue: [] });
+            expect(state.value).toEqual([]);
+        });
+
+        expect(localStorage.getItem('api.corrompida')).toBeNull();
+    });
+
+    it('não deixa rejeição sem tratamento se apiGetRoute falhar', async () => {
+        (apiGetRouteModule.apiGetRoute as any).mockRejectedValue(new Error('boom'));
+
+        scope.run(() => useCachedApi('api.falha', { defaultValue: [] }));
+
+        await expect(Promise.resolve()).resolves.toBeUndefined();
+        await nextTick();
+    });
+});

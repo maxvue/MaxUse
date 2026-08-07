@@ -63,3 +63,23 @@ describe('formatBytes', () => {
         expect(formatBytes(ref(2048))).toBe('2 KB');
     });
 });
+
+describe('formatBytes — regressão auditoria (achado 014)', () => {
+    it('trata valores negativos em vez de retornar "NaN undefined"', () => {
+        expect(formatBytes(-1024)).toBe('-1 KB');
+        expect(formatBytes(-1048576)).toBe('-1 MB');
+    });
+
+    it('não estoura o array de sufixos para valores enormes', () => {
+        expect(formatBytes(1e30)).toMatch(/YB$/);
+        expect(formatBytes(1e30)).not.toContain('undefined');
+    });
+
+    it('trata vírgula como separador decimal (pt-BR)', () => {
+        expect(formatBytes('1,5')).toBe('1.5 Bytes');
+    });
+
+    it('preserva o sinal negativo em strings', () => {
+        expect(formatBytes('-1024')).toBe('-1 KB');
+    });
+});

@@ -92,28 +92,33 @@ export function maskSensitive(value: RefString, type: 'email' | 'card' | 'text' 
 
     const str = String(data).trim();
 
-    if (type === 'email') {
-        const [user, domain] = str.split('@');
-        if (!domain) return str;
-
-        const mask = (s: string) => {
-            if (s.length <= 3) return s.charAt(0) + '***';
-            return s.slice(0, 3) + '***';
-        };
-
-        const [domainName, domainSuffix] = domain.split('.');
-        if (!domainSuffix) return `${mask(user)}@${mask(domain)}`;
-
-        return `${mask(user)}@${mask(domainName)}.${domainSuffix}`;
-    }
-
     if (type === 'card') {
         const onlyNumbers = str.replace(/\D/g, '');
-        const last4 = onlyNumbers.slice(-4);
-        return `**** **** **** ${last4}`;
+        // Só revela os 4 últimos se sobrar o que ocultar; caso contrário, mascara tudo
+        if (onlyNumbers.length < 8) return '**** **** **** ****';
+        return `**** **** **** ${onlyNumbers.slice(-4)}`;
     }
 
-    // Default: mask middle characters
-    if (str.length <= 4) return '****';
+    if (type === 'email') {
+        const atIndex = str.lastIndexOf('@');
+        if (atIndex < 1) return '****';
+
+        const user = str.slice(0, atIndex);
+        const domain = str.slice(atIndex + 1);
+
+        // Revela no máximo 1/3 do trecho, nunca mais que 3 caracteres
+        const mask = (s: string) => {
+            const reveal = Math.min(3, Math.floor(s.length / 3));
+            return reveal < 1 ? '***' : s.slice(0, reveal) + '***';
+        };
+
+        const dotIndex = domain.lastIndexOf('.');
+        if (dotIndex < 1) return `${mask(user)}@${mask(domain)}`;
+
+        return `${mask(user)}@${mask(domain.slice(0, dotIndex))}${domain.slice(dotIndex)}`;
+    }
+
+    // Default: revela no máximo os 2 primeiros e 2 últimos, e só se houver o que ocultar
+    if (str.length <= 6) return '****';
     return str.slice(0, 2) + '***' + str.slice(-2);
 }

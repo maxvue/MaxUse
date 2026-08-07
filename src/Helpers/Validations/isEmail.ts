@@ -11,9 +11,12 @@ export function isEmail(value: MaybeRefOrGetter<string | null | undefined>): boo
 
     if (!data || typeof data !== 'string') return false;
 
+    // Limite prático de comprimento (RFC 5321)
+    if (data.length > 254) return false;
 
-    // Regex robusto para validação de e-mail
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Parte local: grupos alfanuméricos separados por ponto único (sem ponto no início/fim).
+    // Domínio: labels que não iniciam nem terminam com hífen, seguidas de TLD com 2+ letras.
+    const emailRegex = /^[a-zA-Z0-9_%+-]+(\.[a-zA-Z0-9_%+-]+)*@([a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
 
     return emailRegex.test(data);
 }

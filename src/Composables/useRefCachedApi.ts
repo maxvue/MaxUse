@@ -33,28 +33,36 @@ export function useCachedApi<T>(route_name: string, options: { data_get?: any; d
     const state = ref(options.defaultValue ?? null) as ToRefCachedApi<T>;
     const key = options.key ?? route_name;
 
-    const data = localStorage.getItem(key);
+    const is_client = typeof localStorage !== 'undefined';
 
-    if (data) state.value = JSON.parse(data);
+    const data = is_client ? localStorage.getItem(key) : null;
+
+    // Cache corrompido não deve derrubar o setup do componente: cai para o defaultValue
+    if (data) try {
+        state.value = JSON.parse(data);
+    } catch {
+        localStorage.removeItem(key);
+    }
 
     if (options.watch !== false) {
         const data_save = computed(() => JSON.stringify(state.value));
 
         watch(data_save, (value) => {
-            localStorage.setItem(key, value);
+            if (is_client) localStorage.setItem(key, value);
         });
     }
 
 
     if (options.sync !== false){
         const data_get = options.data_get ?? options.data ?? {};
-        apiGetRoute(route_name, data_get).then((value) => {
-            if (value) {
+        apiGetRoute(route_name, data_get)
+            .then((value) => {
+                if (!value) return;
                 state.value = value;
-                const cleanData = JSON.parse(JSON.stringify(value));
-                localStorage.setItem(key, JSON.stringify(cleanData));
-            }
-        });
+                // Com watch ativo a persistência já ocorre pelo watcher acima
+                if (is_client && options.watch === false) localStorage.setItem(key, JSON.stringify(value));
+            })
+            .catch(() => { /* apiGetRoute já registra o erro; mantém o valor vindo do cache */ });
     }
 
     return state;

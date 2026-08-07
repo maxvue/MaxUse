@@ -83,3 +83,30 @@ describe('diffInYears', () => {
         expect(diffInMonths(null, '2026-01-01')).toBe(0);
     });
 });
+
+describe('diffInYears / diffInMonths — regressão auditoria (achado 026)', () => {
+    it('não conta 1 dia como 1 ano na virada do calendário', () => {
+        expect(diffInYears('2020-12-31', '2021-01-01')).toBe(0);
+    });
+
+    it('não conta 1 dia como 1 mês na virada do mês', () => {
+        expect(diffInMonths('2026-01-31', '2026-02-01')).toBe(0);
+    });
+
+    it('calcula meses completos', () => {
+        expect(diffInMonths('2026-01-15', '2026-02-15')).toBe(1);
+        expect(diffInMonths('2026-01-15', '2026-02-14')).toBe(0);
+        expect(diffInMonths('2026-01-15', '2026-03-15')).toBe(2);
+    });
+
+    it('calcula idade corretamente (anos completos)', () => {
+        expect(diffInYears('2005-12-31', '2026-01-01')).toBe(20);
+        expect(diffInYears('2000-06-15', '2026-06-15')).toBe(26);
+        expect(diffInYears('2000-06-15', '2026-06-14')).toBe(25);
+    });
+
+    it('é simétrico independente da ordem dos argumentos', () => {
+        expect(diffInMonths('2026-03-15', '2026-01-15')).toBe(2);
+        expect(diffInYears('2026-01-01', '2005-12-31')).toBe(20);
+    });
+});

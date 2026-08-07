@@ -40,10 +40,13 @@ export function noEmpty<V>(value: V): value is NonNullable<V> {
  * Verifica se um valor está vazio (tamanho === 0).
  * Inverso de {@link notEmpty}.
  *
+ * ATENÇÃO: booleanos e números (inclusive `0` e `false`) nunca são considerados
+ * vazios. Para tratar `0` como ausência de valor, use {@link isBlank}.
+ *
  * @param value - O valor a ser verificado.
  * @returns true se o valor estiver vazio (size === 0).
  */
-export function isEmpty<V>(value: V): value is NonNullable<V> {
+export function isEmpty<V>(value: V): boolean {
     if (typeof value === 'boolean' || typeof value === 'number') return false;
     return size(value as any) === 0;
 }

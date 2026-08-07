@@ -64,10 +64,10 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours → "Xhs" para horas atrás', () => {
+        it('hours → "Xh" para horas atrás', () => {
             scope.run(() => {
                 const result = timeAgo(ago(3 * HOUR));
-                expect(result.value).toMatch(/3hs/);
+                expect(result.value).toMatch(/3h/);
             });
         });
 
@@ -127,10 +127,10 @@ describe('timeAgo', () => {
             });
         });
 
-        it('years → "X years" para múltiplos anos', () => {
+        it('years → "X anos" para múltiplos anos', () => {
             scope.run(() => {
                 const result = timeAgo(ago(2 * YEAR));
-                expect(result.value).toContain('2 years');
+                expect(result.value).toContain('2 anos');
             });
         });
     });
@@ -284,10 +284,10 @@ describe('timeAgo', () => {
             });
         });
 
-        it('years plural (passado) → "X years"', () => {
+        it('years plural (passado) → "X anos"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(2 * YEAR), 'action');
-                expect(result.value).toContain('2 years');
+                expect(result.value).toContain('2 anos');
             });
         });
 
@@ -305,10 +305,10 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours (passado) → "Atrasado: Xhs"', () => {
+        it('hours (passado) → "Atrasado: Xh"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(3 * HOUR), 'action');
-                expect(result.value).toContain('3hs');
+                expect(result.value).toContain('3h');
             });
         });
 
@@ -359,11 +359,11 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours (passado) → "Atrasado: Xhs"', () => {
+        it('hours (passado) → "Atrasado: Xh"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(3 * HOUR), 'limit');
                 expect(result.value).toContain('Atrasado');
-                expect(result.value).toContain('3hs');
+                expect(result.value).toContain('3h');
             });
         });
 
@@ -428,7 +428,7 @@ describe('timeAgo', () => {
         it('years plural (passado) → "Atrasado: X years"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(2 * YEAR), 'limit');
-                expect(result.value).toContain('2 years');
+                expect(result.value).toContain('2 anos');
             });
         });
 
@@ -468,11 +468,11 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours (futuro) → "Realizar em Xhs"', () => {
+        it('hours (futuro) → "Realizar em Xh"', () => {
             scope.run(() => {
                 const result = timeAgo(ahead(3 * HOUR), 'limit');
                 expect(result.value).toContain('Realizar em');
-                expect(result.value).toContain('3hs');
+                expect(result.value).toContain('3h');
             });
         });
     });
@@ -495,11 +495,11 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours (passado) → "Atrasado: Xhs"', () => {
+        it('hours (passado) → "Atrasado: Xh"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(3 * HOUR), 'limitAbbrev');
                 expect(result.value).toContain('Atrasado');
-                expect(result.value).toContain('3hs');
+                expect(result.value).toContain('3h');
             });
         });
 
@@ -562,7 +562,7 @@ describe('timeAgo', () => {
         it('years plural (passado) → "Atrasado: X years"', () => {
             scope.run(() => {
                 const result = timeAgo(ago(2 * YEAR), 'limitAbbrev');
-                expect(result.value).toContain('2 years');
+                expect(result.value).toContain('2 anos');
             });
         });
 
@@ -602,11 +602,11 @@ describe('timeAgo', () => {
             });
         });
 
-        it('hours (futuro) → "Em Xhs"', () => {
+        it('hours (futuro) → "Em Xh"', () => {
             scope.run(() => {
                 const result = timeAgo(ahead(3 * HOUR), 'limitAbbrev');
                 expect(result.value).toContain('Em');
-                expect(result.value).toContain('3hs');
+                expect(result.value).toContain('3h');
             });
         });
     });
@@ -667,7 +667,7 @@ describe('timeAgo', () => {
         it('aceita string ISO como data', () => {
             scope.run(() => {
                 const result = timeAgo(ago(2 * HOUR).toISOString());
-                expect(result.value).toContain('2hs');
+                expect(result.value).toContain('2h');
             });
         });
 
@@ -740,4 +740,43 @@ describe('timeAgo', () => {
             vi.doUnmock('@vueuse/core');
         });
     });
+});
+
+describe('timeAgo — regressão auditoria (achado 013)', () => {
+    let scope: ReturnType<typeof effectScope>;
+
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(FIXED_NOW);
+        scope = effectScope();
+    });
+
+    afterEach(() => {
+        scope.stop();
+        vi.useRealTimers();
+    });
+
+    it.each(['br', 'abbrev', 'action', 'limit', 'limitAbbrev'])(
+        'formato %s não emite "year" em inglês no plural',
+        (formato) => {
+            scope.run(() => {
+                expect(timeAgo(ago(2 * YEAR), formato).value).not.toMatch(/year/i);
+            });
+        }
+    );
+
+    it('pluraliza anos em português', () => {
+        scope.run(() => {
+            expect(timeAgo(ago(2 * YEAR), 'br').value).toContain('anos');
+        });
+    });
+
+    it.each(['br', 'abbrev', 'action', 'limit', 'limitAbbrev'])(
+        'formato %s usa abreviação invariável de hora (sem "hs")',
+        (formato) => {
+            scope.run(() => {
+                expect(timeAgo(ago(3 * HOUR), formato).value).not.toMatch(/\dhs/);
+            });
+        }
+    );
 });

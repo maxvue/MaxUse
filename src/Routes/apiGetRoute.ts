@@ -13,6 +13,9 @@ import { getConfiguredHeaders, getWithCredentials } from './config';
  */
 export async function apiGetRoute(RouteName: string | null, data: any = {}, options: any = null): Promise<any> {
     const system_options: any = apiRoute(RouteName, data, options, 'GET');
+
+    if (!system_options) return null;
+
     const config: AxiosRequestConfig = {
         responseType: 'json',
         headers: {

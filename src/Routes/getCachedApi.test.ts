@@ -40,7 +40,7 @@ describe('getCachedApi', () => {
         const result = await getCachedApi('test.route', { id: 1 });
 
         expect(config.resolveRoute).toHaveBeenCalledWith('test.route', { id: 1 });
-        expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', { responseType: 'json', withCredentials: true });
+        expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', expect.objectContaining({ responseType: 'json', withCredentials: true }));
         expect(result).toEqual({ id: 1, name: 'Test' });
 
         const cached = localStorage.getItem('test.route_{"id":1}');
@@ -63,5 +63,32 @@ describe('getCachedApi', () => {
 
         expect(axios.get).not.toHaveBeenCalled();
         expect(result).toEqual({ custom: true });
+    });
+});
+
+describe('getCachedApi — regressão auditoria (achado 004)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        localStorage.clear();
+        (config.resolveRoute as any).mockReturnValue('https://example.com/rota');
+        (axios.get as any).mockResolvedValue({ data: { ok: true } });
+    });
+
+    it('envia os headers configurados via setApiRequestConfig', async () => {
+        (config.getConfiguredHeaders as any).mockReturnValue({ Authorization: 'Bearer abc' });
+
+        await getCachedApi('api.rota');
+
+        const callArgs = (axios.get as any).mock.calls[0];
+        expect(callArgs[1].headers.Authorization).toBe('Bearer abc');
+    });
+
+    it('respeita withCredentials configurado como false', async () => {
+        (config.getWithCredentials as any).mockReturnValue(false);
+
+        await getCachedApi('api.rota');
+
+        const callArgs = (axios.get as any).mock.calls[0];
+        expect(callArgs[1].withCredentials).toBe(false);
     });
 });

@@ -49,16 +49,16 @@
             "import": "./dist/electrical.es.js"
         },
         "./vueUseCore": {
-            "types": "./dist/Helpers/VueUse/core.ts",
-            "import": "./dist/vueUseCore.ts"
+            "types": "./dist/Helpers/VueUse/core.d.ts",
+            "import": "./dist/vueUseCore.es.js"
         },
         "./format": {
             "types": "./dist/Helpers/Format/index.d.ts",
             "import": "./dist/format.es.js"
         },
         "./vueuse": {
-            "types": "./dist/Helpers/VueUse/core.d.ts",
-            "import": "./dist/core.es.js"
+            "types": "./dist/Helpers/VueUse/index.d.ts",
+            "import": "./dist/vueuse.es.js"
         },
         "./composables": {
             "types": "./dist/Composables/index.d.ts",
@@ -95,7 +95,6 @@
         "color": "^5.0.3",
         "js-brasil": "^2.8.0",
         "libphonenumber-js": "^1.13.10",
-        "localforage": "^1.10.0",
         "lodash-es": "^4.18.1",
         "ulid": "^3.0.2"
     },

@@ -10,10 +10,10 @@ const ptBr = {
     past: (n: n) => (n.toString().match(/\d/) ? `${n}` : n),
     future: (n: n) => (n.toString().match(/\d/) ? `Em ${n}` : n),
     month: (n: n, past: past) => (n === 1 ? (past ? 'Mês passado' : 'Próximo mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
-    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} year${n > 1 ? 's' : ''}`),
+    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} ano${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? 'Semana passada' : 'Próxima semana') : `${n} semana${n > 1 ? 's' : ''}`),
-    hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
+    hour: (n: n) => `${n}h`,
     minute: (n: n) => `${n}m`,
     second: (n: n) => `${n}s`
 };
@@ -23,10 +23,10 @@ const timeAgoAbbrev = {
     past: (n: n) => (n.toString().match(/\d/) ? `${n}` : n),
     future: (n: n) => (n.toString().match(/\d/) ? `Em ${n}` : n),
     month: (n: n, past: past) => (n === 1 ? (past ? '1 mês' : 'Próx. mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
-    year: (n: n, past: past) => (n === 1 ? (past ? '1 ano' : 'Próx. ano') : `${n} year${n > 1 ? 's' : ''}`),
+    year: (n: n, past: past) => (n === 1 ? (past ? '1 ano' : 'Próx. ano') : `${n} ano${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 Sem' : 'Próx. sem.') : `${n} sem.`),
-    hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
+    hour: (n: n) => `${n}h`,
     minute: (n: n) => `${n}m`,
     second: (n: n) => `${n}s`
 };
@@ -36,23 +36,23 @@ const timeAgoAction = {
     past: (n: n) => (n.toString().match(/\d/) ? `Atrasado: ${n}` : n),
     future: (n: n) => (n.toString().match(/\d/) ? `Realizar em ${n}` : n),
     month: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (1 Mês)' : 'Próximo mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
-    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} year${n > 1 ? 's' : ''}`),
+    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} ano${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (Ontem)' : 'Realizar até amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
-    hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
+    hour: (n: n) => `${n}h`,
     minute: (n: n) => `${n}m`,
     second: (n: n) => `${n}s`
 };
 
-const timeAgoLimitAbrev = {
+const timeAgoLimitAbbrev = {
     justNow: 'Hoje',
     past: (n: n) => (n.toString().match(/\d/) ? `Atrasado: ${n}` : n),
     future: (n: n) => (n.toString().match(/\d/) ? `Em ${n}` : n),
     month: (n: n, past: past) => (n === 1 ? (past ? 'Mês passado' : 'Próximo mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
-    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} year${n > 1 ? 's' : ''}`),
+    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} ano${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Ontem' : 'Amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
-    hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
+    hour: (n: n) => `${n}h`,
     minute: (n: n) => `${n}m`,
     second: (n: n) => `${n}s`
 };
@@ -62,10 +62,10 @@ const timeAgoLimit = {
     past: (n: n) => (n.toString().match(/\d/) ? `Atrasado: ${n}` : n),
     future: (n: n) => (n.toString().match(/\d/) ? `Realizar em ${n}` : n),
     month: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (1 Mês)' : 'Próximo mês') : `${n} M${n > 1 ? 'eses' : 'ês'}`),
-    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} year${n > 1 ? 's' : ''}`),
+    year: (n: n, past: past) => (n === 1 ? (past ? 'Ano passado' : 'Próximo ano') : `${n} ano${n > 1 ? 's' : ''}`),
     day: (n: n, past: past) => (n === 1 ? (past ? 'Atrasado (Ontem)' : 'Realizar até amanhã') : `${n} dia${n > 1 ? 's' : ''}`),
     week: (n: n, past: past) => (n === 1 ? (past ? '1 semana' : '1 semana') : `${n} semana${n > 1 ? 's' : ''}`),
-    hour: (n: n) => `${n}h${n > 1 ? 's' : ''}`,
+    hour: (n: n) => `${n}h`,
     minute: (n: n) => `${n}m`,
     second: (n: n) => `${n}s`
 };
@@ -75,9 +75,9 @@ const FORMAT_MAP: Record<string, any> = {
     abbrev: timeAgoAbbrev,
     action: timeAgoAction,
     limit: timeAgoLimit,
-    limitAbbrev: timeAgoLimitAbrev,
-    limit_abbrev: timeAgoLimitAbrev,
-    future: timeAgoLimitAbrev
+    limitAbbrev: timeAgoLimitAbbrev,
+    limit_abbrev: timeAgoLimitAbbrev,
+    future: timeAgoLimitAbbrev
 };
 
 /**

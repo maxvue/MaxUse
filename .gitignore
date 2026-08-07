@@ -52,6 +52,7 @@ eslint.test.config.js
 .env.*
 
 # Coverage outputs
+coverage/
 coverage*.txt
 temp_cov.txt
 

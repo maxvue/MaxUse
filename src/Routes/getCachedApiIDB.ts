@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { resolveRoute } from './config';
+import { resolveRoute, getConfiguredHeaders, getWithCredentials } from './config';
 import { isBlank } from '../Helpers/Types';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
@@ -133,8 +133,11 @@ export async function clearCacheIDB(): Promise<void> {
 async function fetchAndStore(route_name: string, data_request: any, key: string): Promise<any> {
     const routeUrl = resolveRoute(route_name, data_request);
 
-    const config: AxiosRequestConfig = { responseType: 'json' };
-    axios.defaults.withCredentials = true;
+    const config: AxiosRequestConfig = {
+        responseType: 'json',
+        headers: { ...getConfiguredHeaders() },
+        withCredentials: getWithCredentials()
+    };
     const response = await axios.get(routeUrl, config);
     const data_return = response.data;
 

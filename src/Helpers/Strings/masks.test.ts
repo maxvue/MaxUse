@@ -119,9 +119,10 @@ describe('maskSensitive', () => {
         expect(result).toContain('@');
     });
 
-    it('mascara string sem @ como email (retorna original)', () => {
+    it('mascara integralmente string sem @ no modo email (não vaza o valor)', () => {
         const result = maskSensitive('noatsign', 'email');
-        expect(result).toBe('noatsign');
+        expect(result).toBe('****');
+        expect(result).not.toContain('noatsign');
     });
 
     it('mascara cartão mostrando últimos 4 dígitos', () => {
@@ -147,5 +148,31 @@ describe('maskSensitive', () => {
     it('funciona com Ref', () => {
         const result = maskSensitive(ref('4111111111111111'), 'card');
         expect(result).toBe('**** **** **** 1111');
+    });
+});
+
+describe('maskSensitive — regressão auditoria (achado 017)', () => {
+    it('não expõe cartões curtos por inteiro', () => {
+        expect(maskSensitive('12', 'card')).not.toContain('12');
+        expect(maskSensitive('123', 'card')).toBe('**** **** **** ****');
+    });
+
+    it('continua revelando os 4 últimos dígitos de cartões completos', () => {
+        expect(maskSensitive('4111111111111234', 'card')).toBe('**** **** **** 1234');
+    });
+
+    it('não expõe domínios de e-mail curtos por inteiro', () => {
+        expect(maskSensitive('ab@x.com', 'email')).not.toBe('a***@x***.com');
+    });
+
+    it('nunca revela mais de 1/3 do valor no modo text', () => {
+        const cpf = '12345678901';
+        const masked = maskSensitive(cpf);
+        const revealed = [...masked].filter((c) => c !== '*').length;
+        expect(revealed).toBeLessThanOrEqual(Math.ceil(cpf.length / 3));
+    });
+
+    it('mascara integralmente valores curtos no modo text', () => {
+        expect(maskSensitive('abcdef')).toBe('****');
     });
 });

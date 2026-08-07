@@ -61,3 +61,26 @@ describe('toNumber', () => {
         expect(toNumber(ref('99.9'), 0)).toBe(100);
     });
 });
+
+describe('toNumber — regressão auditoria (achado 015)', () => {
+    it('converte decimais em formato pt-BR', () => {
+        expect(toNumber('1,5')).toBe(1.5);
+        expect(toNumber('1.234,56')).toBe(1234.56);
+        expect(toNumber('0,25')).toBe(0.25);
+    });
+
+    it('mantém compatibilidade com formato internacional', () => {
+        expect(toNumber('1234.56')).toBe(1234.56);
+        expect(toNumber('1,234.56')).toBe(1234.56);
+        expect(toNumber(42)).toBe(42);
+    });
+
+    it('respeita o parâmetro decimals com entrada pt-BR', () => {
+        expect(toNumber('1.234,567', 2)).toBe(1234.57);
+    });
+
+    it('retorna 0 para entradas realmente inválidas', () => {
+        expect(toNumber('abc')).toBe(0);
+        expect(toNumber(null)).toBe(0);
+    });
+});

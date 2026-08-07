@@ -11,7 +11,8 @@ export function formatBytes(
     decimals: MaybeRefOrGetter<number> = 2
 ): string {
     const raw = toValue(bytes);
-    const sanitized = typeof raw === 'string' ? raw.replace(/[^0-9.]/g, '') : raw;
+    // Preserva o sinal e aceita vírgula como separador decimal (pt-BR)
+    const sanitized = typeof raw === 'string' ? raw.replace(',', '.').replace(/[^0-9.-]/g, '') : raw;
     const rawBytes = Number(sanitized);
     const rawDecimals = toValue(decimals);
 
@@ -21,7 +22,11 @@ export function formatBytes(
     const dm = rawDecimals < 0 ? 0 : rawDecimals;
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-    const i = Math.floor(Math.log(rawBytes) / Math.log(k));
+    const sign = rawBytes < 0 ? '-' : '';
+    const abs = Math.abs(rawBytes);
 
-    return `${parseFloat((rawBytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
+    // Limita ao maior sufixo disponível para não indexar fora do array
+    const i = Math.min(Math.floor(Math.log(abs) / Math.log(k)), sizes.length - 1);
+
+    return `${sign}${parseFloat((abs / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }

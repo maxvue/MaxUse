@@ -27,3 +27,25 @@ describe('isEmail', () => {
         expect(isEmail(ref('test@test.com'))).toBe(true);
     });
 });
+
+describe('isEmail — regressão auditoria (achado 025)', () => {
+    it.each([
+        'a@b..com',
+        'a@-dominio.com',
+        'a@dominio-.com',
+        'a@.com',
+        'a..b@dominio.com',
+        '.a@dominio.com'
+    ])('rejeita %s', (invalido) => {
+        expect(isEmail(invalido)).toBe(false);
+    });
+
+    it.each([
+        'nome@dominio.com',
+        'nome.sobrenome+tag@sub.dominio.com.br',
+        'a@b.co',
+        'usuario_1@empresa-x.com.br'
+    ])('aceita %s', (valido) => {
+        expect(isEmail(valido)).toBe(true);
+    });
+});

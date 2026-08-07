@@ -77,3 +77,26 @@ describe('apiGetRoute', () => {
         expect(callArgs[1].headers['Authorization']).toBe('Bearer abc');
     });
 });
+
+describe('apiGetRoute — regressão auditoria (achado 006)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it.each([null, ''])('retorna null sem lançar quando RouteName é %p', async (routeName) => {
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue(null);
+
+        await expect(apiGetRoute(routeName as any)).resolves.toBeNull();
+        expect(axios.get).not.toHaveBeenCalled();
+    });
+
+    it('não lança segundo TypeError dentro do catch quando a rota é inválida', async () => {
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue(null);
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+        await expect(apiGetRoute(null)).resolves.toBeNull();
+        expect(consoleSpy).not.toHaveBeenCalled();
+    });
+});

@@ -43,24 +43,29 @@ export function diffInDays(date1: RefDate, date2: RefDate): number {
 }
 
 /**
- * Calcula a diferença absoluta em meses entre duas datas.
+ * Calcula a diferença absoluta em meses COMPLETOS entre duas datas.
+ * O dia é considerado: 31/01 → 01/02 retorna 0, pois não completou um mês.
  */
 export function diffInMonths(date1: RefDate, date2: RefDate): number {
     const d1 = parseDate(date1);
     const d2 = parseDate(date2);
     if (!d1 || !d2) return 0;
 
-    const years = d1.getFullYear() - d2.getFullYear();
-    const months = d1.getMonth() - d2.getMonth();
-    return Math.abs(years * 12 + months);
+    const [earlier, later] = d1 <= d2 ? [d1, d2] : [d2, d1];
+
+    let months = (later.getFullYear() - earlier.getFullYear()) * 12
+               + (later.getMonth() - earlier.getMonth());
+
+    // Desconta o mês em curso se o dia ainda não foi alcançado
+    if (later.getDate() < earlier.getDate()) months--;
+
+    return Math.max(0, months);
 }
 
 /**
- * Calcula a diferença absoluta em anos entre duas datas.
+ * Calcula a diferença absoluta em anos COMPLETOS entre duas datas.
+ * O dia e o mês são considerados, tornando-a adequada para cálculo de idade.
  */
 export function diffInYears(date1: RefDate, date2: RefDate): number {
-    const d1 = parseDate(date1);
-    const d2 = parseDate(date2);
-    if (!d1 || !d2) return 0;
-    return Math.abs(d1.getFullYear() - d2.getFullYear());
+    return Math.floor(diffInMonths(date1, date2) / 12);
 }
