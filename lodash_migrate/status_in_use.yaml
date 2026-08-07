@@ -45,5 +45,6 @@ helpers:
       - words
       - upperFirst
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
+
