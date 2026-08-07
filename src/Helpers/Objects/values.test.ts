@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
 import { values } from './values';
+import { pickBy } from './pickBy';
 
 describe('values', () => {
     it('retorna os valores de um objeto', () => {
@@ -65,11 +66,9 @@ describe('values', () => {
     it('reproduz o call site real de getListPlannerListsStore.ts:126 (_.values(_.pickBy(...)))', () => {
         // Formato real: cards_filtered.value é um array de "cards" do planner,
         // cada um com client/solar_company/concessionaire/project aninhados.
-        // `pickBy` ainda não foi migrado nesta trilha (é o próximo item da
-        // fila); por isso o resultado que ele produziria — um objeto indexado
-        // por posição, só com as chaves que passaram no predicado — é
-        // reproduzido aqui manualmente, exatamente como o `_.pickBy` do
-        // Lodash devolveria para um array de entrada.
+        // `pickBy` já foi migrado (src/Helpers/Objects/pickBy.ts) — a chamada
+        // abaixo usa a implementação própria da MaxUse, encadeada exatamente
+        // como o call site real: values(pickBy(cards_filtered, predicado)).
         const cards_filtered = [
             {
                 id: 1,
@@ -105,14 +104,7 @@ describe('values', () => {
             return client || solar_company || concessionaire || consumer_code || installation_code;
         };
 
-        // Equivalente ao objeto que _.pickBy(cards_filtered, matches) devolveria:
-        // chaves numéricas como string, só para os índices que casam o predicado.
-        const picked: Record<string, unknown> = {};
-        cards_filtered.forEach((card, index) => {
-            if (matches(card)) picked[String(index)] = card;
-        });
-
-        const filtered = values(picked);
+        const filtered = values(pickBy(cards_filtered as unknown as Record<string, unknown>, matches));
 
         // values() precisa devolver um array denso, na ordem das chaves do
         // objeto pickBy-shaped ({0: card1, 2: card3} → [card1, card3]).
