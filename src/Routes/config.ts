@@ -88,15 +88,13 @@ export function setApiRequestConfig(config: ApiRequestConfig): void {
  * @throws Se o resolver não estiver configurado ou a rota não for encontrada.
  */
 export function resolveRoute(name: string, params?: any): string {
-    if (!routeResolver) {
-        throw new Error(
-            'Route resolver não configurado. Chame setRouteResolver() na inicialização da aplicação.'
-        );
-    }
+    if (!routeResolver) throw new Error(
+        'Route resolver não configurado. Chame setRouteResolver() na inicialização da aplicação.'
+    );
+
     const url = routeResolver(name, params);
-    if (url === null) {
-        throw new Error(`Rota "${name}" não encontrada pelo resolver.`);
-    }
+    if (url === null) throw new Error(`Rota "${name}" não encontrada pelo resolver.`);
+
     return url;
 }
 
@@ -124,9 +122,8 @@ export function getConfiguredHeaders(): Record<string, string> {
     const result: Record<string, string> = {};
     if (!apiConfig.headers) return result;
 
-    for (const [key, value] of Object.entries(apiConfig.headers)) {
-        result[key] = typeof value === 'function' ? value() : value;
-    }
+    for (const [key, value] of Object.entries(apiConfig.headers)) result[key] = typeof value === 'function' ? value() : value;
+
     return result;
 }
 

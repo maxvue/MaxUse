@@ -32,13 +32,12 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     const onStorageEvent = (event: StorageEvent) => {
         if (event.key !== raw_key.value || event.storageArea !== localStorage) return;
 
-        if (event.newValue !== null) {
-            try {
-                state.value = JSON.parse(event.newValue);
-            } catch {
-                state.value = default_value;
-            }
-        } else state.value = default_value;
+        if (event.newValue !== null) try {
+            state.value = JSON.parse(event.newValue);
+        } catch {
+            state.value = default_value;
+        }
+        else state.value = default_value;
 
 
     };

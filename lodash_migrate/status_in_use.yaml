@@ -1,0 +1,49 @@
+total: 3
+fases:
+  - id: 1
+    nome: Primitivos sem dependência
+    detalhe: Lang, Math, Strings simples e Utils básicos.
+  - id: 2
+    nome: Arrays e coleções
+    detalhe: Iterables sem iteratee e acesso básico a objetos.
+  - id: 3
+    nome: Derivados de iteratee
+    detalhe: Coleções, objetos e strings que dependem do shorthand.
+  - id: 4
+    nome: Functions e Utils
+    detalhe: Programação funcional e template.
+  - id: 5
+    nome: Seq (chaining)
+    detalhe: Wrapper de encadeamento; depende do fechamento da fase 4.
+helpers:
+  - nome: values
+    uso_confirmado: "MinhaBibliaOnline/resources/Stores/Planner/getListPlannerListsStore.ts:126 (_.values)"
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/values.md
+    depende_de:
+      - keys
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pickBy
+    uso_confirmado: "MinhaBibliaOnline/resources/Stores/Planner/getListPlannerListsStore.ts:126 (_.pickBy)"
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/pickBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: startCase
+    uso_confirmado: "MinhaBibliaOnline/resources/Vue/Sections/Auth/Pesquisa.vue:202 (_.startCase)"
+    categoria: Strings
+    fase: 3
+    plano: lodash_migrate/plans/Strings/startCase.md
+    depende_de:
+      - words
+      - upperFirst
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando

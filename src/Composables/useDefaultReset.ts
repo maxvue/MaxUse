@@ -55,9 +55,7 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
     state.reset();
     state.timer = timer;
 
-    if (timer) {
-        watchDebounced(state, () => state.reset(), { debounce: timer });
-    }
+    if (timer) watchDebounced(state, () => state.reset(), { debounce: timer });
 
 
     return state as DefaultReset<T>;
