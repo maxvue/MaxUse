@@ -20,8 +20,13 @@ import { MaybeRefOrGetter, toValue } from 'vue';
  * ```
  */
 export const useDateFormat = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string): UseDateFormatReturn => {
-    if (isNotValid(toValue(initialDate))) return vueUseDateFormat(new Date(), format);
-    return vueUseDateFormat(initialDate as any, format);
+    // O fallback precisa ser resolvido dentro de um getter: passar `new Date()` direto
+    // congelaria o valor e romperia a reatividade quando a data chegasse depois
+    // (caso comum em carregamento assíncrono com valor inicial nulo).
+    return vueUseDateFormat(() => {
+        const value = toValue(initialDate);
+        return isNotValid(value) ? new Date() : value as Date | number | string;
+    }, format);
 };
 
 /** Alias de {@link useDateFormat}. */

@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { effectScope } from 'vue';
+import { effectScope, nextTick, ref } from 'vue';
 import { timeAgo, useTimeAgo } from './useTimeAgo';
 
 /**
@@ -779,4 +779,43 @@ describe('timeAgo — regressão auditoria (achado 013)', () => {
             });
         }
     );
+});
+
+describe('timeAgo — regressão auditoria (achado 018, parte reatividade)', () => {
+    let scope: ReturnType<typeof effectScope>;
+
+    beforeEach(() => {
+        vi.useFakeTimers();
+        vi.setSystemTime(FIXED_NOW);
+        scope = effectScope();
+    });
+
+    afterEach(() => {
+        scope.stop();
+        vi.useRealTimers();
+    });
+
+    it('mantém a reatividade quando a data chega depois (valor inicial nulo)', async () => {
+        await scope.run(async () => {
+            const data = ref<Date | null>(null);
+            const resultado = timeAgo(data, 'br');
+
+            data.value = ago(2 * DAY);
+            await nextTick();
+
+            expect(resultado.value).toContain('2 dias');
+        });
+    });
+
+    it('reage a mudanças subsequentes da fonte', async () => {
+        await scope.run(async () => {
+            const data = ref<Date | null>(ago(2 * DAY));
+            const resultado = timeAgo(data, 'br');
+
+            data.value = ago(5 * DAY);
+            await nextTick();
+
+            expect(resultado.value).toContain('5 dias');
+        });
+    });
 });

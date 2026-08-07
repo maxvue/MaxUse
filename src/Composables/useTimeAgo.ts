@@ -105,8 +105,13 @@ const FORMAT_MAP: Record<string, any> = {
  * ```
  */
 export const timeAgo = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string = 'br'): UseTimeAgoReturn => {
-    if (isNotValid(toValue(initialDate))) return vueUseTimeAgo(new Date(), { messages: FORMAT_MAP[format] ?? ptBr });
-    return vueUseTimeAgo(initialDate as any, { messages: FORMAT_MAP[format] ?? ptBr });
+    // O fallback precisa ser resolvido dentro de um getter: passar `new Date()` direto
+    // congelaria o valor e romperia a reatividade quando a data chegasse depois
+    // (caso comum em carregamento assíncrono com valor inicial nulo).
+    return vueUseTimeAgo(() => {
+        const value = toValue(initialDate);
+        return isNotValid(value) ? new Date() : value as Date | number | string;
+    }, { messages: FORMAT_MAP[format] ?? ptBr });
 };
 
 /** Alias de {@link timeAgo}. */

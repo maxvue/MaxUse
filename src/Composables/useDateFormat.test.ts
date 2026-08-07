@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { effectScope } from 'vue';
+import { effectScope, nextTick, ref } from 'vue';
 import { useDateFormat } from './useDateFormat';
 
 describe('useDateFormat', () => {
@@ -50,6 +50,52 @@ describe('useDateFormat', () => {
             // Usando hora 12:00 UTC para evitar mudança de dia no fuso local
             const result = useDateFormat(new Date('2026-01-15T12:00:00Z'), 'YYYY');
             expect(result.value).toContain('2026');
+        });
+    });
+});
+
+describe('useDateFormat — regressão auditoria (achado 018, parte reatividade)', () => {
+    let scope: ReturnType<typeof effectScope>;
+
+    beforeEach(() => { scope = effectScope(); });
+    afterEach(() => { scope.stop(); });
+
+    it('mantém a reatividade quando a data chega depois (valor inicial nulo)', async () => {
+        await scope.run(async () => {
+            const data = ref<string | null>(null);
+            const formatada = useDateFormat(data, 'DD/MM/YYYY');
+
+            data.value = '2020-01-15';
+            await nextTick();
+
+            expect(formatada.value).toBe('15/01/2020');
+        });
+    });
+
+    it('reage a mudanças subsequentes da fonte', async () => {
+        await scope.run(async () => {
+            const data = ref<string | null>('2020-01-15');
+            const formatada = useDateFormat(data, 'DD/MM/YYYY');
+
+            expect(formatada.value).toBe('15/01/2020');
+
+            data.value = '2021-03-20';
+            await nextTick();
+
+            expect(formatada.value).toBe('20/03/2021');
+        });
+    });
+
+    it('volta ao fallback se a data for removida', async () => {
+        await scope.run(async () => {
+            const data = ref<string | null>('2020-01-15');
+            const formatada = useDateFormat(data, 'DD/MM/YYYY');
+
+            data.value = null;
+            await nextTick();
+
+            // Fallback atual: data de hoje (comportamento preservado nesta correção)
+            expect(formatada.value).toBeTruthy();
         });
     });
 });

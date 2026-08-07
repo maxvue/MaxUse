@@ -3,8 +3,11 @@
 - **Severidade:** Média
 - **Tipo:** Divergência de regra de negócio / bug silencioso
 - **Arquivos:**
-  - [src/Composables/useDateFormat.ts:22-25](../src/Composables/useDateFormat.ts#L22-L25)
-  - [src/Composables/useTimeAgo.ts:107-110](../src/Composables/useTimeAgo.ts#L107-L110)
+  - [src/Composables/useDateFormat.ts](../src/Composables/useDateFormat.ts)
+  - [src/Composables/useTimeAgo.ts](../src/Composables/useTimeAgo.ts)
+- **Status:** ⚠️ **Parcialmente corrigido** — o Problema 2 (quebra de reatividade)
+  foi resolvido; os Problemas 1 e 3 seguem abertos por dependerem de decisão de
+  produto.
 
 ## Descrição
 
@@ -43,7 +46,7 @@ Esse é o pior tipo de falha: não há erro, não há log, e o valor exibido é
 plausível — indistinguível de um dado real. Em telas de auditoria ou relatórios,
 o dado fabricado é indistinguível do verdadeiro.
 
-## Problema 2 — a data do fallback é congelada na criação
+## Problema 2 — a data do fallback é congelada na criação ✅ CORRIGIDO
 
 `new Date()` é avaliado **uma vez**, no momento da chamada do composable. Se a
 data chegar depois (caso normal em carregamento assíncrono):
@@ -57,10 +60,31 @@ dataRecebida.value = '2020-01-15';
 // formatada.value continua "07/08/2026" — a reatividade foi perdida
 ```
 
-Como o ramo do fallback passa `new Date()` (valor estático) em vez do
-`MaybeRefOrGetter` original, o `useDateFormat` do VueUse nunca reobserva a fonte.
-**A reatividade é permanentemente quebrada** quando o valor inicial é nulo — que é
-o caso mais comum em componentes que carregam dados via API.
+Como o ramo do fallback passava `new Date()` (valor estático) em vez do
+`MaybeRefOrGetter` original, o `useDateFormat` do VueUse nunca reobservava a
+fonte. **A reatividade era permanentemente quebrada** quando o valor inicial era
+nulo — o caso mais comum em componentes que carregam dados via API.
+
+### Correção aplicada
+
+O fallback passou a ser resolvido **dentro de um getter**, preservando a
+reatividade sem alterar o valor exibido:
+
+```typescript
+export const useDateFormat = (initialDate, format): UseDateFormatReturn => {
+    return vueUseDateFormat(() => {
+        const value = toValue(initialDate);
+        return isNotValid(value) ? new Date() : value as Date | number | string;
+    }, format);
+};
+```
+
+O mesmo padrão foi aplicado a `timeAgo`. Essa parte não dependia de decisão de
+produto: o fallback continua sendo a data atual (Problema 1 intacto), apenas
+deixou de congelar a fonte.
+
+Verificado com testes que falham quando a correção é revertida:
+`expected '07/08/2026' to be '15/01/2020'` — exatamente o sintoma descrito acima.
 
 ## Problema 3 — `isNotValid` não detecta datas inválidas
 
@@ -97,12 +121,16 @@ export const useDateFormat = (
 };
 ```
 
-O mesmo tratamento se aplica a `timeAgo`. O padrão passa a ser string vazia
+O mesmo tratamento se aplica a `timeAgo`. O padrão passaria a ser string vazia
 (ou um traço `'—'`), que comunica ausência de dado sem inventar informação, e o
-consumidor pode escolher outro fallback.
+consumidor poderia escolher outro fallback.
 
-Se a mudança de padrão for considerada quebra de contrato, a correção mínima e
-não negociável é o **Problema 2**: manter a reatividade mesmo no ramo de fallback.
+**Esta parte segue represada:** mudar o fallback altera o que já é exibido em
+telas existentes — onde hoje aparece a data de hoje, passaria a aparecer vazio.
+É uma decisão de produto, não um bug de implementação.
+
+O **Problema 2** (reatividade), que era a parte não negociável e independente
+dessa decisão, já foi corrigido — ver acima.
 
 ## Testes de regressão sugeridos
 
