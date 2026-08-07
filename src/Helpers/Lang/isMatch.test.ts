@@ -46,4 +46,10 @@ describe('isMatch', () => {
         expect(isMatch('abc', { 0: 'z' })).toBe(false);
         expect(isMatch(5, { toFixed: Number.prototype.toFixed })).toBe(true);
     });
+
+    it('trata source primitivo não-nulo como objeto indexável, não como "sem restrições" (peculiaridade)', () => {
+        expect(isMatch('abc', 'abd')).toBe(false);
+        expect(isMatch('abc', 'abc')).toBe(true);
+        expect(isMatch('x', [{ a: 1 }])).toBe(false);
+    });
 });

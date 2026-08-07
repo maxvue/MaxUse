@@ -1142,8 +1142,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: propertyOf
     categoria: Utils
     fase: 3
@@ -1151,8 +1151,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: matches
     categoria: Utils
     fase: 3
@@ -1160,8 +1160,8 @@ helpers:
     depende_de:
       - isMatch
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: matchesProperty
     categoria: Utils
     fase: 3
@@ -1169,8 +1169,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: iteratee
     categoria: Utils
     fase: 3
@@ -1180,8 +1180,8 @@ helpers:
       - matches
       - matchesProperty
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: method
     categoria: Utils
     fase: 3
@@ -1189,8 +1189,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: methodOf
     categoria: Utils
     fase: 3
@@ -1198,8 +1198,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: result
     categoria: Utils
     fase: 3
@@ -1207,16 +1207,16 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: attempt
     categoria: Utils
     fase: 3
     plano: lodash_migrate/plans/Utils/attempt.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: cond
     categoria: Utils
     fase: 3
@@ -1224,24 +1224,24 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: conforms
     categoria: Utils
     fase: 3
     plano: lodash_migrate/plans/Utils/conforms.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: conformsTo
     categoria: Utils
     fase: 3
     plano: lodash_migrate/plans/Utils/conformsTo.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: over
     categoria: Utils
     fase: 3
@@ -1249,8 +1249,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: overEvery
     categoria: Utils
     fase: 3
@@ -1258,8 +1258,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: overSome
     categoria: Utils
     fase: 3
@@ -1267,8 +1267,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: map
     categoria: Iterables
     fase: 3
@@ -1276,24 +1276,24 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forEach
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/forEach.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forEachRight
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/forEachRight.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: each
     categoria: Iterables
     fase: 3
@@ -1301,8 +1301,8 @@ helpers:
     depende_de:
       - forEach
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: eachRight
     categoria: Iterables
     fase: 3
@@ -1310,8 +1310,8 @@ helpers:
     depende_de:
       - forEachRight
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: find
     categoria: Iterables
     fase: 3
@@ -1319,8 +1319,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: findIndex
     categoria: Iterables
     fase: 3
@@ -1328,8 +1328,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: findLastIndex
     categoria: Iterables
     fase: 3
@@ -1337,8 +1337,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: every
     categoria: Iterables
     fase: 3
@@ -1346,8 +1346,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: some
     categoria: Iterables
     fase: 3
@@ -1355,8 +1355,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: reject
     categoria: Iterables
     fase: 3
@@ -1365,8 +1365,8 @@ helpers:
       - iteratee
       - negate
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: partition
     categoria: Iterables
     fase: 3
@@ -1374,8 +1374,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: remove
     categoria: Iterables
     fase: 3
@@ -1383,24 +1383,24 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: reduce
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/reduce.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: reduceRight
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/reduceRight.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: flatMap
     categoria: Iterables
     fase: 3
@@ -1409,8 +1409,8 @@ helpers:
       - map
       - flatten
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: flatMapDeep
     categoria: Iterables
     fase: 3
@@ -1419,8 +1419,8 @@ helpers:
       - map
       - flattenDeep
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: flatMapDepth
     categoria: Iterables
     fase: 3
@@ -1429,24 +1429,24 @@ helpers:
       - map
       - flattenDepth
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: max
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/max.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: min
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/min.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: maxBy
     categoria: Iterables
     fase: 3
@@ -1454,8 +1454,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: minBy
     categoria: Iterables
     fase: 3
@@ -1463,16 +1463,16 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: mean
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/mean.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: meanBy
     categoria: Iterables
     fase: 3
@@ -1480,8 +1480,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: uniqBy
     categoria: Iterables
     fase: 3
@@ -1489,16 +1489,16 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: uniqWith
     categoria: Iterables
     fase: 3
     plano: lodash_migrate/plans/Iterables/uniqWith.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: sortedUniqBy
     categoria: Iterables
     fase: 3
@@ -1506,8 +1506,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: sortedIndexBy
     categoria: Iterables
     fase: 3
@@ -1515,8 +1515,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: sortedLastIndexBy
     categoria: Iterables
     fase: 3
@@ -1524,8 +1524,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: differenceBy
     categoria: Iterables
     fase: 3
@@ -1534,8 +1534,8 @@ helpers:
       - iteratee
       - difference
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: differenceWith
     categoria: Iterables
     fase: 3
@@ -1543,8 +1543,8 @@ helpers:
     depende_de:
       - difference
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: intersectionBy
     categoria: Iterables
     fase: 3
@@ -1553,8 +1553,8 @@ helpers:
       - iteratee
       - intersection
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: intersectionWith
     categoria: Iterables
     fase: 3
@@ -1562,8 +1562,8 @@ helpers:
     depende_de:
       - intersection
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: unionBy
     categoria: Iterables
     fase: 3
@@ -1572,8 +1572,8 @@ helpers:
       - iteratee
       - union
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: unionWith
     categoria: Iterables
     fase: 3
@@ -1581,8 +1581,8 @@ helpers:
     depende_de:
       - union
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: xorBy
     categoria: Iterables
     fase: 3
@@ -1591,8 +1591,8 @@ helpers:
       - iteratee
       - xor
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: xorWith
     categoria: Iterables
     fase: 3
@@ -1600,8 +1600,8 @@ helpers:
     depende_de:
       - xor
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: pullAllBy
     categoria: Iterables
     fase: 3
@@ -1610,8 +1610,8 @@ helpers:
       - iteratee
       - pullAll
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: pullAllWith
     categoria: Iterables
     fase: 3
@@ -1619,8 +1619,8 @@ helpers:
     depende_de:
       - pullAll
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: dropWhile
     categoria: Iterables
     fase: 3
@@ -1628,8 +1628,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: dropRightWhile
     categoria: Iterables
     fase: 3
@@ -1637,8 +1637,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: takeWhile
     categoria: Iterables
     fase: 3
@@ -1646,8 +1646,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: takeRightWhile
     categoria: Iterables
     fase: 3
@@ -1655,8 +1655,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: zipWith
     categoria: Iterables
     fase: 3
@@ -1664,8 +1664,8 @@ helpers:
     depende_de:
       - zip
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: unzipWith
     categoria: Iterables
     fase: 3
@@ -1673,8 +1673,8 @@ helpers:
     depende_de:
       - unzip
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: zipObjectDeep
     categoria: Iterables
     fase: 3
@@ -1682,8 +1682,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: invokeMap
     categoria: Iterables
     fase: 3
@@ -1692,8 +1692,8 @@ helpers:
       - toPath
       - map
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: assign
     categoria: Objects
     fase: 3
@@ -1701,8 +1701,8 @@ helpers:
     depende_de:
       - keys
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: assignIn
     categoria: Objects
     fase: 3
@@ -1710,8 +1710,8 @@ helpers:
     depende_de:
       - keysIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: extend
     categoria: Objects
     fase: 3
@@ -1719,8 +1719,8 @@ helpers:
     depende_de:
       - assignIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: assignWith
     categoria: Objects
     fase: 3
@@ -1728,8 +1728,8 @@ helpers:
     depende_de:
       - assign
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: assignInWith
     categoria: Objects
     fase: 3
@@ -1737,8 +1737,8 @@ helpers:
     depende_de:
       - assignIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: extendWith
     categoria: Objects
     fase: 3
@@ -1746,8 +1746,8 @@ helpers:
     depende_de:
       - assignInWith
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: defaults
     categoria: Objects
     fase: 3
@@ -1755,16 +1755,16 @@ helpers:
     depende_de:
       - keysIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: merge
     categoria: Objects
     fase: 3
     plano: lodash_migrate/plans/Objects/merge.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: mergeWith
     categoria: Objects
     fase: 3
@@ -1772,8 +1772,8 @@ helpers:
     depende_de:
       - merge
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: defaultsDeep
     categoria: Objects
     fase: 3
@@ -1782,8 +1782,8 @@ helpers:
       - defaults
       - mergeWith
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: create
     categoria: Objects
     fase: 3
@@ -1791,8 +1791,8 @@ helpers:
     depende_de:
       - assign
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: entries
     categoria: Objects
     fase: 3
@@ -1800,8 +1800,8 @@ helpers:
     depende_de:
       - toPairs
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: entriesIn
     categoria: Objects
     fase: 3
@@ -1809,8 +1809,8 @@ helpers:
     depende_de:
       - toPairsIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: findKey
     categoria: Objects
     fase: 3
@@ -1818,8 +1818,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: findLastKey
     categoria: Objects
     fase: 3
@@ -1827,8 +1827,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forIn
     categoria: Objects
     fase: 3
@@ -1836,8 +1836,8 @@ helpers:
     depende_de:
       - keysIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forInRight
     categoria: Objects
     fase: 3
@@ -1845,8 +1845,8 @@ helpers:
     depende_de:
       - keysIn
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forOwn
     categoria: Objects
     fase: 3
@@ -1854,8 +1854,8 @@ helpers:
     depende_de:
       - keys
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: forOwnRight
     categoria: Objects
     fase: 3
@@ -1863,8 +1863,8 @@ helpers:
     depende_de:
       - keys
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: functions
     categoria: Objects
     fase: 3
@@ -1873,8 +1873,8 @@ helpers:
       - keys
       - isFunction
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: functionsIn
     categoria: Objects
     fase: 3
@@ -1883,16 +1883,16 @@ helpers:
       - keysIn
       - isFunction
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: invert
     categoria: Objects
     fase: 3
     plano: lodash_migrate/plans/Objects/invert.md
     depende_de: []
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: invertBy
     categoria: Objects
     fase: 3
@@ -1900,8 +1900,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: mapKeys
     categoria: Objects
     fase: 3
@@ -1909,8 +1909,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: omitBy
     categoria: Objects
     fase: 3
@@ -1920,8 +1920,8 @@ helpers:
       - pickBy
       - negate
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: setWith
     categoria: Objects
     fase: 3
@@ -1929,8 +1929,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: update
     categoria: Objects
     fase: 3
@@ -1938,8 +1938,8 @@ helpers:
     depende_de:
       - toPath
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: updateWith
     categoria: Objects
     fase: 3
@@ -1947,8 +1947,8 @@ helpers:
     depende_de:
       - setWith
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: transform
     categoria: Objects
     fase: 3
@@ -1959,8 +1959,8 @@ helpers:
       - isFunction
       - isTypedArray
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: lowerCase
     categoria: Strings
     fase: 3
@@ -1969,8 +1969,8 @@ helpers:
       - words
       - deburr
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: upperCase
     categoria: Strings
     fase: 3
@@ -1979,8 +1979,8 @@ helpers:
       - words
       - deburr
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: debounce
     categoria: Functions
     fase: 4

@@ -24,6 +24,8 @@ export * from './pad';
 export * from './padStart';
 export * from './padEnd';
 export * from './repeat';
+export * from './lowerCase';
+export * from './upperCase';
 
 import { Random, ulid, intervalRandom } from './random';
 import { truncate, slugify, stripHtml, initials, readingTime } from './manipulations';

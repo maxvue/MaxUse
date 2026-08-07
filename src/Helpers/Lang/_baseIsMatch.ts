@@ -82,11 +82,16 @@ function arraysMatch(objValue: unknown, srcValue: unknown[], customizer?: MatchC
  */
 export function baseIsMatch(object: unknown, source: unknown, customizer?: MatchCustomizer): boolean {
     if (object === source) return true;
-    if (source === null || typeof source !== 'object') return true;
+    // Apenas `null`/`undefined` como source é tratado como "sem restrições".
+    // Primitivos (string, number, boolean, symbol) são coagidos via
+    // `Object.keys`/`Object.getOwnPropertySymbols`, que aceitam qualquer
+    // valor e o tratam como `Object(source)` — replica o comportamento do
+    // Lodash, que nunca dá esse atalho para primitivos.
+    if (source == null) return true;
 
-    const keys = [...Object.keys(source), ...Object.getOwnPropertySymbols(source)];
+    const keys = [...Object.keys(source as object), ...Object.getOwnPropertySymbols(source as object)];
     if (keys.length === 0) return true;
-    if (object === null || object === undefined) return false;
+    if (object == null) return false;
 
     // Lodash trata primitivos (string, number, boolean, symbol) como objetos
     // envolvidos (`Object(object)`) para permitir indexação por chave.
