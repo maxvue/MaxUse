@@ -1,0 +1,2412 @@
+total: 277
+fases:
+  - id: 1
+    nome: Primitivos sem dependência
+    detalhe: Lang, Math, Strings simples e Utils básicos.
+  - id: 2
+    nome: Arrays e coleções
+    detalhe: Iterables sem iteratee e acesso básico a objetos.
+  - id: 3
+    nome: Derivados de iteratee
+    detalhe: Coleções, objetos e strings que dependem do shorthand.
+  - id: 4
+    nome: Functions e Utils
+    detalhe: Programação funcional e template.
+  - id: 5
+    nome: Seq (chaining)
+    detalhe: Wrapper de encadeamento; depende do fechamento da fase 4.
+helpers:
+  - nome: isNil
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isNil.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Concluído
+    status_verificacao: Concluído
+  - nome: isNull
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isNull.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isUndefined
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isUndefined.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isBoolean
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isBoolean.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isString
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isString.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isFunction
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isFunction.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isSymbol
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isSymbol.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isRegExp
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isRegExp.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isError
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isError.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isElement
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isElement.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isArguments
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isArguments.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isArrayBuffer
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isArrayBuffer.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isBuffer
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isBuffer.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isTypedArray
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isTypedArray.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isMap
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isMap.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isSet
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isSet.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isWeakMap
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isWeakMap.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isWeakSet
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isWeakSet.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isNative
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isNative.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isObjectLike
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isObjectLike.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isPlainObject
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isPlainObject.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isLength
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isLength.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isArrayLike
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isArrayLike.md
+    depende_de:
+      - isLength
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isArrayLikeObject
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isArrayLikeObject.md
+    depende_de:
+      - isArrayLike
+      - isObjectLike
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isFinite
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isFinite.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isInteger
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isInteger.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isSafeInteger
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isSafeInteger.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isNaN
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isNaN.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: eq
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/eq.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: gt
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/gt.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: gte
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/gte.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lt
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/lt.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lte
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/lte.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toFinite
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toFinite.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toInteger
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toInteger.md
+    depende_de:
+      - toFinite
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toLength
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toLength.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toSafeInteger
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toSafeInteger.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: castArray
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/castArray.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toPath
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toPath.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toPlainObject
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toPlainObject.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toString
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/toString.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: clone
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/clone.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: cloneWith
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/cloneWith.md
+    depende_de:
+      - clone
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: cloneDeepWith
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/cloneDeepWith.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isEqualWith
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isEqualWith.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isMatch
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isMatch.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: isMatchWith
+    categoria: Lang
+    fase: 1
+    plano: lodash_migrate/plans/Lang/isMatchWith.md
+    depende_de:
+      - isMatch
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: add
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/add.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: subtract
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/subtract.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: multiply
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/multiply.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: divide
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/divide.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: ceil
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/ceil.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: floor
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/floor.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: round
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/round.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: inRange
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/inRange.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: random
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/random.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: parseInt
+    categoria: Math
+    fase: 1
+    plano: lodash_migrate/plans/Math/parseInt.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toLower
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/toLower.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toUpper
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/toUpper.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: trim
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/trim.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: trimStart
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/trimStart.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: trimEnd
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/trimEnd.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: repeat
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/repeat.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: startsWith
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/startsWith.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: endsWith
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/endsWith.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: escape
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/escape.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unescape
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/unescape.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: escapeRegExp
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/escapeRegExp.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: deburr
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/deburr.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: words
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/words.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: split
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/split.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: replace
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/replace.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lowerFirst
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/lowerFirst.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: upperFirst
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/upperFirst.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pad
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/pad.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: padStart
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/padStart.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: padEnd
+    categoria: Strings
+    fase: 1
+    plano: lodash_migrate/plans/Strings/padEnd.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: stubArray
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/stubArray.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: stubFalse
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/stubFalse.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: stubObject
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/stubObject.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: stubString
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/stubString.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: stubTrue
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/stubTrue.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Concluído
+    status_verificacao: Concluído
+  - nome: constant
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/constant.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: defaultTo
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/defaultTo.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: uniqueId
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/uniqueId.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: range
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/range.md
+    depende_de:
+      - toFinite
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: rangeRight
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/rangeRight.md
+    depende_de:
+      - range
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: times
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/times.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: nthArg
+    categoria: Utils
+    fase: 1
+    plano: lodash_migrate/plans/Utils/nthArg.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: negate
+    categoria: Functions
+    fase: 1
+    plano: lodash_migrate/plans/Functions/negate.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Concluído
+    status_verificacao: Concluído
+  - nome: compact
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/compact.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: concat
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/concat.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: head
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/head.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: tail
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/tail.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: initial
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/initial.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: nth
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/nth.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: slice
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/slice.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: reverse
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/reverse.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: fill
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/fill.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: join
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/join.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: indexOf
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/indexOf.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lastIndexOf
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/lastIndexOf.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: includes
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/includes.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: drop
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/drop.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: dropRight
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/dropRight.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: take
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/take.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: takeRight
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/takeRight.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flatten
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/flatten.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flattenDeep
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/flattenDeep.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flattenDepth
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/flattenDepth.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: fromPairs
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/fromPairs.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: zip
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/zip.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unzip
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/unzip.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: zipObject
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/zipObject.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: without
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/without.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: difference
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/difference.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: intersection
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/intersection.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: union
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/union.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: xor
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/xor.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pull
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/pull.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pullAll
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/pullAll.md
+    depende_de:
+      - pull
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pullAt
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/pullAt.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedIndex
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sortedIndex.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedIndexOf
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sortedIndexOf.md
+    depende_de:
+      - sortedIndex
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedLastIndex
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sortedLastIndex.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedLastIndexOf
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sortedLastIndexOf.md
+    depende_de:
+      - sortedLastIndex
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedUniq
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sortedUniq.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sampleSize
+    categoria: Iterables
+    fase: 2
+    plano: lodash_migrate/plans/Iterables/sampleSize.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: keys
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/keys.md
+    depende_de:
+      - isArrayLike
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: keysIn
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/keysIn.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: valuesIn
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/valuesIn.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: has
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/has.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: hasIn
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/hasIn.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toPairs
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/toPairs.md
+    depende_de:
+      - keys
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toPairsIn
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/toPairsIn.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: at
+    categoria: Objects
+    fase: 2
+    plano: lodash_migrate/plans/Objects/at.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: property
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/property.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: propertyOf
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/propertyOf.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: matches
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/matches.md
+    depende_de:
+      - isMatch
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: matchesProperty
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/matchesProperty.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: iteratee
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/iteratee.md
+    depende_de:
+      - property
+      - matches
+      - matchesProperty
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: method
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/method.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: methodOf
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/methodOf.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: result
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/result.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: attempt
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/attempt.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: cond
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/cond.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: conforms
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/conforms.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: conformsTo
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/conformsTo.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: over
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/over.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: overEvery
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/overEvery.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: overSome
+    categoria: Utils
+    fase: 3
+    plano: lodash_migrate/plans/Utils/overSome.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: map
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/map.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forEach
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/forEach.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forEachRight
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/forEachRight.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: each
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/each.md
+    depende_de:
+      - forEach
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: eachRight
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/eachRight.md
+    depende_de:
+      - forEachRight
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: find
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/find.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: findIndex
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/findIndex.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: findLastIndex
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/findLastIndex.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: every
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/every.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: some
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/some.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: reject
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/reject.md
+    depende_de:
+      - iteratee
+      - negate
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: partition
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/partition.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: remove
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/remove.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: reduce
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/reduce.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: reduceRight
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/reduceRight.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flatMap
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/flatMap.md
+    depende_de:
+      - map
+      - flatten
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flatMapDeep
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/flatMapDeep.md
+    depende_de:
+      - map
+      - flattenDeep
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flatMapDepth
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/flatMapDepth.md
+    depende_de:
+      - map
+      - flattenDepth
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: max
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/max.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: min
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/min.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: maxBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/maxBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: minBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/minBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: mean
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/mean.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: meanBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/meanBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: uniqBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/uniqBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: uniqWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/uniqWith.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedUniqBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/sortedUniqBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedIndexBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/sortedIndexBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: sortedLastIndexBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/sortedLastIndexBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: differenceBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/differenceBy.md
+    depende_de:
+      - iteratee
+      - difference
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: differenceWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/differenceWith.md
+    depende_de:
+      - difference
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: intersectionBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/intersectionBy.md
+    depende_de:
+      - iteratee
+      - intersection
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: intersectionWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/intersectionWith.md
+    depende_de:
+      - intersection
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unionBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/unionBy.md
+    depende_de:
+      - iteratee
+      - union
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unionWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/unionWith.md
+    depende_de:
+      - union
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: xorBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/xorBy.md
+    depende_de:
+      - iteratee
+      - xor
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: xorWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/xorWith.md
+    depende_de:
+      - xor
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pullAllBy
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/pullAllBy.md
+    depende_de:
+      - iteratee
+      - pullAll
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: pullAllWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/pullAllWith.md
+    depende_de:
+      - pullAll
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: dropWhile
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/dropWhile.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: dropRightWhile
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/dropRightWhile.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: takeWhile
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/takeWhile.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: takeRightWhile
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/takeRightWhile.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: zipWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/zipWith.md
+    depende_de:
+      - zip
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unzipWith
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/unzipWith.md
+    depende_de:
+      - unzip
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: zipObjectDeep
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/zipObjectDeep.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: invokeMap
+    categoria: Iterables
+    fase: 3
+    plano: lodash_migrate/plans/Iterables/invokeMap.md
+    depende_de:
+      - toPath
+      - map
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: assign
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/assign.md
+    depende_de:
+      - keys
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: assignIn
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/assignIn.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: extend
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/extend.md
+    depende_de:
+      - assignIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: assignWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/assignWith.md
+    depende_de:
+      - assign
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: assignInWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/assignInWith.md
+    depende_de:
+      - assignIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: extendWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/extendWith.md
+    depende_de:
+      - assignInWith
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: defaults
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/defaults.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: merge
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/merge.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: mergeWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/mergeWith.md
+    depende_de:
+      - merge
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: defaultsDeep
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/defaultsDeep.md
+    depende_de:
+      - defaults
+      - mergeWith
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: create
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/create.md
+    depende_de:
+      - assign
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: entries
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/entries.md
+    depende_de:
+      - toPairs
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: entriesIn
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/entriesIn.md
+    depende_de:
+      - toPairsIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: findKey
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/findKey.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: findLastKey
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/findLastKey.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forIn
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/forIn.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forInRight
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/forInRight.md
+    depende_de:
+      - keysIn
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forOwn
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/forOwn.md
+    depende_de:
+      - keys
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: forOwnRight
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/forOwnRight.md
+    depende_de:
+      - keys
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: functions
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/functions.md
+    depende_de:
+      - keys
+      - isFunction
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: functionsIn
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/functionsIn.md
+    depende_de:
+      - keysIn
+      - isFunction
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: invert
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/invert.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: invertBy
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/invertBy.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: mapKeys
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/mapKeys.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: omitBy
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/omitBy.md
+    depende_de:
+      - iteratee
+      - pickBy
+      - negate
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: setWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/setWith.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: update
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/update.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: updateWith
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/updateWith.md
+    depende_de:
+      - setWith
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: transform
+    categoria: Objects
+    fase: 3
+    plano: lodash_migrate/plans/Objects/transform.md
+    depende_de:
+      - forOwn
+      - isBuffer
+      - isFunction
+      - isTypedArray
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lowerCase
+    categoria: Strings
+    fase: 3
+    plano: lodash_migrate/plans/Strings/lowerCase.md
+    depende_de:
+      - words
+      - deburr
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: upperCase
+    categoria: Strings
+    fase: 3
+    plano: lodash_migrate/plans/Strings/upperCase.md
+    depende_de:
+      - words
+      - deburr
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: debounce
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/debounce.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: throttle
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/throttle.md
+    depende_de:
+      - debounce
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: memoize
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/memoize.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: after
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/after.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: before
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/before.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: once
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/once.md
+    depende_de:
+      - before
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: defer
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/defer.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: delay
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/delay.md
+    depende_de:
+      - toNumber
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: ary
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/ary.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: unary
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/unary.md
+    depende_de:
+      - ary
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flip
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/flip.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: rest
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/rest.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: spread
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/spread.md
+    depende_de:
+      - toInteger
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: overArgs
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/overArgs.md
+    depende_de:
+      - iteratee
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: rearg
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/rearg.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: partial
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/partial.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrap
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/wrap.md
+    depende_de:
+      - partial
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: partialRight
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/partialRight.md
+    depende_de:
+      - partial
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: bind
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/bind.md
+    depende_de:
+      - partial
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: bindKey
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/bindKey.md
+    depende_de:
+      - bind
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: bindAll
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/bindAll.md
+    depende_de:
+      - toPath
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: curry
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/curry.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: curryRight
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/curryRight.md
+    depende_de:
+      - curry
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flow
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/flow.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: flowRight
+    categoria: Functions
+    fase: 4
+    plano: lodash_migrate/plans/Functions/flowRight.md
+    depende_de:
+      - flow
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: templateSettings
+    categoria: Utils
+    fase: 4
+    plano: lodash_migrate/plans/Utils/templateSettings.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: template
+    categoria: Utils
+    fase: 4
+    plano: lodash_migrate/plans/Utils/template.md
+    depende_de:
+      - templateSettings
+      - escape
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: mixin
+    categoria: Utils
+    fase: 4
+    plano: lodash_migrate/plans/Utils/mixin.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: chain
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/chain.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: tap
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/tap.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Concluído
+    status_verificacao: Concluído
+  - nome: thru
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/thru.md
+    depende_de: []
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperAt
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperAt.md
+    depende_de:
+      - chain
+      - at
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperChain
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperChain.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperCommit
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperCommit.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperLodash
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperLodash.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperNext
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperNext.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperPlant
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperPlant.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperReverse
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperReverse.md
+    depende_de:
+      - chain
+      - reverse
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperToIterator
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperToIterator.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: wrapperValue
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/wrapperValue.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: value
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/value.md
+    depende_de:
+      - chain
+      - wrapperValue
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: commit
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/commit.md
+    depende_de:
+      - chain
+      - wrapperCommit
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: plant
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/plant.md
+    depende_de:
+      - chain
+      - wrapperPlant
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: next
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/next.md
+    depende_de:
+      - chain
+      - wrapperNext
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toIterator
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/toIterator.md
+    depende_de:
+      - chain
+      - wrapperToIterator
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: toJSON
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/toJSON.md
+    depende_de:
+      - chain
+      - wrapperValue
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: valueOf
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/valueOf.md
+    depende_de:
+      - chain
+      - wrapperValue
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
+  - nome: lodash
+    categoria: Seq
+    fase: 5
+    plano: lodash_migrate/plans/Seq/lodash.md
+    depende_de:
+      - chain
+    tentativas: 0
+    status_execucao: Aguardando
+    status_verificacao: Aguardando
