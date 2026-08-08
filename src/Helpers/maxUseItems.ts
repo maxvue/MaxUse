@@ -10,6 +10,10 @@ import * as Types from './Types';
 import * as Validations from './Validations';
 import * as Electrical from './Electrical';
 import * as Format from './Format';
+import * as Lang from './Lang';
+import * as Functions from './Functions';
+import * as Utils from './Utils';
+import * as Seq from './Seq';
 import * as VueUse from './VueUse';
 import autoImportData from './autoImportData.json';
 
@@ -33,6 +37,10 @@ export const maxUseItems = (): string[] => {
         Validations,
         Electrical,
         Format,
+        Lang,
+        Functions,
+        Utils,
+        Seq,
         VueUse
     ];
 

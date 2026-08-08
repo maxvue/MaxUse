@@ -1,0 +1,48 @@
+/**
+ * Símbolo usado como placeholder para "pular" a posição de um argumento
+ * pré-preenchido em `partial`, `partialRight` e `bind` — o valor real é
+ * preenchido na chamada da função resultante.
+ * Semelhante ao `_.partial.placeholder` do Lodash.
+ */
+export const placeholder: unique symbol = Symbol('maxuse.partial.placeholder');
+
+/**
+ * Combina os argumentos pré-preenchidos (`partials`) com os argumentos
+ * recebidos na chamada (`args`), substituindo cada ocorrência do
+ * `placeholder` em `partials` pelo próximo argumento disponível de `args`.
+ * Argumentos de `args` não consumidos por um placeholder são anexados ao
+ * final.
+ *
+ * @param partials argumentos pré-preenchidos, podendo conter `placeholder`
+ * @param args argumentos recebidos na chamada da função combinada
+ * @returns array final de argumentos
+ */
+function mergeArgs(partials: unknown[], args: unknown[]): unknown[] {
+    const result: unknown[] = [];
+    let argIndex = 0;
+    for (const value of partials) result.push(value === placeholder ? args[argIndex++] : value);
+
+    while (argIndex < args.length) result.push(args[argIndex++]);
+    return result;
+}
+
+/**
+ * Cria uma função que invoca `func` com `partials` prependados aos
+ * argumentos recebidos. Aceita `placeholder` (`partial.placeholder`) em
+ * qualquer posição de `partials` para reservar o lugar de um argumento a
+ * ser informado na chamada da função resultante.
+ * Semelhante ao _.partial do Lodash.
+ *
+ * @param func função a envolver
+ * @param partials argumentos pré-preenchidos (podem conter `placeholder`)
+ * @returns nova função com os argumentos iniciais pré-preenchidos
+ */
+export function partial<T extends (...args: any[]) => any>(func: T, ...partials: unknown[]): (...args: any[]) => ReturnType<T> {
+    if (typeof func !== 'function') throw new TypeError('Expected a function');
+
+    return function (this: unknown, ...args: any[]): ReturnType<T> {
+        return func.apply(this, mergeArgs(partials, args));
+    };
+}
+
+partial.placeholder = placeholder;

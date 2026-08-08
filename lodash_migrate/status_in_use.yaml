@@ -24,8 +24,8 @@ helpers:
     depende_de:
       - keys
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: pickBy
     uso_confirmado: "MinhaBibliaOnline/resources/Stores/Planner/getListPlannerListsStore.ts:126 (_.pickBy)"
     categoria: Objects
@@ -34,8 +34,8 @@ helpers:
     depende_de:
       - iteratee
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
   - nome: startCase
     uso_confirmado: "MinhaBibliaOnline/resources/Vue/Sections/Auth/Pesquisa.vue:202 (_.startCase)"
     categoria: Strings
@@ -45,5 +45,6 @@ helpers:
       - words
       - upperFirst
     tentativas: 0
-    status_execucao: Aguardando
-    status_verificacao: Aguardando
+    status_execucao: Concluído
+    status_verificacao: Concluído
+

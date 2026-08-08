@@ -44,6 +44,44 @@ Preencher conforme cada divergência for confirmada durante a migração. Format
 - **MaxUse:** `<assinatura>` — `<comportamento>`
 - **Impacto:** `<o que quebra ao migrar>`
 
+### `deburr`
+
+- **Lodash:** `deburr(string)` — trata `Ǣ`/`ǣ` (AE latino maiúsculo/minúsculo com
+  ligadura) como caracteres fora da tabela `deburredLetters` e fora do range
+  do `reLatin1`; a normalização NFD não os decompõe (não são pré-compostos),
+  então `_.deburr('Ǣ')` retorna `'Ǣ'` intocado.
+- **MaxUse:** `deburr(value: MaybeRefOrGetter<unknown>)` —
+  `src/Helpers/Strings/deburr.ts` usa a mesma técnica (tabela +
+  `normalize('NFD')`), mas o range `reLatin1` (`/[\xc0-\xffĀ-ſ]/g`) inclui
+  `Ǣ`/`ǣ` (`U+01E2`/`U+01E3`, dentro do bloco Latin Extended-A coberto pelo
+  range `Ā-ſ`). Como não há entrada correspondente em `deburredLetters`, o
+  caractere passa intocado pela etapa de substituição, mas a normalização
+  NFD subsequente o decompõe em `Æ` (ligadura simples) + marca combinante,
+  que a segunda etapa (`reComboMark`) remove — resultado: `deburr('Ǣ')` →
+  `'Æ'` (maiúscula preservada, marca removida), não o `'Ǣ'` intocado do
+  Lodash.
+- **Impacto:** divergência intencional, não um bug — a versão MaxUse produz
+  uma saída mais "desacentuada" (mais próxima do ASCII) para esse par de
+  caracteres raro. Quem depende do comportamento exato do Lodash para
+  `Ǣ`/`ǣ` (preservação sem alteração) verá uma saída diferente ao migrar.
+
+### `template`
+
+- **Lodash:** o identificador `_` disponível dentro do corpo do template
+  compilado (quando `options.imports` não o sobrescreve) é o objeto
+  `lodash` completo — chamável e com todos os métodos (`_.map`, `_.filter`
+  etc.).
+- **MaxUse:** `_` dentro do template é `{ escape }` — apenas o `escape`
+  desta biblioteca, não um objeto chamável nem com outros métodos.
+- **Impacto:** templates que usam `_.<qualquerMétodoQueNãoSejaEscape>(...)`
+  sem informar `options.imports` explicitamente lançam `TypeError` na
+  MaxUse (funcionavam no Lodash). Motivo: `template` não é o único ponto de
+  entrada de um `_` chamável e completo aqui — importar `_` de
+  `src/index.ts` dentro de `src/Helpers/Utils/template.ts` criaria uma
+  dependência circular, pois `_` é montado a partir de todas as
+  categorias, incluindo `Utils`. Quem precisa de outros helpers dentro do
+  template deve repassá-los via `options.imports`.
+
 ## Como esta divergência é protegida
 
 `src/Helpers/divergences.test.ts` calcula a lista de nomes conflitantes
