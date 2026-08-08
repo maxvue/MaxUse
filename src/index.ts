@@ -1,8 +1,6 @@
 import * as vueUse from '@vueuse/core';
 export * as vueUse from '@vueuse/core';
 
-import * as lodash from 'lodash-es';
-
 import * as Browser from './Helpers/Browser';
 import * as Dates from './Helpers/Dates';
 import * as Iterables from './Helpers/Iterables';
@@ -80,21 +78,11 @@ const vueUseKeys = Object.keys(vueUse).filter((key) => key !== 'vueUse');
 for (const key of vueUseKeys) if (!(key in ownHelpers)) (filteredVueUse as Record<string, any>)[key] = (vueUse as Record<string, any>)[key];
 
 /**
- * Helpers do Lodash (filtrados para evitar duplicatas com ownHelpers e filteredVueUse).
- */
-const filteredLodash: Record<string, any> = {};
-const lodashKeys = Object.keys(lodash);
-
-for (const key of lodashKeys) if (!(key in ownHelpers) && !(key in filteredVueUse)) filteredLodash[key] = (lodash as Record<string, any>)[key];
-
-
-/**
  * Objeto centralizado de helpers, semelhante ao Lodash (_).
- * Contém os helpers próprios, os do VueUse e os do Lodash (sem duplicatas).
+ * Contém os helpers próprios e os do VueUse (sem duplicatas).
  */
 export const _ = {
     ...ownHelpers,
-    ...filteredVueUse,
-    ...filteredLodash
+    ...filteredVueUse
 };
 
