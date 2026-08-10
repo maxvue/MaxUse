@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sortBy } from './sortBy';
+import { sortBy } from './orderBy';
 
 describe('sortBy (via re-export)', () => {
     it('é uma função', () => {

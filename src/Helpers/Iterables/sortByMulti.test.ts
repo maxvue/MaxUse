@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { sortByMulti } from './sortByMulti';
+import { sortByMulti } from './orderBy';
 
 describe('sortByMulti (via re-export)', () => {
     it('é uma função', () => {

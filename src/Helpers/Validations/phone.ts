@@ -1,4 +1,4 @@
-import * as PhoneLib from 'libphonenumber-js';
+import * as PhoneLib from 'libphonenumber-js/max';
 import { type MaybeRefOrGetter, toValue } from 'vue';
 
 /**

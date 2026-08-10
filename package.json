@@ -173,6 +173,7 @@
         "access": "public"
     },
     "peerDependencies": {
+        "@vueuse/core": "^14.0.0",
         "vue": "^3.5.0 || ^3.6.0-rc.2",
         "vue-router": "^5.0.6"
     }

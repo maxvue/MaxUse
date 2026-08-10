@@ -7,6 +7,14 @@ describe('formatCep', () => {
         expect(formatCep('12345678')).toBe('12345-678');
     });
 
+    it('formata CEP numérico com zero à esquerda', () => {
+        expect(formatCep(1001000)).toBe('01001-000');
+    });
+
+    it('é consistente com cepIsValid para entrada numérica', () => {
+        expect(formatCep(1001000)).toMatch(/^\d{5}-\d{3}$/);
+    });
+
     it('retorna string original se não tem 8 dígitos', () => {
         expect(formatCep('1234')).toBe('1234');
     });
@@ -22,9 +30,7 @@ describe('formatCep', () => {
 
 describe('formatCpf', () => {
     it('formata CPF com 11 dígitos', () => {
-        const result = formatCpf('12345678901');
-        expect(result).toContain('.');
-        expect(result).toContain('-');
+        expect(formatCpf('12345678901')).toBe('123.456.789-01');
     });
 
     it('retorna string original para CPF com menos de 11 dígitos', () => {
@@ -36,17 +42,13 @@ describe('formatCpf', () => {
     });
 
     it('funciona com Ref', () => {
-        const result = formatCpf(ref('12345678901'));
-        expect(result.length).toBeGreaterThan(0);
+        expect(formatCpf(ref('12345678901'))).toBe('123.456.789-01');
     });
 });
 
 describe('formatCnpj', () => {
     it('formata CNPJ com 14 dígitos', () => {
-        const result = formatCnpj('12345678000199');
-        expect(result).toContain('.');
-        expect(result).toContain('/');
-        expect(result).toContain('-');
+        expect(formatCnpj('12345678000199')).toBe('12.345.678/0001-99');
     });
 
     it('retorna vazio para null', () => {
@@ -56,14 +58,11 @@ describe('formatCnpj', () => {
 
 describe('formatCpfCnpj', () => {
     it('formata CPF quando tem 11 dígitos', () => {
-        const result = formatCpfCnpj('12345678901');
-        expect(result).toContain('.');
-        expect(result).toContain('-');
+        expect(formatCpfCnpj('12345678901')).toBe('123.456.789-01');
     });
 
     it('formata CNPJ quando tem 14 dígitos', () => {
-        const result = formatCpfCnpj('12345678000199');
-        expect(result).toContain('/');
+        expect(formatCpfCnpj('12345678000199')).toBe('12.345.678/0001-99');
     });
 
     it('retorna string original para documento com 12 dígitos sem perder caractere', () => {
@@ -94,6 +93,16 @@ describe('formatPhone', () => {
 
     it('formata 0800', () => {
         expect(formatPhone('08001234567')).toBe('0800 123 4567');
+    });
+
+    it('não formata DDDs inexistentes', () => {
+        expect(formatPhone('0301234567')).toBe('0301234567');
+        expect(formatPhone('2012345678')).toBe('2012345678');
+        expect(formatPhone('0012345678')).toBe('0012345678');
+    });
+
+    it('trata 0300 como número não-geográfico', () => {
+        expect(formatPhone('03001234567')).not.toBe('(03) 00123-4567');
     });
 
     it('retorna vazio para null', () => {

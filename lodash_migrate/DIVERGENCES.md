@@ -82,6 +82,12 @@ Preencher conforme cada divergência for confirmada durante a migração. Format
   categorias, incluindo `Utils`. Quem precisa de outros helpers dentro do
   template deve repassá-los via `options.imports`.
 
+### `orderBy` / `sortBy`
+
+- **Lodash:** em ordenação descendente (`'desc'`), valores `null` e `undefined` são colocados no início da lista.
+- **MaxUse:** em ordenação descendente (`'desc'`), valores `null` e `undefined` são mantidos no final da lista.
+- **Impacto:** ordenação descendente de coleções com valores nulos preserva os nulos ao final.
+
 ## Como esta divergência é protegida
 
 `src/Helpers/divergences.test.ts` calcula a lista de nomes conflitantes

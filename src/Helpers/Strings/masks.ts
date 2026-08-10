@@ -14,7 +14,8 @@ export function formatCep(value: RefString): string {
     const data = toValue(value);
     if (isBlank(data)) return '';
 
-    const cep = String(data).replace(/\D/g, '');
+    const cep = (typeof data === 'number' ? String(data).padStart(8, '0') : String(data))
+        .replace(/\D/g, '');
     if (cep.length === 8) return cep.replace(/^(\d{5})(\d{3})$/, '$1-$2');
     return String(data);
 }
@@ -61,6 +62,18 @@ export function formatCpfCnpj(value: RefString): string {
     return maskBr.cpfcnpj(numbers);
 }
 
+const VALID_DDD = new Set([
+    '11', '12', '13', '14', '15', '16', '17', '18', '19',
+    '21', '22', '24', '27', '28',
+    '31', '32', '33', '34', '35', '37', '38',
+    '41', '42', '43', '44', '45', '46', '47', '48', '49',
+    '51', '53', '54', '55',
+    '61', '62', '63', '64', '65', '66', '67', '68', '69',
+    '71', '73', '74', '75', '77', '79',
+    '81', '82', '83', '84', '85', '86', '87', '88', '89',
+    '91', '92', '93', '94', '95', '96', '97', '98', '99'
+]);
+
 /**
  * Aplica a máscara de telefone brasileiro em uma string.
  *
@@ -74,11 +87,24 @@ export function formatPhone(phone_number: RefString): string {
 
     const only_numbers = String(data).replace(/\D/g, '');
 
-    if (only_numbers.startsWith('0800')) {
-        if (only_numbers.length === 11) return only_numbers.replace(/^0800(\d{3})(\d{4})$/, '0800 $1 $2');
-
+    if (/^0(800|300|500|900)/.test(only_numbers)) {
+        if (only_numbers.length === 11) {
+            const prefix = only_numbers.slice(0, 4);
+            return `${prefix} ${only_numbers.slice(4, 7)} ${only_numbers.slice(7)}`;
+        }
         return String(data);
     }
+
+    let ddd = '';
+    if (only_numbers.length === 10 || only_numbers.length === 11) {
+        const code = only_numbers.slice(0, 2);
+        ddd = code;
+    } else if ((only_numbers.length === 12 || only_numbers.length === 13) && only_numbers.startsWith('55')) {
+        const code = only_numbers.slice(2, 4);
+        ddd = code;
+    }
+
+    if (!ddd || !VALID_DDD.has(ddd)) return String(data);
 
     if (only_numbers.length === 10) return only_numbers.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
     if (only_numbers.length === 11) return only_numbers.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
@@ -86,7 +112,6 @@ export function formatPhone(phone_number: RefString): string {
     if (only_numbers.length === 12 && only_numbers.startsWith('55')) return only_numbers.replace(/^55(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
 
     if (only_numbers.length === 13 && only_numbers.startsWith('55')) return only_numbers.replace(/^55(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-
 
     return String(data);
 }

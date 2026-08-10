@@ -15,9 +15,10 @@ export function truncate(value: RefString, limit: number = 20, suffix: string = 
     if (isBlank(data)) return '';
 
     const str = String(data);
-    if (str.length <= limit) return str;
+    const chars = [...str];
+    if (chars.length <= limit) return str;
 
-    return str.slice(0, limit) + suffix;
+    return chars.slice(0, limit).join('') + suffix;
 }
 
 /**
@@ -37,7 +38,8 @@ export function slugify(value: RefString): string {
         .trim()
         .replace(/[^a-z0-9\s-]/g, '')
         .replace(/[\s_]+/g, '-')
-        .replace(/-+/g, '-');
+        .replace(/-+/g, '-')
+        .replace(/^-+|-+$/g, '');
 }
 
 /**

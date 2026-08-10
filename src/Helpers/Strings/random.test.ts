@@ -58,6 +58,16 @@ describe('Random', () => {
         const result = Random('' as any, '' as any);
         expect(result.length).toBe(20);
     });
+
+    it('nonumber gera string sem dígitos', () => {
+        expect(Random(50, 'nonumber')).toMatch(/^[a-zA-Z]+$/);
+    });
+
+    it.each(['number', 'nonumber', 'letter', 'ulid'] as const)(
+        'cobre o Typecode %s', (tipo) => {
+            expect(Random(10, tipo)).toBeTruthy();
+        }
+    );
 });
 
 describe('ulid', () => {

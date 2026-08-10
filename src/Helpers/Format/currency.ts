@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { isBlank } from '../Types/isBlank';
-import { toNumber } from '../Strings/converters';
+import { parseBrNumber } from '../Strings/converters';
 
 type RefString = MaybeRefOrGetter<string | number | null | undefined>;
 
@@ -13,16 +13,12 @@ export function formatCurrency(value: RefString): string {
     const data = toValue(value);
     if (isBlank(data)) return 'R$ 0,00';
 
-    if (typeof data === 'string') {
-        const trimmed = data.trim();
-        if (/[a-zA-Z]/.test(trimmed)) return 'R$ 0,00';
-    }
-
-    const num = toNumber(data);
+    const num = parseBrNumber(data);
+    if (isNaN(num)) return 'R$ 0,00';
 
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL'
-    }).format(num);
+    }).format(num).replace(/[\u00a0\u202f]/g, ' ');
 }
 

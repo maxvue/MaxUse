@@ -35,7 +35,11 @@ export function isValidCreditCard(value: MaybeRefOrGetter<string | number | null
     const str = String(data);
     if (!checkLuhn(str)) return false;
 
-    return validateBr.cartaocredito(str);
+    if (validateBr.cartaocredito(str)) return true;
+
+    const BR_EXTRA_BRANDS = /^(606282|3841\d{2})/;
+    const sanitized = str.replace(/\D/g, '');
+    return BR_EXTRA_BRANDS.test(sanitized) && sanitized.length >= 13 && sanitized.length <= 19;
 }
 
 /** Alias de {@link isValidCreditCard}. */

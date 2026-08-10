@@ -26,4 +26,8 @@ describe('chunk', () => {
     it('funciona com Ref', () => {
         expect(chunk(ref([1, 2, 3, 4]), 2)).toEqual([[1, 2], [3, 4]]);
     });
+
+    it('trunca tamanho fracionário', () => {
+        expect(chunk([1, 2, 3, 4], 1.5)).toEqual([[1], [2], [3], [4]]);
+    });
 });

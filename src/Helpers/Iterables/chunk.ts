@@ -8,10 +8,11 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
  */
 export function chunk<T>(array: MaybeRefOrGetter<T[]>, size: number = 1): T[][] {
     const data = toValue(array);
-    if (!data || data.length === 0 || size <= 0) return [];
+    const chunkSize = Math.trunc(size) || 0;
+    if (!data || data.length === 0 || chunkSize <= 0) return [];
 
     const result: T[][] = [];
-    for (let i = 0; i < data.length; i += size) result.push(data.slice(i, i + size));
+    for (let i = 0; i < data.length; i += chunkSize) result.push(data.slice(i, i + chunkSize));
 
     return result;
 }

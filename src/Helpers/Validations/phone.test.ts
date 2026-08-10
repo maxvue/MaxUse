@@ -36,4 +36,13 @@ describe('phone', () => {
         expect(phone(11999991234)).toBe(true);
         expect(phone('')).toBe(false);
     });
+
+    it('rejeita celular BR de 10 dígitos (sem o 9º dígito)', () => {
+        expect(phone('1199999123')).toBe(false);
+        expect(phone('+551199999123')).toBe(false);
+    });
+
+    it('rejeita fixo BR com 11 dígitos', () => {
+        expect(phone('11333344445')).toBe(false);
+    });
 });

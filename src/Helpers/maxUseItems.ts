@@ -49,6 +49,8 @@ export const maxUseItems = (): string[] => {
         allKeys.add(key);
     }
 
+    allKeys.add('maxUseItems');
+    allKeys.add('maxUseAutoImport');
 
     return Array.from(allKeys).sort();
 };

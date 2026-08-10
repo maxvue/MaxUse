@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { get } from '../Objects/get';
 
 type Criterion<T> = string | ((item: T) => unknown);
 type OrderDirection = 'asc' | 'desc';
@@ -46,8 +47,8 @@ export function orderBy<T>(
                 valA = rule(a);
                 valB = rule(b);
             } else if (typeof rule === 'string') {
-                valA = (a as Record<string, unknown>)?.[rule];
-                valB = (b as Record<string, unknown>)?.[rule];
+                valA = get(a, rule);
+                valB = get(b, rule);
             } else {
                 valA = a;
                 valB = b;

@@ -115,6 +115,21 @@ describe('orderBy', () => {
     it('sortBy é alias de orderBy', () => {
         expect(sortBy).toBe(orderBy);
     });
+
+    it('ordena por caminho profundo com notação de colchetes', () => {
+        const arr = [{ a: [{ b: { c: 5 } }] }, { a: [{ b: { c: 2 } }] }];
+        expect(sortBy(arr, 'a[0].b.c')[0].a[0].b.c).toBe(2);
+    });
+
+    it('ordena por caminho com ponto', () => {
+        const arr = [{ u: { idade: 30 } }, { u: { idade: 20 } }];
+        expect(sortBy(arr, 'u.idade')[0].u.idade).toBe(20);
+    });
+
+    it('mantém nulos no final também em desc (divergência documentada)', () => {
+        const r = orderBy([{ a: 1 }, { a: null }, { a: 3 }], ['a'], ['desc']);
+        expect(r.map((x) => x.a)).toEqual([3, 1, null]);
+    });
 });
 
 describe('sortByMulti', () => {

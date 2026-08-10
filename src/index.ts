@@ -18,6 +18,8 @@ import * as Seq from './Helpers/Seq';
 import * as Composables from './Composables';
 import * as Routes from './Routes';
 
+import * as MaxUseMeta from './Helpers/maxUseItems';
+
 // Exporta os módulos principais
 export * from './Composables';
 export * from './Routes';
@@ -67,7 +69,8 @@ const ownHelpers = {
     ...Lang,
     ...Functions,
     ...Utils,
-    ...Seq
+    ...Seq,
+    ...MaxUseMeta
 };
 
 /**

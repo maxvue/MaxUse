@@ -33,6 +33,30 @@ function mergeCurryArgs(existing: unknown[], incoming: unknown[]): unknown[] {
     return result;
 }
 
+function createCurried(func: Function, arity: number, accumulatedArgs: unknown[] = []): any {
+    const fn = function (this: unknown, ...args: unknown[]): any {
+        const combined = mergeCurryArgs(accumulatedArgs, args);
+        if (hasEnoughArgs(combined, arity)) return func.apply(this, combined.slice(0, Math.max(combined.length, arity)));
+
+        return createCurried(func, arity, combined);
+    };
+
+    let nonPlaceholdersCount = 0;
+    for (let i = 0; i < accumulatedArgs.length && i < arity; i++) if (accumulatedArgs[i] !== placeholder) nonPlaceholdersCount++;
+
+    const remainingArity = Math.max(arity - nonPlaceholdersCount, 0);
+
+    Object.defineProperty(fn, 'length', {
+        value: remainingArity,
+        writable: false,
+        enumerable: false,
+        configurable: true
+    });
+
+    fn.placeholder = placeholder;
+    return fn;
+}
+
 /**
  * Cria uma função "curried": pode ser invocada com menos argumentos do
  * que `func` espera, retornando uma nova função que aceita o restante.
@@ -48,17 +72,7 @@ export function curry<T extends (...args: any[]) => any>(func: T, arity: number 
     if (typeof func !== 'function') throw new TypeError('Expected a function');
 
     const n = toInteger(arity);
-
-    function curried(this: unknown, ...args: unknown[]): any {
-        if (hasEnoughArgs(args, n)) return func.apply(this, args.slice(0, Math.max(args.length, n)));
-
-        return function (this: unknown, ...more: unknown[]): any {
-            return curried.apply(this, mergeCurryArgs(args, more));
-        };
-    }
-
-    curried.placeholder = placeholder;
-    return curried;
+    return createCurried(func, n, []);
 }
 
 curry.placeholder = placeholder;

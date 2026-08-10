@@ -133,7 +133,7 @@ const getVueUseTypes = (valueKeys: string[]): string[] => {
 };
 
 export const generateAutoImportData = () => {
-    const items = [...maxUseItems(), '_', 'vueUse'];
+    const items = Array.from(new Set([...maxUseItems(), '_', 'vueUse', 'maxUseItems', 'maxUseAutoImport'])).sort();
     const vueUseValueKeys = [...Object.keys(VueUseCore), ...Object.keys(VueUse)];
     const types = getVueUseTypes(vueUseValueKeys).filter((t) => !items.includes(t));
 

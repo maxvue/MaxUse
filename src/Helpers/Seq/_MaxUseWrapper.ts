@@ -73,6 +73,20 @@ export class MaxUseWrapper<T = unknown> {
     }
 
     /**
+     * Retorna o valor resolvido para serialização em JSON.
+     */
+    toJSON(): unknown {
+        return this.value();
+    }
+
+    /**
+     * Retorna o valor resolvido.
+     */
+    valueOf(): unknown {
+        return this.value();
+    }
+
+    /**
      * Empilha uma ação na fila e retorna um **novo** wrapper — nunca muta
      * a instância atual. Usado pelos métodos de instância encadeáveis
      * (`.thru()`, `.tap()` etc.) definidos nos arquivos `wrapper*.ts`.
@@ -81,6 +95,9 @@ export class MaxUseWrapper<T = unknown> {
         return new MaxUseWrapper<T>(this.__wrapped__, this.__chain__, [...this.__actions__, { func, args }]);
     }
 }
+
+import { registerCollectionMixins } from './_collectionMixins';
+registerCollectionMixins(MaxUseWrapper);
 
 /**
  * Cria um wrapper de encadeamento explícito (equivalente a `_.chain`).

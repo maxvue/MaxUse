@@ -45,4 +45,13 @@ describe('chain', () => {
         const w = chain(ref([1, 2, 3]));
         expect(w.value()).toEqual([1, 2, 3]);
     });
+
+    it('encadeia map/filter e resolve com value()', () => {
+        expect((chain([1, 2, 3]) as any).map((x: number) => x * 2).value()).toEqual([2, 4, 6]);
+    });
+
+    it('serializa como o valor embrulhado, não como estado interno', () => {
+        expect(JSON.stringify(chain([1, 2, 3]))).toBe('[1,2,3]');
+        expect(chain([1, 2, 3]).valueOf()).toEqual([1, 2, 3]);
+    });
 });

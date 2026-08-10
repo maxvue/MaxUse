@@ -1,5 +1,6 @@
 import * as vueUseCore from '@vueuse/core';
 
+export * from '@vueuse/core';
 export * as vueUse from '@vueuse/core';
 export type * from '@vueuse/core';
 export type * as vueUseTypes from '@vueuse/core';

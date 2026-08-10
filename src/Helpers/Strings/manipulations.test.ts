@@ -22,6 +22,11 @@ describe('truncate', () => {
     it('funciona com Ref', () => {
         expect(truncate(ref('Texto longo'), 5)).toBe('Texto...');
     });
+
+    it('não parte pares substitutos', () => {
+        const out = truncate('🙂🙂🙂🙂🙂', 3, '...');
+        expect(out).not.toMatch(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/);
+    });
 });
 
 describe('slugify', () => {
@@ -39,6 +44,10 @@ describe('slugify', () => {
 
     it('colapsa múltiplos hífens', () => {
         expect(slugify('hello   world')).toBe('hello-world');
+    });
+
+    it('não deixa hífens nas bordas', () => {
+        expect(slugify('  -- olá --  ')).toBe('ola');
     });
 
     it('retorna vazio para null', () => {

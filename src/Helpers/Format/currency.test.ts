@@ -48,4 +48,17 @@ describe('formatCurrency', () => {
         const res2 = formatCurrency('10,5');
         expect(res2).toContain('10,50');
     });
+
+    it('interpreta ponto como separador de milhar em pt-BR', () => {
+        expect(formatCurrency('1.234')).toBe('R$ 1.234,00');
+        expect(formatCurrency('1.234.567')).toBe('R$ 1.234.567,00');
+    });
+
+    it('faz round-trip do próprio formato de saída', () => {
+        expect(formatCurrency(formatCurrency(1234.56))).toBe('R$ 1.234,56');
+    });
+
+    it('retorna R$ 0,00 para Infinity', () => {
+        expect(formatCurrency(Infinity)).toBe('R$ 0,00');
+    });
 });

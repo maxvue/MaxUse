@@ -30,10 +30,13 @@ export function Random(arg1: MaybeRefOrGetter<number | Typecode> = 20, arg2: May
     if (type_code.includes('number') && !type_code.includes('nonumber')) chars += '0123456789';
 
     // Fallback se nada foi especificado ou se resultou em vazio
-    if (!chars) chars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+    if (!chars) {
+        const fallback = type_code.includes('nonumber') ? 'abcdefghijklmnopqrstuvwxyz' : 'abcdefghijklmnopqrstuvwxyz0123456789';
+        chars = fallback;
+    }
 
     // Se for solicitado APENAS número
-    if (type_code.includes('number') && !type_code.includes('lower') && !type_code.includes('upper') && !type_code.includes('letter')) chars = '0123456789';
+    if (type_code.includes('number') && !type_code.includes('nonumber') && !type_code.includes('lower') && !type_code.includes('upper') && !type_code.includes('letter')) chars = '0123456789';
 
     let result = '';
     const charactersLength = chars.length;

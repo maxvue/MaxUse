@@ -18,6 +18,7 @@ export interface MemoizedFunction<T extends (...args: any[]) => any> {
 export function memoize<T extends (...args: any[]) => any>(func: T, resolver?: (...args: Parameters<T>) => unknown): MemoizedFunction<T> {
     if (typeof func !== 'function' || (resolver != null && typeof resolver !== 'function')) throw new TypeError('Expected a function');
 
+    const CacheConstructor = memoize.Cache || Map;
 
     function memoized(this: unknown, ...args: Parameters<T>): ReturnType<T> {
         const key = resolver ? resolver.apply(this, args) : args[0];
@@ -30,6 +31,8 @@ export function memoize<T extends (...args: any[]) => any>(func: T, resolver?: (
         return result;
     }
 
-    memoized.cache = new Map<unknown, ReturnType<T>>();
+    memoized.cache = new CacheConstructor<unknown, ReturnType<T>>();
     return memoized;
 }
+
+memoize.Cache = Map;

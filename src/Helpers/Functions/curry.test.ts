@@ -50,4 +50,10 @@ describe('curry', () => {
         const curried = curry(abc) as any;
         expect(curried.placeholder).toBe(placeholder);
     });
+
+    it('reporta a aridade restante', () => {
+        const cf = curry((_a: number, _b: number, _c: number) => 0);
+        expect(cf.length).toBe(3);
+        expect((cf(1) as any).length).toBe(2);
+    });
 });

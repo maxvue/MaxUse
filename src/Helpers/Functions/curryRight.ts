@@ -73,7 +73,7 @@ export function curryRight<T extends (...args: any[]) => any>(func: T, arity: nu
     const totalArity = toInteger(arity);
 
     function step(partials: unknown[], holders: number[], remaining: number): (...args: any[]) => any {
-        return function (this: unknown, ...incoming: unknown[]): any {
+        const fn = function (this: unknown, ...incoming: unknown[]): any {
             const holdersCount = countHolders(incoming);
             const composed = composeArgsRight(incoming, partials, holders);
             const length = incoming.length - holdersCount;
@@ -84,10 +84,19 @@ export function curryRight<T extends (...args: any[]) => any>(func: T, arity: nu
             }
             return func.apply(this, composed);
         };
+
+        Object.defineProperty(fn, 'length', {
+            value: Math.max(remaining, 0),
+            writable: false,
+            enumerable: false,
+            configurable: true
+        });
+
+        (fn as any).placeholder = placeholder;
+        return fn;
     }
 
     const curried = step([], [], totalArity);
-    (curried as any).placeholder = placeholder;
     return curried;
 }
 

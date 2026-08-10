@@ -48,4 +48,12 @@ describe('isValidCreditCard', () => {
         expect(isValidCreditCard('5500005555555558')).toBe(false);
         expect(isValidCreditCard('1234567890123456')).toBe(false);
     });
+
+    it('aceita Hipercard válido', () => {
+        expect(isValidCreditCard('6062825624254001')).toBe(true);
+    });
+
+    it('continua rejeitando Luhn inválido', () => {
+        expect(isValidCreditCard('4514160123456789')).toBe(false);
+    });
 });

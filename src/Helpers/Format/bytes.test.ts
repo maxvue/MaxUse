@@ -88,4 +88,21 @@ describe('formatBytes — regressão auditoria (achado 014)', () => {
         expect(formatBytes(-0.5)).toBe('-0.5 Bytes');
         expect(formatBytes('0,5')).toBe('0.5 Bytes');
     });
+
+    it('interpreta strings pt-BR com milhar e decimal', () => {
+        expect(formatBytes('1.234,5')).toBe('1.21 KB');
+        expect(formatBytes('1.024')).toBe('1 KB');
+    });
+
+    it('não fabrica números a partir de notação científica', () => {
+        expect(formatBytes('2e3')).not.toBe('23 Bytes');
+    });
+
+    it('promove o sufixo quando o arredondamento atinge 1024', () => {
+        expect(formatBytes(1023.9999)).toBe('1 KB');
+    });
+
+    it('trata Infinity como entrada inválida', () => {
+        expect(formatBytes(Infinity)).toBe('0 Bytes');
+    });
 });

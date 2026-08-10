@@ -61,4 +61,48 @@ export function toNumber(value: RefString, decimals: number | null = null): numb
     return number;
 }
 
+/**
+ * Converte uma entrada numérica ou string contendo valores pt-BR ou internacionais em um `number` válido.
+ * Trata o formato de milhar pt-BR (ex: "1.234" -> 1234, "1.234,56" -> 1234.56, "R$ 1.234,56" -> 1234.56).
+ * Retorna `NaN` em caso de valores inválidos ou não finitos (como Infinity).
+ */
+export function parseBrNumber(value: unknown): number {
+    if (value === null || value === undefined || value === '') return NaN;
+    if (typeof value === 'number') return Number.isFinite(value) ? value : NaN;
+    if (typeof value !== 'string') return NaN;
+
+    // Normaliza espaços em branco especiais (como NBSP)
+    let str = value.replace(/[\u00a0\u202f]/g, ' ').trim();
+    if (!str) return NaN;
+
+    // Remove prefixo de moeda R$
+    str = str.replace(/^R\$\s*/i, '').trim();
+
+    // Remove sufixos de bytes (ex: Bytes, B, KB, etc.) no final
+    str = str.replace(/\s*(bytes?|[bkmgtpezy]b?)?$/i, '').trim();
+    if (!str) return NaN;
+
+    if (str.includes(',')) {
+        const normalized = str.replace(/\./g, '').replace(',', '.');
+        str = normalized;
+    } else if (str.includes('.')) {
+        const isMilhar = /^[+-]?\d{1,3}(\.\d{3})+$/.test(str);
+        if (isMilhar) {
+            const normalized = str.replace(/\./g, '');
+            str = normalized;
+        }
+    }
+
+    // Notação científica direta (ex: 2e3, -1.5e-2) ou decimal comum
+    if (/^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/.test(str)) {
+        const n = parseFloat(str);
+        return Number.isFinite(n) ? n : NaN;
+    }
+
+    if (/[a-zA-Z]/.test(str)) return NaN;
+
+    const num = Number(str);
+    return Number.isFinite(num) ? num : NaN;
+}
+
 

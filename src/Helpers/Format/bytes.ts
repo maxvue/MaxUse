@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { parseBrNumber } from '../Strings/converters';
 
 /**
  * Converte um número bruto de bytes em uma string legível.
@@ -11,9 +12,7 @@ export function formatBytes(
     decimals: MaybeRefOrGetter<number> = 2
 ): string {
     const raw = toValue(bytes);
-    // Preserva o sinal e aceita vírgula como separador decimal (pt-BR)
-    const sanitized = typeof raw === 'string' ? raw.replace(',', '.').replace(/[^0-9.-]/g, '') : raw;
-    const rawBytes = Number(sanitized);
+    const rawBytes = parseBrNumber(raw);
     const rawDecimals = toValue(decimals);
 
     if (isNaN(rawBytes) || rawBytes === 0) return '0 Bytes';
@@ -25,8 +24,9 @@ export function formatBytes(
     const sign = rawBytes < 0 ? '-' : '';
     const abs = Math.abs(rawBytes);
 
-    // Limita ao maior sufixo disponível para não indexar fora do array e previne i negativo em fracionários
-    const i = Math.min(Math.max(Math.floor(Math.log(abs) / Math.log(k)), 0), sizes.length - 1);
+    let i = Math.min(Math.max(Math.floor(Math.log(abs) / Math.log(k)), 0), sizes.length - 1);
+
+    if (parseFloat((abs / Math.pow(k, i)).toFixed(dm)) >= k && i < sizes.length - 1) i++;
 
     return `${sign}${parseFloat((abs / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }

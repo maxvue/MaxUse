@@ -74,4 +74,8 @@ describe('memoize', () => {
         const memoized = memoize(obj.calc);
         expect(memoized.call(obj, 5)).toBe(15);
     });
+
+    it('expõe memoize.Cache', () => {
+        expect(memoize.Cache).toBe(Map);
+    });
 });
