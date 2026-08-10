@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { _parseDate } from './_parseDate';
 
 type TDate = string | number | Date | null | undefined;
 
@@ -11,10 +12,9 @@ type TDate = string | number | Date | null | undefined;
 export function isFuture(dateValue: MaybeRefOrGetter<TDate>): boolean {
     const rawValue = toValue(dateValue);
 
-    if (!rawValue) return false;
-
-    const date = new Date(rawValue);
-    if (isNaN(date.getTime())) return false;
+    const date = _parseDate(rawValue);
+    if (!date) return false;
 
     return date.getTime() > Date.now();
 }
+

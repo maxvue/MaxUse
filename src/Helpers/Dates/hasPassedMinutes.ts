@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { _parseDate } from './_parseDate';
 import type { TPassedDate } from './hasPassedHours';
 
 /**
@@ -16,13 +17,12 @@ export function hasPassedMinutes(
     const rawValue: any = toValue(dateValue);
     const numMinutes = Number(toValue(minutes));
 
-    if (!rawValue) return true;
-
-    const date = new Date(rawValue);
-    if (isNaN(date.getTime())) return true;
+    const date = _parseDate(rawValue);
+    if (!date) return true;
 
     const limitMinutes = isNaN(numMinutes) ? 1 : numMinutes;
     const timeInMs: number = limitMinutes * 60 * 1000;
     const diferencaEmMs: number = Date.now() - date.getTime();
     return diferencaEmMs > timeInMs;
 }
+

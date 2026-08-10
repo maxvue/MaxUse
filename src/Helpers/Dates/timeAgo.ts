@@ -1,5 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
-import { isNotValid } from '../Validations';
+import { _parseDate } from './_parseDate';
 import { diffInMonths, diffInYears } from './differences';
 
 type RefDate = MaybeRefOrGetter<string | number | Date | null | undefined>;
@@ -12,10 +12,8 @@ type RefDate = MaybeRefOrGetter<string | number | Date | null | undefined>;
  */
 export function secondsAgo(value: RefDate): number {
     const data = toValue(value);
-    if (isNotValid(data)) return 0;
-
-    const date = new Date(data);
-    if (isNaN(date.getTime())) return 0;
+    const date = _parseDate(data);
+    if (!date) return 0;
 
     const diferencaMs = Date.now() - date.getTime();
     return Math.max(0, Math.floor(diferencaMs / 1000));
@@ -59,9 +57,8 @@ export function daysAgo(value: RefDate): number {
  */
 export function monthsAgo(value: RefDate): number {
     const data = toValue(value);
-    if (isNotValid(data)) return 0;
-    const date = new Date(data);
-    if (isNaN(date.getTime()) || date.getTime() > Date.now()) return 0;
+    const date = _parseDate(data);
+    if (!date || date.getTime() > Date.now()) return 0;
     return diffInMonths(date, new Date());
 }
 
@@ -73,8 +70,7 @@ export function monthsAgo(value: RefDate): number {
  */
 export function yearsAgo(value: RefDate): number {
     const data = toValue(value);
-    if (isNotValid(data)) return 0;
-    const date = new Date(data);
-    if (isNaN(date.getTime()) || date.getTime() > Date.now()) return 0;
+    const date = _parseDate(data);
+    if (!date || date.getTime() > Date.now()) return 0;
     return diffInYears(date, new Date());
 }
