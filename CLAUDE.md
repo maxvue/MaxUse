@@ -30,7 +30,7 @@ npx vitest run -t 'isCpf'
 ## Architecture
 
 ### Modular exports with a central `_` object
-The public API is assembled in [src/index.ts](src/index.ts). Everything is re-exported flat for named imports (`import { isCpf } from '@maxvue/max-use'`), **and** merged into a single `_` object mirroring Lodash's convention. The `_` object is built by merging, in order: `ownHelpers`, the filtered VueUse, then lodash-es. **VueUse keys are filtered out when the name already exists in `ownHelpers`; lodash-es keys are NOT filtered**, so on a name collision the Lodash version wins inside `_` (e.g. `_.size(5)` → `0` from Lodash, while the named export `size(5)` → `5` from this library). Named/flat imports always resolve to this library's own helper. When adding a helper whose name collides with Lodash, be aware the two entry points will disagree — see `implementations/019`.
+The public API is assembled in [src/index.ts](src/index.ts). Everything is re-exported flat for named imports (`import { isCpf } from '@maxvue/max-use'`), **and** merged into a single `_` object mirroring Lodash's convention. Since the lodash-es migration removed that dependency entirely, the `_` object is built by merging just `ownHelpers` and the filtered VueUse. **VueUse keys are filtered out when the name already exists in `ownHelpers`**, so own helpers win every collision and `_.someHelper` and the named export `someHelper` always agree.
 
 Ambiguity between modules (e.g. `now`, `get`/`set`, `isObject`, `useTimeAgo`) is resolved with explicit `export { ... }` lines near the bottom of `index.ts` — add to that list if you introduce a name exported by more than one module.
 
@@ -54,7 +54,7 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 - `setApiRequestConfig({ headers, withCredentials })` — global headers (values may be functions resolved per-request, e.g. `Authorization`) and cookie behavior for mutating requests.
 - `resetConfig()` — `@internal`, used to reset singletons between tests.
 
-`apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants: `getCachedApi` caches in `localStorage`; `getCachedApiIDB` and `postCachedApiIDB` use the native `indexedDB` API directly (the IDB layer is currently duplicated between those two files — see `implementations/009`). Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
+`apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants: `getCachedApi` caches in `localStorage`; `getCachedApiIDB` and `postCachedApiIDB` use the native `indexedDB` API through the shared internal layer in [src/Routes/internal/idbCache.ts](src/Routes/internal/idbCache.ts) — put IDB changes there, not in the individual helpers. `deleteFromIDB` and `clearCacheIDB` stay publicly re-exported from `getCachedApiIDB.ts`. Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
 
 ### Data-driven helpers
 `Helpers/Electrical/wireSize.ts` reads lookup tables from `src/json/*.json` (electrical wire-sizing tables like `al-70-bi-a1.json`). `resolveJsonModule` is enabled; these JSON files are bundled, not external.
