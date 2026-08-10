@@ -100,6 +100,7 @@ export function baseMerge(object: unknown, source: unknown, customizer?: Customi
     const src = source as Record<PropertyKey, unknown>;
 
     for (const key of keysIn(src)) {
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
         const srcValue = src[key];
         if (isObjectValue(srcValue)) baseMergeDeep(dest, src, key, baseMerge, customizer, stack);
         else {

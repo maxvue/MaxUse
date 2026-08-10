@@ -40,4 +40,12 @@ describe('merge', () => {
         expect(merge({ a: 1 }, 0)).toEqual({ a: 1 });
         expect(merge({ a: 1 }, '')).toEqual({ a: 1 });
     });
+
+    it('não permite poluição de protótipo via __proto__ ou constructor.prototype', () => {
+        merge({}, JSON.parse('{"__proto__":{"pollutedM":1}}'));
+        expect(({} as Record<string, unknown>).pollutedM).toBeUndefined();
+
+        merge({}, JSON.parse('{"constructor":{"prototype":{"pollutedC":1}}}'));
+        expect(({} as Record<string, unknown>).pollutedC).toBeUndefined();
+    });
 });

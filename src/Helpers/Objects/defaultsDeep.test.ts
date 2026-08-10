@@ -17,4 +17,9 @@ describe('defaultsDeep', () => {
     it('peculiaridade: fonte string é tratada como array-like e mesclada por índice', () => {
         expect(defaultsDeep({}, 'ab')).toEqual({ 0: 'a', 1: 'b' });
     });
+
+    it('não permite poluição de protótipo via __proto__ ou constructor.prototype', () => {
+        defaultsDeep({}, JSON.parse('{"__proto__":{"pollutedD":2}}'));
+        expect(({} as Record<string, unknown>).pollutedD).toBeUndefined();
+    });
 });
