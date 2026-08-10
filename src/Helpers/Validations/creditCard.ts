@@ -2,6 +2,26 @@ import { validateBr } from 'js-brasil';
 import { type MaybeRefOrGetter, toValue } from 'vue';
 import { isBlank } from '../Types/isBlank';
 
+function checkLuhn(cardNumber: string): boolean {
+    const sanitized = cardNumber.replace(/\D/g, '');
+    if (!sanitized || /^0+$/.test(sanitized)) return false;
+
+    let sum = 0;
+    let shouldDouble = false;
+
+    for (let i = sanitized.length - 1; i >= 0; i--) {
+        let digit = parseInt(sanitized.charAt(i), 10);
+        if (shouldDouble) {
+            digit *= 2;
+            if (digit > 9) digit -= 9;
+        }
+        sum += digit;
+        shouldDouble = !shouldDouble;
+    }
+
+    return sum % 10 === 0;
+}
+
 /**
  * Valida se um número de cartão de crédito é válido (algoritmo de Luhn).
  *
@@ -11,7 +31,11 @@ import { isBlank } from '../Types/isBlank';
 export function isValidCreditCard(value: MaybeRefOrGetter<string | number | null | undefined>): boolean {
     const data = toValue(value);
     if (isBlank(data)) return false;
-    return validateBr.cartaocredito(data);
+
+    const str = String(data);
+    if (!checkLuhn(str)) return false;
+
+    return validateBr.cartaocredito(str);
 }
 
 /** Alias de {@link isValidCreditCard}. */

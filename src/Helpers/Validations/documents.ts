@@ -1,5 +1,6 @@
 import { validateBr } from 'js-brasil';
 import { type MaybeRefOrGetter, toValue } from 'vue';
+import { isBlank } from '../Types/isBlank';
 
 type RefString = MaybeRefOrGetter<string | number | null | undefined>;
 
@@ -9,9 +10,11 @@ type RefString = MaybeRefOrGetter<string | number | null | undefined>;
  * @param value - O CPF a ser validado (aceita com ou sem máscara, Ref ou Getter).
  * @returns true se for um CPF válido, false caso contrário.
  */
-export function isCpf(value: RefString) {
+export function isCpf(value: RefString): boolean {
     const data = toValue(value);
-    return validateBr.cpf(data);
+    if (isBlank(data)) return false;
+    const str = typeof data === 'number' ? String(data).padStart(11, '0') : String(data);
+    return validateBr.cpf(str);
 }
 
 /**
@@ -20,9 +23,11 @@ export function isCpf(value: RefString) {
  * @param value - O CNPJ a ser validado (aceita com ou sem máscara, Ref ou Getter).
  * @returns true se for um CNPJ válido, false caso contrário.
  */
-export function isCnpj(value: RefString) {
+export function isCnpj(value: RefString): boolean {
     const data = toValue(value);
-    return validateBr.cnpj(data);
+    if (isBlank(data)) return false;
+    const str = typeof data === 'number' ? String(data).padStart(14, '0') : String(data);
+    return validateBr.cnpj(str);
 }
 
 /**
@@ -31,9 +36,15 @@ export function isCnpj(value: RefString) {
  * @param value - O documento a ser validado (aceita com ou sem máscara, Ref ou Getter).
  * @returns true se for um CPF ou CNPJ válido, false caso contrário.
  */
-export function isCpfCnpj(value: RefString) {
+export function isCpfCnpj(value: RefString): boolean {
     const data = toValue(value);
-    return validateBr.cpfcnpj(data);
+    if (isBlank(data)) return false;
+    const digitsOnly = String(data).replace(/\D/g, '');
+    if (typeof data === 'number') {
+        const str = digitsOnly.length <= 11 ? digitsOnly.padStart(11, '0') : digitsOnly.padStart(14, '0');
+        return validateBr.cpfcnpj(str);
+    }
+    return validateBr.cpfcnpj(String(data));
 }
 
 /** Alias de {@link isCpf}. */

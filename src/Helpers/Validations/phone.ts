@@ -11,7 +11,14 @@ export function phone(value: MaybeRefOrGetter<string | number | null | undefined
     const data = toValue(value);
     if (!data) return false;
 
-    return PhoneLib.isValidPhoneNumber(String(data), { defaultCountry: 'BR', defaultCallingCode: '55' });
+    const str = String(data);
+    const digitsOnly = str.replace(/\D/g, '');
+
+    const without55 = digitsOnly.startsWith('55') && digitsOnly.length > 11 ? digitsOnly.slice(2) : digitsOnly;
+    if (without55.length < 10) return false;
+    if (without55.startsWith('00')) return false;
+
+    return PhoneLib.isValidPhoneNumber(str, { defaultCountry: 'BR', defaultCallingCode: '55' });
 }
 
 /** Alias de {@link phone}. */

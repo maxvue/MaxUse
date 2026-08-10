@@ -42,4 +42,10 @@ describe('isValidCreditCard', () => {
     it('funciona com Getter', () => {
         expect(isValidCreditCard(() => '4111111111111111')).toBe(true);
     });
+
+    it('rejeita cartões com dígito verificador Luhn inválido', () => {
+        expect(isValidCreditCard('4111111111111112')).toBe(false);
+        expect(isValidCreditCard('5500005555555558')).toBe(false);
+        expect(isValidCreditCard('1234567890123456')).toBe(false);
+    });
 });
