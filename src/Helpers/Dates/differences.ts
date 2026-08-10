@@ -1,14 +1,11 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
-import { isNotValid } from '../Validations';
+import { _parseDate } from './_parseDate';
 
 type RefDate = MaybeRefOrGetter<string | number | Date | null | undefined>;
 
 function parseDate(value: RefDate): Date | null {
     const data = toValue(value);
-    if (isNotValid(data)) return null;
-
-    const date = new Date(data);
-    return isNaN(date.getTime()) ? null : date;
+    return _parseDate(data);
 }
 
 /**

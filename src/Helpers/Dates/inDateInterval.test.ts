@@ -31,12 +31,20 @@ describe('inDateInterval', () => {
         expect(inDateInterval('2099-12-31', { start: '2026-01-01', end: null })).toBe(true);
     });
 
-    it('retorna true para null/undefined (comportamento padrão)', () => {
-        expect(inDateInterval(null, { start: '2026-01-01' })).toBe(true);
+    it('trata end com época zero (new Date(0)) como limite real', () => {
+        expect(inDateInterval('1969-12-31', { start: '1960-01-01', end: new Date(0) })).toBe(true);
+        expect(inDateInterval('1971-01-01', { start: '1960-01-01', end: new Date(0) })).toBe(false);
     });
 
-    it('retorna true para interval null', () => {
-        expect(inDateInterval('2026-06-15', null as any)).toBe(true);
+    it('retorna false para data nula ou inválida', () => {
+        expect(inDateInterval(null, { start: '2026-01-01' })).toBe(false);
+        expect(inDateInterval('invalid', { start: '2026-01-01' })).toBe(false);
+    });
+
+    it('retorna false para intervalo nulo ou start inválido', () => {
+        expect(inDateInterval('2026-06-15', null as any)).toBe(false);
+        expect(inDateInterval('2026-06-15', { start: 'invalid-start' })).toBe(false);
+        expect(inDateInterval('2026-06-15', { start: '2026-01-01', end: 'invalid-end' })).toBe(false);
     });
 
     it('funciona com Ref', () => {

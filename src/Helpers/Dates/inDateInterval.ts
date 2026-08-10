@@ -1,7 +1,8 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { _parseDate } from './_parseDate';
 
-type TDate = string | Date | null | undefined;
-type IDateInterval = { start: Date | string; end?: Date | string | null };
+type TDate = string | number | Date | null | undefined;
+type IDateInterval = { start: Date | string | number; end?: Date | string | number | null };
 
 /**
  * Verifica se uma data está dentro de um intervalo.
@@ -11,16 +12,27 @@ type IDateInterval = { start: Date | string; end?: Date | string | null };
  * @returns Retorna true se estiver no intervalo.
  */
 export function inDateInterval(value: MaybeRefOrGetter<TDate>, interval: MaybeRefOrGetter<IDateInterval>): boolean {
-    const targetDate: any = toValue(value);
-    const rawInterval: any = toValue(interval);
+    const targetValue = toValue(value);
+    const rawInterval = toValue(interval);
 
-    if (!targetDate || !rawInterval) return true;
+    if (!targetValue || !rawInterval) return false;
 
-    const target = new Date(targetDate).getTime();
-    const start = new Date(rawInterval.start).getTime();
-    const end = rawInterval.end ? new Date(rawInterval.end).getTime() : false;
+    const targetDate = _parseDate(targetValue);
+    const startDate = _parseDate(rawInterval.start);
 
-    return target >= start && (!end || target <= end);
+    if (!targetDate || !startDate) return false;
+
+    let endDate: Date | null = null;
+    if (rawInterval.end !== undefined && rawInterval.end !== null) {
+        endDate = _parseDate(rawInterval.end);
+        if (!endDate) return false;
+    }
+
+    const targetTs = targetDate.getTime();
+    const startTs = startDate.getTime();
+    const endTs = endDate !== null ? endDate.getTime() : null;
+
+    return targetTs >= startTs && (endTs === null || targetTs <= endTs);
 }
 
 /**
@@ -33,3 +45,4 @@ export function inDateInterval(value: MaybeRefOrGetter<TDate>, interval: MaybeRe
 export function isInDateInterval(value: MaybeRefOrGetter<TDate>, interval: MaybeRefOrGetter<IDateInterval>): boolean {
     return inDateInterval(value, interval);
 }
+

@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { _parseDate } from './_parseDate';
 
 type TDate = string | number | Date | null | undefined;
 
@@ -11,12 +12,11 @@ type TDate = string | number | Date | null | undefined;
  */
 export function isWeekend(dateValue: MaybeRefOrGetter<TDate>): boolean {
     const rawValue = toValue(dateValue);
+    const date = _parseDate(rawValue);
 
-    if (!rawValue) return false;
-
-    const date = new Date(rawValue);
-    if (isNaN(date.getTime())) return false;
+    if (!date) return false;
 
     const day = date.getDay();
     return day === 0 || day === 6; // 0 = Domingo, 6 = Sábado
 }
+

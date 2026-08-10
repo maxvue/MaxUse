@@ -13,8 +13,19 @@ describe('isSameDay', () => {
         expect(isSameDay(['2026-06-15', '2026-06-16'], 'and')).toBe(false);
     });
 
-    it('retorna true para array com um único item', () => {
+    it('retorna false para datas inválidas', () => {
+        expect(isSameDay(['foo', 'bar'])).toBe(false);
+        expect(isSameDay(['2026-06-15', 'invalid'])).toBe(false);
+    });
+
+    it('suporta formatos mistos date-only e ISO com hora no mesmo dia civil', () => {
+        expect(isSameDay(['2024-01-01', '2024-01-01T10:00:00'])).toBe(true);
+        expect(isSameDay([new Date('2024-01-01T10:00:00'), '2024-01-01'])).toBe(true);
+    });
+
+    it('retorna true para array com um único item válido', () => {
         expect(isSameDay(['2026-06-15'])).toBe(true);
+        expect(isSameDay(['invalid-date'])).toBe(false);
     });
 
     it('retorna true para array vazio', () => {

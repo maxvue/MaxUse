@@ -54,6 +54,29 @@ describe('addTime', () => {
         expect(addTime(base, 1, 'second')?.getSeconds()).toBe(new Date(base).getSeconds() + 1);
     });
 
+    it('trata overflow de fim de mês e ano bissexto no último dia útil', () => {
+        // 31/01/2024 + 1 mês = 29/02/2024 (ano bissexto)
+        const jan31_2024 = addTime('2024-01-31', 1, 'month');
+        expect(jan31_2024?.getDate()).toBe(29);
+        expect(jan31_2024?.getMonth()).toBe(1); // Fev
+
+        // 31/01/2023 + 1 mês = 28/02/2023 (ano normal)
+        const jan31_2023 = addTime('2023-01-31', 1, 'month');
+        expect(jan31_2023?.getDate()).toBe(28);
+        expect(jan31_2023?.getMonth()).toBe(1); // Fev
+
+        // 29/02/2024 + 1 ano = 28/02/2025
+        const feb29_2024 = addTime('2024-02-29', 1, 'year');
+        expect(feb29_2024?.getDate()).toBe(28);
+        expect(feb29_2024?.getMonth()).toBe(1); // Fev
+        expect(feb29_2024?.getFullYear()).toBe(2025);
+    });
+
+    it('retorna null para amount NaN ou não finito', () => {
+        expect(addTime(base, NaN)).toBeNull();
+        expect(addTime(base, Infinity)).toBeNull();
+    });
+
     it('retorna null para data inválida', () => {
         expect(addTime('invalid', 1)).toBeNull();
     });
@@ -72,8 +95,8 @@ describe('addTime', () => {
         expect(result).not.toBeNull();
     });
 
-    it('retorna a mesma data para unidade não mapeada', () => {
+    it('retorna null para unidade não mapeada', () => {
         const result = addTime(base, 1, 'decada' as any);
-        expect(result?.getTime()).toBe(new Date(base).getTime());
+        expect(result).toBeNull();
     });
 });

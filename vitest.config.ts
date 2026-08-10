@@ -6,6 +6,9 @@ export default defineConfig({
     test: {
         globals: true,
         environment: 'happy-dom',
+        env: {
+            TZ: 'America/Sao_Paulo'
+        },
         include: ['src/**/*.test.ts'],
         coverage: {
             provider: 'v8',

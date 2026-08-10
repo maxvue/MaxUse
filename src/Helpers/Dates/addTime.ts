@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { _parseDate } from './_parseDate';
 
 type TDate = string | number | Date | null | undefined;
 type TUnit = 'day' | 'days' | 'month' | 'months' | 'year' | 'years' | 'hour' | 'hours' | 'minute' | 'minutes' | 'second' | 'seconds';
@@ -9,7 +10,7 @@ type TUnit = 'day' | 'days' | 'month' | 'months' | 'year' | 'years' | 'hour' | '
  * @param dateValue A data base.
  * @param amount A quantidade de tempo a adicionar (ou subtrair se negativo).
  * @param unit A unidade de tempo.
- * @returns Retorna o objeto Date resultante.
+ * @returns Retorna o objeto Date resultante ou null se inválido.
  */
 export function addTime(
     dateValue: MaybeRefOrGetter<TDate>,
@@ -18,12 +19,14 @@ export function addTime(
 ): Date | null {
     const rawDate = toValue(dateValue);
     const rawAmount = toValue(amount);
-    const rawUnit = toValue(unit).toLowerCase() as TUnit;
+    const rawUnit = toValue(unit)?.toLowerCase() as TUnit;
 
-    if (!rawDate) return null;
+    if (!Number.isFinite(rawAmount)) return null;
 
-    const date = new Date(rawDate);
-    if (isNaN(date.getTime())) return null;
+    const date = _parseDate(rawDate);
+    if (!date) return null;
+
+    let expectedDay: number;
 
     switch (rawUnit) {
         case 'day':
@@ -32,11 +35,17 @@ export function addTime(
             break;
         case 'month':
         case 'months':
+            expectedDay = date.getDate();
             date.setMonth(date.getMonth() + rawAmount);
+            if (date.getDate() !== expectedDay) date.setDate(0);
+
             break;
         case 'year':
         case 'years':
+            expectedDay = date.getDate();
             date.setFullYear(date.getFullYear() + rawAmount);
+            if (date.getDate() !== expectedDay) date.setDate(0);
+
             break;
         case 'hour':
         case 'hours':
@@ -50,7 +59,10 @@ export function addTime(
         case 'seconds':
             date.setSeconds(date.getSeconds() + rawAmount);
             break;
+        default:
+            return null;
     }
 
     return date;
 }
+
