@@ -52,22 +52,19 @@ Lanes paralelas:
 
 - **Lane 6A**: [lodash-internos-base-sem-teste-direto](plans/lodash-internos-base-sem-teste-direto.md) — *Concluída em c0c24bb0 (2736 testes)*
 
-## Etapa 7 — Infra/build (por último, mexe em config global)
+## Etapa 7 — Infra/build (por último, mexe em config global) [CONCLUÍDA em e433a940]
 
-- **Lane 7A — build/exports**: [infra-exports-manifest-pega-chunk-errado](plans/infra-exports-manifest-pega-chunk-errado.md), [infra-dist-publica-dts-de-testes](plans/infra-dist-publica-dts-de-testes.md), [infra-tsconfig-include-scripts-fantasma-e-exclude-tests-errado](plans/infra-tsconfig-include-scripts-fantasma-e-exclude-tests-errado.md), [infra-categorias-sem-subpath-export](plans/infra-categorias-sem-subpath-export.md), [infra-colisoes-strings-format-sem-desambiguacao-explicita](plans/infra-colisoes-strings-format-sem-desambiguacao-explicita.md), [infra-peer-vue-fixado-em-release-candidate](plans/infra-peer-vue-fixado-em-release-candidate.md) — *Pendente*
-- **Lane 7B — auto-import/scripts**: [infra-autoimport-tipos-com-entradas-invalidas-e-valores](plans/infra-autoimport-tipos-com-entradas-invalidas-e-valores.md), [infra-buildautoimport-guard-de-execucao-fragil](plans/infra-buildautoimport-guard-de-execucao-fragil.md), [infra-autoimportdata-desatualizado-onresetconfig](plans/infra-autoimportdata-desatualizado-onresetconfig.md), [infra-readme-maxuseautoimport-nao-e-funcao](plans/infra-readme-maxuseautoimport-nao-e-funcao.md), [infra-generatelist-codigo-morto-e-json-orfao](plans/infra-generatelist-codigo-morto-e-json-orfao.md) — *Pendente*
+- **Lane 7A — build/exports**: [infra-exports-manifest-pega-chunk-errado](plans/infra-exports-manifest-pega-chunk-errado.md), [infra-dist-publica-dts-de-testes](plans/infra-dist-publica-dts-de-testes.md), [infra-tsconfig-include-scripts-fantasma-e-exclude-tests-errado](plans/infra-tsconfig-include-scripts-fantasma-e-exclude-tests-errado.md), [infra-categorias-sem-subpath-export](plans/infra-categorias-sem-subpath-export.md), [infra-colisoes-strings-format-sem-desambiguacao-explicita](plans/infra-colisoes-strings-format-sem-desambiguacao-explicita.md), [infra-peer-vue-fixado-em-release-candidate](plans/infra-peer-vue-fixado-em-release-candidate.md) — *Concluída em e433a940 (2737 testes)*
+- **Lane 7B — auto-import/scripts**: [infra-autoimport-tipos-com-entradas-invalidas-e-valores](plans/infra-autoimport-tipos-com-entradas-invalidas-e-valores.md), [infra-buildautoimport-guard-de-execucao-fragil](plans/infra-buildautoimport-guard-de-execucao-fragil.md), [infra-autoimportdata-desatualizado-onresetconfig](plans/infra-autoimportdata-desatualizado-onresetconfig.md), [infra-readme-maxuseautoimport-nao-e-funcao](plans/infra-readme-maxuseautoimport-nao-e-funcao.md), [infra-generatelist-codigo-morto-e-json-orfao](plans/infra-generatelist-codigo-morto-e-json-orfao.md) — *Concluída em e433a940 (2737 testes)*
 - **Lane 7C — lint**: [infra-eslint-sem-ignores-para-dist](plans/infra-eslint-sem-ignores-para-dist.md) — *Concluída em 088f648e (2628 testes)*
 
-## Etapa 8 — Verificação final (subagente único, na árvore principal já integrada)
+## Etapa 8 — Verificação final [CONCLUÍDA]
 
-1. `npm run prebuild` (regenerar `autoImportData.json`) e commitar
-2. `npm test` — 100% verde, contagem de testes **maior** que os 2607 do baseline
-3. `npm run type-check` e `npm run lint` limpos
-4. `npm run build` — verificar `dist/exports.json` completo e ausência de `*.test.d.ts` no dist
-5. Remover worktrees (`git worktree prune`) e branches integradas
-6. Atualizar este arquivo marcando as etapas concluídas— *Concluído: 777 exportações em exports.json e 0 arquivos .test.d.ts.*
-5. Remover worktrees (`git worktree prune`) e branches integradas — *Concluído.*
-6. Atualizar este arquivo marcando as etapas concluídas — *Concluído.*
+1. `npm run prebuild` (regenerar `autoImportData.json`) e commitar — *Concluído.*
+2. `npm test` — 100% verde (2737 testes em 392 arquivos) — *Concluído.*
+3. `npm run type-check` e `npm run lint` limpos — *Concluído.*
+4. `npm run build` — 780 exportações em exports.json e 0 arquivos .test.d.ts no dist — *Concluído.*
+5. Atualizar este arquivo marcando todas as 8 etapas concluídas — *Concluído.*
 
 ## Resumo dos achados
 
