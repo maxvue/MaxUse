@@ -48,4 +48,16 @@ describe('unset', () => {
         unset(obj, 'x');
         expect(obj.value).toEqual({ y: 2 });
     });
+
+    it('remove chave literal com ponto quando ela existe no objeto', () => {
+        const obj: Record<string, unknown> = { 'a.b': 1, a: { b: 2 } };
+        unset(obj, 'a.b');
+        expect(obj).toEqual({ a: { b: 2 } });
+    });
+
+    it('não permite poluição nem remoção indesejada em __proto__', () => {
+        const obj = {};
+        expect(unset(obj, '__proto__.pollutedU')).toBe(true);
+        expect(({} as Record<string, unknown>).pollutedU).toBeUndefined();
+    });
 });

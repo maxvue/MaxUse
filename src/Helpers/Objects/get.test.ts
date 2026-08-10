@@ -52,4 +52,8 @@ describe('get', () => {
     it('funciona com Getter', () => {
         expect(get(() => obj, 'a.b.c')).toBe(42);
     });
+
+    it('trata chave literal que contém ponto quando ela existe no objeto', () => {
+        expect(get({ 'a.b': 5 }, 'a.b')).toBe(5);
+    });
 });

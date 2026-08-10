@@ -53,4 +53,18 @@ describe('set', () => {
         set(obj, 'b', 2);
         expect(obj.value.b).toBe(2);
     });
+
+    it('não permite poluição de protótipo via __proto__ ou constructor.prototype', () => {
+        set({}, '__proto__.pollutedS', 3);
+        expect(({} as Record<string, unknown>).pollutedS).toBeUndefined();
+
+        set({}, 'constructor.prototype.pollutedSC', 3);
+        expect(({} as Record<string, unknown>).pollutedSC).toBeUndefined();
+    });
+
+    it('cria array em segmento com índice numérico em vez de objeto', () => {
+        const target: Record<string, unknown> = {};
+        set(target, 'a[0].b', 2);
+        expect(target).toEqual({ a: [{ b: 2 }] });
+    });
 });
