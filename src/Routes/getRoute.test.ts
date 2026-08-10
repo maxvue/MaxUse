@@ -34,14 +34,14 @@ describe('getRoute', () => {
     it('retorna a rota se ela existir', () => {
         (config.hasRoute as any).mockReturnValue(true);
         const result = getRoute('users.show', { id: 1 });
-        expect(config.hasRoute).toHaveBeenCalledWith('users.show');
+        expect(config.hasRoute).toHaveBeenCalledWith('users.show', { id: 1 });
         expect(result).toBe('https://example.com/users.show/1');
     });
 
     it('retorna null se a rota não existir', () => {
         (config.hasRoute as any).mockReturnValue(false);
         const result = getRoute('users.show', { id: 1 });
-        expect(config.hasRoute).toHaveBeenCalledWith('users.show');
+        expect(config.hasRoute).toHaveBeenCalledWith('users.show', { id: 1 });
         expect(result).toBeNull();
     });
 
@@ -49,14 +49,14 @@ describe('getRoute', () => {
         (config.hasRoute as any).mockReturnValue(true);
         const routeRef = ref('users.edit');
         const result = getRoute(routeRef, { id: 42 });
-        expect(config.hasRoute).toHaveBeenCalledWith('users.edit');
+        expect(config.hasRoute).toHaveBeenCalledWith('users.edit', { id: 42 });
         expect(result).toBe('https://example.com/users.edit/42');
     });
 
     it('suporta função getter para routeName', () => {
         (config.hasRoute as any).mockReturnValue(true);
         const result = getRoute(() => 'users.index');
-        expect(config.hasRoute).toHaveBeenCalledWith('users.index');
+        expect(config.hasRoute).toHaveBeenCalledWith('users.index', {});
         expect(result).toBe('https://example.com/users.index');
     });
 

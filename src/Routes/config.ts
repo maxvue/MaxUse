@@ -29,10 +29,14 @@ const resetHandlers = new Set<() => void>();
 
 /**
  * Registra um callback a ser executado por {@link resetConfig}.
+ * @returns Função de cancelamento do registro (unsubscribe).
  * @internal Uso interno da biblioteca.
  */
-export function onResetConfig(handler: () => void): void {
+export function onResetConfig(handler: () => void): () => void {
     resetHandlers.add(handler);
+    return () => {
+        resetHandlers.delete(handler);
+    };
 }
 
 /**
@@ -120,12 +124,13 @@ export function resolveRoute(name: string, params?: any): string {
  * @internal Uso interno da biblioteca.
  *
  * @param name - Nome da rota.
+ * @param params - Parâmetros opcionais da rota.
  * @returns true se a rota existe, false caso contrário.
  */
-export function hasRoute(name: string): boolean {
+export function hasRoute(name: string, params?: Record<string, any>): boolean {
     if (!routeResolver) return false;
     try {
-        return routeResolver(name) !== null;
+        return routeResolver(name, params) !== null;
     } catch {
         return false;
     }

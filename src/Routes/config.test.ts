@@ -6,6 +6,7 @@ import {
     hasRoute,
     getConfiguredHeaders,
     getWithCredentials,
+    onResetConfig,
     resetConfig
 } from './config';
 
@@ -62,6 +63,13 @@ describe('config', () => {
             setRouteResolver(() => { throw new Error('falha no resolver'); });
 
             expect(hasRoute('rota.problematica')).toBe(false);
+        });
+
+        it('repassa parâmetros para o resolver ao checar existência', () => {
+            setRouteResolver((name, params) => (params?.id ? `/users/${params.id}` : null));
+
+            expect(hasRoute('users.show')).toBe(false);
+            expect(hasRoute('users.show', { id: 10 })).toBe(true);
         });
     });
 
@@ -151,6 +159,20 @@ describe('config', () => {
 
             expect(getConfiguredHeaders()).toEqual({});
             expect(getWithCredentials()).toBe(true);
+        });
+    });
+
+    describe('onResetConfig', () => {
+        it('executa handlers no reset e permite cancelar com a função de unsubscribe', () => {
+            const handler = vi.fn();
+            const unsubscribe = onResetConfig(handler);
+
+            resetConfig();
+            expect(handler).toHaveBeenCalledTimes(1);
+
+            unsubscribe();
+            resetConfig();
+            expect(handler).toHaveBeenCalledTimes(1);
         });
     });
 });

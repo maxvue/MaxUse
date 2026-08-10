@@ -16,7 +16,7 @@ export const getRoute = (routeName: MaybeRefOrGetter<string | null> = null, data
 
     const data_value = toValue(data) ?? {};
 
-    if (hasRoute(route_value)) return resolveRoute(route_value, data_value);
+    if (hasRoute(route_value, data_value)) return resolveRoute(route_value, data_value);
     return null;
 };
 

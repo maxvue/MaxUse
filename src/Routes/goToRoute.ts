@@ -48,10 +48,19 @@ export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: a
 
     const data_value = toValue(data) ?? {};
 
-    if (hasRoute(route_value)) {
-        activeRouter.push(resolveRoute(route_value, data_value)!);
+    if (hasRoute(route_value, data_value)) {
+        const resolved = resolveRoute(route_value, data_value);
+        let targetPath = resolved;
+        if (resolved.startsWith('http://') || resolved.startsWith('https://')) try {
+            const parsed = new URL(resolved);
+            targetPath = parsed.pathname + parsed.search + parsed.hash;
+        } catch {
+            // Fallback para resolved em caso de URL malformada
+        }
+
+        activeRouter.push(targetPath);
         return true;
-    };
+    }
 
 
     activeRouter.push({ name: route_value, params: data_value, query: data_value });
