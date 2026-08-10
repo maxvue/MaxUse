@@ -152,19 +152,21 @@ describe('postCachedApiIDB', () => {
         );
     });
 
-    it('rejeita promise se houver erro ao abrir o banco', async () => {
+    it('busca na rede quando há erro ao abrir o banco no postCachedApiIDB', async () => {
         idb.setOpenError(true);
-        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('open error');
-    });
-
-    it('rejeita promise se houver erro no get', async () => {
-        idb.setGetError(true);
-        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('get error');
-    });
-
-    it('rejeita promise se houver erro no put', async () => {
-        idb.setPutError(true);
         (axios.post as any).mockResolvedValue({ data: { id: 1, name: 'PostIDBTest' } });
-        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('put error');
+        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).resolves.toEqual({ id: 1, name: 'PostIDBTest' });
+    });
+
+    it('busca na rede quando a leitura do cache falha no postCachedApiIDB (degradação graciosa)', async () => {
+        idb.setGetError(true);
+        (axios.post as any).mockResolvedValue({ data: { id: 1, name: 'RedePostOk' } });
+        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).resolves.toEqual({ id: 1, name: 'RedePostOk' });
+    });
+
+    it('entrega dado da rede mesmo se a escrita no cache falhar no postCachedApiIDB', async () => {
+        idb.setPutError(true);
+        (axios.post as any).mockResolvedValue({ data: { id: 1, name: 'RedePostOk' } });
+        await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).resolves.toEqual({ id: 1, name: 'RedePostOk' });
     });
 });

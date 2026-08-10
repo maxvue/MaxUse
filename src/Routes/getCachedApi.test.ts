@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getCachedApi } from './getCachedApi';
+import { getCachedApi, clearCachedApi } from './getCachedApi';
 import axios from 'axios';
 import * as config from './config';
 
@@ -104,5 +104,36 @@ describe('getCachedApi', () => {
 
         expect(axios.get).not.toHaveBeenCalled();
         expect(result).toEqual({ custom: true });
+    });
+
+    it('permite limpar o cache de localStorage com clearCachedApi especificando chave ou tudo', async () => {
+        (axios.get as any).mockResolvedValue({ data: { a: 1 } });
+        await getCachedApi('rota', {}, 'k');
+        expect(localStorage.getItem('k')).not.toBeNull();
+
+        clearCachedApi('k');
+        expect(localStorage.getItem('k')).toBeNull();
+
+        await getCachedApi('rota2', {});
+        expect(localStorage.length).toBeGreaterThan(0);
+
+        clearCachedApi();
+        expect(localStorage.length).toBe(0);
+    });
+
+    it('respeita TTL opcional no getCachedApi expirando dados antigos', async () => {
+        (axios.get as any).mockResolvedValue({ data: { v: 1 } });
+        await getCachedApi('rota.ttl', {}, 'k_ttl', 1000);
+
+        (axios.get as any).mockResolvedValue({ data: { v: 2 } });
+        const res1 = await getCachedApi('rota.ttl', {}, 'k_ttl', 1000);
+        expect(res1).toEqual({ v: 1 });
+
+        const raw = JSON.parse(localStorage.getItem('k_ttl')!);
+        raw.timestamp = Date.now() - 5000;
+        localStorage.setItem('k_ttl', JSON.stringify(raw));
+
+        const res2 = await getCachedApi('rota.ttl', {}, 'k_ttl', 1000);
+        expect(res2).toEqual({ v: 2 });
     });
 });

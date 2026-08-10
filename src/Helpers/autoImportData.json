@@ -43,6 +43,7 @@
       "chunk",
       "clamp",
       "clearCacheIDB",
+      "clearCachedApi",
       "clone",
       "cloneDeep",
       "cloneDeepWith",

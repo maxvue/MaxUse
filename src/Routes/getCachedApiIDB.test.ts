@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getCachedApiIDB, clearCacheIDB, deleteFromIDB } from './getCachedApiIDB';
+import { getCachedApi } from './getCachedApi';
+import { postCachedApiIDB } from './postCachedApiIDB';
 import axios from 'axios';
 import * as config from './config';
 import { setupIDBMock } from './internal/testing/idbMock';
@@ -192,20 +194,40 @@ describe('getCachedApiIDB', () => {
         expect(result).toEqual({ id: 99, name: 'StoreExists' });
     });
 
-    it('rejeita promise se houver erro ao abrir o banco', async () => {
+    it('busca na rede quando há erro ao abrir o banco (open error)', async () => {
         idb.setOpenError(true);
-        await expect(getCachedApiIDB('test.idb', { id: 1 })).rejects.toThrow('open error');
-    });
-
-    it('rejeita promise se houver erro no get', async () => {
-        idb.setGetError(true);
-        await expect(getCachedApiIDB('test.idb', { id: 1 })).rejects.toThrow('get error');
-    });
-
-    it('rejeita promise se houver erro no put', async () => {
-        idb.setPutError(true);
         (axios.get as any).mockResolvedValue({ data: { id: 1, name: 'IDBTest' } });
-        await expect(getCachedApiIDB('test.idb', { id: 1 })).rejects.toThrow('put error');
+        await expect(getCachedApiIDB('test.idb', { id: 1 })).resolves.toEqual({ id: 1, name: 'IDBTest' });
+    });
+
+    it('busca na rede quando a leitura do cache falha (degradação graciosa)', async () => {
+        idb.setGetError(true);
+        (axios.get as any).mockResolvedValue({ data: { id: 1, name: 'RedeOk' } });
+        await expect(getCachedApiIDB('test.idb', { id: 1 })).resolves.toEqual({ id: 1, name: 'RedeOk' });
+    });
+
+    it('entrega dado da rede mesmo se a escrita no cache falhar (gravação não-fatal)', async () => {
+        idb.setPutError(true);
+        (axios.get as any).mockResolvedValue({ data: { id: 1, name: 'RedeOk' } });
+        await expect(getCachedApiIDB('test.idb', { id: 1 })).resolves.toEqual({ id: 1, name: 'RedeOk' });
+    });
+
+    it('entrega dado fresco e dispara onUpdate mesmo com falha de escrita no cache SWR', async () => {
+        (axios.get as any).mockResolvedValue({ data: { v: 2 } });
+        idb.mockStore.set('test.idb_{"id":1}', {
+            key: 'test.idb_{"id":1}',
+            data: { v: 1 },
+            timestamp: Date.now()
+        });
+
+        idb.setPutError(true);
+        const onUpdate = vi.fn();
+        const result = await getCachedApiIDB('test.idb', { id: 1 }, null, undefined, onUpdate);
+
+        expect(result).toEqual({ v: 1 });
+        await vi.waitFor(() => {
+            expect(onUpdate).toHaveBeenCalledWith({ v: 2 });
+        });
     });
 
     it('rejeita promise se houver erro no delete', async () => {
@@ -252,5 +274,48 @@ describe('getCachedApiIDB — regressão auditoria (achados 004 e 005)', () => {
         await getCachedApiIDB('api.rota');
 
         expect((axios as any).defaults.withCredentials).toBe(false);
+    });
+
+    it('não reutiliza request em voo após invalidação com deleteFromIDB', async () => {
+        let resolveRequest: (val: any) => void = () => {};
+        (axios.get as any).mockImplementation(() => new Promise((r) => {
+            resolveRequest = (data: any) => r({ data });
+        }));
+
+        const p1 = getCachedApiIDB('rota.dedupe', { id: 1 });
+        await vi.waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
+
+        await deleteFromIDB('rota.dedupe_{"id":1}');
+
+        (axios.get as any).mockImplementation(async () => ({ data: { v: 2 } }));
+        const p2 = getCachedApiIDB('rota.dedupe', { id: 1 });
+        await vi.waitFor(() => expect(axios.get).toHaveBeenCalledTimes(2));
+
+        resolveRequest({ v: 1 });
+        await Promise.all([p1, p2]);
+    });
+
+    it('não compartilha dedupe entre stores e métodos (namespace isolado)', async () => {
+        (axios.get as any).mockImplementation(async () => {
+            await new Promise((r) => setTimeout(r, 10));
+            return { data: { via: 'GET' } };
+        });
+        (axios.post as any).mockImplementation(async () => {
+            await new Promise((r) => setTimeout(r, 10));
+            return { data: { via: 'POST' } };
+        });
+
+        const key = 'chave-compartilhada';
+        const [a, b, c] = await Promise.all([
+            getCachedApi('rota.A', {}, key),
+            getCachedApiIDB('rota.B', {}, key),
+            postCachedApiIDB('rota.C', {}, {}, key)
+        ]);
+
+        expect(a).toEqual({ via: 'GET' });
+        expect(b).toEqual({ via: 'GET' });
+        expect(c).toEqual({ via: 'POST' });
+        expect(axios.get).toHaveBeenCalledTimes(2);
+        expect(axios.post).toHaveBeenCalledTimes(1);
     });
 });

@@ -16,7 +16,7 @@ export { deleteFromIDB, clearCacheIDB };
  * Faz o GET na rota e persiste o resultado no cache do IndexedDB com deduplicação.
  */
 async function fetchAndStore(route_name: string, data_request: any, key: string): Promise<any> {
-    return dedupeRequest(key, async () => {
+    return dedupeRequest(`idb:GET:${key}`, async () => {
         const routeUrl = resolveRoute(route_name, data_request);
 
         const config: AxiosRequestConfig = {
@@ -31,7 +31,7 @@ async function fetchAndStore(route_name: string, data_request: any, key: string)
         const response = await axios.get(routeUrl, config);
         const data_return = response.data;
 
-        await setToIDB(key, data_return);
+        await setToIDB(key, data_return).catch(() => {});
 
         return data_return;
     });
@@ -67,8 +67,8 @@ export async function getCachedApiIDB(
 
     const key = buildCacheKey(String(route_name), data_request, custom_key);
 
-    // Tenta buscar do IndexedDB
-    const cached = await getFromIDB(key, ttl);
+    // Tenta buscar do IndexedDB (degrada graciosamente se houver erro ao ler o cache)
+    const cached = await getFromIDB(key, ttl).catch(() => null);
 
     if (cached && cached.hit) {
         // Revalida em background: atualiza o cache e notifica se o servidor tiver dado diferente

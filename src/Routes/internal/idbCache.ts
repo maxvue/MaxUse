@@ -8,6 +8,7 @@
  * @internal
  */
 import { onResetConfig } from '../config';
+import { invalidateDedupeKey } from './cacheUtils';
 
 /** Nome do banco IndexedDB */
 const DB_NAME = 'max_cache';
@@ -114,6 +115,9 @@ export async function getFromIDB<T = any>(key: string, ttl?: number): Promise<ID
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readonly');
+        tx.onabort = () => reject(tx.error ?? new Error('Transação IndexedDB abortada.'));
+        tx.onerror = () => reject(tx.error ?? new Error('Erro na transação IndexedDB.'));
+
         const store = tx.objectStore(STORE_NAME);
         const request = store.get(key);
 
@@ -153,12 +157,14 @@ export async function setToIDB(key: string, data: any): Promise<void> {
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
-        const store = tx.objectStore(STORE_NAME);
+        tx.onabort = () => reject(tx.error ?? new Error('Transação IndexedDB abortada.'));
+        tx.onerror = () => reject(tx.error ?? new Error('Erro na transação IndexedDB.'));
+        tx.oncomplete = () => resolve();
 
+        const store = tx.objectStore(STORE_NAME);
         const entry: CacheEntry = { key, data, timestamp: Date.now() };
         const request = store.put(entry);
 
-        request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
     });
 }
@@ -169,15 +175,19 @@ export async function setToIDB(key: string, data: any): Promise<void> {
  * @param key - Chave do cache a ser removida.
  */
 export async function deleteFromIDB(key: string): Promise<void> {
+    invalidateDedupeKey(key);
     const db = await openDB();
     if (!db) return;
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.onabort = () => reject(tx.error ?? new Error('Transação IndexedDB abortada.'));
+        tx.onerror = () => reject(tx.error ?? new Error('Erro na transação IndexedDB.'));
+        tx.oncomplete = () => resolve();
+
         const store = tx.objectStore(STORE_NAME);
         const request = store.delete(key);
 
-        request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
     });
 }
@@ -186,15 +196,19 @@ export async function deleteFromIDB(key: string): Promise<void> {
  * Limpa todo o cache do IndexedDB.
  */
 export async function clearCacheIDB(): Promise<void> {
+    invalidateDedupeKey();
     const db = await openDB();
     if (!db) return;
 
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
+        tx.onabort = () => reject(tx.error ?? new Error('Transação IndexedDB abortada.'));
+        tx.onerror = () => reject(tx.error ?? new Error('Erro na transação IndexedDB.'));
+        tx.oncomplete = () => resolve();
+
         const store = tx.objectStore(STORE_NAME);
         const request = store.clear();
 
-        request.onsuccess = () => resolve();
         request.onerror = () => reject(request.error);
     });
 }
