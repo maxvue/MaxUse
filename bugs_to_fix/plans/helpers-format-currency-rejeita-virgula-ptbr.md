@@ -11,5 +11,8 @@ Uma lib pt-BR que formata moeda não aceita entrada no formato pt-BR: `formatCur
 1. Usar `toNumber` (helper da própria lib) para normalizar strings antes do `Intl.NumberFormat`.
 2. Avaliar retornar `''` para NaN em vez de `'R$ 0,00'` (breaking — no mínimo documentar a decisão).
 
+## Decisão de Design Registrada
+Opção selecionada: Usar `toNumber` para aceitar formatação pt-BR ("1.234,56") e manter `'R$ 0,00'` para valores nulos/em branco/inválidos para preservar a compatibilidade retroativa (backward compatibility).
+
 ## Testes
 - `'1.234,56'` → `'R$ 1.234,56'`, `'10,5'` → `'R$ 10,50'`; manter casos NaN/null atuais (atenção ao NBSP ` ` do Intl nas asserções).

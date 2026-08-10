@@ -25,8 +25,8 @@ export function formatBytes(
     const sign = rawBytes < 0 ? '-' : '';
     const abs = Math.abs(rawBytes);
 
-    // Limita ao maior sufixo disponível para não indexar fora do array
-    const i = Math.min(Math.floor(Math.log(abs) / Math.log(k)), sizes.length - 1);
+    // Limita ao maior sufixo disponível para não indexar fora do array e previne i negativo em fracionários
+    const i = Math.min(Math.max(Math.floor(Math.log(abs) / Math.log(k)), 0), sizes.length - 1);
 
     return `${sign}${parseFloat((abs / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }

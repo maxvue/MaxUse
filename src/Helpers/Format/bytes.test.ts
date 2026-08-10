@@ -82,4 +82,10 @@ describe('formatBytes — regressão auditoria (achado 014)', () => {
     it('preserva o sinal negativo em strings', () => {
         expect(formatBytes('-1024')).toBe('-1 KB');
     });
+
+    it('formata valores fracionários entre 0 e 1 sem sufixo undefined', () => {
+        expect(formatBytes(0.5)).toBe('0.5 Bytes');
+        expect(formatBytes(-0.5)).toBe('-0.5 Bytes');
+        expect(formatBytes('0,5')).toBe('0.5 Bytes');
+    });
 });

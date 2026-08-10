@@ -40,4 +40,12 @@ describe('formatCurrency', () => {
         const result = formatCurrency(ref(100));
         expect(result).toContain('100');
     });
+
+    it('formata strings no formato brasileiro pt-BR com vírgula', () => {
+        const res1 = formatCurrency('1.234,56');
+        expect(res1).toContain('1.234,56');
+
+        const res2 = formatCurrency('10,5');
+        expect(res2).toContain('10,50');
+    });
 });
