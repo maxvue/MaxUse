@@ -44,6 +44,19 @@ export function dedupeRequest<T>(key: string, fn: () => Promise<T>): Promise<T> 
     return promise;
 }
 
+/**
+ * Invalida uma chave (ou todas as chaves) em voo no mapa de deduplicação.
+ */
+export function invalidateDedupeKey(key?: string): void {
+    if (key) {
+        inFlight.delete(key);
+        inFlight.delete(`idb:GET:${key}`);
+        inFlight.delete(`ls:GET:${key}`);
+        inFlight.delete(`idb:POST:${key}`);
+    } else inFlight.clear();
+
+}
+
 onResetConfig(() => {
-    inFlight.clear();
+    invalidateDedupeKey();
 });

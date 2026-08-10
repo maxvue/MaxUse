@@ -37,12 +37,12 @@ export async function postCachedApiIDB(
 
     const key = buildCacheKey(String(route_name), { routeParams: route_params, postData: post_data }, custom_key);
 
-    // Tenta buscar do IndexedDB
-    const cached = await getFromIDB(key, ttl);
+    // Tenta buscar do IndexedDB (degrada graciosamente se houver erro ao ler o cache)
+    const cached = await getFromIDB(key, ttl).catch(() => null);
 
     if (cached && cached.hit) return cached.data;
 
-    return dedupeRequest(key, async () => {
+    return dedupeRequest(`idb:POST:${key}`, async () => {
         // Faz a requisição POST se não houver cache válido
         const routeUrl = resolveRoute(String(route_name), route_params);
 
@@ -61,8 +61,8 @@ export async function postCachedApiIDB(
         const response = await axios.post(routeUrl, post_data, config);
         const data_return = response.data;
 
-        // Salva no IndexedDB
-        await setToIDB(key, data_return);
+        // Salva no IndexedDB de forma não-fatal
+        await setToIDB(key, data_return).catch(() => {});
 
         return data_return;
     });

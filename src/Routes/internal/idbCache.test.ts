@@ -91,4 +91,10 @@ describe('idbCache (módulo interno compartilhado)', () => {
         await setToIDB('b', 2);
         expect(global.indexedDB.open).toHaveBeenCalledTimes(1);
     });
+
+    it('abort de transação rejeita em vez de travar', async () => {
+        idb.setAbortError(true);
+        await expect(setToIDB('k', { a: 1 })).rejects.toThrow();
+    });
 });
+
