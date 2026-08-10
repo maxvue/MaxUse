@@ -4,6 +4,9 @@ import vueParser from 'vue-eslint-parser';
 import eslintPluginVue from 'eslint-plugin-vue';
 
 export default [
+    {
+        ignores: ['dist/**', 'coverage/**', 'src/Helpers/Locales/**', 'playground/**']
+    },
     // 1º Bloco: Configuração Base (Aplica-se a TS, JS e Vue)
     {
         files: ['**/*.{ts,js,mts,vue}'],
