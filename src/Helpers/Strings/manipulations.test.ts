@@ -73,8 +73,12 @@ describe('stripHtml', () => {
 });
 
 describe('initials', () => {
-    it('extrai iniciais de nome completo', () => {
-        expect(initials('João Victor Silva')).toBe('JV');
+    it('extrai iniciais de nome completo (primeira e última inicial)', () => {
+        expect(initials('João Victor Silva')).toBe('JS');
+    });
+
+    it('ignora preposições ao gerar iniciais', () => {
+        expect(initials('João da Silva')).toBe('JS');
     });
 
     it('retorna uma inicial para nome simples', () => {

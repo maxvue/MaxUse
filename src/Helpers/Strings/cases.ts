@@ -3,6 +3,12 @@ import { isBlank } from '../Types/isBlank';
 
 type RefString = MaybeRefOrGetter<string | number | null | undefined>;
 
+function normalizeInput(value: unknown): string {
+    const data = toValue(value);
+    if (!data || isBlank(data)) return '';
+    return String(data).normalize('NFD').replace(/\p{Diacritic}/gu, '');
+}
+
 /**
  * Converte uma string para o formato snake_case.
  *
@@ -10,12 +16,10 @@ type RefString = MaybeRefOrGetter<string | number | null | undefined>;
  * @returns A string em formato snake_case.
  */
 export function snakeCase(value: RefString): string {
-    const data = toValue(value);
-    if (!data || isBlank(data)) return '';
+    const stringData = normalizeInput(value);
+    if (!stringData) return '';
 
-    const stringData = String(data);
     const words = stringData.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
-
     return words ? words.map((word: string) => word.toLowerCase()).join('_') : '';
 }
 
@@ -26,12 +30,10 @@ export function snakeCase(value: RefString): string {
  * @returns A string em formato kebab-case.
  */
 export function kebabCase(value: RefString): string {
-    const data = toValue(value);
-    if (!data || isBlank(data)) return '';
+    const stringData = normalizeInput(value);
+    if (!stringData) return '';
 
-    const stringData = String(data);
     const words = stringData.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
-
     return words ? words.map((word: string) => word.toLowerCase()).join('-') : '';
 }
 
@@ -42,16 +44,14 @@ export function kebabCase(value: RefString): string {
  * @returns A string em formato camelCase.
  */
 export function camelCase(value: RefString): string {
-    const data = toValue(value);
-    if (!data || isBlank(data)) return '';
+    const stringData = normalizeInput(value);
+    if (!stringData) return '';
 
-    const stringData = String(data);
     const words = stringData.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g);
-
-    return words? words.map((word: string, index: number) => {
+    return words ? words.map((word: string, index: number) => {
         if (index === 0) return word.toLowerCase();
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-    }).join(''): '';
+    }).join('') : '';
 }
 
 /**

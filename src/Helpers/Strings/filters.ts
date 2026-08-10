@@ -14,7 +14,7 @@ export function onlyLetters(value: RefString, space: boolean = false): string {
     const data = toValue(value);
     if (isBlank(data)) return '';
 
-    return space ? String(data).replace(/[^a-zA-ZÀ-ÿ\s]/g, '') : String(data).replace(/[^a-zA-ZÀ-ÿ]/g, '');
+    return space ? String(data).replace(/[^\p{L}\s]/gu, '') : String(data).replace(/[^\p{L}]/gu, '');
 }
 
 /**
@@ -52,7 +52,7 @@ export function onlySymbols(value: RefString): string {
 export function onlyLettersAndNumbers(value: RefString, space: boolean = false): string {
     const data = toValue(value);
     if (isBlank(data)) return '';
-    return space ? String(data).replace(/[^a-zA-ZÀ-ÿ0-9\s]/g, '') : String(data).replace(/[^a-zA-ZÀ-ÿ0-9]/g, '');
+    return space ? String(data).replace(/[^\p{L}0-9\s]/gu, '') : String(data).replace(/[^\p{L}0-9]/gu, '');
 }
 
 /**

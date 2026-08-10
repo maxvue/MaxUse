@@ -57,7 +57,7 @@ export function stripHtml(value: RefString): string {
 }
 
 /**
- * Extrai as iniciais de um nome completo (ex: "João Victor Silva" ➔ "JS").
+ * Extrai as iniciais de um nome completo (ex: "João Victor Silva" ➔ "JS", "João da Silva" ➔ "JS").
  * Perfeito para gerar placeholders de avatares quando o usuário não tem uma foto de perfil.
  *
  * @param value O nome completo.
@@ -67,15 +67,25 @@ export function initials(value: RefString, limit: number = 2): string {
     const data = toValue(value);
     if (isBlank(data)) return '';
 
-    const names = String(data).trim().split(/\s+/);
+    const prepositions = new Set(['de', 'da', 'do', 'dos', 'das', 'e']);
+    const rawNames = String(data).trim().split(/\s+/).filter(Boolean);
 
-    if (names.length === 1) return names[0].charAt(0).toUpperCase();
+    const names = rawNames.filter((name) => !prepositions.has(name.toLowerCase()));
+    const targetNames = names.length > 0 ? names : rawNames;
 
-    const initialsArr = names
+    if (targetNames.length === 1) return targetNames[0].charAt(0).toUpperCase();
+
+
+    if (limit === 2 && targetNames.length > 2) {
+        const first = targetNames[0].charAt(0).toUpperCase();
+        const last = targetNames[targetNames.length - 1].charAt(0).toUpperCase();
+        return `${first}${last}`;
+    }
+
+    return targetNames
+        .slice(0, limit)
         .map((name) => name.charAt(0).toUpperCase())
-        .filter((char) => char.length > 0);
-
-    return initialsArr.slice(0, limit).join('');
+        .join('');
 }
 
 /**

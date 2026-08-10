@@ -1,11 +1,11 @@
 import { ulid as ulidLib } from 'ulid';
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
-function getUlid (): string {
+function getUlid(): string {
     return String(ulidLib()).toLowerCase();
 }
 
-type Typecode = `${string}${'lower' | 'ulid' | 'upper'}${string}`;
+export type Typecode = 'lower' | 'upper' | 'ulid' | 'number' | 'letter' | 'nonumber' | (string & {});
 
 /**
  * Gera uma string aleatória.
@@ -14,7 +14,7 @@ type Typecode = `${string}${'lower' | 'ulid' | 'upper'}${string}`;
  * @param arg2 Comprimento ou código de tipo.
  * @returns Retorna a string gerada.
  */
-export function Random ( arg1: MaybeRefOrGetter<number | Typecode> = 20, arg2: MaybeRefOrGetter<number | Typecode> = 'letter lower'): string {
+export function Random(arg1: MaybeRefOrGetter<number | Typecode> = 20, arg2: MaybeRefOrGetter<number | Typecode> = 'letter lower'): string {
     const val1 = toValue(arg1);
     const val2 = toValue(arg2);
 
@@ -51,7 +51,7 @@ export function Random ( arg1: MaybeRefOrGetter<number | Typecode> = 20, arg2: M
  *
  * @returns Retorna o ULID gerado.
  */
-export function ulid (): string {
+export function ulid(): string {
     return getUlid();
 }
 
@@ -62,7 +62,7 @@ export function ulid (): string {
  * @param max Valor máximo.
  * @returns Retorna o número gerado.
  */
-export function intervalRandom (
+export function intervalRandom(
     min: MaybeRefOrGetter<number> = 0,
     max: MaybeRefOrGetter<number> = 1000
 ) {
@@ -71,4 +71,3 @@ export function intervalRandom (
 
     return Math.floor(Math.random() * (valMax - valMin + 1)) + valMin;
 }
-

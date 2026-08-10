@@ -27,6 +27,10 @@ describe('formatCpf', () => {
         expect(result).toContain('-');
     });
 
+    it('retorna string original para CPF com menos de 11 dígitos', () => {
+        expect(formatCpf('123')).toBe('123');
+    });
+
     it('retorna vazio para null', () => {
         expect(formatCpf(null)).toBe('');
     });
@@ -62,6 +66,10 @@ describe('formatCpfCnpj', () => {
         expect(result).toContain('/');
     });
 
+    it('retorna string original para documento com 12 dígitos sem perder caractere', () => {
+        expect(formatCpfCnpj('123456789012')).toBe('123456789012');
+    });
+
     it('retorna vazio para null', () => {
         expect(formatCpfCnpj(null)).toBe('');
     });
@@ -94,6 +102,14 @@ describe('formatPhone', () => {
 
     it('retorna string original para tamanho de telefone inválido', () => {
         expect(formatPhone('1234')).toBe('1234');
+    });
+
+    it('retorna string original para 12 dígitos que não começam com 55', () => {
+        expect(formatPhone('119999912345')).toBe('119999912345');
+    });
+
+    it('retorna string original para 0800 com comprimento diferente de 11', () => {
+        expect(formatPhone('080012345')).toBe('080012345');
     });
 
     it('funciona com Ref', () => {
