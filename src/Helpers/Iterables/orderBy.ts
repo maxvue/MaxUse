@@ -1,6 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
-type Criterion<T> = string | ((item: T) => any);
+type Criterion<T> = string | ((item: T) => unknown);
 type OrderDirection = 'asc' | 'desc';
 
 /**
@@ -39,15 +39,15 @@ export function orderBy<T>(
             const rule = rules[i];
             const dir = dirs[i] ?? globalDir;
 
-            let valA: any;
-            let valB: any;
+            let valA: unknown;
+            let valB: unknown;
 
             if (typeof rule === 'function') {
                 valA = rule(a);
                 valB = rule(b);
             } else if (typeof rule === 'string') {
-                valA = (a as any)[rule];
-                valB = (b as any)[rule];
+                valA = (a as Record<string, unknown>)?.[rule];
+                valB = (b as Record<string, unknown>)?.[rule];
             } else {
                 valA = a;
                 valB = b;
@@ -60,9 +60,12 @@ export function orderBy<T>(
                 if (valA === null) return 1;
                 if (valB === null) return -1;
 
+                const compA = valA as number | string;
+                const compB = valB as number | string;
+
                 return dir === 'asc'
-                    ? (valA < valB ? -1 : 1)
-                    : (valA < valB ? 1 : -1);
+                    ? (compA < compB ? -1 : 1)
+                    : (compA < compB ? 1 : -1);
             }
         }
         return 0;
