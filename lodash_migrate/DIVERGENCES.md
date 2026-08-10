@@ -101,3 +101,15 @@ Como a lista é calculada dinamicamente a partir do código-fonte, o teste
 continua correto conforme novos helpers dos 280 forem implementados: o
 conjunto de nomes conflitantes só cresce (ou muda) junto com `maxUseItems()`,
 sem precisar editar o teste.
+
+### `sum` / `sumBy`
+
+- **Lodash:** `_.sum(['1', '2'])` acumula com `+` cru, então strings são
+  concatenadas: o resultado é `'12'` (string), não `3`.
+- **MaxUse:** `sum(['1', '2'])` aplica `parseFloat` a cada item (com `NaN → 0`),
+  retornando `3` (number). Verificado: `sum([1, undefined, 3]) === 4` nas duas
+  implementações.
+- **Impacto:** divergência considerada intencional e preferível — somar valores
+  numéricos e receber uma string concatenada é comportamento que raramente se
+  deseja. Quem migra do Lodash com arrays de strings numéricas passa a receber
+  `number` no lugar de `string`; o tipo do retorno muda, o valor fica correto.
