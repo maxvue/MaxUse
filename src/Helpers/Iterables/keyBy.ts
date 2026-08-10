@@ -17,10 +17,6 @@ export function keyBy(collection: MaybeRefOrGetter<T | any[]>, key: string): Rec
     const items = Array.isArray(data) ? data : Object.values(data);
 
     return Object.fromEntries(
-        items.map((item) => {
-            const k = item[key];
-            const strKey = k !== null && k !== '' && !isNaN(Number(k)) ? String(k) + ' ' : String(k);
-            return [strKey, item];
-        })
+        items.map((item) => [String(item[key]), item])
     );
 }

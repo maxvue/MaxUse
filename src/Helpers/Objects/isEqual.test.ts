@@ -152,4 +152,19 @@ describe('isEqual', () => {
     it('funciona com Getter', () => {
         expect(isEqual(() => [1, 2], () => [1, 2])).toBe(true);
     });
+
+    // Referências circulares
+    it('trata referências circulares sem estourar a pilha', () => {
+        const a: any = { x: 1 }; a.s = a;
+        const b: any = { x: 1 }; b.s = b;
+        expect(() => isEqual(a, b)).not.toThrow();
+        expect(isEqual(a, b)).toBe(true);
+    });
+
+    it('trata arrays autorreferentes', () => {
+        const p: any = [1]; p.push(p);
+        const q: any = [1]; q.push(q);
+        expect(isEqual(p, q)).toBe(true);
+    });
 });
+

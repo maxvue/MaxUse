@@ -18,6 +18,7 @@ export function deepMerge<T extends object>(target: MaybeRefOrGetter<T>, ...sour
     const dataSource = toValue(source);
 
     if (isObject(dataTarget) && !isArray(dataTarget) && isObject(dataSource) && !isArray(dataSource)) Object.keys(dataSource).forEach((key) => {
+        if (key === '__proto__' || key === 'constructor' || key === 'prototype') return;
         const targetValue = dataTarget[key];
         const sourceValue = dataSource[key];
 

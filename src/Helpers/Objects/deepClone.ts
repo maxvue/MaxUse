@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { baseClone } from '../Lang/_baseClone';
 
 /**
  * Cria uma cópia profunda de um valor, lidando com referências circulares e diversos tipos de dados.
@@ -18,20 +19,32 @@ export function deepClone<T>(value: MaybeRefOrGetter<T>, map = new WeakMap()): T
     // Se não for um objeto ou for nulo, retorna o próprio valor (primitivos)
     if (data === null || typeof data !== 'object') return data as T;
 
-
     // Se já clonamos este objeto, retorna a referência existente (evita loops infinitos)
     if (map.has(data)) return map.get(data);
-
 
     let clone: any;
 
     // Lida com instâncias de Date
     if (data instanceof Date) return new Date(data.getTime()) as any;
 
+    // Lida com instâncias de RegExp (preservando lastIndex)
+    if (data instanceof RegExp) {
+        const result = new RegExp(data.source, data.flags);
+        result.lastIndex = data.lastIndex;
+        return result as any;
+    }
 
-    // Lida com instâncias de RegExp
-    if (data instanceof RegExp) return new RegExp(data.source, data.flags) as any;
-
+    // Lida com instâncias de Error (preservando message, name e stack)
+    if (data instanceof Error) {
+        const Ctor = (data.constructor as any) || Error;
+        const errClone = new Ctor(data.message);
+        errClone.name = data.name;
+        errClone.stack = data.stack;
+        map.set(data, errClone);
+        const keys = [...Object.keys(data), ...Object.getOwnPropertySymbols(data)];
+        for (const key of keys) errClone[key] = deepClone((data as any)[key], map);
+        return errClone as T;
+    }
 
     // Lida com instâncias de Map
     if (data instanceof Map) {
@@ -53,9 +66,10 @@ export function deepClone<T>(value: MaybeRefOrGetter<T>, map = new WeakMap()): T
         return clone;
     }
 
+    // Lida com TypedArray, ArrayBuffer e DataView delegando ao baseClone
+    if (ArrayBuffer.isView(data) || data instanceof ArrayBuffer || Object.prototype.toString.call(data) === '[object DataView]') return baseClone(data, true) as T;
+
     // Lida com Arrays e Objetos comuns, preservando o protótipo da instância
-    // (sem isso, instâncias de classe seriam clonadas como objetos literais e
-    // perderiam métodos, getters e a identidade em `instanceof`).
     if (Array.isArray(data)) clone = [];
     else {
         const proto = Object.getPrototypeOf(data);
@@ -68,6 +82,6 @@ export function deepClone<T>(value: MaybeRefOrGetter<T>, map = new WeakMap()): T
     const keys = [...Object.keys(data), ...Object.getOwnPropertySymbols(data)];
     for (const key of keys) clone[key] = deepClone((data as any)[key], map);
 
-
     return clone as T;
 }
+
