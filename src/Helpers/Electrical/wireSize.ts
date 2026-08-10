@@ -6,7 +6,7 @@ type T = MaybeRefOrGetter<string | number | null>;
 type Material = 'copper' | 'aluminum' | 'cobre' | 'aluminio' | 'alumínio' | 'cu' | 'al';
 type Temperature = '90' | '70' | 90 | 70;
 type Isolation = 'pvc' | 'epr' | 'xlpe';
-type Phases = 1 | 2 |3 | '1' | '2' | '3';
+type Phases = 1 | 2 | 3 | '1' | '2' | '3';
 
 /**
  * Opções de configuração para o cálculo de bitola de cabos elétricos.
@@ -17,6 +17,7 @@ type Phases = 1 | 2 |3 | '1' | '2' | '3';
  * @property method - Método de instalação conforme NBR 5410 ('a1', 'a2', 'b1', 'b2', 'c', 'd', 'e', 'f', 'g').
  * @property length - Comprimento do circuito em metros.
  * @property voltage - Tensão do circuito em volts.
+ * @property voltage_type - Tipo de tensão ('fn' para fase-neutro ou 'ff' para fase-fase).
  * @property phases - Número de fases (1, 2 ou 3).
  * @property max_loss - Percentual máximo de queda de tensão permitido.
  * @property voltage_drop - Queda de tensão máxima permitida (V).
@@ -31,12 +32,21 @@ export type WireOptions = {
     method?: 'a1' | 'a2' | 'b1' | 'b2' | 'c' | 'd' | 'e' | 'f' | 'g' | string;
     length?: number | string;
     voltage?: 115 | 120 | 127 | 220 | 230 | 240 | 380 | 400 | 440 | 480 | number | string;
+    voltage_type?: 'fn' | 'ff';
     phases?: Phases;
     max_loss?: number | string;
     voltage_drop?: number | string;
     fca?: number | string;
     fct?: number | string;
     circuit_type?: 'lighting' | 'power' | 'iluminacao' | 'tomada' | 'forca' | string;
+};
+
+export type WireSizeResult = {
+    wire: number;
+    max_current: number;
+    voltage_drop: number;
+    loss_percent: number;
+    exceeded?: boolean;
 };
 
 /**
@@ -58,7 +68,7 @@ function toPhasePhase(phaseNeutralVoltage: number): number {
  * @param options Opções do cálculo, como material, tensão, método de instalação e distância.
  * @returns Um objeto com a bitola do cabo, a corrente máxima, a queda de tensão e a porcentagem de perda.
  */
-export async function wireSize(current: T, options: WireOptions) {
+export async function wireSize(current: T, options: WireOptions = {}): Promise<WireSizeResult | null> {
     const data = toValue(current);
     if (isBlank(data)) return null;
 
@@ -72,7 +82,8 @@ export async function wireSize(current: T, options: WireOptions) {
     const phase_name = Number(options?.phases) > 2 ? 'tri' : 'bi';
 
     const phases = Number(options?.phases) > 2 ? 3 : 2;
-    const voltage = Number(options?.voltage ?? 220);
+    const rawVoltage = Number(options?.voltage ?? 220);
+    const voltage_type = options?.voltage_type;
     const length = Number(options?.length ?? 10);
     const max_percent = Number(options?.max_loss ?? 5);
 
@@ -80,7 +91,8 @@ export async function wireSize(current: T, options: WireOptions) {
     const fct = Number(options?.fct ?? 1);
     const circuit_type = String(options?.circuit_type ?? '').toLowerCase();
 
-    let min_section = 0.5;
+    // Seção mínima padrão: 1.5mm² (conforme NBR 5410 Tabela 47 para iluminação/força)
+    let min_section = 1.5;
     if (circuit_type.includes('lighting') || circuit_type.includes('ilumina')) min_section = 1.5;
     else if (circuit_type.includes('power') || circuit_type.includes('tomada') || circuit_type.includes('forca')) min_section = 2.5;
 
@@ -88,14 +100,19 @@ export async function wireSize(current: T, options: WireOptions) {
 
     const resistivity = {
         'cu': { '70': 0.0225, '90': 0.0240 },
-        'al':{ '70': 0.0360, '90': 0.0360 }
+        'al': { '70': 0.0360, '90': 0.0384 }
     };
 
     const safeMaterial = material as keyof typeof resistivity;
     const safeIsolation = isolation as keyof typeof resistivity[typeof safeMaterial];
     const rho = resistivity[safeMaterial][safeIsolation];
-    const voltage_base = Number(phases === 3 ? toPhasePhase(Number(voltage)) : voltage);
-    const voltage_drop_allowed = (phases === 3 ? voltage_base: voltage) * (max_percent / 100);
+
+    // Trata tensão fase-fase vs fase-neutro em trifásico
+    const voltage_base = phases === 3
+        ? (voltage_type === 'ff' || rawVoltage > 254 ? rawVoltage : toPhasePhase(rawVoltage))
+        : rawVoltage;
+
+    const voltage_drop_allowed = voltage_base * (max_percent / 100);
 
     const section = phases === 3
         ? (Math.sqrt(3) * currentVal * length * rho) / voltage_drop_allowed
@@ -104,7 +121,7 @@ export async function wireSize(current: T, options: WireOptions) {
     const calc_section = Math.max(section, min_section);
 
     const all_wires = [0.5, 0.75, 1, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, 300, 400, 500, 630, 800, 1000];
-    const data_return: any = {
+    const data_return: WireSizeResult = {
         wire: Number(all_wires.find((w) => w >= calc_section) || 1000),
         max_current: currentVal,
         voltage_drop: Number(voltage_drop_allowed.toFixed(2)),
@@ -116,12 +133,19 @@ export async function wireSize(current: T, options: WireOptions) {
             const module = await import(`../../json/${material}-${isolation}-${phase_name}-${method}.json`);
             const dados = module.default || module;
             const item = dados.find((c: { wire: number; max_current: number }) => c.max_current >= correctedCurrent);
-            if (item && item.wire >= data_return.wire) {
+            if (item) if (item.wire >= data_return.wire) {
                 data_return.wire = item.wire;
                 data_return.max_current = Number((item.max_current * fca * fct).toFixed(2));
-            } else if (item) {
+            } else {
                 const wire_table = dados.find((c: { wire: number; max_current: number }) => c.wire === data_return.wire);
                 if (wire_table) data_return.max_current = Number((wire_table.max_current * fca * fct).toFixed(2));
+            }
+            else if (dados.length > 0) {
+                // Corrente excede o limite da tabela da NBR 5410
+                const maxItem = dados[dados.length - 1];
+                data_return.wire = Math.max(data_return.wire, maxItem.wire);
+                data_return.max_current = Number((maxItem.max_current * fca * fct).toFixed(2));
+                data_return.exceeded = true;
             }
         }
     } catch (e) {

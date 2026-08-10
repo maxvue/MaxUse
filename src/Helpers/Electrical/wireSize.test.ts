@@ -234,7 +234,7 @@ describe('wireSize', () => {
         expect(result!.max_current).toBe(477); // O max_current para a bitola 300 na tabela b1
     });
 
-    it('pula if e else if quando a corrente excede a tabela', async () => {
+    it('sinaliza exceeded: true quando a corrente excede a tabela', async () => {
         const result = await wireSize(2000, {
             material: 'copper',
             voltage: 220,
@@ -244,6 +244,19 @@ describe('wireSize', () => {
             max_loss: 5
         });
         expect(result).not.toBeNull();
+        expect(result!.exceeded).toBe(true);
+    });
+
+    it('trata tensão trifásica com voltage_type "ff"', async () => {
+        const result1 = await wireSize(50, { phases: 3, voltage: 380, voltage_type: 'ff' });
+        expect(result1).not.toBeNull();
+        expect(result1!.loss_percent).toBeLessThanOrEqual(5);
+    });
+
+    it('calcula queda de tensão diferente para alumínio 70°C vs 90°C', async () => {
+        const res70 = await wireSize(100, { material: 'al', isolation: 'pvc', length: 100 });
+        const res90 = await wireSize(100, { material: 'al', isolation: 'epr', length: 100 });
+        expect(res90!.voltage_drop).toBeGreaterThan(res70!.voltage_drop);
     });
 
     it('testa branch if (wire_table) falso com arquivo real reduzido', async () => {

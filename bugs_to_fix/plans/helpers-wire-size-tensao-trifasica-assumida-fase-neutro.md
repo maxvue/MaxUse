@@ -12,9 +12,12 @@ Para trifásico, `toPhasePhase` **sempre** multiplica a tensão por √3, assumi
 const voltage_base = Number(phases === 3 ? toPhasePhase(Number(voltage)) : voltage);
 ```
 
+## Decisão de Design Registrada
+- Aceitar opção `voltage_type?: 'fn' | 'ff'`. Se `voltage_type` for `'fn'` (ou se omitido e `voltage <= 254` em sistema trifásico), multiplica por √3 para converter para fase-fase. Se `voltage_type` for `'ff'` ou `voltage > 254` (ex: 380 V, 440 V), usa a tensão informada diretamente como fase-fase.
+
 ## Plano de correção
-1. Só converter quando a tensão informada for claramente fase-neutro (ex.: `voltage <= 254`), **ou** aceitar flag explícita `voltage_type: 'fn' | 'ff'` (preferível — sem ambiguidade).
-2. Documentar a semântica no JSDoc.
+1. Adicionar `voltage_type?: 'fn' | 'ff'` nas opções e ajustar a lógica de `voltage_base` em `src/Helpers/Electrical/wireSize.ts`.
+2. Documentar no JSDoc.
 
 ## Testes
 - `{phases:3, voltage:380}` usa base 380; `{phases:3, voltage:220}` usa 380 (220·√3).
