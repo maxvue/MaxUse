@@ -44,6 +44,7 @@ export { refAutoReset, useCached, useStorage, useTimeAgo, useDateFormat } from '
 export { now } from './Helpers/Dates';
 export { get, set } from './Helpers/Objects';
 export { isObject } from './Helpers/Types';
+export { formatCep, formatCnpj, formatCpf, formatCpfCnpj, formatPhone, maskSensitive } from './Helpers/Strings';
 
 export { maxUseItems, maxUseAutoImport } from './Helpers/maxUseItems';
 

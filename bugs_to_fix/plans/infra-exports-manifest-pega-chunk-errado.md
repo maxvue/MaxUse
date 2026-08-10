@@ -7,10 +7,12 @@
 ## Problema
 O plugin `generateExportsManifest` itera o bundle e faz `break` no **primeiro** chunk com `isEntry`, mas o build é multi-entry (15 entradas). A ordem de iteração fez o chunk `browser` ser capturado em vez do `index`: `dist/exports.json` contém apenas 7 nomes (incluindo `t`, um binding interno minificado) quando a superfície real do `index` tem ~774 exports.
 
+## Decisão de Design Registrada
+- Filtrar especificamente o chunk `chunk.name === 'index'` (ou `chunk.fileName === 'index.es.js'`) ao gerar `dist/exports.json`, capturando a superfície total de exports da entrada principal.
+
 ## Plano de correção
-1. Selecionar o chunk cujo `chunk.name === 'index'` (ou `fileName === 'index.es.js'`) em vez do primeiro `isEntry`.
-2. Opcional: emitir manifesto por entrada (`{ index: [...], browser: [...] }`).
-3. Rebuildar e conferir que `dist/exports.json` lista a superfície completa.
+1. Ajustar o plugin `generateExportsManifest` em `vite.config.ts`.
+2. Rebuildar e conferir `dist/exports.json`.
 
 ## Testes
 - Após `npm run build`, script/asserção de que `exports.json` contém nomes conhecidos (`isCpf`, `formatCurrency`, `apiGetRoute`) e nenhum binding de 1 letra.

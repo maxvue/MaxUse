@@ -48,9 +48,9 @@ Lanes paralelas:
 - **Lane 5B — Electrical**: [helpers-wire-size-tensao-trifasica-assumida-fase-neutro](plans/helpers-wire-size-tensao-trifasica-assumida-fase-neutro.md), [helpers-wire-size-corrente-acima-da-tabela-sem-ampacidade](plans/helpers-wire-size-corrente-acima-da-tabela-sem-ampacidade.md), [helpers-wire-size-secao-minima-05-fora-da-nbr](plans/helpers-wire-size-secao-minima-05-fora-da-nbr.md), [helpers-wire-size-resistividade-al-90-igual-70](plans/helpers-wire-size-resistividade-al-90-igual-70.md), [helpers-wire-size-retorno-any](plans/helpers-wire-size-retorno-any.md) — *Concluída em 3aa642b4 (2686 testes)*
 - **Lane 5C — Dates/Types/Browser**: [helpers-is-date-rejeita-formato-brasileiro](plans/helpers-is-date-rejeita-formato-brasileiro.md), [helpers-time-ago-negativo-para-futuro-e-bases-imprecisas](plans/helpers-time-ago-negativo-para-futuro-e-bases-imprecisas.md), [helpers-has-passed-sem-number-e-null-true](plans/helpers-has-passed-sem-number-e-null-true.md), [helpers-has-content-strings-null-literal](plans/helpers-has-content-strings-null-literal.md), [helpers-get-color-from-var-sem-tratamento-de-erro](plans/helpers-get-color-from-var-sem-tratamento-de-erro.md) — *Concluída em 442a3047 (2692 testes)*
 
-## Etapa 6 — Testes dos módulos internos
+## Etapa 6 — Testes dos módulos internos [CONCLUÍDA em c0c24bb0]
 
-- **Lane 6A**: [lodash-internos-base-sem-teste-direto](plans/lodash-internos-base-sem-teste-direto.md) — *Pendente (14 novos arquivos de teste)*
+- **Lane 6A**: [lodash-internos-base-sem-teste-direto](plans/lodash-internos-base-sem-teste-direto.md) — *Concluída em c0c24bb0 (2736 testes)*
 
 ## Etapa 7 — Infra/build (por último, mexe em config global)
 

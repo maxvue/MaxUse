@@ -43,7 +43,15 @@ describe('maxUseAutoImport', () => {
     it('é uma função chamável que retorna a configuração de auto-import', () => {
         expect(typeof maxUseAutoImport).toBe('function');
         const config = maxUseAutoImport();
-        expect(config).toBeDefined();
-        expect(config).not.toBeNull();
+        expect(Array.isArray(config)).toBe(true);
+        expect(config[0]).toHaveProperty('@maxvue/max-use');
+    });
+
+    it('garante que todos os itens de maxUseItems estão presentes no autoImportData', () => {
+        const items = maxUseItems();
+        const config = maxUseAutoImport();
+        const autoImportItems = (config[0] as any)['@maxvue/max-use'];
+        for (const item of items) expect(autoImportItems).toContain(item);
+
     });
 });

@@ -1,6 +1,7 @@
 [
   {
     "@maxvue/max-use": [
+      "FORMAT_MAP",
       "Obj",
       "Random",
       "Str",
@@ -177,6 +178,8 @@
       "get",
       "getCachedApi",
       "getCachedApiIDB",
+      "getClientId",
+      "getClientIdHeader",
       "getColorFromVar",
       "getColorOpposite",
       "getConfiguredHeaders",
