@@ -19,5 +19,5 @@ export function baseInvoke(object: unknown, path: unknown, args: unknown[]): unk
     const parent = segments.length < 2 ? object : baseGet(object, segments.slice(0, -1));
     const key = segments[segments.length - 1];
     const func = parent == null ? parent : (parent as Record<PropertyKey, unknown>)[key as PropertyKey];
-    return func == null ? undefined : (func as (...a: unknown[]) => unknown).apply(parent, args);
+    return typeof func === 'function' ? (func as (...a: unknown[]) => unknown).apply(parent, args) : undefined;
 }
