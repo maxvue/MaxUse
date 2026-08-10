@@ -120,6 +120,76 @@ describe('useDefaultReset com timer', () => {
         vi.useRealTimers();
     });
 
+    it('reseta objeto por timer uma única vez sem entrar em loop infinito', async () => {
+        vi.useFakeTimers();
+        const scope = effectScope();
+        await scope.run(async () => {
+            const state = useDefaultReset({ a: 1 }, 500);
+            const spy = vi.spyOn(state, 'reset');
+
+            state.value.a = 99;
+            await nextTick();
+            vi.advanceTimersByTime(1000);
+            await nextTick();
+
+            expect(state.value.a).toBe(1);
+            // 1 reset do timer capturado após criar o spy
+            expect(spy).toHaveBeenCalledTimes(1);
+
+            // Avança mais tempo e verifica que NENHUM novo reset ocorreu em loop
+            vi.advanceTimersByTime(2000);
+            await nextTick();
+            expect(spy).toHaveBeenCalledTimes(1);
+        });
+        scope.stop();
+        vi.useRealTimers();
+    });
+
+    it('detecta mutação profunda em objeto via timer com deep: true', async () => {
+        vi.useFakeTimers();
+        const scope = effectScope();
+        await scope.run(async () => {
+            const state = useDefaultReset({ user: { name: 'Ana' } }, 300);
+            state.value.user.name = 'Beatriz';
+
+            await nextTick();
+            vi.advanceTimersByTime(500);
+            await nextTick();
+
+            expect(state.value.user.name).toBe('Ana');
+        });
+        scope.stop();
+        vi.useRealTimers();
+    });
+
+    it('não ativa timer quando timer for 0, null ou negativo', async () => {
+        vi.useFakeTimers();
+        const scope = effectScope();
+        await scope.run(async () => {
+            const state = useDefaultReset({ val: 1 }, 0);
+            state.value.val = 2;
+
+            await nextTick();
+            vi.advanceTimersByTime(1000);
+            await nextTick();
+
+            expect(state.value.val).toBe(2);
+        });
+        scope.stop();
+        vi.useRealTimers();
+    });
+
+    it('trata initialData undefined graciosamente sem lançar erro', () => {
+        const scope = effectScope();
+        scope.run(() => {
+            const state = useDefaultReset(undefined as any);
+            expect(state.value).toBeUndefined();
+            state.reset();
+            expect(state.value).toBeUndefined();
+        });
+        scope.stop();
+    });
+
     it('reset funciona com array de objetos', () => {
         const scope = effectScope();
         scope.run(() => {

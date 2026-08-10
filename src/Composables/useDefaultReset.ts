@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue';
+import { ref, nextTick, type Ref } from 'vue';
 import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
@@ -41,11 +41,17 @@ export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
  */
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
     const state = ref<T>() as DefaultReset<T>;
-    state.initialData = JSON.parse(JSON.stringify(initialData));
+
+    state.initialData = initialData === undefined
+        ? undefined
+        : JSON.parse(JSON.stringify(initialData));
 
     state.reset = () => {
-        const new_data = JSON.parse(JSON.stringify(state.initialData));
-        if (typeof state.initialData === 'object') {
+        const new_data = state.initialData === undefined
+            ? undefined
+            : JSON.parse(JSON.stringify(state.initialData));
+
+        if (state.initialData && typeof state.initialData === 'object') {
             if ((state.initialData as any)?.id === 'ulid') (new_data as any).id = ulid().toLowerCase();
             if ((state.initialData as any)?.created_at === 'now') (new_data as any).created_at = new Date().toISOString();
         }
@@ -55,8 +61,19 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
     state.reset();
     state.timer = timer;
 
-    if (timer) watchDebounced(state, () => state.reset(), { debounce: timer });
-
+    if (typeof timer === 'number' && timer > 0) {
+        const watcher = watchDebounced(
+            state,
+            () => {
+                watcher.pause();
+                state.reset();
+                nextTick(() => {
+                    watcher.resume();
+                });
+            },
+            { debounce: timer, deep: true }
+        );
+    }
 
     return state as DefaultReset<T>;
 }
