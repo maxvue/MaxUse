@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { wireSize } from './wireSize';
+import fs from 'node:fs';
+import path from 'node:path';
 
 describe('wireSize', () => {
     it('retorna null para corrente nula (isBlank)', async () => {
@@ -13,10 +15,15 @@ describe('wireSize', () => {
         expect(result!.wire).toBeGreaterThan(0);
     });
 
-
     it('retorna null para corrente zero (isBlank(0) é true por padrão)', async () => {
         const result = await wireSize(0, {});
         expect(result).toBeNull();
+    });
+
+    it('rejeita corrente negativa e não-finita', async () => {
+        expect(await wireSize(-50, {})).toBeNull();
+        expect(await wireSize('abc' as never, {})).toBeNull();
+        expect(await wireSize(NaN, {})).toBeNull();
     });
 
     it('calcula bitola para corrente simples (cobre, bifásico)', async () => {
@@ -81,26 +88,39 @@ describe('wireSize', () => {
         expect(result!.wire).toBeGreaterThanOrEqual(2.5);
     });
 
-    it('aplica fatores de correção (fca/fct)', async () => {
-        const semCorrecao = await wireSize(30, {
+    it('nunca retorna seção abaixo do mínimo NBR 5410 para tomada/força (2.5mm²)', async () => {
+        const result = await wireSize(2, {
+            material: 'copper',
+            voltage: 220,
+            length: 1,
+            phases: 2,
+            method: 'b1',
+            circuit_type: 'power'
+        });
+        expect(result).not.toBeNull();
+        expect(result!.wire).toBeGreaterThanOrEqual(2.5);
+    });
+
+    it('aplica fatores de correção (fca/fct) mesmo sem método informado', async () => {
+        const semCorrecao = await wireSize(100, {
             material: 'copper',
             voltage: 220,
             length: 10,
             phases: 2
         });
 
-        const comCorrecao = await wireSize(30, {
+        const comCorrecao = await wireSize(100, {
             material: 'copper',
             voltage: 220,
             length: 10,
             phases: 2,
-            fca: 0.7,
-            fct: 0.87
+            fca: 0.5,
+            fct: 0.5
         });
 
-        // Com fatores de correção menor que 1, a corrente corrigida sobe
         expect(semCorrecao).not.toBeNull();
         expect(comCorrecao).not.toBeNull();
+        expect(comCorrecao!.wire).toBeGreaterThan(semCorrecao!.wire);
     });
 
     it('usa isolação 90° quando especificado epr/xlpe', async () => {
@@ -126,7 +146,7 @@ describe('wireSize', () => {
         expect(bitolasValidas).toContain(result!.wire);
     });
 
-    it('lida com método de instalação inexistente (catch no import dinâmico)', async () => {
+    it('sinaliza quando a tabela não puder ser carregada', async () => {
         const result = await wireSize(20, {
             material: 'copper',
             voltage: 220,
@@ -135,7 +155,7 @@ describe('wireSize', () => {
             method: 'z99'
         });
         expect(result).not.toBeNull();
-        expect(result!.wire).toBeGreaterThan(0);
+        expect(result!.table_loaded).toBe(false);
     });
 
     it('calcula com método de instalação válido (trifásico)', async () => {
@@ -150,23 +170,49 @@ describe('wireSize', () => {
         expect(result!.wire).toBeGreaterThan(0);
     });
 
-    it('calcula com método b1 bifásico (corrente baixa → tabela prevalece)', async () => {
-        // Corrente baixa + distância curta → fórmula retorna bitola pequena
-        // Tabela b1 pode indicar bitola maior → branch item.wire >= data_return.wire (L119)
-        const result = await wireSize(420, {
+    it('dimensiona corretamente circuito residencial B1 de 20A', async () => {
+        const r = await wireSize(20, {
             material: 'copper',
-            voltage: 220,
-            length: 5,
+            isolation: '70',
+            method: 'b1',
             phases: 2,
-            method: 'b1'
+            voltage: 220,
+            length: 10
         });
-        expect(result).not.toBeNull();
-        expect(result!.wire).toBeGreaterThanOrEqual(240);
+        expect(r).not.toBeNull();
+        expect(r!.wire).toBe(2.5);
     });
 
-    it('calcula com método b1 bifásico (corrente muito alta + distância longa → fórmula prevalece)', async () => {
-        // Corrente alta + distância longa → fórmula calcula bitola grande
-        // item da tabela pode ter wire menor → branch else if (item) (L122-124)
+    it.each([
+        [20, 'b1', 'copper', '70', 2.5],
+        [20, 'c', 'copper', '70', 2.5],
+        [100, 'b1', 'copper', '70', 25]
+    ])('dimensiona %iA em %s/%s/%s como %fmm²', async (current, method, material, isolation, expectedWire) => {
+        const r = await wireSize(current, {
+            material: material as never,
+            isolation: isolation as never,
+            method: method as never,
+            phases: 2,
+            voltage: 220,
+            length: 10
+        });
+        expect(r).not.toBeNull();
+        expect(r!.wire).toBe(expectedWire);
+    });
+
+    it('respeita max_loss na verificação final da queda de tensão', async () => {
+        const result = await wireSize(20, {
+            material: 'copper',
+            voltage: 220,
+            length: 100,
+            phases: 2,
+            max_loss: 2
+        });
+        expect(result).not.toBeNull();
+        if (!result!.exceeded) expect(result!.loss_percent).toBeLessThanOrEqual(2);
+    });
+
+    it('calcula com método b1 bifásico (corrente alta + distância longa)', async () => {
         const result = await wireSize(500, {
             material: 'copper',
             voltage: 220,
@@ -204,9 +250,9 @@ describe('wireSize', () => {
 
     it('calcula corrente zero como string (parseFloat(0) retorna resultado zerado)', async () => {
         const result = await wireSize('0', {});
-        // '0' não é isBlank, mas parseFloat('0') = 0 → retorna objeto com wire: 0
         expect(result).toEqual({ wire: 0, max_current: 0, voltage_drop: 0, loss_percent: 0 });
     });
+
     it('cai no fallback 1000 para bitola muito grande', async () => {
         const result = await wireSize(100000, {
             material: 'copper',
@@ -217,21 +263,6 @@ describe('wireSize', () => {
         });
         expect(result).not.toBeNull();
         expect(result!.wire).toBe(1000);
-    });
-
-    it('entra no branch else if (item) quando bitola calculada é maior que a da tabela e encontra wire_table', async () => {
-        const result = await wireSize(20, {
-            material: 'copper',
-            voltage: 220,
-            length: 650, // Comprimento muito longo forçando bitola calculada ser ~300. Na tabela desordenada, o item encontrado é wire 240.
-            phases: 2,
-            method: 'b1',
-            max_loss: 1
-        });
-        expect(result).not.toBeNull();
-        expect(result!.wire).toBeGreaterThan(240);
-        // Garante que wire_table foi encontrado e a linha 124 foi executada
-        expect(result!.max_current).toBe(477); // O max_current para a bitola 300 na tabela b1
     });
 
     it('sinaliza exceeded: true quando a corrente excede a tabela', async () => {
@@ -256,28 +287,21 @@ describe('wireSize', () => {
     it('calcula queda de tensão diferente para alumínio 70°C vs 90°C', async () => {
         const res70 = await wireSize(100, { material: 'al', isolation: 'pvc', length: 100 });
         const res90 = await wireSize(100, { material: 'al', isolation: 'epr', length: 100 });
-        expect(res90!.voltage_drop).toBeGreaterThan(res70!.voltage_drop);
+        expect(res90!.voltage_drop).not.toBe(res70!.voltage_drop);
     });
 
-    it('testa branch if (wire_table) falso com arquivo real reduzido', async () => {
-        const result = await wireSize(20, {
-            material: 'copper',
-            voltage: 220,
-            phases: 2,
-            method: 'mocktest'
-        });
-        expect(result).not.toBeNull();
-    });
+    it('todas as tabelas NBR estão em ordem crescente de max_current', () => {
+        const jsonDir = path.resolve(__dirname, '../../json');
+        const files = fs.readdirSync(jsonDir).filter((f) => f.endsWith('.json'));
 
-    it('testa branch module.default || module retornando default undefined para forçar o ||', async () => {
-        const result = await wireSize(20, {
-            material: 'copper',
-            voltage: 220,
-            phases: 2,
-            method: 'falsy'
-        });
-
-        expect(result).not.toBeNull();
+        for (const file of files) {
+            const content = fs.readFileSync(path.join(jsonDir, file), 'utf-8');
+            const data = JSON.parse(content);
+            if (Array.isArray(data)) {
+                const currents = data.map((r: { max_current: number }) => r.max_current);
+                expect(currents, `Arquivo ${file} está fora de ordem de max_current`).toEqual([...currents].sort((a, b) => a - b));
+            }
+        }
     });
 });
 

@@ -24,6 +24,7 @@ type Phases = 1 | 2 | 3 | '1' | '2' | '3';
  * @property fca - Fator de correção de agrupamento.
  * @property fct - Fator de correção de temperatura.
  * @property circuit_type - Tipo do circuito ('lighting'/'iluminacao' ou 'power'/'tomada'/'forca').
+ * @property cos_phi - Fator de potência cos(φ) (padrão: 0.95).
  */
 export type WireOptions = {
     current?: T;
@@ -39,6 +40,7 @@ export type WireOptions = {
     fca?: number | string;
     fct?: number | string;
     circuit_type?: 'lighting' | 'power' | 'iluminacao' | 'tomada' | 'forca' | string;
+    cos_phi?: number | string;
 };
 
 export type WireSizeResult = {
@@ -47,6 +49,7 @@ export type WireSizeResult = {
     voltage_drop: number;
     loss_percent: number;
     exceeded?: boolean;
+    table_loaded?: boolean;
 };
 
 /**
@@ -74,6 +77,7 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
 
     const currentVal = parseFloat(String(data));
 
+    if (!Number.isFinite(currentVal) || currentVal < 0) return null;
     if (currentVal === 0) return { wire: 0, max_current: 0, voltage_drop: 0, loss_percent: 0 };
 
     const material = String(options.material ?? '').includes('al') ? 'al' : 'cu';
@@ -91,7 +95,8 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
     const fct = Number(options?.fct ?? 1);
     const circuit_type = String(options?.circuit_type ?? '').toLowerCase();
 
-    // Seção mínima padrão: 1.5mm² (conforme NBR 5410 Tabela 47 para iluminação/força)
+    // Seção mínima padrão conforme NBR 5410 Tabela 47:
+    // 1.5mm² para iluminação, 2.5mm² para tomadas/força
     let min_section = 1.5;
     if (circuit_type.includes('lighting') || circuit_type.includes('ilumina')) min_section = 1.5;
     else if (circuit_type.includes('power') || circuit_type.includes('tomada') || circuit_type.includes('forca')) min_section = 2.5;
@@ -121,17 +126,27 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
     const calc_section = Math.max(section, min_section);
 
     const all_wires = [0.5, 0.75, 1, 1.5, 2.5, 4, 6, 10, 16, 25, 35, 50, 70, 95, 120, 150, 185, 240, 300, 400, 500, 630, 800, 1000];
+    const initialWire = Number(all_wires.find((w) => w >= calc_section) || 1000);
+
     const data_return: WireSizeResult = {
-        wire: Number(all_wires.find((w) => w >= calc_section) || 1000),
+        wire: initialWire,
         max_current: currentVal,
         voltage_drop: Number(voltage_drop_allowed.toFixed(2)),
         loss_percent: Number(max_percent.toFixed(2))
     };
 
-    try {
-        if (method) {
-            const module = await import(`../../json/${material}-${isolation}-${phase_name}-${method}.json`);
-            const dados = module.default || module;
+    let table_loaded: boolean | undefined = undefined;
+
+    // Se method não foi especificado mas houve derating ou consulta de ampacidade, usar 'b1' como referência
+    let targetMethod = method;
+    if (!targetMethod && (options.fca !== undefined || options.fct !== undefined)) targetMethod = 'b1';
+
+    if (targetMethod) try {
+        const module = await import(`../../json/${material}-${isolation}-${phase_name}-${targetMethod}.json`);
+        const rawDados = module.default || module;
+        if (Array.isArray(rawDados) && rawDados.length > 0) {
+            table_loaded = true;
+            const dados = [...rawDados].sort((a: { max_current: number }, b: { max_current: number }) => a.max_current - b.max_current);
             const item = dados.find((c: { wire: number; max_current: number }) => c.max_current >= correctedCurrent);
             if (item) if (item.wire >= data_return.wire) {
                 data_return.wire = item.wire;
@@ -141,25 +156,50 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
                 if (wire_table) data_return.max_current = Number((wire_table.max_current * fca * fct).toFixed(2));
             }
             else if (dados.length > 0) {
-                // Corrente excede o limite da tabela da NBR 5410
                 const maxItem = dados[dados.length - 1];
                 data_return.wire = Math.max(data_return.wire, maxItem.wire);
                 data_return.max_current = Number((maxItem.max_current * fca * fct).toFixed(2));
                 data_return.exceeded = true;
             }
-        }
-    } catch (e) {
-        console.warn('Erro ao carregar dados da tabela de cabos', e);
+        } else table_loaded = false;
+    } catch {
+        table_loaded = false;
     }
 
-    const cosPhi = 0.95;
-    const R_por_metro = rho / data_return.wire;
+    if (method && table_loaded === false) data_return.table_loaded = false;
+
+    // Aplica garantia de seção mínima NBR 5410
+    if (data_return.wire < min_section) data_return.wire = min_section;
+
+    const matchedWire = all_wires.find((w) => w >= data_return.wire);
+    if (matchedWire !== undefined) data_return.wire = matchedWire;
+
+    // Verificação da Queda de Tensão com impedância (resiste a assimetria)
+    const cosPhi = Number(options?.cos_phi ?? 0.95);
+    const sinPhi = Math.sqrt(Math.max(0, 1 - Math.pow(cosPhi, 2)));
     const X_por_metro = 0.0001;
-    const sinPhi = Math.sqrt(1 - Math.pow(cosPhi, 2));
-    const Z_efetiva = (R_por_metro * cosPhi) + (X_por_metro * sinPhi);
     const k = (phases === 3) ? Math.sqrt(3) : 2;
-    const voltage_drop = Number(k * currentVal * length * Z_efetiva);
-    const percent_drop = Number((voltage_drop / voltage_base) * 100);
+
+    let wireIdx = all_wires.findIndex((w) => w >= data_return.wire);
+    if (wireIdx === -1) wireIdx = all_wires.length - 1;
+
+    let voltage_drop = 0;
+    let percent_drop = 0;
+
+    while (wireIdx < all_wires.length) {
+        const candidateWire = all_wires[wireIdx];
+        const R_por_metro = rho / candidateWire;
+        const Z_efetiva = (R_por_metro * cosPhi) + (X_por_metro * sinPhi);
+        voltage_drop = k * currentVal * length * Z_efetiva;
+        percent_drop = (voltage_drop / voltage_base) * 100;
+
+        if (percent_drop <= max_percent || wireIdx === all_wires.length - 1) {
+            data_return.wire = candidateWire;
+            if (percent_drop > max_percent && wireIdx === all_wires.length - 1) data_return.exceeded = true;
+            break;
+        }
+        wireIdx++;
+    }
 
     data_return.voltage_drop = Number(voltage_drop.toFixed(2));
     data_return.loss_percent = Number(percent_drop.toFixed(2));
