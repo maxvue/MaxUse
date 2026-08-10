@@ -1,33 +1,5 @@
 [
     {
-        "max_current": 415,
-        "wire": 240
-    },
-    {
-        "max_current": 477,
-        "wire": 300
-    },
-    {
-        "max_current": 571,
-        "wire": 400
-    },
-    {
-        "max_current": 656,
-        "wire": 500
-    },
-    {
-        "max_current": 758,
-        "wire": 630
-    },
-    {
-        "max_current": 881,
-        "wire": 800
-    },
-    {
-        "max_current": 1012,
-        "wire": 1000
-    },
-    {
         "max_current": 9,
         "wire": 0.5
     },
@@ -94,5 +66,33 @@
     {
         "max_current": 353,
         "wire": 185
+    },
+    {
+        "max_current": 415,
+        "wire": 240
+    },
+    {
+        "max_current": 477,
+        "wire": 300
+    },
+    {
+        "max_current": 571,
+        "wire": 400
+    },
+    {
+        "max_current": 656,
+        "wire": 500
+    },
+    {
+        "max_current": 758,
+        "wire": 630
+    },
+    {
+        "max_current": 881,
+        "wire": 800
+    },
+    {
+        "max_current": 1012,
+        "wire": 1000
     }
 ]

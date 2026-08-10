@@ -176,12 +176,12 @@
         "wire": 800
     },
     {
-        "max_current": 1119,
-        "wire": 800
-    },
-    {
         "max_current": 1079,
         "wire": 1000
+    },
+    {
+        "max_current": 1119,
+        "wire": 800
     },
     {
         "max_current": 1296,

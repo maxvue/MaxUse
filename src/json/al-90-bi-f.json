@@ -1,5 +1,9 @@
 [
     {
+        "max_current": 90,
+        "wire": 16
+    },
+    {
         "max_current": 121,
         "wire": 25
     },
@@ -58,9 +62,5 @@
     {
         "max_current": 1347,
         "wire": 1000
-    },
-    {
-        "max_current": 90,
-        "wire": 16
     }
 ]

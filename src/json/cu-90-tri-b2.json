@@ -1,5 +1,41 @@
 [
     {
+        "max_current": 10,
+        "wire": 0.5
+    },
+    {
+        "max_current": 13,
+        "wire": 0.75
+    },
+    {
+        "max_current": 15,
+        "wire": 1
+    },
+    {
+        "max_current": 19.5,
+        "wire": 1.5
+    },
+    {
+        "max_current": 26,
+        "wire": 2.5
+    },
+    {
+        "max_current": 35,
+        "wire": 4
+    },
+    {
+        "max_current": 44,
+        "wire": 6
+    },
+    {
+        "max_current": 60,
+        "wire": 10
+    },
+    {
+        "max_current": 80,
+        "wire": 16
+    },
+    {
         "max_current": 105,
         "wire": 25
     },
@@ -58,41 +94,5 @@
     {
         "max_current": 957,
         "wire": 1000
-    },
-    {
-        "max_current": 10,
-        "wire": 0.5
-    },
-    {
-        "max_current": 13,
-        "wire": 0.75
-    },
-    {
-        "max_current": 15,
-        "wire": 1
-    },
-    {
-        "max_current": 19.5,
-        "wire": 1.5
-    },
-    {
-        "max_current": 26,
-        "wire": 2.5
-    },
-    {
-        "max_current": 35,
-        "wire": 4
-    },
-    {
-        "max_current": 44,
-        "wire": 6
-    },
-    {
-        "max_current": 60,
-        "wire": 10
-    },
-    {
-        "max_current": 80,
-        "wire": 16
     }
 ]
