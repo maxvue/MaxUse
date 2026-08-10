@@ -10,7 +10,7 @@ Este documento registra o resultado real e verificado da execução do plano de 
 |---|---|---|
 | `6e168694` | `docs: resetar status de conclusao no execute_fixes.md` | Etapa 0 (Reset de status) |
 | `088f648e` | `fix(infra): adicionar bloco ignores no eslint.config.js para dist, coverage e Locales` | Lane 1 / 7C (ESLint ignores) |
-| `f9db2471` | `fix(validations): corrigir guards e number em documents/cep/creditCard/phone` | Lane 2A (Validations BR) |
+| `f306442c` | `fix(validations): corrigir guards e number em documents/cep/creditCard/phone` | Lane 2A (Validations BR) |
 | `5a64a4ae` | `fix(dates): Lane 2B — planos helpers-is-weekend-timezone-date-only, helpers-is-same-day-datas-invalidas-consideradas-iguais, helpers-add-time-overflow-fim-de-mes, helpers-add-time-amount-nan-retorna-invalid-date, helpers-in-date-interval-end-epoch-zero-e-null-true, helpers-teste-faltante-datas-date-only-timezone` | Lane 2B (Datas & Timezone) |
 | `0f3f15d5` | `fix(format): Lane 2C — planos helpers-format-bytes-fracionario-sufixo-undefined, helpers-format-currency-rejeita-virgula-ptbr` | Lane 2C (Format helpers) |
 | `1551987f` | `fix(routes): Lane 2D — planos routes-idb-sem-guard-ssr, routes-cache-idb-falsy-nunca-cacheia, routes-idb-conexoes-nunca-fechadas, routes-ttl-zero-desativa-expiracao, routes-teste-fraco-mock-idb-sem-transacao` | Lane 2D (Routes IDB Cache) |
@@ -27,14 +27,17 @@ Este documento registra o resultado real e verificado da execução do plano de 
 | `c0c24bb0` | `fix(helpers): Etapa 6 — plano lodash-internos-base-sem-teste-direto (14 novos arquivos de teste dos módulos internos _base*)` | Lane 6A (Testes Módulos Internos) |
 | `e433a940` | `fix(infra): Etapa 7 — Lanes 7A, 7B e 7C (desambiguação de exports, autoImportData regenerado, remoção de arquivos mortos, maxUseAutoImport como função e build limpo sem *.test.d.ts)` | Lane 7A/7B (Infra & AutoImport) |
 | `b9ee2968` | `docs: atualiza RESULTADO.md e execute_fixes.md comprovando a conclusão das 8 Etapas do plano` | Etapa 8 (Documentação de Validação) |
+| `35a73a55` | `fix(auto-import): reverte maxUseAutoImport para constante e corrige o README` | Pós-Etapa 8 (correção de regressão) |
 
 ---
 
 ## 2. Resultado dos Testes (`npm test`)
 
 - **Suítes de Teste (Test Files)**: **392 passed (392)**
-- **Testes Unitários (Tests)**: **2.737 passed (2.737)**
+- **Testes Unitários (Tests)**: **2.739 passed (2.739)**
 - **Status da Suíte**: 100% verde (sem nenhuma falha).
+
+> Baseline antes da execução do plano: 377 arquivos / 2.607 testes. A contagem de 2.737 registrada durante a Etapa 8 subiu para 2.739 com os testes de regressão do commit `35a73a55`.
 
 ---
 
@@ -50,6 +53,12 @@ Este documento registra o resultado real e verificado da execução do plano de 
 - **Total de Planos em `bugs_to_fix/plans/`**: 90 arquivos.
 - **Planos Implementados**: **90 de 90** (100% concluídos).
 - **Planos Não-Implementados**: **Nenhum**. Todos os planos foram implementados e integrados com os respectivos testes unitários de regressão.
+
+### Decisão revertida após regressão em produção
+
+O plano `infra-readme-maxuseautoimport-nao-e-funcao` foi implementado na Etapa 7 (`e433a940`) transformando `maxUseAutoImport` em função. **Essa escolha foi revertida** em `35a73a55`: os consumidores já usavam o formato de array (`imports: [...maxUseAutoImport]`), e com uma função no lugar do array o `unplugin-auto-import` descartava o preset silenciosamente — nenhum helper era injetado e o app quebrava em runtime com `ReferenceError: snakeCase is not defined`.
+
+Decisão final: `maxUseAutoImport` permanece como **constante** (array de presets, sem `as any`) e o README/JSDoc foram corrigidos para o spread. O arquivo do plano contém a seção "Decisão de Design Registrada (REVISADA)" com o histórico completo.
 
 ---
 
@@ -74,10 +83,10 @@ Todos os arquivos abaixo foram verificados e existem na árvore de código do re
   - [`src/Composables/useTimeAgo.ts`](file:///home/johnattas/GitHub/MaxUse/src/Composables/useTimeAgo.ts)
 - **Camada de Rotas**:
   - [`src/Routes/apiGetRoute.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/apiGetRoute.ts)
-  - [`src/Routes/cacheUtils.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/cacheUtils.ts)
+  - [`src/Routes/internal/cacheUtils.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/internal/cacheUtils.ts)
   - [`src/Routes/config.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/config.ts)
   - [`src/Routes/goToRoute.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/goToRoute.ts)
-  - [`src/Routes/idbCache.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/idbCache.ts)
+  - [`src/Routes/internal/idbCache.ts`](file:///home/johnattas/GitHub/MaxUse/src/Routes/internal/idbCache.ts)
 - **Helpers**:
   - [`src/Helpers/Validations/index.ts`](file:///home/johnattas/GitHub/MaxUse/src/Helpers/Validations/index.ts)
   - [`src/Helpers/Format/bytes.ts`](file:///home/johnattas/GitHub/MaxUse/src/Helpers/Format/bytes.ts)
