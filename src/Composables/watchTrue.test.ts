@@ -85,6 +85,33 @@ describe('watchIfValid', () => {
             expect(callback).toHaveBeenCalledTimes(1);
         });
     });
+
+    it('suporta option once com flush sync sem disparar múltiplas vezes em mutações síncronas', async () => {
+        await scope.run(async () => {
+            const source = ref<string | null>(null);
+            const callback = vi.fn();
+
+            watchIfValid(source, callback, { once: true, flush: 'sync' });
+
+            source.value = 'primeira';
+            source.value = 'segunda';
+
+            expect(callback).toHaveBeenCalledTimes(1);
+            expect(callback).toHaveBeenCalledWith('primeira', null);
+        });
+    });
+
+    it('dispara imediatamente se immediate for true e o valor inicial for válido', async () => {
+        await scope.run(async () => {
+            const source = ref('valido');
+            const callback = vi.fn();
+
+            watchIfValid(source, callback, { immediate: true });
+            await nextTick();
+
+            expect(callback).toHaveBeenCalledWith('valido', undefined);
+        });
+    });
 });
 
 describe('watchDebounceIfValid', () => {
@@ -136,6 +163,24 @@ describe('watchDebounceIfValid', () => {
         });
     });
 
+    it('respeita opção maxWait no watchDebounceIfValid', async () => {
+        await scope.run(async () => {
+            const source = ref('inicial');
+            const callback = vi.fn();
+
+            watchDebounceIfValid(source, callback, { debounce: 200, maxWait: 100 });
+            await nextTick();
+
+            source.value = 'passo-1';
+            await nextTick();
+
+            vi.advanceTimersByTime(110);
+            await nextTick();
+
+            expect(callback).toHaveBeenCalledWith('passo-1', 'inicial');
+        });
+    });
+
     it('testa a condição isNotEmpty verdadeira diretamente no debounce', async () => {
         await scope.run(async () => {
             const source = ref<string>('valid');
@@ -170,8 +215,21 @@ describe('watchDebounceIfValid', () => {
 });
 
 describe('aliases', () => {
-    it('watchTrue é whenever do VueUse', () => {
-        expect(typeof watchTrue).toBe('function');
+    it('watchTrue executa callback quando o valor muda de falsy para truthy', async () => {
+        const scope = effectScope();
+        await scope.run(async () => {
+            const flag = ref(false);
+            const callback = vi.fn();
+
+            watchTrue(flag, callback);
+            await nextTick();
+
+            flag.value = true;
+            await nextTick();
+
+            expect(callback).toHaveBeenCalledWith(true, false, expect.any(Function));
+        });
+        scope.stop();
     });
 
     it('watchValid é alias de watchIfValid', () => {

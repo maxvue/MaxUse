@@ -52,6 +52,22 @@ describe('useDateFormat', () => {
             expect(result.value).toContain('2026');
         });
     });
+
+    it('usa data atual como fallback para string inválida', () => {
+        scope.run(() => {
+            const result = useDateFormat('data-invalida', 'YYYY');
+            const currentYear = new Date().getFullYear().toString();
+            expect(result.value).toContain(currentYear);
+        });
+    });
+
+    it('usa data atual como fallback para Date(NaN)', () => {
+        scope.run(() => {
+            const result = useDateFormat(new Date(NaN), 'YYYY');
+            const currentYear = new Date().getFullYear().toString();
+            expect(result.value).toContain(currentYear);
+        });
+    });
 });
 
 describe('useDateFormat — regressão auditoria (achado 018, parte reatividade)', () => {

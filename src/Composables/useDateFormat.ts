@@ -1,4 +1,3 @@
-import { isNotValid } from '../Helpers/Validations';
 import { UseDateFormatReturn, useDateFormat as vueUseDateFormat } from '@vueuse/core';
 import { MaybeRefOrGetter, toValue } from 'vue';
 
@@ -20,12 +19,13 @@ import { MaybeRefOrGetter, toValue } from 'vue';
  * ```
  */
 export const useDateFormat = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string): UseDateFormatReturn => {
-    // O fallback precisa ser resolvido dentro de um getter: passar `new Date()` direto
-    // congelaria o valor e romperia a reatividade quando a data chegasse depois
-    // (caso comum em carregamento assíncrono com valor inicial nulo).
+    // O fallback precisa ser resolvido dentro de um getter: se a data for nula, undefined ou inválida (NaN),
+    // usa a data atual (new Date()) sem romper a reatividade quando a data válida chegar depois.
     return vueUseDateFormat(() => {
         const value = toValue(initialDate);
-        return isNotValid(value) ? new Date() : value as Date | number | string;
+        if (value == null) return new Date();
+        const d = value instanceof Date ? value : new Date(value);
+        return isNaN(d.getTime()) ? new Date() : (value as Date | number | string);
     }, format);
 };
 

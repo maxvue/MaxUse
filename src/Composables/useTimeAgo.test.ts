@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { effectScope, nextTick, ref } from 'vue';
-import { timeAgo, useTimeAgo } from './useTimeAgo';
+import { timeAgo, useTimeAgo, FORMAT_MAP } from './useTimeAgo';
 
 /**
  * Helpers para criar datas com deslocamento controlado a partir do "agora" congelado.
@@ -646,13 +646,13 @@ describe('timeAgo', () => {
             });
         });
 
-        it('string vazia → isNotValid("") retorna false, VueUse recebe string inválida', () => {
+        it('usa data atual como fallback para Date(NaN) e string inválida', () => {
             scope.run(() => {
-                // String vazia não é considerada "inválida" pelo isNotValid,
-                // então é passada ao VueUse que pode retornar undefined
-                const result = timeAgo('');
-                // Verificamos apenas que não lança exceção e retorna algo
-                expect(result).toBeDefined();
+                const result1 = timeAgo(new Date(NaN));
+                expect(result1.value.toLowerCase()).toContain('agora');
+
+                const result2 = timeAgo('data-invalida');
+                expect(result2.value.toLowerCase()).toContain('agora');
             });
         });
 
@@ -687,57 +687,31 @@ describe('timeAgo', () => {
         });
     });
 
-    describe('cobertura direta dos formatadores via extração do FORMAT_MAP', () => {
-        it('extrai mensagens usando um mock temporário no spy para cobertura total', async () => {
-            // Mock inline do vueUseTimeAgo para interceptar e testar os formatadores de mensagens
-            const mockFn = vi.fn((date, options) => options.messages);
+    describe('validação direta das mensagens em FORMAT_MAP', () => {
+        it('FORMAT_MAP.limit aponta para o mesmo objeto que FORMAT_MAP.action', () => {
+            expect(FORMAT_MAP.limit).toBe(FORMAT_MAP.action);
+        });
 
-            vi.doMock('@vueuse/core', async (importOriginal) => {
-                const actual = await importOriginal<typeof import('@vueuse/core')>();
-                return {
-                    ...actual,
-                    useTimeAgo: mockFn
-                };
-            });
+        it('valida mensagens de ptBr', () => {
+            const br = FORMAT_MAP.br;
+            expect(br.justNow).toBe('agora');
+            expect((br.past as any)('5m')).toBe('5m');
+            expect((br.future as any)('5m')).toBe('Em 5m');
+            expect((br.day as any)(1, true)).toBe('Ontem');
+            expect((br.day as any)(1, false)).toBe('Amanhã');
+            expect((br.day as any)(3, true)).toBe('3 dias');
+            expect((br.month as any)(1, true)).toBe('Mês passado');
+            expect((br.month as any)(2, true)).toBe('2 Meses');
+            expect((br.year as any)(1, true)).toBe('Ano passado');
+            expect((br.year as any)(2, true)).toBe('2 anos');
+        });
 
-            // Re-importa timeAgo para usar o mock
-            const mod = await import('./useTimeAgo?update=' + Date.now());
-            const localTimeAgo = mod.timeAgo;
-
-            const formats = ['br', 'abbrev', 'action', 'limitAbbrev', 'limit'];
-
-            for (const format of formats) {
-                const messages = localTimeAgo(new Date(), format) as any;
-
-                // Testa unidades numéricas em todos os branches: n=1, n=2 (plural), n=0 (edge case), past=true/false
-                ['second', 'minute', 'hour', 'day', 'week', 'month', 'year'].forEach((unit) => {
-                    if (messages[unit]) {
-                        expect(messages[unit](1, true)).toBeDefined();
-                        expect(messages[unit](1, false)).toBeDefined();
-                        expect(messages[unit](2, true)).toBeDefined();
-                        expect(messages[unit](2, false)).toBeDefined();
-                        expect(messages[unit](0, true)).toBeDefined();
-                        expect(messages[unit](0, false)).toBeDefined();
-                    }
-                });
-
-                // Testa formatadores 'past' e 'future' com números (regex match) e strings
-                if (messages.past) {
-                    expect(messages.past('texto passado')).toBeDefined();
-                    expect(messages.past(10)).toBeDefined();
-                }
-                if (messages.future) {
-                    expect(messages.future('texto futuro')).toBeDefined();
-                    expect(messages.future(10)).toBeDefined();
-                }
-            }
-
-            // Testa o branch do formato desconhecido na linha 108 chamando com formato null
-            // e uma data inválida para bater na linha 108 e seu fallback
-            const fallbackMessages = localTimeAgo(null, 'formato_inexistente') as any;
-            expect(fallbackMessages).toBeDefined();
-
-            vi.doUnmock('@vueuse/core');
+        it('valida mensagens de action/limit', () => {
+            const action = FORMAT_MAP.action;
+            expect(action.justNow).toBe('Realizar Hoje');
+            expect((action.day as any)(1, true)).toBe('Atrasado (Ontem)');
+            expect((action.day as any)(1, false)).toBe('Realizar até amanhã');
+            expect((action.month as any)(1, true)).toBe('Atrasado (1 Mês)');
         });
     });
 });
