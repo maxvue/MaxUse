@@ -24,6 +24,11 @@ describe('hasContentFn', () => {
         expect(hasContentFn('null')).toBe(false);
     });
 
+    it('retorna false para string "Null" e "Undefined" (capitalização mista)', () => {
+        expect(hasContentFn('Null')).toBe(false);
+        expect(hasContentFn('Undefined')).toBe(false);
+    });
+
     it('retorna false para string "NULL"', () => {
         expect(hasContentFn('NULL')).toBe(false);
     });

@@ -7,6 +7,11 @@ describe('secondsAgo', () => {
         expect(secondsAgo(tenSecsAgo)).toBeGreaterThanOrEqual(9);
     });
 
+    it('retorna 0 para datas no futuro', () => {
+        const futureDate = new Date(Date.now() + 100000).toISOString();
+        expect(secondsAgo(futureDate)).toBe(0);
+    });
+
     it('retorna 0 para null', () => {
         expect(secondsAgo(null)).toBe(0);
     });

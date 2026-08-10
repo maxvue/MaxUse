@@ -16,6 +16,11 @@ describe('hasPassedDays', () => {
         expect(hasPassedDays(null)).toBe(true);
     });
 
+    it('aceita timestamp numérico e days como ref', () => {
+        const timestamp = Date.now() - 7 * 24 * 60 * 60 * 1000;
+        expect(hasPassedDays(timestamp, 5)).toBe(true);
+    });
+
     it('retorna true para data inválida', () => {
         expect(hasPassedDays('invalid')).toBe(true);
     });

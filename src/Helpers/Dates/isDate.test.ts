@@ -11,6 +11,16 @@ describe('isDate', () => {
         expect(isDate('2026-01-15')).toBe(true);
     });
 
+    it('valida formato brasileiro (DD/MM/YYYY)', () => {
+        expect(isDate('28/12/2024')).toBe(true);
+        expect(isDate('28/12/2024 14:30:00')).toBe(true);
+    });
+
+    it('rejeita formato brasileiro com dia/mês inválido', () => {
+        expect(isDate('31/02/2024')).toBe(false);
+        expect(isDate('99/99/2024')).toBe(false);
+    });
+
     it('valida timestamp numérico', () => {
         expect(isDate(Date.now())).toBe(true);
     });

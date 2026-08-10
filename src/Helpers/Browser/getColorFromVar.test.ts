@@ -29,6 +29,11 @@ describe('getColorFromVar', () => {
         expect(result.hexa().toUpperCase()).toBe('#00000000');
     });
 
+    it('retorna transparente sem lançar exceção para valores modernos não suportados como oklch', () => {
+        expect(() => getColorFromVar('oklch(0.7 0.1 200)')).not.toThrow();
+        expect(getColorFromVar('oklch(0.7 0.1 200)').hexa().toUpperCase()).toBe('#00000000');
+    });
+
     it('funciona com Ref', () => {
         document.documentElement.style.setProperty('--ref-color', '#0000ff');
         const result = getColorFromVar(ref('--ref-color'));
