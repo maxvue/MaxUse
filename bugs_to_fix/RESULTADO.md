@@ -123,8 +123,8 @@ as asserções. Hoje são **25 asserções de igualdade exata e zero frouxas**.
 
 Registro explícito para não induzir a erro:
 
-- **Cobertura (`npm run test:coverage`)** não foi executada nesta rodada. Não há
-  número de cobertura a reportar.
+- ~~**Cobertura** não foi executada.~~ **Medida ao final da rodada** — ver
+  seção 9.
 - **Não houve publicação no npm.** A correção do `@vueuse/core` altera o pacote
   entregue ao consumidor (peer dependency nova) e deve entrar em uma versão
   *minor*, não *patch* — decisão pendente do mantenedor.
@@ -144,3 +144,27 @@ correção. Após `npm run build`, passou.
 
 Em CI, esse teste precisa rodar **depois** do build, ou produzirá falso
 positivo.
+
+## 9. Cobertura de testes
+
+Medida na árvore final com `npm run test:coverage` (provider v8):
+
+| Métrica | Cobertura |
+|---|---|
+| Statements | **95,52%** |
+| Branches | **90,14%** |
+| Functions | **97,77%** |
+| Lines | **97,39%** |
+
+Arquivos abaixo de 85% de statements — nenhum crítico, e todos com boa
+cobertura de linhas:
+
+| Arquivo | % Stmts | % Lines |
+|---|---|---|
+| `Iterables/some.ts` | 77,77 | 80,00 |
+| `Lang/isEqualWith.ts` | 76,76 | 89,23 |
+| `Routes/internal/idbCache.ts` | 88,78 | 92,85 |
+
+Lembrando que a configuração exclui da cobertura os `index.ts` (barris),
+`scripts/`, `json/` e as pastas de reexport `VueUse/` e `Locales/` — números
+referem-se a código com lógica própria.
