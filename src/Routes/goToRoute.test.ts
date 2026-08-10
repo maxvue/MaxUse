@@ -9,7 +9,8 @@ vi.mock('./config', () => ({
     hasRoute: vi.fn(),
     getConfiguredHeaders: vi.fn(() => ({})),
     getWithCredentials: vi.fn(() => true),
-    resetConfig: vi.fn()
+    resetConfig: vi.fn(),
+    onResetConfig: vi.fn()
 }));
 
 describe('goToRoute', () => {

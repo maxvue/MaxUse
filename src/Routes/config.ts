@@ -19,6 +19,23 @@ let routeResolver: RouteResolver | null = null;
 let apiConfig: ApiRequestConfig = { withCredentials: true };
 
 /**
+ * Callbacks de limpeza registrados por outros módulos que mantêm estado global.
+ * Usa registro em vez de import direto porque `goToRoute.ts` já importa deste
+ * arquivo — importá-lo de volta criaria uma dependência circular.
+ *
+ * @internal
+ */
+const resetHandlers = new Set<() => void>();
+
+/**
+ * Registra um callback a ser executado por {@link resetConfig}.
+ * @internal Uso interno da biblioteca.
+ */
+export function onResetConfig(handler: () => void): void {
+    resetHandlers.add(handler);
+}
+
+/**
  * Configura o resolvedor de rotas da biblioteca.
  * Deve ser chamado uma vez na inicialização da aplicação.
  *
@@ -136,10 +153,19 @@ export function getWithCredentials(): boolean {
 }
 
 /**
- * Reseta toda a configuração. Útil para testes.
+ * Reseta toda a configuração da biblioteca — resolver, opções de requisição e o
+ * router registrado via `setLibraryRouter`. Útil para testes.
+ *
+ * ATENÇÃO: a configuração é global ao processo. Em ambientes SSR, NÃO chame
+ * `setApiRequestConfig` por requisição — use funções nos headers que leiam de um
+ * contexto isolado por requisição (ex.: AsyncLocalStorage), sob risco de vazar
+ * credenciais entre usuários concorrentes.
+ *
  * @internal
  */
 export function resetConfig(): void {
     routeResolver = null;
     apiConfig = { withCredentials: true };
+
+    for (const handler of resetHandlers) handler();
 }

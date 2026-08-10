@@ -1,9 +1,15 @@
 import { type MaybeRefOrGetter, toValue } from 'vue';
 import { isBlank } from '../Helpers/Types';
-import { resolveRoute, hasRoute } from './config';
+import { resolveRoute, hasRoute, onResetConfig } from './config';
 import type { Router } from 'vue-router';
 
 let activeRouter: Router | null = null;
+
+// Garante que resetConfig() também limpe o router: sem isso, um router
+// registrado em um teste permanecia ativo para todos os testes seguintes.
+onResetConfig(() => {
+    activeRouter = null;
+});
 
 /**
  * Configura a instância do Vue Router para uso interno na biblioteca.

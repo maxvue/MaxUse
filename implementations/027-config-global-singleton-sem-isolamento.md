@@ -2,7 +2,11 @@
 
 - **Severidade:** Média
 - **Tipo:** Sugestão de melhoria arquitetural
-- **Arquivo:** [src/Routes/config.ts:18-19](../src/Routes/config.ts#L18-L19)
+- **Arquivo:** [src/Routes/config.ts](../src/Routes/config.ts)
+- **Status:** ⚠️ **Parcialmente corrigido** — a Consequência 1 (vazamento de
+  `activeRouter` entre testes) foi resolvida, junto com o alerta de SSR no JSDoc.
+  As Consequências 2 e 3 seguem abertas: dependem da API de instância, que é
+  breaking change.
 
 ## Descrição
 
@@ -22,7 +26,7 @@ let activeRouter: Router | null = null;
 O padrão funciona para o caso comum (uma aplicação, configurada uma vez no
 `main.ts`), mas tem consequências que valem ser conhecidas.
 
-## Consequência 1 — testes acoplados à ordem de execução
+## Consequência 1 — testes acoplados à ordem de execução ✅ CORRIGIDO
 
 O próprio código reconhece o problema ao expor `resetConfig()`:
 
@@ -37,10 +41,41 @@ export function resetConfig(): void {
 }
 ```
 
-Porém `resetConfig()` **não reseta `activeRouter`** de `goToRoute.ts`, que é um
-singleton em outro módulo. Um teste que chama `setLibraryRouter(mockRouter)`
-deixa esse mock ativo para todos os testes subsequentes do arquivo, sem forma
-suportada de limpar.
+Porém `resetConfig()` **não resetava `activeRouter`** de `goToRoute.ts`, que é um
+singleton em outro módulo. Um teste que chamasse `setLibraryRouter(mockRouter)`
+deixava esse mock ativo para todos os testes subsequentes, sem forma suportada
+de limpar.
+
+### Correção aplicada
+
+`config.ts` ganhou um registro de callbacks de limpeza, e `goToRoute.ts` registra
+o seu na carga do módulo:
+
+```typescript
+// config.ts
+const resetHandlers = new Set<() => void>();
+
+/** @internal */
+export function onResetConfig(handler: () => void): void {
+    resetHandlers.add(handler);
+}
+
+export function resetConfig(): void {
+    routeResolver = null;
+    apiConfig = { withCredentials: true };
+    for (const handler of resetHandlers) handler();
+}
+
+// goToRoute.ts
+onResetConfig(() => { activeRouter = null; });
+```
+
+Optou-se por **registro** em vez de `config.ts` importar `goToRoute.ts`
+diretamente porque `goToRoute` já importa de `config` — o import de volta criaria
+uma dependência circular. O build foi verificado e não emite aviso de ciclo.
+
+O JSDoc de `resetConfig` também passou a documentar o alerta de SSR descrito na
+Consequência 3.
 
 Além disso, `resetConfig()` não desfaz a mutação de `axios.defaults` feita por
 `getCachedApiIDB` (ver [achado 005](./005-mutacao-global-axios-defaults.md)).

@@ -52,7 +52,7 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 [src/Routes/config.ts](src/Routes/config.ts) holds module-level singletons configured once at app startup:
 - `setRouteResolver((name, params) => url | null)` — bridges to Ziggy/Laravel or any named-route system. Internal helpers (`resolveRoute`, `hasRoute`) throw/return based on it.
 - `setApiRequestConfig({ headers, withCredentials })` — global headers (values may be functions resolved per-request, e.g. `Authorization`) and cookie behavior for mutating requests.
-- `resetConfig()` — `@internal`, used to reset singletons between tests.
+- `resetConfig()` — `@internal`, used to reset singletons between tests. It also runs every callback registered via `onResetConfig()`, which is how `goToRoute.ts` clears its `activeRouter`. **If you add module-level state to `Routes/`, register its cleanup with `onResetConfig()`** — don't import `goToRoute.ts` from `config.ts`, that would be a circular import.
 
 `apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants: `getCachedApi` caches in `localStorage`; `getCachedApiIDB` and `postCachedApiIDB` use the native `indexedDB` API through the shared internal layer in [src/Routes/internal/idbCache.ts](src/Routes/internal/idbCache.ts) — put IDB changes there, not in the individual helpers. `deleteFromIDB` and `clearCacheIDB` stay publicly re-exported from `getCachedApiIDB.ts`. Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
 

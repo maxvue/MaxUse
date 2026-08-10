@@ -13,7 +13,7 @@ runtime simples — todos exigem uma decisão de produto ou arquitetura antes de
 implementar, porque mudam comportamento observável de quem já consome a
 biblioteca.
 
-**Estado atual da suíte:** 373 arquivos, **2567 testes**, todos passando.
+**Estado atual da suíte:** 374 arquivos, **2570 testes**, todos passando.
 `vue-tsc` sem erros. Build ok. 15/15 subpath exports resolvem.
 
 ---
@@ -27,7 +27,7 @@ biblioteca.
 | [007](./007-contratos-retorno-inconsistentes-rotas.md) | Contratos de retorno inconsistentes entre helpers de rota (`false` vs `null` vs exceção) | Routes | O contrato discriminado proposto é breaking change |
 | [016](./016-orderBy-muta-objeto-de-entrada.md) | `orderBy`: perda de chaves em Record e divergência do Lodash | Iterables | Depende de definir se a lib segue ou não a semântica do Lodash |
 | [018](./018-useDateFormat-fallback-mascara-erro.md) ⚠️ | `useDateFormat`/`timeAgo`: fallback para "hoje" mascara dado ausente | Composables | **Parcial** — a quebra de reatividade foi corrigida; mudar o fallback altera o que já é exibido em telas existentes |
-| [027](./027-config-global-singleton-sem-isolamento.md) | Config global em singletons: vazamento entre requisições em SSR | Routes | A API de instância proposta é major |
+| [027](./027-config-global-singleton-sem-isolamento.md) ⚠️ | Config global em singletons: vazamento entre requisições em SSR | Routes | **Parcial** — o vazamento de router entre testes foi corrigido; a API de instância para SSR é major |
 
 ### Destaques
 
@@ -72,6 +72,12 @@ como 1 ano; type-guard invertido em `isEmpty`.
 build nunca emite; `localforage` declarada mas nunca importada; `CLAUDE.md`
 descrevendo precedência e implementação inexistentes; `coverage/` (112 arquivos)
 versionada.
+
+**Estado global** — `resetConfig()` não limpava o `activeRouter` de `goToRoute`,
+então um router registrado em um teste permanecia ativo para os seguintes. Agora
+`config.ts` mantém um registro de callbacks de limpeza (evitando o ciclo de
+imports que um require direto criaria) e o JSDoc alerta sobre o risco de vazar
+credenciais entre requisições em SSR.
 
 **Clonagem** — `deepClone` (exportado também como `cloneDeep`) descartava o
 protótipo de instâncias de classe, devolvendo objetos literais sem métodos e sem
