@@ -1,8 +1,13 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, afterEach } from 'vitest';
 import { ref } from 'vue';
 import { deepMerge } from './deepMerge';
 
 describe('deepMerge', () => {
+    afterEach(() => {
+        delete (Object.prototype as any).polluted;
+        delete (Object.prototype as any).x;
+    });
+
     it('faz merge raso de propriedades simples', () => {
         const target = { a: 1 };
         const source = { b: 2 };
@@ -60,4 +65,16 @@ describe('deepMerge', () => {
         const result = deepMerge(target, source);
         expect(result).toEqual({ a: 1, b: 2 });
     });
+
+    // Segurança
+    it('não polui Object.prototype via __proto__', () => {
+        deepMerge({} as any, JSON.parse('{"__proto__":{"polluted":"YES"}}'));
+        expect(({} as any).polluted).toBeUndefined();
+    });
+
+    it('ignora chaves constructor/prototype', () => {
+        deepMerge({} as any, JSON.parse('{"constructor":{"prototype":{"x":1}}}'));
+        expect(({} as any).x).toBeUndefined();
+    });
 });
+

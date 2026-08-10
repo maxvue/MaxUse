@@ -179,4 +179,35 @@ describe('deepClone — regressão auditoria (achado 024)', () => {
         expect(clone).toBeInstanceOf(Ponto);
         expect(clone.self).toBe(clone);
     });
+
+    it('clona TypedArray como TypedArray real', () => {
+        const src = new Uint8Array([1, 2, 3]);
+        const c = deepClone(src);
+        expect(Object.prototype.toString.call(c)).toBe('[object Uint8Array]');
+        expect(Array.from(c)).toEqual([1, 2, 3]);
+        expect(c.buffer).not.toBe(src.buffer);
+        expect(c.byteLength).toBe(3);
+    });
+
+    it('clona ArrayBuffer sem compartilhar memória', () => {
+        const src = new ArrayBuffer(4);
+        const c = deepClone(src);
+        expect(Object.prototype.toString.call(c)).toBe('[object ArrayBuffer]');
+        expect(c.byteLength).toBe(4);
+        expect(c).not.toBe(src);
+    });
+
+    it('preserva lastIndex de RegExp', () => {
+        const r = /a/g;
+        r.lastIndex = 3;
+        expect(deepClone(r).lastIndex).toBe(3);
+    });
+
+    it('preserva a mensagem e propriedades de Error', () => {
+        const err = new Error('boom');
+        const clone = deepClone(err);
+        expect(clone).toBeInstanceOf(Error);
+        expect(clone.message).toBe('boom');
+    });
 });
+
