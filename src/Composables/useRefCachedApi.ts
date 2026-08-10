@@ -1,69 +1,105 @@
-import { ref, type Ref, watch, computed } from 'vue';
+import { ref, type Ref, watch, computed, toValue, type MaybeRefOrGetter, onScopeDispose, getCurrentScope } from 'vue';
 import { apiGetRoute } from '../Routes/apiGetRoute';
 
-export type ToRefCachedApi<T> = T extends Ref ? T : Ref<T>;
+export type ToRefCachedApi<T> = [T] extends [Ref] ? T : Ref<T>;
+
+export interface UseCachedApiOptions<T> {
+    data_get?: MaybeRefOrGetter<any>;
+    data?: MaybeRefOrGetter<any>;
+    key?: MaybeRefOrGetter<string | null | undefined>;
+    defaultValue?: T;
+    sync?: boolean;
+    watch?: boolean;
+}
 
 /**
  * Cria uma Ref com cache local (localStorage) que sincroniza automaticamente com uma rota de API (GET).
  * Na primeira chamada, carrega do cache local (se existir) e dispara a requisição em background para atualizar.
  *
- * @param route_name - Nome da rota para a requisição GET.
+ * @template T - Tipo dos dados retornados.
+ * @param route_name - Nome da rota para a requisição GET (aceita Ref/Getter).
  * @param options - Opções de configuração.
- * @param options.data_get - Dados enviados como parâmetros da rota (alternativo a `data`).
- * @param options.data - Dados enviados como parâmetros da rota.
- * @param options.key - Chave do localStorage (padrão: `route_name`).
- * @param options.defaultValue - Valor padrão enquanto não há dados no cache nem da API.
- * @param options.sync - Se false, desativa a sincronização com a API (padrão: true).
- * @param options.watch - Se false, desativa a persistência automática ao mudar o valor (padrão: true).
  * @returns Uma Ref reativa com os dados da API/cache.
- *
- * @example
- * ```typescript
- * // Carrega dados de uma API com cache local
- * const usuarios = useCachedApi<Usuario[]>('api.usuarios.index', {
- *     defaultValue: [],
- *     data: { ativo: true }
- * });
- *
- * // Sem sincronização com API (apenas cache local)
- * const config = useCachedApi<Config>('api.config', { sync: false });
- * ```
  */
-export function useCachedApi<T>(route_name: string, options: { data_get?: any; data?: any; key?: string | null; defaultValue?: T; sync?: boolean; watch?: boolean } = {}): ToRefCachedApi<T> {
-    const state = ref(options.defaultValue ?? null) as ToRefCachedApi<T>;
-    const key = options.key ?? route_name;
+export function useCachedApi<T = any>(
+    route_name: MaybeRefOrGetter<string | null | undefined>,
+    options: UseCachedApiOptions<T> = {}
+): ToRefCachedApi<T> {
+    const state = ref<T>((options.defaultValue ?? null) as T) as ToRefCachedApi<T>;
 
     const is_client = typeof localStorage !== 'undefined';
+    let disposed = false;
 
-    const data = is_client ? localStorage.getItem(key) : null;
-
-    // Cache corrompido não deve derrubar o setup do componente: cai para o defaultValue
-    if (data) try {
-        state.value = JSON.parse(data);
-    } catch {
-        localStorage.removeItem(key);
-    }
-
-    if (options.watch !== false) {
-        const data_save = computed(() => JSON.stringify(state.value));
-
-        watch(data_save, (value) => {
-            if (is_client) localStorage.setItem(key, value);
-        });
-    }
+    if (getCurrentScope()) onScopeDispose(() => {
+        disposed = true;
+    });
 
 
-    if (options.sync !== false){
-        const data_get = options.data_get ?? options.data ?? {};
-        apiGetRoute(route_name, data_get)
-            .then((value) => {
-                if (!value) return;
+    const targetRoute = computed(() => toValue(route_name));
+    const targetKey = computed(() => {
+        const k = toValue(options.key);
+        const r = targetRoute.value;
+        return k !== undefined ? (k ?? 'no-key') : (r ?? 'no-key');
+    });
+    const targetParams = computed(() => toValue(options.data_get) ?? toValue(options.data) ?? {});
+
+    const saveToStorage = (k: string, val: any) => {
+        if (!is_client || !k || k === 'no-key') return;
+        const serialized = JSON.stringify(val);
+        try {
+            if (serialized === undefined) localStorage.removeItem(k);
+            else localStorage.setItem(k, serialized);
+
+        } catch {
+            // Silencia QuotaExceededError
+        }
+    };
+
+    // Leitura inicial do cache baseada em targetKey
+    watch(
+        targetKey,
+        (currentKey) => {
+            if (!is_client || !currentKey || currentKey === 'no-key') return;
+            const data = localStorage.getItem(currentKey);
+            if (data) try {
+                state.value = JSON.parse(data);
+            } catch {
+                localStorage.removeItem(currentKey);
+            }
+
+        },
+        { immediate: true }
+    );
+
+    // Watcher de gravação no localStorage
+    if (options.watch !== false) watch(
+        state,
+        (new_val) => {
+            if (disposed) return;
+            saveToStorage(targetKey.value, new_val);
+        },
+        { deep: true }
+    );
+
+
+    // Sincronização com a API (com suporte a parâmetros reativos e resposta tardia descartada)
+    if (options.sync !== false) watch(
+        [targetRoute, targetParams],
+        async ([rName, pData]) => {
+            if (!rName || disposed) return;
+            try {
+                const value = await apiGetRoute(rName, pData);
+                if (disposed || value == null) return;
                 state.value = value;
-                // Com watch ativo a persistência já ocorre pelo watcher acima
-                if (is_client && options.watch === false) localStorage.setItem(key, JSON.stringify(value));
-            })
-            .catch(() => { /* apiGetRoute já registra o erro; mantém o valor vindo do cache */ });
-    }
+                if (is_client && options.watch === false && targetKey.value && targetKey.value !== 'no-key') saveToStorage(targetKey.value, value);
+
+            } catch {
+                // apiGetRoute já registra o erro; mantém o valor vindo do cache
+            }
+        },
+        { immediate: true }
+    );
+
 
     return state;
 }

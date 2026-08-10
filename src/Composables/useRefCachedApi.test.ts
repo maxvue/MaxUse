@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { effectScope, nextTick } from 'vue';
+import { effectScope, nextTick, ref, computed } from 'vue';
 import { useCachedApi } from './useRefCachedApi';
 import * as apiGetRouteModule from '../Routes/apiGetRoute';
 
@@ -133,5 +133,81 @@ describe('useCachedApi — regressão auditoria (achado 012)', () => {
 
         await expect(Promise.resolve()).resolves.toBeUndefined();
         await nextTick();
+    });
+
+    it('dá precedência a data_get sobre data', async () => {
+        const mockApi = vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockResolvedValue({ ok: true });
+
+        scope.run(() => {
+            useCachedApi('api.prec', { data_get: { a: 1 }, data: { a: 2 } });
+        });
+
+        await vi.waitFor(() => {
+            expect(mockApi).toHaveBeenCalledWith('api.prec', { a: 1 });
+        });
+    });
+
+    it('descarta a resposta tardia da API se o scope for destruído antes da promise resolver', async () => {
+        let resolvePromise!: (val: any) => void;
+        const pendingPromise = new Promise((r) => { resolvePromise = r; });
+        vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockReturnValue(pendingPromise as any);
+
+        let state: any;
+        scope.run(() => {
+            state = useCachedApi('api.tardia', { defaultValue: 'inicial' });
+        });
+
+        // Para o escopo antes da resposta chegar
+        scope.stop();
+
+        // Resolve a resposta tardia da API
+        resolvePromise('resposta-tardia');
+        await new Promise((r) => setTimeout(r, 10));
+
+        // Dado não deve ter alterado o state nem o localStorage
+        expect(state.value).toBe('inicial');
+        expect(localStorage.getItem('api.tardia')).toBeNull();
+    });
+
+    it('remove a chave do localStorage se state.value for atribuído como undefined', async () => {
+        await scope.run(async () => {
+            const state = useCachedApi('api.undef', { sync: false, defaultValue: 'val' });
+            state.value = 'definido';
+            await nextTick();
+            expect(localStorage.getItem('api.undef')).toBe(JSON.stringify('definido'));
+
+            state.value = undefined as any;
+            await nextTick();
+            expect(localStorage.getItem('api.undef')).toBeNull();
+        });
+    });
+
+    it('persiste via then quando watch é false e sync é true', async () => {
+        vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockResolvedValue('server-data');
+
+        await scope.run(async () => {
+            useCachedApi('api.watch_false_sync_true', { sync: true, watch: false });
+
+            await vi.waitFor(() => {
+                expect(localStorage.getItem('api.watch_false_sync_true')).toBe(JSON.stringify('server-data'));
+            });
+        });
+    });
+
+    it('revalida a API e atualiza a chave de cache ao mutar parâmetros reativos', async () => {
+        const mockApi = vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockImplementation(async (r, params) => ({
+            page: params?.page
+        }));
+
+        await scope.run(async () => {
+            const pageRef = ref(1);
+            const state = useCachedApi('api.paginated', { data: computed(() => ({ page: pageRef.value })) });
+
+            await vi.waitFor(() => expect(state.value).toEqual({ page: 1 }));
+
+            pageRef.value = 2;
+            await vi.waitFor(() => expect(state.value).toEqual({ page: 2 }));
+            expect(mockApi).toHaveBeenCalledWith('api.paginated', { page: 2 });
+        });
     });
 });
