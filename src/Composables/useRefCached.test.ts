@@ -160,18 +160,73 @@ describe('useRefCached', () => {
 
     it('retorna silenciosamente quando a chave calculada for uma string vazia (ex: passando array vazio)', async () => {
         await scope.run(async () => {
-            // Um array vazio `[]` avalia como truthy, mas `String([])` é `""`.
-            // Isso cobre a linha `if (!raw_key.value) return;` dos `watch`.
             const state = useRefCached([] as any, 'default-val');
             await nextTick();
             expect(state.value).toBe('default-val');
 
-            // Testa o watch do state, forçando uma mudança
             state.value = 'changed';
             await nextTick();
 
-            // Não deve ter salvo no localStorage com chave vazia
             expect(localStorage.getItem('')).toBeNull();
+        });
+    });
+
+    it('não grava chave no localStorage na simples criação sem mutação', async () => {
+        await scope.run(async () => {
+            useRefCached('no-init-key', 'default-val');
+            await nextTick();
+            expect(localStorage.getItem('no-init-key')).toBeNull();
+        });
+    });
+
+    it('suporta chave numérica 0', async () => {
+        await scope.run(async () => {
+            const state = useRefCached(0 as any, 'val0');
+            state.value = 'changed0';
+            await nextTick();
+            expect(localStorage.getItem('0')).toBe(JSON.stringify('changed0'));
+        });
+    });
+
+    it('não recria a chave no localStorage ao receber StorageEvent com newValue = null (sem eco)', async () => {
+        await scope.run(async () => {
+            const state = useRefCached('remove-eco-key', 'default-val');
+            state.value = 'changed';
+            await nextTick();
+            expect(localStorage.getItem('remove-eco-key')).toBe(JSON.stringify('changed'));
+
+            // Simula remoção por outra aba
+            localStorage.removeItem('remove-eco-key');
+            const event = new StorageEvent('storage', {
+                key: 'remove-eco-key',
+                newValue: null,
+                storageArea: localStorage
+            });
+            window.dispatchEvent(event);
+
+            await nextTick();
+            expect(state.value).toBe('default-val');
+            // Garante que o eco não recriou a chave no localStorage
+            expect(localStorage.getItem('remove-eco-key')).toBeNull();
+        });
+    });
+
+    it('preserva a escrita pendente na chave antiga ao mudar a chave no mesmo tick', async () => {
+        await scope.run(async () => {
+            const key = ref('key-a');
+            const state = useRefCached(key, 'default');
+            await nextTick();
+
+            // Muta valor e chave no mesmo tick
+            state.value = 'mutated-a';
+            key.value = 'key-b';
+            await nextTick();
+            await nextTick();
+
+            // key-a deve ter salvo 'mutated-a'
+            expect(localStorage.getItem('key-a')).toBe(JSON.stringify('mutated-a'));
+            // state deve ter assumido o valor da nova key-b (que é default pois key-b está vazia)
+            expect(state.value).toBe('default');
         });
     });
 });

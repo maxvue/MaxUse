@@ -1,4 +1,4 @@
-import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose } from 'vue';
+import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose, nextTick } from 'vue';
 
 export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
@@ -24,25 +24,37 @@ type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
  * ```
  */
 export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T> {
-    const raw_key = computed(() => toValue(key) ? String(toValue(key)) : 'no-key');
+    const raw_key = computed(() => {
+        const k = toValue(key);
+        return k === null || k === undefined || k === '' ? 'no-key' : String(k);
+    });
 
     const state = ref<T>(default_value) as ToRefCached<T>;
 
     // Em SSR/Node não há storage: retorna a Ref com o valor padrão, sem persistência
     const is_client = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
 
+    let is_syncing_from_event = false;
+    let active_key: string = raw_key.value;
+
     // Sincronização reativa entre abas via evento nativo "storage"
     const onStorageEvent = (event: StorageEvent) => {
         if (event.key !== raw_key.value || event.storageArea !== localStorage) return;
 
-        if (event.newValue !== null) try {
-            state.value = JSON.parse(event.newValue);
-        } catch {
-            state.value = default_value;
+        is_syncing_from_event = true;
+        try {
+            if (event.newValue !== null) try {
+                state.value = JSON.parse(event.newValue);
+            } catch {
+                state.value = default_value;
+            }
+            else state.value = default_value;
+
+        } finally {
+            nextTick(() => {
+                is_syncing_from_event = false;
+            });
         }
-        else state.value = default_value;
-
-
     };
 
     if (is_client) {
@@ -50,29 +62,46 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
         onScopeDispose(() => window.removeEventListener('storage', onStorageEvent));
     }
 
-    watch(raw_key, () => {
+    watch(raw_key, (new_key) => {
+        if (!is_client) return;
 
-        if (!is_client || !raw_key.value) return;
+        const old_key = active_key;
+        active_key = new_key;
 
-        // Leitura síncrona do localStorage
-        const raw = localStorage.getItem(raw_key.value);
-        if (raw !== null) {
-            try {
+        if (old_key && old_key !== 'no-key' && old_key !== new_key && !is_syncing_from_event) try {
+            localStorage.setItem(old_key, JSON.stringify(state.value));
+        } catch {
+            // Silencia QuotaExceededError
+        }
+
+
+        if (!new_key || new_key === 'no-key') return;
+
+        const raw = localStorage.getItem(new_key);
+        is_syncing_from_event = true;
+        try {
+            if (raw !== null) try {
                 state.value = JSON.parse(raw);
             } catch {
                 state.value = default_value;
             }
-            return;
+            else state.value = default_value;
+
+        } finally {
+            nextTick(() => {
+                is_syncing_from_event = false;
+            });
         }
-
-        state.value = default_value;
-
     }, { immediate: true });
 
     watch(state, (new_value) => {
-        if (!is_client || !raw_key.value) return;
-        localStorage.setItem(raw_key.value, JSON.stringify(new_value));
-    }, { immediate: true, deep: true });
+        if (!is_client || !active_key || active_key === 'no-key' || is_syncing_from_event) return;
+        try {
+            localStorage.setItem(active_key, JSON.stringify(new_value));
+        } catch {
+            // Silencia QuotaExceededError
+        }
+    }, { deep: true });
 
     return state;
 }
