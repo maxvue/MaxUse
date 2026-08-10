@@ -76,6 +76,17 @@ describe('apiGetRoute', () => {
         const callArgs = (axios.get as any).mock.calls[0];
         expect(callArgs[1].headers['Authorization']).toBe('Bearer abc');
     });
+
+    it('chama onError e repropaga se throw = true', async () => {
+        const error: any = new Error('Validation failed');
+        error.response = { status: 422, data: { errors: { email: ['Invalido'] } } };
+        (axios.get as any).mockRejectedValue(error);
+
+        const onError = vi.fn();
+
+        await expect(apiGetRoute('test.422', {}, { onError, throw: true })).rejects.toThrow('Validation failed');
+        expect(onError).toHaveBeenCalledWith(error);
+    });
 });
 
 describe('apiGetRoute — regressão auditoria (achado 006)', () => {

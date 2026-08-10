@@ -69,4 +69,15 @@ describe('apiPostRoute', () => {
         expect(result).toBeNull();
         expect(consoleSpy).toHaveBeenCalled();
     });
+
+    it('executa onError e lança erro quando throw = true', async () => {
+        const error: any = new Error('Unprocessable Entity');
+        error.response = { status: 422, data: { message: 'Dados inválidos' } };
+        (axios.post as any).mockRejectedValue(error);
+
+        const onError = vi.fn();
+
+        await expect(apiPostRoute('test.422', { name: '' }, { onError, throw: true })).rejects.toThrow('Unprocessable Entity');
+        expect(onError).toHaveBeenCalledWith(error);
+    });
 });

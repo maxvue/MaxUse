@@ -1,25 +1,31 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { apiRoute } from './apiRoute';
+import { apiRoute, type ApiRouteOptions } from './apiRoute';
 import { getConfiguredHeaders, getWithCredentials } from './config';
 
 /**
  * Realiza uma requisição HTTP GET para uma rota nomeada.
  * Suporta download de arquivos (blob) e tratamento de erros configurável.
  *
+ * @template T - Tipo do payload de retorno da API.
  * @param RouteName - Nome da rota (ex: 'api.usuarios.index').
  * @param data - Parâmetros da rota (substituídos na URL).
- * @param options - Opções extras. `{ file: true }` altera responseType para blob. `{ error: false }` silencia erros no console.
+ * @param options - Opções extras (onError, throw, file, error, load_screen).
  * @returns Os dados da resposta ou null em caso de erro.
  */
-export async function apiGetRoute(RouteName: string | null, data: any = {}, options: any = null): Promise<any> {
-    const system_options: any = apiRoute(RouteName, data, options, 'GET');
+export async function apiGetRoute<T = any>(
+    RouteName: string | null | undefined,
+    data: any = {},
+    options: ApiRouteOptions | null = null
+): Promise<T | null> {
+    const system_options = apiRoute(RouteName, data, options, 'GET');
 
     if (!system_options) return null;
 
     const config: AxiosRequestConfig = {
         responseType: 'json',
         headers: {
-            ...getConfiguredHeaders()
+            ...getConfiguredHeaders(),
+            ...options?.headers
         },
         withCredentials: getWithCredentials()
     };
@@ -34,7 +40,9 @@ export async function apiGetRoute(RouteName: string | null, data: any = {}, opti
         const response = await axios.get(system_options.routeURL, config);
         return response.data;
     } catch (error: any) {
+        if (options?.onError) options.onError(error);
         if (options?.error !== false) console.error('>> Request ERRO - URL: "' + system_options.routeURL + '"', error?.message);
+        if (options?.throw) throw error;
 
         return null;
     }

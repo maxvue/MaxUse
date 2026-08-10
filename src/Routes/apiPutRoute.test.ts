@@ -69,4 +69,19 @@ describe('apiPutRoute', () => {
         expect(result).toBeNull();
         expect(consoleSpy).toHaveBeenCalled();
     });
+
+    it('aceita RouteName como null/undefined e retorna false', async () => {
+        mockApiRoute.mockReturnValue(null);
+        const resNull = await apiPutRoute(null);
+        expect(resNull).toBe(false);
+    });
+
+    it('executa onError e lança erro quando throw = true', async () => {
+        const error: any = new Error('Put failed');
+        (axios.put as any).mockRejectedValue(error);
+        const onError = vi.fn();
+
+        await expect(apiPutRoute('test.put.fail', {}, { onError, throw: true })).rejects.toThrow('Put failed');
+        expect(onError).toHaveBeenCalledWith(error);
+    });
 });

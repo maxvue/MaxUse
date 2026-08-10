@@ -81,22 +81,18 @@ describe('apiUploadRoute', () => {
         expect(args[2].headers['Authorization']).toBe('Bearer upload-token');
     });
 
-    it('ignora propriedades herdadas no prototype', async () => {
+    it('ignora campos null e undefined em data e preserva Blobs soltos', async () => {
         const fakeFile = new File(['conteudo'], 'teste.txt', { type: 'text/plain' });
+        const blobData = new Blob(['outros dados'], { type: 'text/plain' });
 
-        const MyClass = function(this: any) {
-            this.ownProp = 'proprio';
-        } as any;
-        MyClass.prototype.inheritedProp = 'herdado';
-        const dataObj = new MyClass();
-
-        await apiUploadRoute('test.upload', [fakeFile], dataObj);
+        await apiUploadRoute('test.upload', [fakeFile], { a: null, b: undefined, anexoBlob: blobData });
 
         const args = (axios.post as any).mock.calls.pop();
         const formData: FormData = args[1];
 
-        expect(formData.has('inheritedProp')).toBe(false);
-        expect(formData.get('ownProp')).toBe('proprio');
+        expect(formData.has('a')).toBe(false);
+        expect(formData.has('b')).toBe(false);
+        expect(formData.get('anexoBlob')).toBeInstanceOf(Blob);
     });
 });
 

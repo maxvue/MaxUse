@@ -53,4 +53,10 @@ describe('apiRoute', () => {
         apiRoute('test.default', { id: 42 });
         expect(config.resolveRoute).toHaveBeenCalledWith('test.default', { id: 42 });
     });
+
+    it('suporta route_params nas options para métodos não-GET', () => {
+        const result = apiRoute('users.update', { name: 'João' }, { route_params: { id: 10 } }, 'PUT');
+        expect(config.resolveRoute).toHaveBeenCalledWith('users.update', { id: 10 });
+        expect(result?.routeURL).toBe('https://example.com/users.update/10');
+    });
 });

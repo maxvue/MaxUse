@@ -1,18 +1,23 @@
 import axios from 'axios';
-import { apiRoute } from './apiRoute';
+import { apiRoute, type ApiRouteOptions } from './apiRoute';
 import { getConfiguredHeaders, getWithCredentials } from './config';
 
 /**
  * Realiza uma requisição HTTP POST para uma rota nomeada.
  * Inclui automaticamente os headers configurados via `setApiRequestConfig`.
  *
+ * @template T - Tipo do payload de retorno da API.
  * @param RouteName - Nome da rota (ex: 'api.usuarios.store').
  * @param data - Corpo da requisição (JSON).
- * @param options - Opções extras passadas para `apiRoute`.
+ * @param options - Opções extras passadas para `apiRoute` (incluindo `route_params`, `onError`, `throw`).
  * @returns Os dados da resposta ou null em caso de erro. Retorna false se a rota for inválida.
  */
-export async function apiPostRoute(RouteName: string | null, data: any | null = null, options: any = null) {
-    const system_options: any = apiRoute(RouteName, data, options, 'POST');
+export async function apiPostRoute<T = any>(
+    RouteName: string | null | undefined,
+    data: any | null = null,
+    options: ApiRouteOptions | null = null
+): Promise<T | null | false> {
+    const system_options = apiRoute(RouteName, data, options, 'POST');
 
     if (!system_options) return false;
 
@@ -23,14 +28,17 @@ export async function apiPostRoute(RouteName: string | null, data: any | null = 
                 'Content-Type': 'application/json',
                 'X-Requested-With': 'XMLHttpRequest',
                 ...getConfiguredHeaders(),
+                ...options?.headers,
                 ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
             },
             withCredentials: getWithCredentials()
         });
         return response.data;
-    } catch (error) {
-        console.error('>> Erro ao fazer a requisição - Rota: ' + RouteName, error);
+    } catch (error: any) {
+        if (options?.onError) options.onError(error);
+        if (options?.error !== false) console.error('>> Erro ao fazer a requisição - Rota: ' + RouteName, error);
+        if (options?.throw) throw error;
+
         return null;
     }
-
 }
