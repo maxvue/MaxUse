@@ -40,8 +40,10 @@ describe('maxUseItems', () => {
 });
 
 describe('maxUseAutoImport', () => {
-    it('é um objeto/array válido (dados do JSON)', () => {
-        expect(maxUseAutoImport).toBeDefined();
-        expect(maxUseAutoImport).not.toBeNull();
+    it('é uma função chamável que retorna a configuração de auto-import', () => {
+        expect(typeof maxUseAutoImport).toBe('function');
+        const config = maxUseAutoImport();
+        expect(config).toBeDefined();
+        expect(config).not.toBeNull();
     });
 });

@@ -3,14 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
-// Since this is a script, we can safely use node internals
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const require = createRequire(import.meta.url);
 
-// We need to import the modules to get the keys.
-// However, compiling TypeScript just to get keys is complex if we import src directly.
-// But we can execute this using tsx.
 import * as Composables from '../Composables';
 import * as Routes from '../Routes';
 import * as Browser from '../Helpers/Browser';
@@ -28,6 +24,7 @@ import * as Functions from '../Helpers/Functions';
 import * as Utils from '../Helpers/Utils';
 import * as Seq from '../Helpers/Seq';
 import * as VueUse from '../Helpers/VueUse';
+import * as VueUseCore from '../Helpers/VueUse/core';
 
 const maxUseItems = (): string[] => {
     const allKeys = new Set<string>();
@@ -57,11 +54,10 @@ const maxUseItems = (): string[] => {
         allKeys.add(key);
     }
 
-
     return Array.from(allKeys).sort();
 };
 
-const getVueUseTypes = (): string[] => {
+const getVueUseTypes = (valueKeys: string[]): string[] => {
     try {
         let corePkgPath;
         try {
@@ -85,17 +81,25 @@ const getVueUseTypes = (): string[] => {
             return [];
         }
 
+        const cleanExportEntry = (entryStr: string): string => {
+            let str = entryStr.trim();
+            if (str.startsWith('type ')) str = str.slice(5).trim();
+            if (str.includes(' as ')) {
+                const parts = str.split(/\s+as\s+/);
+                str = parts[parts.length - 1].trim();
+            }
+            return str;
+        };
+
         const lastExport = exportMatch[exportMatch.length - 1];
         const allExports = lastExport
             .replace(/export\s*\{|\}/g, '')
             .split(',')
-            .map((s: string) => s.trim())
+            .map((s: string) => cleanExportEntry(s))
             .filter(Boolean);
 
-        const valueKeys = Object.keys(VueUse);
-        const typeExports = allExports.filter((name: string) => !valueKeys.includes(name));
-
-        const types = typeExports as string[];
+        const typeExports = allExports.filter((name: string) => !valueKeys.includes(name) && !name.includes(' '));
+        const typesSet = new Set<string>(typeExports);
 
         let sharedPkgPath;
         try {
@@ -112,17 +116,16 @@ const getVueUseTypes = (): string[] => {
                     const sharedAllExports = sharedLastExport
                         .replace(/export\s*\{|\}/g, '')
                         .split(',')
-                        .map((s: string) => s.trim())
+                        .map((s: string) => cleanExportEntry(s))
                         .filter(Boolean);
 
-                    const sharedTypeExports = sharedAllExports.filter((name: string) => !valueKeys.includes(name));
-                    const sharedTypes = sharedTypeExports as string[];
-                    types.push(...sharedTypes);
+                    const sharedTypeExports = sharedAllExports.filter((name: string) => !valueKeys.includes(name) && !name.includes(' '));
+                    sharedTypeExports.forEach((t) => typesSet.add(t));
                 }
             }
         }
 
-        return types;
+        return Array.from(typesSet);
     } catch (e) {
         console.error('Error in getVueUseTypes:', e);
         return [];
@@ -131,7 +134,8 @@ const getVueUseTypes = (): string[] => {
 
 export const generateAutoImportData = () => {
     const items = [...maxUseItems(), '_', 'vueUse'];
-    const types = getVueUseTypes();
+    const vueUseValueKeys = [...Object.keys(VueUseCore), ...Object.keys(VueUse)];
+    const types = getVueUseTypes(vueUseValueKeys).filter((t) => !items.includes(t));
 
     const valueReturn = [
         {
@@ -149,6 +153,5 @@ export const generateAutoImportData = () => {
     console.log(`Auto-import data generated successfully at ${outputFile}`);
 };
 
-// Execute if run directly
-if (import.meta.url === `file://${__filename}`) generateAutoImportData();
-
+// Execute directly
+generateAutoImportData();

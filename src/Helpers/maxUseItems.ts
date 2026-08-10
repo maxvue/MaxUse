@@ -63,4 +63,4 @@ export const maxUseItems = (): string[] => {
  * AutoImport({ imports: [ maxUseAutoImport() ] });
  * ```
  */
-export const maxUseAutoImport = autoImportData as any;
+export const maxUseAutoImport = () => autoImportData;

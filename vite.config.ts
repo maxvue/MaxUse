@@ -20,11 +20,15 @@ export default defineConfig({
                 dates: path.resolve(__dirname, './src/Helpers/Dates/index.ts'),
                 electrical: path.resolve(__dirname, './src/Helpers/Electrical/index.ts'),
                 format: path.resolve(__dirname, './src/Helpers/Format/index.ts'),
+                functions: path.resolve(__dirname, './src/Helpers/Functions/index.ts'),
                 iterables: path.resolve(__dirname, './src/Helpers/Iterables/index.ts'),
+                lang: path.resolve(__dirname, './src/Helpers/Lang/index.ts'),
                 math: path.resolve(__dirname, './src/Helpers/Math/index.ts'),
                 objects: path.resolve(__dirname, './src/Helpers/Objects/index.ts'),
+                seq: path.resolve(__dirname, './src/Helpers/Seq/index.ts'),
                 strings: path.resolve(__dirname, './src/Helpers/Strings/index.ts'),
                 types: path.resolve(__dirname, './src/Helpers/Types/index.ts'),
+                utils: path.resolve(__dirname, './src/Helpers/Utils/index.ts'),
                 validations: path.resolve(__dirname, './src/Helpers/Validations/index.ts'),
                 vueuse: path.resolve(__dirname, './src/Helpers/VueUse/index.ts'),
                 composables: path.resolve(__dirname, './src/Composables/index.ts'),
@@ -72,20 +76,16 @@ function generateExportsManifest(): Plugin {
         generateBundle(options, bundle) {
             let exportsList: string[] = [];
 
-            // Procura pelo arquivo principal gerado (entry chunk)
             for (const fileName in bundle) {
                 const chunk = bundle[fileName];
-                if (chunk.type === 'chunk' && chunk.isEntry) {
-                    // A propriedade 'exports' contém apenas o que foi exposto publicamente!
+                if (chunk.type === 'chunk' && chunk.isEntry && chunk.name === 'index') {
                     exportsList = chunk.exports;
                     break;
                 }
             }
 
-            // Remove a exportação padrão 'default' se não quiser usá-la
             const filteredExports = exportsList.filter((name) => name !== 'default');
 
-            // Emite um novo arquivo JSON na pasta dist
             this.emitFile({
                 type: 'asset',
                 fileName: 'exports.json',

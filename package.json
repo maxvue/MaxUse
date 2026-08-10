@@ -67,6 +67,22 @@
         "./routes": {
             "types": "./dist/Routes/index.d.ts",
             "import": "./dist/routes.es.js"
+        },
+        "./functions": {
+            "types": "./dist/Helpers/Functions/index.d.ts",
+            "import": "./dist/functions.es.js"
+        },
+        "./lang": {
+            "types": "./dist/Helpers/Lang/index.d.ts",
+            "import": "./dist/lang.es.js"
+        },
+        "./seq": {
+            "types": "./dist/Helpers/Seq/index.d.ts",
+            "import": "./dist/seq.es.js"
+        },
+        "./utils": {
+            "types": "./dist/Helpers/Utils/index.d.ts",
+            "import": "./dist/utils.es.js"
         }
     },
     "files": [
@@ -157,7 +173,7 @@
         "access": "public"
     },
     "peerDependencies": {
-        "vue": "^3.6.0-rc.2",
+        "vue": "^3.5.0 || ^3.6.0-rc.2",
         "vue-router": "^5.0.6"
     }
 }

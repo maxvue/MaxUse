@@ -1,6 +1,6 @@
 {
-    "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json", "scripts"],
-    "exclude": ["src/**/__tests__/*", "node_modules", "dist"],
+    "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
+    "exclude": ["src/**/*.test.ts", "node_modules", "dist"],
     "compilerOptions": {
         "composite": true,
         "declaration": true,
