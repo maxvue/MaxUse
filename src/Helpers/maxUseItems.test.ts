@@ -40,18 +40,27 @@ describe('maxUseItems', () => {
 });
 
 describe('maxUseAutoImport', () => {
-    it('é uma função chamável que retorna a configuração de auto-import', () => {
-        expect(typeof maxUseAutoImport).toBe('function');
-        const config = maxUseAutoImport();
-        expect(Array.isArray(config)).toBe(true);
-        expect(config[0]).toHaveProperty('@maxvue/max-use');
+    it('é um array de presets pronto para espalhar em imports, não uma função', () => {
+        expect(typeof maxUseAutoImport).not.toBe('function');
+        expect(Array.isArray(maxUseAutoImport)).toBe(true);
+        expect(maxUseAutoImport[0]).toHaveProperty('@maxvue/max-use');
+    });
+
+    it('sobrevive ao spread usado no vite.config do consumidor', () => {
+        const imports = [...maxUseAutoImport];
+        expect(imports.length).toBe(maxUseAutoImport.length);
+        expect(imports[0]).toHaveProperty('@maxvue/max-use');
     });
 
     it('garante que todos os itens de maxUseItems estão presentes no autoImportData', () => {
         const items = maxUseItems();
-        const config = maxUseAutoImport();
-        const autoImportItems = (config[0] as any)['@maxvue/max-use'];
+        const autoImportItems = (maxUseAutoImport[0] as Record<string, string[]>)['@maxvue/max-use'];
         for (const item of items) expect(autoImportItems).toContain(item);
 
+    });
+
+    it('expõe snakeCase e demais helpers de Strings na lista de auto-import', () => {
+        const autoImportItems = (maxUseAutoImport[0] as Record<string, string[]>)['@maxvue/max-use'];
+        for (const item of ['snakeCase', 'camelCase', 'kebabCase']) expect(autoImportItems).toContain(item);
     });
 });

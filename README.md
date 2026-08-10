@@ -722,7 +722,7 @@ export default defineConfig({
   plugins: [
     AutoImport({
       imports: [
-        maxUseAutoImport(),
+        ...maxUseAutoImport,
       ]
     })
   ]
@@ -740,7 +740,7 @@ const ago = useTimeAgo(createdAt)
 </script>
 ```
 
-> A função `maxUseAutoImport()` gera automaticamente a lista completa de exports, mantendo tudo sempre sincronizado com as atualizações da biblioteca.
+> `maxUseAutoImport` é um **array de presets** (não uma função): espalhe-o com `...` dentro de `imports`. Ele traz a lista completa de exports gerada no build, mantendo tudo sempre sincronizado com as atualizações da biblioteca.
 
 ---
 

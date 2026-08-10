@@ -57,10 +57,12 @@ export const maxUseItems = (): string[] => {
  * Helper para facilitar a importação automática de funções no `unplugin-auto-import`.
  * Contém a lista gerada de exportações organizadas do pacote.
  *
+ * É um array de presets pronto para ser espalhado dentro de `imports` — não é uma função.
+ *
  * @example
  * ```typescript
- * import { maxUseAutoImport } from 'max-use';
- * AutoImport({ imports: [ maxUseAutoImport() ] });
+ * import { maxUseAutoImport } from '@maxvue/max-use';
+ * AutoImport({ imports: [...maxUseAutoImport] });
  * ```
  */
-export const maxUseAutoImport = () => autoImportData;
+export const maxUseAutoImport = autoImportData;
