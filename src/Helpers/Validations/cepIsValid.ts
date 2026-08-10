@@ -11,7 +11,12 @@ import { isBlank } from '../Types/isBlank';
 export function cepIsValid(value: MaybeRefOrGetter<string | number | null | undefined>): boolean {
     const data = toValue(value);
     if (isBlank(data)) return false;
-    return validateBr.cep(data);
+
+    const str = typeof data === 'number' ? String(data).padStart(8, '0') : String(data);
+    const digitsOnly = str.replace(/\D/g, '');
+    if (digitsOnly.length !== 8) return false;
+
+    return validateBr.cep(str);
 }
 
 export const cep = cepIsValid;
