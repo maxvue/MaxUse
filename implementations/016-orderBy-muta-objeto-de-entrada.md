@@ -44,12 +44,12 @@ tecnicamente honesto — mas a documentação não alerta para a perda de inform
 
 ## Problema real 2 — `orderBy` não é compatível com o `orderBy` do Lodash
 
-O nome `orderBy` colide com `_.orderBy` do Lodash, e a biblioteca exporta ambos:
-no objeto `_`, o Lodash **sobrescreve** o helper próprio (ver
-[achado 019](./019-objeto-underscore-lodash-sobrescreve.md)), enquanto o named
-export `import { orderBy }` entrega a versão própria.
+**Atualização:** a migração do Lodash removeu a dependência `lodash-es`, então a
+colisão de nomes descrita originalmente deixou de existir — hoje há uma única
+implementação, e `_.orderBy` e o named export `orderBy` são a mesma função.
 
-As assinaturas divergem em um ponto crítico:
+O que permanece relevante é a **divergência de semântica** para quem migra de
+código que usava `_.orderBy` do Lodash e espera o comportamento dele:
 
 | Aspecto              | `orderBy` (MaxUse)             | `_.orderBy` (Lodash)           |
 |----------------------|--------------------------------|--------------------------------|
@@ -58,9 +58,8 @@ As assinaturas divergem em um ponto crítico:
 | Null/undefined       | sempre no final                | segue a comparação padrão      |
 | Record de entrada    | `Object.values()`              | `Object.values()` (idem)       |
 
-Portanto `_.orderBy(x, 'n', 'desc')` e `orderBy(x, 'n', 'desc')` podem produzir
-resultados diferentes dependendo de qual foi importado — e o desenvolvedor não
-tem sinal de qual está usando.
+Portanto código migrado de `_.orderBy(x, 'n', 'desc')` pode produzir um resultado
+diferente aqui — sem erro nem aviso, já que a assinatura é compatível.
 
 ## Problema real 3 — `sortBy` e `sortByMulti` são apenas aliases
 
@@ -85,8 +84,10 @@ volta.
  *          associação chave→valor, ordene `Object.entries(obj)`.
 ```
 
-2. **Documentar as divergências em relação ao Lodash** no JSDoc e no README,
-   já que a lib se posiciona como substituta do Lodash.
+2. **Documentar as divergências em relação ao Lodash** no JSDoc e no README —
+   agora que a lib substituiu o `lodash-es` por completo, quem migra não tem mais
+   a implementação original como referência, o que torna a documentação mais
+   importante, não menos.
 
 3. **Considerar `orderEntries`** como helper complementar, para o caso de Record:
 
@@ -100,4 +101,6 @@ export function orderEntries<T>(
 
 ## Relacionado
 
-- [019 — Lodash sobrescreve helpers próprios no objeto `_`](./019-objeto-underscore-lodash-sobrescreve.md)
+- O achado 019 (Lodash sobrescrevia helpers próprios no objeto `_`) foi resolvido
+  na raiz pela migração que removeu o `lodash-es`, e por isso não está mais nesta
+  pasta.

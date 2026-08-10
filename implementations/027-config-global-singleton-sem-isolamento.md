@@ -77,8 +77,9 @@ uma dependência circular. O build foi verificado e não emite aviso de ciclo.
 O JSDoc de `resetConfig` também passou a documentar o alerta de SSR descrito na
 Consequência 3.
 
-Além disso, `resetConfig()` não desfaz a mutação de `axios.defaults` feita por
-`getCachedApiIDB` (ver [achado 005](./005-mutacao-global-axios-defaults.md)).
+(A ressalva original sobre `resetConfig()` não desfazer a mutação de
+`axios.defaults` deixou de se aplicar: essa mutação foi removida junto com o
+achado 005.)
 
 ## Consequência 2 — micro-frontends e múltiplos backends
 
@@ -118,34 +119,12 @@ requisição (AsyncLocalStorage), o que a documentação não menciona.
 
 ## Correção sugerida
 
-### Curto prazo (não quebra API)
+### Curto prazo (não quebra API) — ✅ JÁ APLICADO
 
-1. Fazer `resetConfig()` limpar também o `activeRouter`, exportando um
-   `resetRouter()` interno de `goToRoute.ts` e chamando-o:
-
-```typescript
-// goToRoute.ts
-/** @internal */
-export function resetRouter(): void { activeRouter = null; }
-
-// config.ts
-import { resetRouter } from './goToRoute';
-
-export function resetConfig(): void {
-    routeResolver = null;
-    apiConfig = { withCredentials: true };
-    resetRouter();
-}
-```
-
-2. Documentar no JSDoc de `setApiRequestConfig` que a config é **global ao
-   processo** e não deve ser usada por requisição em SSR:
-
-```
- * ATENÇÃO: a configuração é global ao processo. Em ambientes SSR, NÃO chame esta
- * função por requisição — use funções nos headers que leiam de um contexto
- * isolado por requisição (ex.: AsyncLocalStorage).
-```
+Ambos os itens foram implementados; ver "Correção aplicada" na Consequência 1.
+Nota: a proposta original era `config.ts` importar um `resetRouter()` de
+`goToRoute.ts`, o que criaria dependência circular — foi substituída pelo
+registro de callbacks.
 
 ### Longo prazo (major version)
 
@@ -172,5 +151,5 @@ sem `resetConfig`).
 
 ## Relacionado
 
-- [005 — mutação global de axios.defaults](./005-mutacao-global-axios-defaults.md)
-- [004 — getCachedApi ignora config global](./004-getCachedApi-ignora-config-global.md)
+- Achados 004 e 005 (config global ignorada e mutação de `axios.defaults`) já
+  foram corrigidos e removidos desta pasta.
