@@ -7,6 +7,7 @@
  *
  * @internal
  */
+import { onResetConfig } from '../config';
 
 /** Nome do banco IndexedDB */
 const DB_NAME = 'max_cache';
@@ -22,14 +23,50 @@ export interface CacheEntry {
     timestamp: number;
 }
 
+/** Envelope retornado em caso de hit no cache */
+export interface IDBCacheHit<T = any> {
+    hit: true;
+    data: T;
+}
+
+let dbPromise: Promise<IDBDatabase | null> | null = null;
+
 /**
- * Abre (ou cria) o banco IndexedDB `max_cache`.
- * Retorna uma Promise com a instância do banco.
+ * Reseta e fecha a conexão memoizada com o IndexedDB.
+ * @internal
+ */
+export function resetIDBConnection(): void {
+    if (dbPromise) {
+        dbPromise
+            .then((db) => {
+                if (db) try {
+                    db.close();
+                } catch {}
+
+            })
+            .catch(() => {});
+        dbPromise = null;
+    }
+}
+
+// Registra a limpeza da conexão no reset de configurações da biblioteca
+onResetConfig(() => {
+    resetIDBConnection();
+});
+
+/**
+ * Abre (ou reutiliza) a conexão com o banco IndexedDB `max_cache`.
+ * Retorna uma Promise com a instância do banco (ou null se em ambiente sem IDB/SSR).
  *
  * @internal
  */
-export function openDB(): Promise<IDBDatabase> {
-    return new Promise((resolve, reject) => {
+export function openDB(): Promise<IDBDatabase | null> {
+    if (typeof window === 'undefined' || typeof indexedDB === 'undefined') return Promise.resolve(null);
+
+
+    if (dbPromise) return dbPromise;
+
+    dbPromise = new Promise((resolve, reject) => {
         const request = indexedDB.open(DB_NAME, DB_VERSION);
 
         request.onupgradeneeded = () => {
@@ -38,21 +75,43 @@ export function openDB(): Promise<IDBDatabase> {
 
         };
 
-        request.onsuccess = () => resolve(request.result);
-        request.onerror = () => reject(request.error);
+        request.onsuccess = () => {
+            const db = request.result;
+            db.onversionchange = () => {
+                try {
+                    db.close();
+                } catch {}
+                dbPromise = null;
+            };
+            resolve(db);
+        };
+
+        request.onerror = () => {
+            dbPromise = null;
+            reject(request.error);
+        };
+
+        request.onblocked = () => {
+            dbPromise = null;
+            reject(new Error('Conexão IndexedDB bloqueada por outra aba.'));
+        };
     });
+
+    return dbPromise;
 }
 
 /**
  * Busca uma entrada do cache no IndexedDB pela chave.
  *
  * @param key - Chave do cache.
- * @param ttl - Tempo de vida em milissegundos. Se expirado, retorna null.
+ * @param ttl - Tempo de vida em milissegundos. Se expirado ou ttl=0, retorna null.
  *
  * @internal
  */
-export async function getFromIDB(key: string, ttl?: number): Promise<any | null> {
+export async function getFromIDB<T = any>(key: string, ttl?: number): Promise<IDBCacheHit<T> | null> {
     const db = await openDB();
+    if (!db) return null;
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readonly');
         const store = tx.objectStore(STORE_NAME);
@@ -67,14 +126,13 @@ export async function getFromIDB(key: string, ttl?: number): Promise<any | null>
             }
 
             // Verifica se o cache expirou (se TTL foi informado)
-            if (ttl && Date.now() - entry.timestamp > ttl) {
-                // Remove a entrada expirada em background
+            if (ttl !== undefined && Date.now() - entry.timestamp >= ttl) {
                 deleteFromIDB(key).catch(() => {});
                 resolve(null);
                 return;
             }
 
-            resolve(entry.data);
+            resolve({ hit: true, data: entry.data });
         };
 
         request.onerror = () => reject(request.error);
@@ -91,6 +149,8 @@ export async function getFromIDB(key: string, ttl?: number): Promise<any | null>
  */
 export async function setToIDB(key: string, data: any): Promise<void> {
     const db = await openDB();
+    if (!db) return;
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
@@ -110,6 +170,8 @@ export async function setToIDB(key: string, data: any): Promise<void> {
  */
 export async function deleteFromIDB(key: string): Promise<void> {
     const db = await openDB();
+    if (!db) return;
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);
@@ -125,6 +187,8 @@ export async function deleteFromIDB(key: string): Promise<void> {
  */
 export async function clearCacheIDB(): Promise<void> {
     const db = await openDB();
+    if (!db) return;
+
     return new Promise((resolve, reject) => {
         const tx = db.transaction(STORE_NAME, 'readwrite');
         const store = tx.objectStore(STORE_NAME);

@@ -2,6 +2,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { postCachedApiIDB } from './postCachedApiIDB';
 import axios from 'axios';
 import * as config from './config';
+import { setupIDBMock } from './internal/testing/idbMock';
+import { resetIDBConnection } from './internal/idbCache';
 
 vi.mock('axios');
 vi.mock('./config', () => ({
@@ -9,92 +11,17 @@ vi.mock('./config', () => ({
     hasRoute: vi.fn(),
     getConfiguredHeaders: vi.fn(() => ({})),
     getWithCredentials: vi.fn(() => true),
-    resetConfig: vi.fn()
+    resetConfig: vi.fn(),
+    onResetConfig: vi.fn()
 }));
 
-// Mock manual simplificado do IndexedDB
-const mockStore = new Map<string, any>();
-let mockContainsStore = false;
-let mockOpenError = false;
-let mockGetError = false;
-let mockPutError = false;
-let mockDeleteError = false;
-
-global.indexedDB = {
-    open: vi.fn().mockImplementation(() => {
-        const request: any = {
-            result: {
-                objectStoreNames: {
-                    contains: vi.fn().mockImplementation(() => mockContainsStore)
-                },
-                createObjectStore: vi.fn(),
-                transaction: vi.fn().mockReturnValue({
-                    objectStore: vi.fn().mockReturnValue({
-                        get: vi.fn((key) => {
-                            const req: any = {};
-                            setTimeout(() => {
-                                if (mockGetError) {
-                                    req.error = new Error('get error');
-                                    if (req.onerror) req.onerror();
-                                } else {
-                                    req.result = mockStore.get(key);
-                                    if (req.onsuccess) req.onsuccess();
-                                }
-                            }, 0);
-                            return req;
-                        }),
-                        put: vi.fn((entry) => {
-                            const req: any = {};
-                            setTimeout(() => {
-                                if (mockPutError) {
-                                    req.error = new Error('put error');
-                                    if (req.onerror) req.onerror();
-                                } else {
-                                    mockStore.set(entry.key, entry);
-                                    if (req.onsuccess) req.onsuccess();
-                                }
-                            }, 0);
-                            return req;
-                        }),
-                        delete: vi.fn((key) => {
-                            const req: any = {};
-                            setTimeout(() => {
-                                if (mockDeleteError) {
-                                    req.error = new Error('delete error');
-                                    if (req.onerror) req.onerror();
-                                } else {
-                                    mockStore.delete(key);
-                                    if (req.onsuccess) req.onsuccess();
-                                }
-                            }, 0);
-                            return req;
-                        })
-                    })
-                })
-            }
-        };
-        setTimeout(() => {
-            if (mockOpenError) {
-                request.error = new Error('open error');
-                if (request.onerror) request.onerror();
-            } else {
-                if (request.onupgradeneeded) request.onupgradeneeded();
-                if (request.onsuccess) request.onsuccess();
-            }
-        }, 0);
-        return request;
-    })
-} as any;
+const idb = setupIDBMock();
 
 describe('postCachedApiIDB', () => {
     beforeEach(async () => {
         vi.clearAllMocks();
-        mockStore.clear();
-        mockContainsStore = false;
-        mockOpenError = false;
-        mockGetError = false;
-        mockPutError = false;
-        mockDeleteError = false;
+        idb.reset();
+        resetIDBConnection();
 
         (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
             `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
@@ -128,13 +55,13 @@ describe('postCachedApiIDB', () => {
         expect(result).toEqual({ id: 1, name: 'PostIDBTest' });
 
         const cacheKey = 'test.post_{"id":1}_{"campo":"valor"}';
-        const cached = mockStore.get(cacheKey);
+        const cached = idb.mockStore.get(cacheKey);
         expect(cached.data).toEqual({ id: 1, name: 'PostIDBTest' });
     });
 
     it('retorna do cache e não faz requisição', async () => {
         const cacheKey = 'test.post_{"id":2}_{"campo":"valor2"}';
-        mockStore.set(cacheKey, {
+        idb.mockStore.set(cacheKey, {
             key: cacheKey,
             data: { id: 2, name: 'CachedPostIDB' },
             timestamp: Date.now()
@@ -146,17 +73,31 @@ describe('postCachedApiIDB', () => {
         expect(result).toEqual({ id: 2, name: 'CachedPostIDB' });
     });
 
+    it('retorna valor falsy do cache sem fazer requisição HTTP', async () => {
+        const cacheKey = 'test.post_{"id":0}_{}';
+        idb.mockStore.set(cacheKey, {
+            key: cacheKey,
+            data: 0,
+            timestamp: Date.now()
+        });
+
+        const result = await postCachedApiIDB('test.post', { id: 0 });
+
+        expect(axios.post).not.toHaveBeenCalled();
+        expect(result).toBe(0);
+    });
+
     it('invalida cache expirado e cobre o catch() da exclusão falha', async () => {
         (axios.post as any).mockResolvedValue({ data: { id: 3, name: 'NewPostData' } });
 
         const cacheKey = 'test.post_{"id":3}_{"campo":"valor3"}';
-        mockStore.set(cacheKey, {
+        idb.mockStore.set(cacheKey, {
             key: cacheKey,
             data: { id: 3, name: 'OldPostData' },
             timestamp: Date.now() - 5000 // 5s atrás
         });
 
-        mockDeleteError = true; // Para forçar o catch() na exclusão
+        idb.setDeleteError(true);
         const result = await postCachedApiIDB('test.post', { id: 3 }, { campo: 'valor3' }, null, 1000); // ttl de 1s
 
         expect(axios.post).toHaveBeenCalled();
@@ -170,12 +111,12 @@ describe('postCachedApiIDB', () => {
 
         expect(result).toEqual({ id: 4, name: 'CustomKey' });
 
-        const cached = mockStore.get('minha_chave_customizada');
+        const cached = idb.mockStore.get('minha_chave_customizada');
         expect(cached.data).toEqual({ id: 4, name: 'CustomKey' });
     });
 
     it('cobre branch onde a objectStore já existe (contains=true) e routeParams/postData=null', async () => {
-        mockContainsStore = true;
+        idb.setContainsStore(true);
         (axios.post as any).mockResolvedValue({ data: { id: 99, name: 'StoreExists' } });
 
         const result = await postCachedApiIDB('test.post', null, null);
@@ -207,17 +148,17 @@ describe('postCachedApiIDB', () => {
     });
 
     it('rejeita promise se houver erro ao abrir o banco', async () => {
-        mockOpenError = true;
+        idb.setOpenError(true);
         await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('open error');
     });
 
     it('rejeita promise se houver erro no get', async () => {
-        mockGetError = true;
+        idb.setGetError(true);
         await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('get error');
     });
 
     it('rejeita promise se houver erro no put', async () => {
-        mockPutError = true;
+        idb.setPutError(true);
         (axios.post as any).mockResolvedValue({ data: { id: 1, name: 'PostIDBTest' } });
         await expect(postCachedApiIDB('test.post', { id: 1 }, { campo: 'valor' })).rejects.toThrow('put error');
     });

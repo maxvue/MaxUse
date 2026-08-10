@@ -39,7 +39,7 @@ export async function postCachedApiIDB(
     // Tenta buscar do IndexedDB
     const cached = await getFromIDB(key, ttl);
 
-    if (cached) return cached;
+    if (cached && cached.hit) return cached.data;
 
     // Faz a requisição POST se não houver cache válido
     const routeUrl = resolveRoute(String(route_name), route_params);

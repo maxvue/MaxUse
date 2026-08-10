@@ -56,15 +56,15 @@ export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest
     // Tenta buscar do IndexedDB
     const cached = await getFromIDB(key, ttl);
 
-    if (cached) {
+    if (cached && cached.hit) {
         // Revalida em background: atualiza o cache e notifica se o servidor tiver dado diferente
         fetchAndStore(String(route_name), data_request, key)
             .then((fresh) => {
-                if (onUpdate && JSON.stringify(fresh) !== JSON.stringify(cached)) onUpdate(fresh);
+                if (onUpdate && JSON.stringify(fresh) !== JSON.stringify(cached.data)) onUpdate(fresh);
             })
             .catch(() => {});
 
-        return cached;
+        return cached.data;
     }
 
     return fetchAndStore(String(route_name), data_request, key);
