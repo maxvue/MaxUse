@@ -4,12 +4,15 @@ import axios from 'axios';
 import * as config from './config';
 import { setupIDBMock } from './internal/testing/idbMock';
 import { resetIDBConnection } from './internal/idbCache';
+import { buildCacheKey } from './internal/cacheUtils';
 
 vi.mock('axios');
 vi.mock('./config', () => ({
     resolveRoute: vi.fn(),
     hasRoute: vi.fn(),
     getConfiguredHeaders: vi.fn(() => ({})),
+    getClientIdHeader: vi.fn(() => ({})),
+    getClientId: vi.fn(() => null),
     getWithCredentials: vi.fn(() => true),
     resetConfig: vi.fn(),
     onResetConfig: vi.fn()
@@ -27,6 +30,8 @@ describe('postCachedApiIDB', () => {
             `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
         );
         (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getClientIdHeader as any).mockReturnValue({});
+        (config.getClientId as any).mockReturnValue(null);
         (config.getWithCredentials as any).mockReturnValue(true);
     });
 
@@ -54,13 +59,13 @@ describe('postCachedApiIDB', () => {
         );
         expect(result).toEqual({ id: 1, name: 'PostIDBTest' });
 
-        const cacheKey = 'test.post_{"id":1}_{"campo":"valor"}';
+        const cacheKey = buildCacheKey('test.post', { routeParams: { id: 1 }, postData: { campo: 'valor' } });
         const cached = idb.mockStore.get(cacheKey);
         expect(cached.data).toEqual({ id: 1, name: 'PostIDBTest' });
     });
 
     it('retorna do cache e não faz requisição', async () => {
-        const cacheKey = 'test.post_{"id":2}_{"campo":"valor2"}';
+        const cacheKey = buildCacheKey('test.post', { routeParams: { id: 2 }, postData: { campo: 'valor2' } });
         idb.mockStore.set(cacheKey, {
             key: cacheKey,
             data: { id: 2, name: 'CachedPostIDB' },
@@ -74,7 +79,7 @@ describe('postCachedApiIDB', () => {
     });
 
     it('retorna valor falsy do cache sem fazer requisição HTTP', async () => {
-        const cacheKey = 'test.post_{"id":0}_{}';
+        const cacheKey = buildCacheKey('test.post', { routeParams: { id: 0 }, postData: {} });
         idb.mockStore.set(cacheKey, {
             key: cacheKey,
             data: 0,
@@ -90,7 +95,7 @@ describe('postCachedApiIDB', () => {
     it('invalida cache expirado e cobre o catch() da exclusão falha', async () => {
         (axios.post as any).mockResolvedValue({ data: { id: 3, name: 'NewPostData' } });
 
-        const cacheKey = 'test.post_{"id":3}_{"campo":"valor3"}';
+        const cacheKey = buildCacheKey('test.post', { routeParams: { id: 3 }, postData: { campo: 'valor3' } });
         idb.mockStore.set(cacheKey, {
             key: cacheKey,
             data: { id: 3, name: 'OldPostData' },

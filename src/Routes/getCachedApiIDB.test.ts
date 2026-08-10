@@ -10,6 +10,8 @@ vi.mock('./config', () => ({
     resolveRoute: vi.fn(),
     hasRoute: vi.fn(),
     getConfiguredHeaders: vi.fn(() => ({})),
+    getClientIdHeader: vi.fn(() => ({})),
+    getClientId: vi.fn(() => null),
     getWithCredentials: vi.fn(() => true),
     resetConfig: vi.fn(),
     onResetConfig: vi.fn()
@@ -97,6 +99,23 @@ describe('getCachedApiIDB', () => {
         await vi.waitFor(() => {
             expect(onUpdate).toHaveBeenCalledWith({ id: 5, name: 'FreshData' });
         });
+    });
+
+    it('não chama onUpdate quando o dado do servidor é igual ao cache mas com ordem de chaves diferente', async () => {
+        (axios.get as any).mockResolvedValue({ data: { b: 2, a: 1 } });
+
+        idb.mockStore.set('test.idb_{"id":6}', {
+            key: 'test.idb_{"id":6}',
+            data: { a: 1, b: 2 },
+            timestamp: Date.now()
+        });
+
+        const onUpdate = vi.fn();
+        await getCachedApiIDB('test.idb', { id: 6 }, null, undefined, onUpdate);
+
+        await vi.waitFor(() => expect(axios.get).toHaveBeenCalled());
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        expect(onUpdate).not.toHaveBeenCalled();
     });
 
     it('não chama onUpdate quando o dado do servidor é igual ao cache', async () => {

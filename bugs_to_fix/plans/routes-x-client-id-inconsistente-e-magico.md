@@ -9,10 +9,14 @@ Os cinco wrappers `api*Route` injetam o header `X-Client-Id` lido da chave mági
 (a) a mesma rota responde dados diferentes por cliente via header, porém a chave de cache (`routeName + '_' + JSON.stringify(params)`) não inclui o client id — trocar de cliente serve dados cacheados do cliente anterior (**vazamento entre clientes**);
 (b) o spread vem depois de `getConfiguredHeaders()`, então um `X-Client-Id` configurado via `setApiRequestConfig` é silenciosamente sobrescrito.
 
+## Decisão de Design Registrada
+- Precedência de Headers: Headers configurados via `setApiRequestConfig` possuem precedência superior sobre o valor de `localStorage.getItem('selected.client.id')`.
+- O client id ativo é incorporado automaticamente na chave de cache dos helpers cacheados para evitar vazamento de dados entre clientes distintos.
+
 ## Plano de correção
-1. Extrair a lógica para `config.ts` (ex.: função interna `getClientIdHeader()` ou header dinâmico padrão registrável) usada por todos os helpers, inclusive `fetchAndStore` dos cacheados.
+1. Extrair a lógica para `config.ts` (função interna `getClientIdHeader()` e `getClientId()`).
 2. Incluir o client id na chave de cache default dos helpers cacheados.
-3. Inverter a precedência: valor configurado via `setApiRequestConfig` deve vencer o valor mágico do localStorage (ou documentar o contrário).
+3. Inverter a precedência: valor configurado via `setApiRequestConfig` vence o valor do localStorage.
 4. Documentar a convenção `'selected.client.id'` no JSDoc.
 
 ## Testes

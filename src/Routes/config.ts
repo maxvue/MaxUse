@@ -153,6 +153,33 @@ export function getWithCredentials(): boolean {
 }
 
 /**
+ * Retorna o client ID armazenado em localStorage pela convenção 'selected.client.id'.
+ * Se não houver ou estiver fora do browser (SSR), retorna null.
+ * @internal Uso interno da biblioteca.
+ */
+export function getClientId(): string | null {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+        return localStorage.getItem('selected.client.id');
+    } catch {
+        return null;
+    }
+}
+
+/**
+ * Retorna o header X-Client-Id obtido do localStorage ('selected.client.id')
+ * apenas se não tiver sido sobrescrito via setApiRequestConfig.
+ * @internal Uso interno da biblioteca.
+ */
+export function getClientIdHeader(): Record<string, string> {
+    const configured = getConfiguredHeaders();
+    if (configured['X-Client-Id'] !== undefined) return {};
+
+    const clientId = getClientId();
+    return clientId ? { 'X-Client-Id': clientId } : {};
+}
+
+/**
  * Reseta toda a configuração da biblioteca — resolver, opções de requisição e o
  * router registrado via `setLibraryRouter`. Útil para testes.
  *

@@ -15,9 +15,13 @@ if (is_client) localStorage.setItem(key, JSON.stringify(data_return));
 return data_return;
 ```
 
+## Decisão de Design Registrada
+- `localStorage.setItem` em `getCachedApi` é envolvido em `try/catch` silencioso para evitar que erros de quota (`QuotaExceededError`) rejeitem a chamada e descartem a resposta com sucesso.
+- Erros de rede HTTP em `getCachedApi` continuam propagando a rejeição, mantendo o contrato estrito para que a aplicação possa tratar a falha de conexão.
+
 ## Plano de correção
-1. Envolver o `setItem` em `try/catch` silencioso — cache é otimização, não pode derrubar o resultado.
-2. Documentar no JSDoc que erros de rede propagam (ou alinhar ao padrão `null` dos `api*Route` — decidir e documentar).
+1. Envolver o `setItem` em `try/catch` silencioso.
+2. Documentar no JSDoc que erros de rede propagam a rejeição.
 
 ## Testes
 - Mock de `localStorage.setItem` lançando → dado ainda é retornado.

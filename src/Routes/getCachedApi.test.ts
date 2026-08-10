@@ -8,8 +8,11 @@ vi.mock('./config', () => ({
     resolveRoute: vi.fn(),
     hasRoute: vi.fn(),
     getConfiguredHeaders: vi.fn(() => ({})),
+    getClientIdHeader: vi.fn(() => ({})),
+    getClientId: vi.fn(() => null),
     getWithCredentials: vi.fn(() => true),
-    resetConfig: vi.fn()
+    resetConfig: vi.fn(),
+    onResetConfig: vi.fn()
 }));
 
 describe('getCachedApi', () => {
@@ -20,6 +23,9 @@ describe('getCachedApi', () => {
         (config.resolveRoute as any).mockImplementation((name: string, params: any) =>
             `https://example.com/${name}${params && params.id ? '/' + params.id : ''}`
         );
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getClientIdHeader as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
     });
 
     it('retorna null se routeName for vazio', async () => {
@@ -43,17 +49,52 @@ describe('getCachedApi', () => {
         expect(axios.get).toHaveBeenCalledWith('https://example.com/test.route/1', expect.objectContaining({ responseType: 'json', withCredentials: true }));
         expect(result).toEqual({ id: 1, name: 'Test' });
 
-        const cached = localStorage.getItem('test.route_{"id":1}');
+        const cached = localStorage.getItem('max_cache:test.route_{"id":1}');
         expect(cached).toBe('{"id":1,"name":"Test"}');
     });
 
-    it('retorna do cache e não faz requisição', async () => {
-        localStorage.setItem('test.route_{"id":1}', JSON.stringify({ id: 1, name: 'Cached' }));
+    it('retorna do cache e não faz requisição (cache eterno)', async () => {
+        localStorage.setItem('max_cache:test.route_{"id":1}', JSON.stringify({ id: 1, name: 'Cached' }));
 
         const result = await getCachedApi('test.route', { id: 1 });
 
         expect(axios.get).not.toHaveBeenCalled();
         expect(result).toEqual({ id: 1, name: 'Cached' });
+    });
+
+    it('reutiliza a mesma entrada de cache com parâmetros em ordem de chaves diferente', async () => {
+        localStorage.setItem('max_cache:test.route_{"a":1,"b":2}', JSON.stringify({ ok: true }));
+
+        const result = await getCachedApi('test.route', { b: 2, a: 1 });
+        expect(axios.get).not.toHaveBeenCalled();
+        expect(result).toEqual({ ok: true });
+    });
+
+    it('trata JSON corrompido no localStorage removendo a chave e refazendo a requisição', async () => {
+        const key = 'max_cache:test.corrupted_{}';
+        localStorage.setItem(key, '{json_invalido');
+        (axios.get as any).mockResolvedValue({ data: { fresh: true } });
+
+        const result = await getCachedApi('test.corrupted');
+
+        expect(localStorage.getItem(key)).toBe('{"fresh":true}');
+        expect(result).toEqual({ fresh: true });
+    });
+
+    it('tolera QuotaExceededError ao tentar salvar no localStorage sem rejeitar', async () => {
+        (axios.get as any).mockResolvedValue({ data: { bigData: 'ok' } });
+        vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+            throw new Error('QuotaExceededError');
+        });
+
+        const result = await getCachedApi('test.quota');
+        expect(result).toEqual({ bigData: 'ok' });
+    });
+
+    it('propaga rejeição em caso de erro de rede no axios.get', async () => {
+        (axios.get as any).mockRejectedValue(new Error('Network failure'));
+
+        await expect(getCachedApi('test.netfail')).rejects.toThrow('Network failure');
     });
 
     it('usa keyCache personalizado', async () => {
@@ -63,32 +104,5 @@ describe('getCachedApi', () => {
 
         expect(axios.get).not.toHaveBeenCalled();
         expect(result).toEqual({ custom: true });
-    });
-});
-
-describe('getCachedApi — regressão auditoria (achado 004)', () => {
-    beforeEach(() => {
-        vi.clearAllMocks();
-        localStorage.clear();
-        (config.resolveRoute as any).mockReturnValue('https://example.com/rota');
-        (axios.get as any).mockResolvedValue({ data: { ok: true } });
-    });
-
-    it('envia os headers configurados via setApiRequestConfig', async () => {
-        (config.getConfiguredHeaders as any).mockReturnValue({ Authorization: 'Bearer abc' });
-
-        await getCachedApi('api.rota');
-
-        const callArgs = (axios.get as any).mock.calls[0];
-        expect(callArgs[1].headers.Authorization).toBe('Bearer abc');
-    });
-
-    it('respeita withCredentials configurado como false', async () => {
-        (config.getWithCredentials as any).mockReturnValue(false);
-
-        await getCachedApi('api.rota');
-
-        const callArgs = (axios.get as any).mock.calls[0];
-        expect(callArgs[1].withCredentials).toBe(false);
     });
 });

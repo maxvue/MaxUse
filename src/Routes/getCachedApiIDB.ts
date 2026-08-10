@@ -1,8 +1,10 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
-import { resolveRoute, getConfiguredHeaders, getWithCredentials } from './config';
+import { resolveRoute, getConfiguredHeaders, getWithCredentials, getClientIdHeader } from './config';
 import { isBlank } from '../Helpers/Types';
+import { isEqual } from '../Helpers/Objects/isEqual';
 import { getFromIDB, setToIDB, deleteFromIDB, clearCacheIDB } from './internal/idbCache';
+import { buildCacheKey, dedupeRequest } from './internal/cacheUtils';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
@@ -11,22 +13,28 @@ type MayBeRefData = MaybeRefOrGetter<any>;
 export { deleteFromIDB, clearCacheIDB };
 
 /**
- * Faz o GET na rota e persiste o resultado no cache do IndexedDB.
+ * Faz o GET na rota e persiste o resultado no cache do IndexedDB com deduplicação.
  */
 async function fetchAndStore(route_name: string, data_request: any, key: string): Promise<any> {
-    const routeUrl = resolveRoute(route_name, data_request);
+    return dedupeRequest(key, async () => {
+        const routeUrl = resolveRoute(route_name, data_request);
 
-    const config: AxiosRequestConfig = {
-        responseType: 'json',
-        headers: { ...getConfiguredHeaders() },
-        withCredentials: getWithCredentials()
-    };
-    const response = await axios.get(routeUrl, config);
-    const data_return = response.data;
+        const config: AxiosRequestConfig = {
+            responseType: 'json',
+            headers: {
+                ...getClientIdHeader(),
+                ...getConfiguredHeaders()
+            },
+            withCredentials: getWithCredentials()
+        };
 
-    await setToIDB(key, data_return);
+        const response = await axios.get(routeUrl, config);
+        const data_return = response.data;
 
-    return data_return;
+        await setToIDB(key, data_return);
+
+        return data_return;
+    });
 }
 
 /**
@@ -43,15 +51,21 @@ async function fetchAndStore(route_name: string, data_request: any, key: string)
  * @param onUpdate - Callback chamado com o dado fresco quando a revalidação em background encontra diferença.
  * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
  */
-export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest: MayBeRefData = null, keyCache: RefStringOrNull = null, ttl?: number, onUpdate?: (data: any) => void ): Promise<any> {
-
+export async function getCachedApiIDB(
+    routeName: RefStringOrNull,
+    dataToRequest: MayBeRefData = null,
+    keyCache: RefStringOrNull = null,
+    ttl?: number,
+    onUpdate?: (data: any) => void
+): Promise<any> {
     const route_name = toValue(routeName);
 
     if (isBlank(route_name)) return null;
 
     const data_request = toValue(dataToRequest) ?? {};
+    const custom_key = toValue(keyCache);
 
-    const key = toValue(keyCache) ?? route_name + '_' + JSON.stringify(data_request);
+    const key = buildCacheKey(String(route_name), data_request, custom_key);
 
     // Tenta buscar do IndexedDB
     const cached = await getFromIDB(key, ttl);
@@ -60,7 +74,7 @@ export async function getCachedApiIDB( routeName: RefStringOrNull, dataToRequest
         // Revalida em background: atualiza o cache e notifica se o servidor tiver dado diferente
         fetchAndStore(String(route_name), data_request, key)
             .then((fresh) => {
-                if (onUpdate && JSON.stringify(fresh) !== JSON.stringify(cached.data)) onUpdate(fresh);
+                if (onUpdate && !isEqual(fresh, cached.data)) onUpdate(fresh);
             })
             .catch(() => {});
 
