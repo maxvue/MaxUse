@@ -10,7 +10,7 @@ import { watchDebounced } from '@vueuse/core';
  */
 export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
     reset(): void;
-    initialData?: any;
+    initialData?: T;
     timer?: number | null;
 };
 
@@ -39,17 +39,26 @@ export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
  * // Após 3s → volta para ''
  * ```
  */
+function cloneInitialData<T>(data: T): T {
+    if (data === undefined) return undefined as T;
+    try {
+        return structuredClone(data);
+    } catch {
+        try {
+            return JSON.parse(JSON.stringify(data));
+        } catch {
+            return data;
+        }
+    }
+}
+
 export function useDefaultReset<T>(initialData: T, timer: number | null = null): DefaultReset<T> {
     const state = ref<T>() as DefaultReset<T>;
 
-    state.initialData = initialData === undefined
-        ? undefined
-        : JSON.parse(JSON.stringify(initialData));
+    state.initialData = cloneInitialData(initialData);
 
     state.reset = () => {
-        const new_data = state.initialData === undefined
-            ? undefined
-            : JSON.parse(JSON.stringify(state.initialData));
+        const new_data = cloneInitialData(state.initialData);
 
         if (state.initialData && typeof state.initialData === 'object') {
             if ((state.initialData as any)?.id === 'ulid') (new_data as any).id = ulid().toLowerCase();

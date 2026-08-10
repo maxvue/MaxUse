@@ -1,4 +1,4 @@
-import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose, nextTick } from 'vue';
+import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispose, getCurrentScope, nextTick } from 'vue';
 
 export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
@@ -23,19 +23,27 @@ type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
  * const config = useRefCached(computed(() => `config-${userId.value}`), {});
  * ```
  */
+const NO_KEY = Symbol('no-key');
+
 export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T> {
-    const raw_key = computed(() => {
+    const raw_key = computed<string | typeof NO_KEY>(() => {
         const k = toValue(key);
-        return k === null || k === undefined || k === '' ? 'no-key' : String(k);
+        return k === null || k === undefined || k === '' ? NO_KEY : String(k);
     });
 
-    const state = ref<T>(default_value) as ToRefCached<T>;
+    const cloneDefault = (): T =>
+        (typeof default_value === 'object' && default_value !== null)
+            ? structuredClone(default_value)
+            : default_value;
+
+    const state = ref<T>(cloneDefault()) as ToRefCached<T>;
 
     // Em SSR/Node não há storage: retorna a Ref com o valor padrão, sem persistência
     const is_client = typeof window !== 'undefined' && typeof localStorage !== 'undefined';
 
     let is_syncing_from_event = false;
-    let active_key: string = raw_key.value;
+    let last_synced_serialized: string | null = null;
+    let active_key: string | typeof NO_KEY = raw_key.value;
 
     // Sincronização reativa entre abas via evento nativo "storage"
     const onStorageEvent = (event: StorageEvent) => {
@@ -46,10 +54,11 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
             if (event.newValue !== null) try {
                 state.value = JSON.parse(event.newValue);
             } catch {
-                state.value = default_value;
+                state.value = cloneDefault();
             }
-            else state.value = default_value;
+            else state.value = cloneDefault();
 
+            last_synced_serialized = JSON.stringify(state.value);
         } finally {
             nextTick(() => {
                 is_syncing_from_event = false;
@@ -59,7 +68,7 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
 
     if (is_client) {
         window.addEventListener('storage', onStorageEvent);
-        onScopeDispose(() => window.removeEventListener('storage', onStorageEvent));
+        if (getCurrentScope()) onScopeDispose(() => window.removeEventListener('storage', onStorageEvent));
     }
 
     watch(raw_key, (new_key) => {
@@ -68,24 +77,24 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
         const old_key = active_key;
         active_key = new_key;
 
-        if (old_key && old_key !== 'no-key' && old_key !== new_key && !is_syncing_from_event) try {
-            localStorage.setItem(old_key, JSON.stringify(state.value));
+        if (old_key && old_key !== NO_KEY && old_key !== new_key && !is_syncing_from_event) try {
+            localStorage.setItem(old_key as string, JSON.stringify(state.value));
         } catch {
             // Silencia QuotaExceededError
         }
 
 
-        if (!new_key || new_key === 'no-key') return;
+        if (!new_key || new_key === NO_KEY) return;
 
-        const raw = localStorage.getItem(new_key);
+        const raw = localStorage.getItem(new_key as string);
         is_syncing_from_event = true;
         try {
             if (raw !== null) try {
                 state.value = JSON.parse(raw);
             } catch {
-                state.value = default_value;
+                state.value = cloneDefault();
             }
-            else state.value = default_value;
+            else state.value = cloneDefault();
 
         } finally {
             nextTick(() => {
@@ -95,9 +104,15 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     }, { immediate: true });
 
     watch(state, (new_value) => {
-        if (!is_client || !active_key || active_key === 'no-key' || is_syncing_from_event) return;
+        if (!is_client || !active_key || active_key === NO_KEY) return;
+        const serialized = JSON.stringify(new_value);
+        if (serialized === last_synced_serialized) {
+            last_synced_serialized = null;
+            return;
+        }
+        last_synced_serialized = null;
         try {
-            localStorage.setItem(active_key, JSON.stringify(new_value));
+            localStorage.setItem(active_key as string, serialized);
         } catch {
             // Silencia QuotaExceededError
         }

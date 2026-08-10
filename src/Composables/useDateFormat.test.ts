@@ -53,19 +53,17 @@ describe('useDateFormat', () => {
         });
     });
 
-    it('usa data atual como fallback para string inválida', () => {
+    it('não fabrica data plausível para string inválida', () => {
         scope.run(() => {
-            const result = useDateFormat('data-invalida', 'YYYY');
-            const currentYear = new Date().getFullYear().toString();
-            expect(result.value).toContain(currentYear);
+            const result = useDateFormat('data-invalida', 'DD/MM/YYYY');
+            expect(result.value).not.toMatch(/^\d{2}\/\d{2}\/\d{4}$/);
         });
     });
 
-    it('usa data atual como fallback para Date(NaN)', () => {
+    it('não fabrica data plausível para Date(NaN)', () => {
         scope.run(() => {
-            const result = useDateFormat(new Date(NaN), 'YYYY');
-            const currentYear = new Date().getFullYear().toString();
-            expect(result.value).toContain(currentYear);
+            const result = useDateFormat(new Date(NaN), 'DD/MM/YYYY');
+            expect(result.value).not.toMatch(/^\d{2}\/\d{2}\/\d{4}$/);
         });
     });
 });

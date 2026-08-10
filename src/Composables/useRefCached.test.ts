@@ -229,4 +229,45 @@ describe('useRefCached', () => {
             expect(state.value).toBe('default');
         });
     });
+
+    it('não muta o objeto default do chamador', () => {
+        const def = { items: [] as number[] };
+        const state = scope.run(() => useRefCached('k', def))!;
+        state.value.items.push(1);
+        expect(def.items).toEqual([]);
+    });
+
+    it('não compartilha estado entre instâncias com o mesmo default', () => {
+        const def = { n: 0 };
+        const a = scope.run(() => useRefCached('a', def))!;
+        const b = scope.run(() => useRefCached('b', def))!;
+        a.value.n = 42;
+        expect(b.value.n).toBe(0);
+    });
+
+    it('persiste escrita emitida no mesmo tick de um storage event', async () => {
+        const state = scope.run(() => useRefCached('k', 'initial'))!;
+        await nextTick();
+
+        window.dispatchEvent(new StorageEvent('storage', {
+            key: 'k',
+            newValue: JSON.stringify('mine-1'),
+            storageArea: localStorage
+        }));
+
+        state.value = 'mine-2';
+        await nextTick();
+        await nextTick();
+
+        expect(localStorage.getItem('k')).toBe(JSON.stringify('mine-2'));
+    });
+
+    it('suporta string "no-key" como chave legítima', async () => {
+        await scope.run(async () => {
+            const state = useRefCached('no-key', 'default-val');
+            state.value = 'salvo-em-no-key';
+            await nextTick();
+            expect(localStorage.getItem('no-key')).toBe(JSON.stringify('salvo-em-no-key'));
+        });
+    });
 });

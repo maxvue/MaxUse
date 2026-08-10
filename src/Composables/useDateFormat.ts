@@ -19,13 +19,12 @@ import { MaybeRefOrGetter, toValue } from 'vue';
  * ```
  */
 export const useDateFormat = (initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>, format: string): UseDateFormatReturn => {
-    // O fallback precisa ser resolvido dentro de um getter: se a data for nula, undefined ou inválida (NaN),
-    // usa a data atual (new Date()) sem romper a reatividade quando a data válida chegar depois.
+    // O fallback para null/undefined preserva reatividade; entradas inválidas (NaN) não fabricam data plausível.
     return vueUseDateFormat(() => {
         const value = toValue(initialDate);
         if (value == null) return new Date();
         const d = value instanceof Date ? value : new Date(value);
-        return isNaN(d.getTime()) ? new Date() : (value as Date | number | string);
+        return isNaN(d.getTime()) ? (NaN as any) : (value as Date | number | string);
     }, format);
 };
 

@@ -4,8 +4,8 @@ import { apiGetRoute } from '../Routes/apiGetRoute';
 export type ToRefCachedApi<T> = [T] extends [Ref] ? T : Ref<T>;
 
 export interface UseCachedApiOptions<T> {
-    data_get?: MaybeRefOrGetter<any>;
-    data?: MaybeRefOrGetter<any>;
+    data_get?: MaybeRefOrGetter<Record<string, unknown> | unknown>;
+    data?: MaybeRefOrGetter<Record<string, unknown> | unknown>;
     key?: MaybeRefOrGetter<string | null | undefined>;
     defaultValue?: T;
     sync?: boolean;
@@ -25,7 +25,12 @@ export function useCachedApi<T = any>(
     route_name: MaybeRefOrGetter<string | null | undefined>,
     options: UseCachedApiOptions<T> = {}
 ): ToRefCachedApi<T> {
-    const state = ref<T>((options.defaultValue ?? null) as T) as ToRefCachedApi<T>;
+    const cloneDefault = (): T =>
+        (typeof options.defaultValue === 'object' && options.defaultValue !== null)
+            ? structuredClone(options.defaultValue)
+            : (options.defaultValue ?? null) as T;
+
+    const state = ref<T>(cloneDefault()) as ToRefCachedApi<T>;
 
     const is_client = typeof localStorage !== 'undefined';
     let disposed = false;
@@ -65,7 +70,9 @@ export function useCachedApi<T = any>(
                 state.value = JSON.parse(data);
             } catch {
                 localStorage.removeItem(currentKey);
+                state.value = cloneDefault();
             }
+            else state.value = cloneDefault();
 
         },
         { immediate: true }
@@ -82,14 +89,17 @@ export function useCachedApi<T = any>(
     );
 
 
+    let request_id = 0;
+
     // Sincronização com a API (com suporte a parâmetros reativos e resposta tardia descartada)
     if (options.sync !== false) watch(
         [targetRoute, targetParams],
         async ([rName, pData]) => {
             if (!rName || disposed) return;
+            const my_id = ++request_id;
             try {
                 const value = await apiGetRoute(rName, pData);
-                if (disposed || value == null) return;
+                if (disposed || my_id !== request_id || value == null) return;
                 state.value = value;
                 if (is_client && options.watch === false && targetKey.value && targetKey.value !== 'no-key') saveToStorage(targetKey.value, value);
 

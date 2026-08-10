@@ -646,13 +646,13 @@ describe('timeAgo', () => {
             });
         });
 
-        it('usa data atual como fallback para Date(NaN) e string inválida', () => {
+        it('sinaliza data inválida para Date(NaN) e string inválida', () => {
             scope.run(() => {
                 const result1 = timeAgo(new Date(NaN));
-                expect(result1.value.toLowerCase()).toContain('agora');
+                expect(result1.value).toBe('Data inválida');
 
                 const result2 = timeAgo('data-invalida');
-                expect(result2.value.toLowerCase()).toContain('agora');
+                expect(result2.value).toBe('Data inválida');
             });
         });
 

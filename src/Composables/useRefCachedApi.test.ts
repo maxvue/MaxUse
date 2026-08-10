@@ -210,4 +210,69 @@ describe('useCachedApi — regressão auditoria (achado 012)', () => {
             expect(mockApi).toHaveBeenCalledWith('api.paginated', { page: 2 });
         });
     });
+
+    it('redefine para o default ao trocar para chave sem cache', async () => {
+        const key = ref('user-1');
+        const { state } = scope.run(() => {
+            const state = useCachedApi('route.user', { key, defaultValue: { nome: '' }, sync: false });
+            return { state };
+        })!;
+        state.value = { nome: 'Alice', saldo: 100 } as any;
+        await nextTick();
+
+        key.value = 'user-2';
+        await nextTick();
+        expect(state.value).toEqual({ nome: '' });
+    });
+
+    it('nunca grava dados do usuário anterior sob a chave nova', async () => {
+        const key = ref('user-1');
+        const { state } = scope.run(() => {
+            const state = useCachedApi('route.user', { key, defaultValue: { nome: '' }, sync: false });
+            return { state };
+        })!;
+        state.value = { nome: 'Alice', saldo: 100 } as any;
+        await nextTick();
+
+        key.value = 'user-2';
+        await nextTick();
+        state.value = { nome: 'Bob' } as any;
+        await nextTick();
+
+        expect(localStorage.getItem('user-2')).not.toContain('Alice');
+    });
+
+    it('descarta resposta superada que chega atrasada', async () => {
+        let resolveP1!: (val: any) => void;
+        let resolveP2!: (val: any) => void;
+        const p1 = new Promise((r) => { resolveP1 = r; });
+        const p2 = new Promise((r) => { resolveP2 = r; });
+
+        vi.spyOn(apiGetRouteModule, 'apiGetRoute')
+            .mockReturnValueOnce(p1 as any)
+            .mockReturnValueOnce(p2 as any);
+
+        const params = ref({ page: 1 });
+        let state: any;
+        scope.run(() => {
+            state = useCachedApi('api.pagination', { data: params });
+        });
+
+        await nextTick();
+        params.value = { page: 2 };
+        await nextTick();
+
+        // P2 (mais novo) resolve primeiro
+        resolveP2({ page: 2, fresh: true });
+        await new Promise((r) => setTimeout(r, 10));
+
+        // P1 (antigo) resolve depois
+        resolveP1({ page: 1, stale: true });
+        await new Promise((r) => setTimeout(r, 10));
+
+        expect(state.value).toEqual({ page: 2, fresh: true });
+        expect(JSON.parse(localStorage.getItem('api.pagination')!)).toEqual({ page: 2, fresh: true });
+    });
 });
+
+

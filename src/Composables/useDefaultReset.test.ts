@@ -201,4 +201,25 @@ describe('useDefaultReset com timer', () => {
         });
         scope.stop();
     });
+
+    it('preserva Date após reset', () => {
+        const scope = effectScope();
+        scope.run(() => {
+            const state = useDefaultReset({ d: new Date('2024-01-15') });
+            state.value.d = new Date('2025-01-01');
+            state.reset();
+            expect(state.value.d).toBeInstanceOf(Date);
+        });
+        scope.stop();
+    });
+
+    it('não lança com entrada circular', () => {
+        const scope = effectScope();
+        scope.run(() => {
+            const o: any = { a: 1 }; o.self = o;
+            expect(() => useDefaultReset(o)).not.toThrow();
+        });
+        scope.stop();
+    });
 });
+

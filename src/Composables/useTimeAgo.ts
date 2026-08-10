@@ -103,13 +103,12 @@ export const timeAgo = (
     initialDate: MaybeRefOrGetter<Date | number | string | undefined | null>,
     format: TimeAgoFormat | (string & {}) = 'br'
 ): UseTimeAgoReturn => {
-    // O fallback precisa ser resolvido dentro de um getter: se a data for nula, undefined ou inválida (NaN),
-    // usa a data atual (new Date()) sem romper a reatividade quando a data válida chegar depois.
+    // O fallback para null/undefined preserva reatividade; entradas inválidas (NaN) retornam a mensagem invalid.
     return vueUseTimeAgo(() => {
         const value = toValue(initialDate);
         if (value == null) return new Date();
         const d = value instanceof Date ? value : new Date(value);
-        return isNaN(d.getTime()) ? new Date() : (value as Date | number | string);
+        return isNaN(d.getTime()) ? (NaN as any) : (value as Date | number | string);
     }, { messages: FORMAT_MAP[format as TimeAgoFormat] ?? ptBr });
 };
 
