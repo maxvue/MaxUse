@@ -119,3 +119,64 @@ describe('deepClone', () => {
         expect(clone).toEqual({ b: 2 });
     });
 });
+
+describe('deepClone — regressão auditoria (achado 024)', () => {
+    class Ponto {
+        constructor(public x = 0, public y = 0) {}
+        distancia() { return Math.hypot(this.x, this.y); }
+    }
+
+    it('preserva o protótipo de instâncias de classe', () => {
+        const clone = deepClone(new Ponto(3, 4));
+
+        expect(clone).toBeInstanceOf(Ponto);
+        expect(typeof clone.distancia).toBe('function');
+        expect(clone.distancia()).toBe(5);
+    });
+
+    it('preserva o protótipo em instâncias aninhadas', () => {
+        const origem = { origem: new Ponto(1, 2), lista: [new Ponto(3, 4)] };
+        const clone = deepClone(origem);
+
+        expect(clone.origem).toBeInstanceOf(Ponto);
+        expect(clone.lista[0]).toBeInstanceOf(Ponto);
+        expect(clone.lista[0].distancia()).toBe(5);
+    });
+
+    it('desacopla o clone da instância original', () => {
+        const original = new Ponto(1, 1);
+        const clone = deepClone(original);
+
+        clone.x = 99;
+
+        expect(original.x).toBe(1);
+        expect(clone).not.toBe(original);
+    });
+
+    it('preserva objetos com protótipo nulo', () => {
+        const semProto = Object.create(null);
+        semProto.a = 1;
+
+        const clone = deepClone(semProto);
+
+        expect(Object.getPrototypeOf(clone)).toBeNull();
+        expect(clone.a).toBe(1);
+    });
+
+    it('mantém objetos literais como objetos literais', () => {
+        const clone = deepClone({ a: 1, b: { c: 2 } });
+
+        expect(clone.constructor).toBe(Object);
+        expect(clone).toEqual({ a: 1, b: { c: 2 } });
+    });
+
+    it('preserva o protótipo em referências circulares', () => {
+        const p: any = new Ponto(1, 2);
+        p.self = p;
+
+        const clone = deepClone(p);
+
+        expect(clone).toBeInstanceOf(Ponto);
+        expect(clone.self).toBe(clone);
+    });
+});

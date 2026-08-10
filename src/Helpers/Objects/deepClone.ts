@@ -4,6 +4,9 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
  * Cria uma cópia profunda de um valor, lidando com referências circulares e diversos tipos de dados.
  * Semelhante ao _.cloneDeep do Lodash.
  *
+ * Instâncias de classe têm o protótipo preservado: o clone continua respondendo
+ * a `instanceof` e mantém os métodos da classe original.
+ *
  * @param value O valor a ser clonado.
  * @param map Um WeakMap para rastrear referências circulares (uso interno).
  * @returns Uma cópia profunda do valor.
@@ -50,8 +53,15 @@ export function deepClone<T>(value: MaybeRefOrGetter<T>, map = new WeakMap()): T
         return clone;
     }
 
-    // Lida com Arrays e Objetos comuns
-    clone = Array.isArray(data) ? [] : {};
+    // Lida com Arrays e Objetos comuns, preservando o protótipo da instância
+    // (sem isso, instâncias de classe seriam clonadas como objetos literais e
+    // perderiam métodos, getters e a identidade em `instanceof`).
+    if (Array.isArray(data)) clone = [];
+    else {
+        const proto = Object.getPrototypeOf(data);
+        clone = proto === null ? Object.create(null) : Object.create(proto);
+    }
+
     map.set(data, clone);
 
     // Copia propriedades recursivamente

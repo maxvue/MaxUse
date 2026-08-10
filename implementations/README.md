@@ -2,18 +2,18 @@
 
 Auditoria realizada em **07/08/2026** sobre a branch `dev`, versão `1.1.47`.
 
-Foram levantados **28 achados**. **21 foram resolvidos** e seus arquivos removidos
+Foram levantados **28 achados**. **22 foram resolvidos** e seus arquivos removidos
 desta pasta — o registro permanente está no histórico do git (commits
 `fix: corrige 18 achados...`, `fix(composables): preserva reatividade...` e
 `refactor(routes): extrai camada de cache IndexedDB...`). Um deles, o 019, foi
 resolvido indiretamente pela migração do Lodash — ver Destaques.
 
-Os **7 arquivos restantes** são os achados **ainda abertos**: nenhum é um bug de
+Os **6 arquivos restantes** são os achados **ainda abertos**: nenhum é um bug de
 runtime simples — todos exigem uma decisão de produto ou arquitetura antes de
 implementar, porque mudam comportamento observável de quem já consome a
 biblioteca.
 
-**Estado atual da suíte:** 373 arquivos, **2561 testes**, todos passando.
+**Estado atual da suíte:** 373 arquivos, **2567 testes**, todos passando.
 `vue-tsc` sem erros. Build ok. 15/15 subpath exports resolvem.
 
 ---
@@ -27,7 +27,6 @@ biblioteca.
 | [007](./007-contratos-retorno-inconsistentes-rotas.md) | Contratos de retorno inconsistentes entre helpers de rota (`false` vs `null` vs exceção) | Routes | O contrato discriminado proposto é breaking change |
 | [016](./016-orderBy-muta-objeto-de-entrada.md) | `orderBy`: perda de chaves em Record e divergência do Lodash | Iterables | Depende de definir se a lib segue ou não a semântica do Lodash |
 | [018](./018-useDateFormat-fallback-mascara-erro.md) ⚠️ | `useDateFormat`/`timeAgo`: fallback para "hoje" mascara dado ausente | Composables | **Parcial** — a quebra de reatividade foi corrigida; mudar o fallback altera o que já é exibido em telas existentes |
-| [024](./024-deepClone-perde-prototipo-de-classe.md) | `deepClone` descarta o protótipo de instâncias de classe | Objects | Decidir entre corrigir ou documentar como clone "plano" |
 | [027](./027-config-global-singleton-sem-isolamento.md) | Config global em singletons: vazamento entre requisições em SSR | Routes | A API de instância proposta é major |
 
 ### Destaques
@@ -73,6 +72,12 @@ como 1 ano; type-guard invertido em `isEmpty`.
 build nunca emite; `localforage` declarada mas nunca importada; `CLAUDE.md`
 descrevendo precedência e implementação inexistentes; `coverage/` (112 arquivos)
 versionada.
+
+**Clonagem** — `deepClone` (exportado também como `cloneDeep`) descartava o
+protótipo de instâncias de classe, devolvendo objetos literais sem métodos e sem
+`instanceof`. Corrigido via `Object.create(Object.getPrototypeOf(...))`, alinhando
+o comportamento ao `_baseClone` que a migração do Lodash já havia trazido — as
+duas implementações de clone da biblioteca agora concordam.
 
 **Refactor interno** — as ~105 linhas de IndexedDB duplicadas entre
 `getCachedApiIDB` e `postCachedApiIDB` foram extraídas para
