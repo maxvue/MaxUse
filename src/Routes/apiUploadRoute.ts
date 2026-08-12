@@ -57,7 +57,8 @@ export async function apiUploadRoute<T = any>(
                 ...options?.headers,
                 ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
             },
-            withCredentials: getWithCredentials()
+            withCredentials: getWithCredentials(),
+            ...(options?.onUploadProgress ? { onUploadProgress: options.onUploadProgress } : {})
         });
         return message_response.data;
     } catch (error: any) {

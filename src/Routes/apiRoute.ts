@@ -14,6 +14,8 @@ export interface ApiRouteOptions {
     route_params?: Record<string, any>;
     /** Callback para capturar o objeto de erro Axios completo (status HTTP, 422, etc) */
     onError?: (error: unknown) => void;
+    /** Callback de progresso do upload */
+    onUploadProgress?: (progressEvent: any) => void;
     /** Se true, lança/repropaga a exceção em caso de falha HTTP */
     throw?: boolean;
     /** Headers extras para a requisição */
