@@ -16,6 +16,12 @@ export function cepIsValid(value: MaybeRefOrGetter<string | number | null | unde
     const digitsOnly = str.replace(/\D/g, '');
     if (digitsOnly.length !== 8) return false;
 
+    // O CEP zerado é o único valor garantidamente não atribuído pelos Correios.
+    // Sequências como 11111111 ou 22222222 caem em faixas reais (SP, RJ...) e por
+    // isso NÃO são rejeitadas — ao contrário de CPF/CNPJ, o CEP não tem dígito
+    // verificador e rejeitar dígitos repetidos produziria falso negativo.
+    if (/^0{8}$/.test(digitsOnly)) return false;
+
     return validateBr.cep(str);
 }
 
