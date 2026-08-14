@@ -6,8 +6,7 @@ describe('cacheUtils (internal)', () => {
     beforeEach(() => {
         vi.clearAllMocks();
         config.resetConfig();
-        if (typeof localStorage !== 'undefined') localStorage.clear();
-
+        localStorage.clear();
     });
 
     describe('stableStringify', () => {
@@ -37,10 +36,8 @@ describe('cacheUtils (internal)', () => {
         });
 
         it('incorpora selected.client.id na chave de cache', () => {
-            if (typeof localStorage !== 'undefined') {
-                localStorage.setItem('selected.client.id', 'client_123');
-                expect(buildCacheKey('my.route', { a: 1 })).toBe('my.route_client_123_{"a":1}');
-            }
+            localStorage.setItem('selected.client.id', 'client_123');
+            expect(buildCacheKey('my.route', { a: 1 })).toBe('my.route_client_123_{"a":1}');
         });
     });
 

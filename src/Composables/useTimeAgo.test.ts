@@ -333,12 +333,12 @@ describe('timeAgo', () => {
             });
         });
 
-        it('seconds (passado)', () => {
+        it('seconds (passado) → colapsa em justNow', () => {
             scope.run(() => {
-                // Para forçar a execução do formatador de segundos (caso o VueUse chame internamente)
+                // Abaixo de 1 minuto o VueUse colapsa em justNow; o formatador de
+                // segundos do mapa é coberto diretamente em "valida mensagens de action/limit".
                 const result = timeAgo(ago(30 * SECOND), 'action');
-                // Geralmente VueUse retorna justNow para < 1m, mas isso deve cobrir
-                expect(result).toBeDefined();
+                expect(result.value).toBe('Realizar Hoje');
             });
         });
     });

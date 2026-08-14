@@ -102,6 +102,8 @@
         "prepublishOnly": "npm run build",
         "typecheck:tsgo": "tsgo --noEmit",
         "test": "vitest run",
+    "test:types": "vitest run --typecheck.only",
+    "test:all": "vitest run && vitest run --typecheck.only",
         "test:watch": "vitest",
         "test:coverage": "vitest run --coverage",
         "test:ui": "vitest --ui"

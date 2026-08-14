@@ -12,7 +12,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run build          # prebuild (regen auto-import data) → vue-tsc typecheck → vite lib build
 npm run type-check     # vue-tsc --noEmit
 npm run lint           # eslint . --fix
-npm test               # vitest run (all *.test.ts)
+npm test               # vitest run (all *.test.ts) — runtime assertions only
+npm run test:types     # vitest run --typecheck.only — evaluates expectTypeOf assertions
+npm run test:all       # runtime tests followed by the type tests
 npm run test:watch     # vitest watch mode
 npm run test:coverage  # vitest run --coverage (v8)
 npm run dev:playground # vite dev server against ./playground for manual testing
@@ -61,7 +63,7 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 
 ## Conventions
 
-- **Tests are colocated** as `<name>.test.ts` next to source; vitest runs with `globals: true` and the `happy-dom` environment. `index.ts` files, `scripts/`, `json/`, and the VueUse/Locales re-export folders are excluded from coverage.
+- **Tests are colocated** as `<name>.test.ts` next to source; vitest runs with `globals: true` and the `happy-dom` environment. `tsconfig.json` **excludes** `src/**/*.test.ts`, so `vue-tsc` never sees test files — `expectTypeOf` assertions are only evaluated by `npm run test:types`, which uses [tsconfig.test.json](tsconfig.test.json) (same config, without that exclude). A test file that relies on `expectTypeOf` proves nothing under plain `npm test`. `index.ts` files, `scripts/`, `json/`, and the VueUse/Locales re-export folders are excluded from coverage.
 - **ESLint style** (enforced, [eslint.config.js](eslint.config.js)): 4-space indent, single quotes, semicolons required, **no trailing commas**, `curly: multi` (single-statement bodies inline without braces — this codebase heavily uses `if (cond) return x;` on one line). Run `npm run lint` before finishing.
 - New public functions must be reachable from their category `index.ts` to appear in the flat exports, the `_` object, and auto-import data.
 
