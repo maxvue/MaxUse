@@ -32,4 +32,18 @@ describe('difference', () => {
     it('funciona com Ref', () => {
         expect(difference(ref([1, 2, 3]), [2])).toEqual([1, 3]);
     });
+
+    it('trata NaN com SameValueZero', () => {
+        expect(difference([NaN, 1], [NaN])).toEqual([1]);
+    });
+
+    it('considera -0 e +0 iguais', () => {
+        expect(difference([-0, 1], [0])).toEqual([1]);
+    });
+
+    it('compara objetos por referência, não por conteúdo', () => {
+        expect(difference([{ a: 1 }], [{ a: 1 }]).length).toBe(1);
+        const mesmo = { a: 1 };
+        expect(difference([mesmo], [mesmo])).toEqual([]);
+    });
 });

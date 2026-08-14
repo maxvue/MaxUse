@@ -9,10 +9,12 @@
 export function union<T>(...arrays: T[][]): T[] {
     const flat = arrays.filter((a) => Array.isArray(a)).flat(1) as T[];
     const result: T[] = [];
+    const seen = new Set<T>();
 
     for (const item of flat) {
-        const already = result.some((r) => r === item || (r !== r && item !== item));
-        if (!already) result.push(item);
+        if (seen.has(item)) continue;
+        seen.add(item);
+        result.push(item);
     }
 
     return result;

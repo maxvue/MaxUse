@@ -18,19 +18,19 @@ export function intersectionBy<T>(...arrays: unknown[]): T[] {
 
     const fn = iteratee(rawIteratee) as (value: T) => unknown;
     const [first, ...rest] = lists.map((list) => (Array.isArray(list) ? list : []));
-    const restKeys = rest.map((list) => list.map((value) => fn(value)));
+    const restKeys = rest.map((list) => new Set(list.map((value) => fn(value))));
 
     const result: T[] = [];
-    const seen: unknown[] = [];
+    const seen = new Set<unknown>();
 
     for (const item of first) {
         const key = fn(item);
-        if (seen.some((k) => k === key || (k !== k && key !== key))) continue;
+        if (seen.has(key)) continue;
 
-        const inAll = restKeys.every((keys) => keys.some((k) => k === key || (k !== k && key !== key)));
+        const inAll = restKeys.every((keys) => keys.has(key));
         if (inAll) {
             result.push(item);
-            seen.push(key);
+            seen.add(key);
         }
     }
 

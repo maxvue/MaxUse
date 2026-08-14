@@ -22,12 +22,8 @@ export function differenceBy<T>(array: MaybeRefOrGetter<T[] | null | undefined>,
     const [arrays, rawIteratee] = splitRestIteratee<T>(values);
     const fn = iteratee(rawIteratee) as (value: T) => unknown;
 
-    const excluded: T[] = [];
-    for (const value of arrays) if (Array.isArray(value)) excluded.push(...value);
-    const excludedKeys = excluded.map((value) => fn(value));
+    const excludedKeys = new Set<unknown>();
+    for (const value of arrays) if (Array.isArray(value)) for (const item of value) excludedKeys.add(fn(item));
 
-    return data.filter((item) => {
-        const key = fn(item);
-        return !excludedKeys.some((k) => k === key || (k !== k && key !== key));
-    });
+    return data.filter((item) => !excludedKeys.has(fn(item)));
 }

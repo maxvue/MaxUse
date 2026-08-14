@@ -23,4 +23,18 @@ describe('differenceBy', () => {
     it('funciona com Ref', () => {
         expect(differenceBy(ref([2.1, 1.2]), [2.3], Math.floor)).toEqual([1.2]);
     });
+
+    it('trata chaves NaN com SameValueZero', () => {
+        expect(differenceBy([{ x: NaN }], [{ x: NaN }], 'x')).toEqual([]);
+    });
+
+    it('considera chaves -0 e +0 iguais', () => {
+        expect(differenceBy([{ x: -0 }], [{ x: 0 }], 'x')).toEqual([]);
+    });
+
+    it('aceita chave objeto, comparada por referência', () => {
+        const chave = { id: 1 };
+        expect(differenceBy([1], [2], () => ({ id: 1 })).length).toBe(1);
+        expect(differenceBy([1], [2], () => chave)).toEqual([]);
+    });
 });

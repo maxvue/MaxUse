@@ -14,29 +14,46 @@ export function xorBy<T>(...arrays: unknown[]): T[] {
     const [lists, rawIteratee] = splitRestIteratee<T>(arrays);
     const valid = lists.filter((list) => Array.isArray(list));
 
-    const sameValueZero = (a: unknown, b: unknown) => a === b || (a !== a && b !== b);
-
     // Com menos de 2 arrays válidos, o Lodash faz um atalho: apenas
     // deduplica o único array (por SameValueZero puro), **sem** aplicar o
     // iteratee — mesmo que um tenha sido passado. Replica esse atalho.
     if (valid.length < 2) {
         if (valid.length === 0) return [];
         const dedup: T[] = [];
-        for (const item of valid[0]) if (!dedup.some((existing) => sameValueZero(existing, item))) dedup.push(item);
+        const seen = new Set<T>();
+        for (const item of valid[0]) if (!seen.has(item)) {
+            seen.add(item);
+            dedup.push(item);
+        }
         return dedup;
     }
 
     const fn = iteratee(rawIteratee) as (value: T) => unknown;
-    const result: T[] = [];
-    const addedKeys: unknown[] = [];
 
-    for (const current of valid) for (const item of current) {
-        const key = fn(item);
-        const occurrences = valid.filter((arr) => arr.some((value) => sameValueZero(fn(value), key))).length;
-        const alreadyAdded = addedKeys.some((k) => sameValueZero(k, key));
-        if (occurrences === 1 && !alreadyAdded) {
-            result.push(item);
-            addedKeys.push(key);
+    // As chaves são derivadas uma única vez por elemento (O(n) invocações do
+    // iteratee) e indexadas em `Set`, tornando a contagem de ocorrências O(k)
+    // com k = número de arrays.
+    const keysByList = valid.map((list) => list.map((value) => fn(value)));
+    const sets = keysByList.map((keys) => new Set(keys));
+
+    const result: T[] = [];
+    const addedKeys = new Set<unknown>();
+
+    for (let listIndex = 0; listIndex < valid.length; listIndex++) {
+        const current = valid[listIndex];
+        const currentKeys = keysByList[listIndex];
+
+        for (let index = 0; index < current.length; index++) {
+            const key = currentKeys[index];
+            if (addedKeys.has(key)) continue;
+
+            let occurrences = 0;
+            for (const set of sets) if (set.has(key)) occurrences++;
+
+            if (occurrences === 1) {
+                result.push(current[index]);
+                addedKeys.add(key);
+            }
         }
     }
 

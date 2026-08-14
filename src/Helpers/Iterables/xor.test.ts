@@ -29,4 +29,20 @@ describe('xor', () => {
     it('ignora argumentos não array', () => {
         expect(xor([1, 2], 'a' as unknown as number[])).toEqual([1, 2]);
     });
+
+    it('trata NaN com SameValueZero', () => {
+        expect(xor([NaN, 1], [NaN, 2])).toEqual([1, 2]);
+    });
+
+    it('considera -0 e +0 iguais, mas preserva o sinal do valor original', () => {
+        expect(xor([-0, 1], [0, 2])).toEqual([1, 2]);
+        const resultado = xor([-0, 1], [2]);
+        expect(Object.is(resultado[0], -0)).toBe(true);
+    });
+
+    it('compara objetos por referência, não por conteúdo', () => {
+        expect(xor([{ a: 1 }], [{ a: 1 }]).length).toBe(2);
+        const mesmo = { a: 1 };
+        expect(xor([mesmo], [mesmo])).toEqual([]);
+    });
 });
