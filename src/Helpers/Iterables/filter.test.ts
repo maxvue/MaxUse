@@ -22,12 +22,16 @@ describe('filter', () => {
     });
 
     it('retorna array vazio para null', () => {
-        expect(filter(null, () => true)).toEqual({});
+        expect(filter(null, () => true)).toEqual([]);
     });
 
-    it('retorna objeto vazio para tipos primitivos', () => {
-        expect(filter('string' as any, () => true)).toEqual({});
-        expect(filter(42 as any, () => true)).toEqual({});
+    it('retorna array vazio para undefined', () => {
+        expect(filter(undefined, () => true)).toEqual([]);
+    });
+
+    it('retorna array vazio para tipos primitivos', () => {
+        expect(filter('string' as any, () => true)).toEqual([]);
+        expect(filter(42 as any, () => true)).toEqual([]);
     });
 
     it('funciona com Ref', () => {
