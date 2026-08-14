@@ -1,5 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { keys } from './keys';
+import { baseAssignValue } from './_baseAssignValue';
 
 /**
  * Atribui as propriedades **próprias** enumeráveis de cada objeto em
@@ -18,7 +19,7 @@ export function assign<T extends object>(object: MaybeRefOrGetter<T | null | und
     const data = (raw == null ? {} : Object(raw)) as T;
     for (const source of sources) {
         if (!source) continue;
-        for (const key of keys(source)) (data as Record<PropertyKey, unknown>)[key] = (source as Record<PropertyKey, unknown>)[key];
+        for (const key of keys(source)) baseAssignValue(data as Record<PropertyKey, unknown>, key, (source as Record<PropertyKey, unknown>)[key]);
     }
     return data;
 }

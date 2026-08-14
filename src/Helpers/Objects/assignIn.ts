@@ -1,5 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { keysIn } from './keysIn';
+import { baseAssignValue } from './_baseAssignValue';
 
 /**
  * Como `assign`, mas atribui também as propriedades **herdadas** via
@@ -15,7 +16,7 @@ export function assignIn<T extends object>(object: MaybeRefOrGetter<T | null | u
     const data = (raw == null ? {} : Object(raw)) as T;
     for (const source of sources) {
         if (!source) continue;
-        for (const key of keysIn(source)) (data as Record<PropertyKey, unknown>)[key] = (source as Record<PropertyKey, unknown>)[key];
+        for (const key of keysIn(source)) baseAssignValue(data as Record<PropertyKey, unknown>, key, (source as Record<PropertyKey, unknown>)[key]);
     }
     return data;
 }

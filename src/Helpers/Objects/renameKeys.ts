@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { baseAssignValue } from './_baseAssignValue';
 
 /**
  * Altera os nomes das chaves de um objeto usando um mapa de "de/para".
@@ -19,7 +20,7 @@ export function renameKeys(
 
     Object.keys(rawObject).forEach((key) => {
         const newKey = rawMap[key] || key;
-        renamedObject[newKey] = rawObject[key];
+        baseAssignValue(renamedObject, newKey, rawObject[key]);
     });
 
     return renamedObject;
