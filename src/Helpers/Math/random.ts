@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { isIterateeCall } from './_isIterateeCall';
 
 /**
  * Converte um valor para número finito — coerção interna equivalente ao
@@ -22,6 +23,11 @@ function toFiniteNumber(value: unknown): number {
  * resultado é um número de ponto flutuante; caso contrário, um inteiro.
  * Semelhante ao _.random do Lodash.
  *
+ * Assim como no Lodash, a função é segura quando passada diretamente como
+ * iteratee de `Array.prototype.map` — `[4, 8].map(random)` ignora o índice e o
+ * array recebidos como 2º e 3º argumentos, comportando-se como `random(4)` e
+ * `random(8)`.
+ *
  * @param lower limite inferior, ou limite superior se os demais forem omitidos
  * @param upper limite superior, ou a flag `floating` se for booleano
  * @param floating força o resultado a ser um número de ponto flutuante
@@ -31,6 +37,11 @@ export function random(lower?: MaybeRefOrGetter<number | boolean>, upper?: Maybe
     let lo: unknown = lower === undefined ? undefined : toValue(lower);
     let hi: unknown = upper === undefined ? undefined : toValue(upper);
     let isFloat: unknown = floating === undefined ? undefined : toValue(floating);
+
+    if (isFloat && typeof isFloat !== 'boolean' && isIterateeCall(lo, hi, isFloat)) {
+        hi = undefined;
+        isFloat = undefined;
+    }
 
     if (isFloat === undefined) if (typeof hi === 'boolean') {
         isFloat = hi;

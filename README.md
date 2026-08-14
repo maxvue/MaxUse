@@ -129,6 +129,44 @@ curry(fn)(1, _, 3)              // ❌ o objeto _ vira o valor de b, sem erro
 
 > **Migrando código de Lodash:** troque todo `_` em posição de placeholder por `placeholder`. A troca é textual e **não há erro em tempo de execução avisando** — o `_` passa como argumento real e a função executa silenciosamente com o valor errado.
 
+### `_` é um objeto, não uma função
+
+No Lodash o mesmo valor serve de namespace (`_.map`) e de wrapper chamável (`_([1,2,3])`). Aqui `_` é apenas o objeto agrupador — `_(valor)` lança `TypeError`. Para encadear, use as funções dedicadas:
+
+```ts
+import { _, chain, wrapperLodash } from '@maxvue/max-use'
+
+_.max([1, 2, 3])              // ✅ 3
+// _([1, 2, 3]).max()         // ❌ TypeError: _ is not a function
+
+chain([1, 2, 3]).max().value()          // ✅ 3 (encadeamento explícito)
+wrapperLodash([1, 2, 3]).max().value()  // ✅ 3 (encadeamento implícito)
+```
+
+### O wrapper sempre exige `.value()`
+
+No Lodash, o wrapper implícito desembrulha sozinho em métodos terminais (`max`, `min`, `sum`, `mean`, `head`, `last`, `get`). Na MaxUse **todos** os métodos retornam o wrapper, e o valor primitivo só sai com `.value()`:
+
+```ts
+wrapperLodash([1, 2, 3]).max()          // MaxUseWrapper, não 3
+wrapperLodash([1, 2, 3]).max().value()  // 3
+```
+
+O wrapper implementa `valueOf()` e `toJSON()`, então aritmética, comparação relacional e serialização continuam funcionando sem `.value()` — mas `typeof` e a comparação estrita `===` **não**:
+
+```ts
+const w = wrapperLodash([1, 2, 3]).max()
+
+w > 2                 // true
+w + 1                 // 4
+JSON.stringify(w)     // "3"
+
+typeof w              // 'object'  (no Lodash seria 'number')
+w === 3               // false     — use w.value() === 3
+```
+
+Na dúvida, chame `.value()` ao final de qualquer cadeia.
+
 ---
 
 ## ⚡ Reatividade como Princípio
