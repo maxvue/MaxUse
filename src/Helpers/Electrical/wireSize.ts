@@ -152,7 +152,12 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
                 data_return.wire = item.wire;
                 data_return.max_current = Number((item.max_current * fca * fct).toFixed(2));
             } else {
-                const wire_table = dados.find((c: { wire: number; max_current: number }) => c.wire === data_return.wire);
+                // Busca a menor bitola tabelada capaz de acomodar a seção calculada.
+                // A busca exata acerta com as tabelas atuais (todas cobrem uma faixa
+                // contígua de seções nominais); o recuo para a maior entrada é rede de
+                // segurança para uma tabela futura com piso ou lacuna diferente, que
+                // deixaria max_current com a corrente de entrada em vez da ampacidade.
+                const wire_table = dados.find((c: { wire: number; max_current: number }) => c.wire >= data_return.wire) ?? dados[dados.length - 1];
                 if (wire_table) data_return.max_current = Number((wire_table.max_current * fca * fct).toFixed(2));
             }
             else if (dados.length > 0) {
