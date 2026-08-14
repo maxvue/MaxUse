@@ -6,6 +6,11 @@ import { splitRestIteratee } from './_restIteratee';
  * último argumento não for um array, ele é tratado como o `comparator`.
  * Semelhante ao _.xorWith do Lodash.
  *
+ * **Complexidade O(n*m)**: um comparador arbitrário não induz uma relação de
+ * equivalência indexável, então não há como usar `Set` aqui. Para entradas
+ * grandes, prefira `xorBy` quando o critério de igualdade puder ser expresso
+ * como uma chave derivada.
+ *
  * @param arrays arrays a comparar, seguidos opcionalmente do comparator
  * @returns novo array com a diferença simétrica, segundo o comparator
  */

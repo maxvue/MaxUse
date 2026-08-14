@@ -12,14 +12,18 @@ export function intersection<T>(...arrays: T[][]): T[] {
 
     const casted = arrays.map((a) => (Array.isArray(a) ? a : []));
     const [first, ...rest] = casted;
+    const restSets = rest.map((arr) => new Set(arr));
     const result: T[] = [];
+    const seen = new Set<T>();
 
     for (const item of first) {
-        const already = result.some((r) => r === item || (r !== r && item !== item));
-        if (already) continue;
+        if (seen.has(item)) continue;
 
-        const inAll = rest.every((arr) => arr.some((value) => value === item || (value !== value && item !== item)));
-        if (inAll) result.push(item);
+        const inAll = restSets.every((set) => set.has(item));
+        if (inAll) {
+            seen.add(item);
+            result.push(item);
+        }
     }
 
     return result;

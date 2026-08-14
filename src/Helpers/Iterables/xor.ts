@@ -9,16 +9,21 @@
  */
 export function xor<T>(...arrays: T[][]): T[] {
     const valid = arrays.filter((a) => Array.isArray(a));
+    const sets = valid.map((arr) => new Set(arr));
     const result: T[] = [];
-
-    const sameValueZero = (a: T, b: T) => a === b || (a !== a && b !== b);
+    const alreadyAdded = new Set<T>();
 
     for (const current of valid) for (const item of current) {
-        const occurrences = valid.filter((arr) => arr.some((value) => sameValueZero(value, item))).length;
-        const alreadyAdded = result.some((r) => sameValueZero(r, item));
-        if (occurrences === 1 && !alreadyAdded) result.push(item);
-    }
+        if (alreadyAdded.has(item)) continue;
 
+        let occurrences = 0;
+        for (const set of sets) if (set.has(item)) occurrences++;
+
+        if (occurrences === 1) {
+            alreadyAdded.add(item);
+            result.push(item);
+        }
+    }
 
     return result;
 }

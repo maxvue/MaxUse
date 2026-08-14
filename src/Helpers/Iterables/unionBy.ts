@@ -17,12 +17,12 @@ export function unionBy<T>(...arrays: unknown[]): T[] {
 
     const flat = lists.filter((list) => Array.isArray(list)).flat(1) as T[];
     const result: T[] = [];
-    const seen: unknown[] = [];
+    const seen = new Set<unknown>();
 
     for (const item of flat) {
         const key = fn(item);
-        if (!seen.some((k) => k === key || (k !== k && key !== key))) {
-            seen.push(key);
+        if (!seen.has(key)) {
+            seen.add(key);
             result.push(item);
         }
     }

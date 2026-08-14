@@ -14,8 +14,8 @@ export function difference<T>(array: MaybeRefOrGetter<T[] | null | undefined>, .
     const data = toValue(array);
     if (!data || !data.length) return [];
 
-    const excluded: T[] = [];
-    for (const value of values) if (Array.isArray(value)) excluded.push(...value);
+    const excluded = new Set<T>();
+    for (const value of values) if (Array.isArray(value)) for (const item of value) excluded.add(item);
 
-    return data.filter((item) => !excluded.some((value) => item === value || (item !== item && value !== value)));
+    return data.filter((item) => !excluded.has(item));
 }

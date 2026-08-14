@@ -34,4 +34,18 @@ describe('pull', () => {
         const r = ref([1, 2, 3]);
         expect(pull(r, 2)).toEqual([1, 3]);
     });
+
+    it('trata NaN com SameValueZero', () => {
+        expect(pull([NaN, 1], NaN)).toEqual([1]);
+    });
+
+    it('considera -0 e +0 iguais', () => {
+        expect(pull([-0, 1], 0)).toEqual([1]);
+    });
+
+    it('compara objetos por referência, não por conteúdo', () => {
+        expect(pull([{ a: 1 }], { a: 1 }).length).toBe(1);
+        const mesmo = { a: 1 };
+        expect(pull([mesmo], mesmo)).toEqual([]);
+    });
 });

@@ -8,6 +8,11 @@ import { splitRestIteratee } from './_restIteratee';
  * caso contrário, usa-se SameValueZero.
  * Semelhante ao _.differenceWith do Lodash.
  *
+ * **Complexidade O(n*m)**: um comparador arbitrário não induz uma relação de
+ * equivalência indexável, então não há como usar `Set` aqui. Para entradas
+ * grandes, prefira `differenceBy` quando o critério de igualdade puder ser
+ * expresso como uma chave derivada.
+ *
  * @param array array de entrada
  * @param values arrays de valores a excluir, seguidos opcionalmente do comparator
  * @returns novo array com a diferença, segundo o comparator

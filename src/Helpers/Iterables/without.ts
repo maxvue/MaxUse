@@ -13,5 +13,7 @@ export function without<T>(array: MaybeRefOrGetter<T[] | null | undefined>, ...v
     const data = toValue(array);
     if (!data || !data.length) return [];
 
-    return data.filter((item) => !values.some((value) => item === value || (item !== item && value !== value)));
+    const excluded = new Set<T>(values);
+
+    return data.filter((item) => !excluded.has(item));
 }

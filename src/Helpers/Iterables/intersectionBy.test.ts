@@ -22,4 +22,18 @@ describe('intersectionBy', () => {
         const result = intersectionBy([{ x: 1, tag: 'first' }], [{ x: 1, tag: 'second' }], 'x');
         expect(result).toEqual([{ x: 1, tag: 'first' }]);
     });
+
+    it('trata chaves NaN com SameValueZero', () => {
+        expect(intersectionBy([{ x: NaN }], [{ x: NaN }], 'x').length).toBe(1);
+    });
+
+    it('considera chaves -0 e +0 iguais', () => {
+        expect(intersectionBy([{ x: -0 }], [{ x: 0 }], 'x').length).toBe(1);
+    });
+
+    it('aceita chave objeto, comparada por referência', () => {
+        const chave = { id: 1 };
+        expect(intersectionBy([1], [2], () => ({ id: 1 }))).toEqual([]);
+        expect(intersectionBy([1], [2], () => chave)).toEqual([1]);
+    });
 });

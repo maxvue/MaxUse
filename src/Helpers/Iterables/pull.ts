@@ -14,10 +14,9 @@ export function pull<T>(array: MaybeRefOrGetter<T[] | null | undefined>, ...valu
     const data = toValue(array);
     if (!data || !data.length || !values.length) return data;
 
-    const sameValueZero = (a: T, b: T) => a === b || (a !== a && b !== b);
+    const excluded = new Set<T>(values);
 
-    for (let index = data.length - 1; index >= 0; index--) if (values.some((value) => sameValueZero(data[index], value))) data.splice(index, 1);
-
+    for (let index = data.length - 1; index >= 0; index--) if (excluded.has(data[index])) data.splice(index, 1);
 
     return data;
 }
