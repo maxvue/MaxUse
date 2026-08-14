@@ -64,6 +64,16 @@ function createCurried(func: Function, arity: number, accumulatedArgs: unknown[]
  * reservar posições a preencher em chamadas futuras.
  * Semelhante ao _.curry do Lodash.
  *
+ * **Atenção:** `curry.placeholder` é um `Symbol` — **não** é o objeto `_`.
+ * Veja `placeholder` em `partial`.
+ *
+ * @example
+ * import { curry, placeholder } from '@maxvue/max-use';
+ *
+ * const fn = (a: number, b: number, c: number) => [a, b, c];
+ * curry(fn)(1, placeholder, 3)(2); // [1, 2, 3]
+ * curry(fn)(1, _, 3);              // ❌ o objeto `_` vira o valor de `b`
+ *
  * @param func função a curried
  * @param arity número de argumentos esperados (padrão: `func.length`)
  * @returns função curried

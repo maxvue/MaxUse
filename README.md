@@ -112,6 +112,25 @@ const { useMouse, useStorage, useClipboard } = vueUse
 
 ---
 
+## 🔀 Diferenças conhecidas em relação ao Lodash
+
+### Placeholder de `partial` / `curry` / `bind`
+
+No Lodash o placeholder é o próprio `_`, porque lá `_` **é a função da biblioteca**. Na MaxUse, `_` é um **objeto agregador de helpers** — não é chamável e não há `export default`. Por isso o placeholder é um `Symbol` dedicado, exportado como `placeholder` e também disponível em `partial.placeholder`, `partialRight.placeholder`, `curry.placeholder`, `curryRight.placeholder`, `bind.placeholder` e `bindKey.placeholder` — todos o **mesmo** símbolo.
+
+```ts
+import { curry, placeholder } from '@maxvue/max-use'
+
+const fn = (a, b, c) => [a, b, c]
+
+curry(fn)(1, placeholder, 3)(2) // ✅ [1, 2, 3]
+curry(fn)(1, _, 3)              // ❌ o objeto _ vira o valor de b, sem erro
+```
+
+> **Migrando código de Lodash:** troque todo `_` em posição de placeholder por `placeholder`. A troca é textual e **não há erro em tempo de execução avisando** — o `_` passa como argumento real e a função executa silenciosamente com o valor errado.
+
+---
+
 ## ⚡ Reatividade como Princípio
 
 Diferente de bibliotecas utilitárias comuns, **toda função da MaxUse entende a reatividade do Vue**. Você pode passar valores puros, `Refs`, `Computeds` ou funções `getter` — internamente, `toValue()` é utilizado para resolver o valor.

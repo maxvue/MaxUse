@@ -1,5 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import { partial, placeholder } from './partial';
+import { partialRight } from './partialRight';
+import { curry } from './curry';
+import { curryRight } from './curryRight';
+import { bind } from './bind';
+import { bindKey } from './bindKey';
 
 describe('partial', () => {
     it('pré-preenche os argumentos iniciais', () => {
@@ -37,5 +42,22 @@ describe('partial', () => {
 
     it('lança TypeError se func não for função', () => {
         expect(() => partial(null as any)).toThrow(TypeError);
+    });
+});
+
+describe('placeholder', () => {
+    it('é um Symbol dedicado, não o objeto _', () => {
+        expect(typeof placeholder).toBe('symbol');
+        expect(partial.placeholder).toBe(placeholder);
+        expect(partialRight.placeholder).toBe(placeholder);
+        expect(curry.placeholder).toBe(placeholder);
+        expect(curryRight.placeholder).toBe(placeholder);
+        expect(bind.placeholder).toBe(placeholder);
+        expect(bindKey.placeholder).toBe(placeholder);
+    });
+
+    it('reserva a posição em curry quando importado nominalmente', () => {
+        const fn = (a: number, b: number, c: number) => [a, b, c];
+        expect(curry(fn)(1, placeholder, 3)(2)).toEqual([1, 2, 3]);
     });
 });

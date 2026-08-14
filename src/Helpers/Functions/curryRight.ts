@@ -61,6 +61,9 @@ function composeArgsRight(args: unknown[], partials: unknown[], holders: number[
  * acumulados. Aceita `placeholder` (`curryRight.placeholder`) para
  * reservar posições, inclusive em chamadas sucessivas que preenchem os
  * mesmos placeholders aos poucos. Semelhante ao `curry`, mas espelhado.
+ *
+ * **Atenção:** `curryRight.placeholder` é um `Symbol` — **não** é o objeto
+ * `_`. Veja `placeholder` em `partial`.
  * Semelhante ao _.curryRight do Lodash.
  *
  * @param func função a curried
