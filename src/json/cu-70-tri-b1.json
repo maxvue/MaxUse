@@ -52,10 +52,6 @@
         "wire": 70
     },
     {
-        "max_current": 186,
-        "wire": 120
-    },
-    {
         "max_current": 207,
         "wire": 95
     },

@@ -290,6 +290,47 @@ describe('wireSize', () => {
         expect(res90!.voltage_drop).not.toBe(res70!.voltage_drop);
     });
 
+    // Regressão da issue #15: `cu-70-tri-b1.json` tinha uma entrada espúria
+    // {max_current: 186, wire: 120} — o valor de 120mm² da tabela de ALUMÍNIO
+    // equivalente, contaminada por cópia. Ela fazia 180A devolver 120mm² onde a
+    // sequência correta (171/70 → 207/95 → 239/120) pede 95mm². Nenhum dos testes
+    // existentes cobria essa faixa, e a ordenação por max_current seguia válida.
+    it('180A em cobre/PVC/B1/trifásico usa 95mm², não 120mm² (issue #15)', async () => {
+        const result = await wireSize(180, {
+            material: 'cu',
+            isolation: '70',
+            method: 'b1',
+            phases: 3,
+            voltage: 380,
+            voltage_type: 'ff',
+            length: 5,
+            max_loss: 5
+        });
+
+        expect(result).not.toBeNull();
+        expect(result!.wire).toBe(95);
+        expect(result!.max_current).toBe(207);
+    });
+
+    it('preenche max_current pela ampacidade tabelada quando a seção calculada supera a exigida pela corrente', async () => {
+        // Circuito longo: a queda de tensão exige seção maior que a ampacidade,
+        // caminho em que wireSize consulta a tabela pela bitola já escolhida.
+        const result = await wireSize(60, {
+            material: 'cu',
+            isolation: '70',
+            method: 'b1',
+            phases: 3,
+            voltage: 380,
+            voltage_type: 'ff',
+            length: 300,
+            max_loss: 2
+        });
+
+        expect(result).not.toBeNull();
+        // max_current vem da tabela (ampacidade da bitola), nunca da corrente de entrada.
+        expect(result!.max_current).toBeGreaterThan(60);
+    });
+
     it('todas as tabelas NBR estão em ordem crescente de max_current', () => {
         const jsonDir = path.resolve(__dirname, '../../json');
         const files = fs.readdirSync(jsonDir).filter((f) => f.endsWith('.json'));
