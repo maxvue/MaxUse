@@ -25,7 +25,8 @@ function mergeArgsRight(partials: unknown[], args: unknown[]): unknown[] {
 
 /**
  * Cria uma função que invoca `func` com `partials` anexados ao final dos
- * argumentos recebidos. Aceita `placeholder` (`partial.placeholder`) em
+ * argumentos recebidos. Aceita `placeholder` (`partialRight.placeholder`,
+ * um `Symbol` — **não** é o objeto `_`; veja `placeholder` em `partial`) em
  * qualquer posição de `partials` para reservar o lugar de um argumento a
  * ser informado na chamada da função resultante.
  * Semelhante ao _.partialRight do Lodash.

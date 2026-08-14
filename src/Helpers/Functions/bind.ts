@@ -21,7 +21,8 @@ function mergeArgs(partials: unknown[], args: unknown[]): unknown[] {
 /**
  * Cria uma função que invoca `func` com `thisArg` fixado como contexto e
  * `partials` prependados aos argumentos recebidos. Aceita `placeholder`
- * (`bind.placeholder`, igual ao `partial.placeholder`) em qualquer
+ * (`bind.placeholder`, um `Symbol` igual ao `partial.placeholder` — **não**
+ * é o objeto `_`; veja `placeholder` em `partial`) em qualquer
  * posição de `partials`. Assim como o `bind` nativo, uma vez fixado, o
  * contexto não pode ser trocado por um `bind` subsequente.
  * Semelhante ao _.bind do Lodash.

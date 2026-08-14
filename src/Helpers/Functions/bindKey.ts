@@ -25,6 +25,9 @@ function mergeArgs(partials: unknown[], args: unknown[]): unknown[] {
  * se o método for substituído em `object` depois de `bindKey` ser
  * chamado, a versão nova é usada. Aceita `placeholder`
  * (`bindKey.placeholder`) em `partials`.
+ *
+ * **Atenção:** `bindKey.placeholder` é um `Symbol` — **não** é o objeto `_`.
+ * Veja `placeholder` em `partial`.
  * Semelhante ao _.bindKey do Lodash.
  *
  * @param object objeto que contém o método
