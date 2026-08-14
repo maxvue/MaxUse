@@ -2,14 +2,22 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 import { resolveRoute, getConfiguredHeaders, getWithCredentials, getClientIdHeader } from './config';
 import { hasContent } from '../Helpers/Types';
-import { buildCacheKey, dedupeRequest } from './internal/cacheUtils';
+import { buildCacheKey, dedupeRequest, invalidateDedupeKey } from './internal/cacheUtils';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
 
 /**
  * Limpa uma chave específica ou todo o cache do localStorage gerenciado por `getCachedApi`.
- * Se `key` não for informada, limpa todas as chaves prefixadas com `max_cache:`.
+ *
+ * - Com `key`: remove tanto a chave crua (usada quando se informa `keyCache` customizado)
+ *   quanto a variante prefixada `max_cache:<key>`.
+ * - Sem `key`: remove **apenas** as chaves prefixadas com `max_cache:`. Chaves gravadas sob
+ *   `keyCache` customizado não têm prefixo e são indistinguíveis das chaves do aplicativo
+ *   hospedeiro, portanto **não** são removidas — limpe-as individualmente com
+ *   `clearCachedApi(minhaChave)`.
+ *
+ * Nenhuma chave alheia à biblioteca é apagada.
  */
 export function clearCachedApi(key?: string): void {
     if (typeof localStorage === 'undefined') return;
@@ -18,13 +26,16 @@ export function clearCachedApi(key?: string): void {
         if (key) {
             localStorage.removeItem(key);
             localStorage.removeItem(`max_cache:${key}`);
+            invalidateDedupeKey(key);
+            invalidateDedupeKey(`max_cache:${key}`);
         } else {
             const keysToRemove: string[] = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const k = localStorage.key(i);
-                if (k && (k.startsWith('max_cache:') || k.length > 0)) keysToRemove.push(k);
+                if (k && k.startsWith('max_cache:')) keysToRemove.push(k);
             }
             keysToRemove.forEach((k) => localStorage.removeItem(k));
+            invalidateDedupeKey();
         }
     } catch {
         // Silencia erro em ambientes restritos

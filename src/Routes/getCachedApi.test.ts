@@ -121,6 +121,30 @@ describe('getCachedApi', () => {
         expect(localStorage.length).toBe(0);
     });
 
+    it('clearCachedApi() sem chave remove apenas o cache prefixado com max_cache:', async () => {
+        localStorage.setItem('max_cache:rota', 'dado da lib');
+        localStorage.setItem('app_user_session', 'TOKEN DO APP HOSPEDEIRO');
+        localStorage.setItem('pinia_state', 'estado de outra lib');
+
+        clearCachedApi();
+
+        expect(localStorage.getItem('max_cache:rota')).toBeNull();
+        expect(localStorage.getItem('app_user_session')).toBe('TOKEN DO APP HOSPEDEIRO');
+        expect(localStorage.getItem('pinia_state')).toBe('estado de outra lib');
+    });
+
+    it('clearCachedApi(key) remove a chave crua e a variante prefixada, sem tocar em outras', async () => {
+        localStorage.setItem('custom_key', 'cache customizado');
+        localStorage.setItem('max_cache:custom_key', 'cache prefixado');
+        localStorage.setItem('outra_chave', 'do app');
+
+        clearCachedApi('custom_key');
+
+        expect(localStorage.getItem('custom_key')).toBeNull();
+        expect(localStorage.getItem('max_cache:custom_key')).toBeNull();
+        expect(localStorage.getItem('outra_chave')).toBe('do app');
+    });
+
     it('respeita TTL opcional no getCachedApi expirando dados antigos', async () => {
         (axios.get as any).mockResolvedValue({ data: { v: 1 } });
         await getCachedApi('rota.ttl', {}, 'k_ttl', 1000);
