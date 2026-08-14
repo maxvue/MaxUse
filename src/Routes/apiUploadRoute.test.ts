@@ -130,3 +130,68 @@ describe('apiUploadRoute — regressão auditoria (achado 008)', () => {
         expect(consoleSpy).toHaveBeenCalled();
     });
 });
+
+
+describe('apiUploadRoute - cancelamento (AbortSignal)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue({
+            option_load_screen: null,
+            routeURL: 'https://api.example.com/upload'
+        });
+
+        (axios.post as any).mockResolvedValue({ data: { uploaded: true } });
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it('propaga options.signal para o config do axios', async () => {
+        const controller = new AbortController();
+
+        await apiUploadRoute('test.upload', null, {}, { signal: controller.signal });
+
+        const received = (axios.post as any).mock.calls[0][2];
+        expect(received.signal).toBe(controller.signal);
+    });
+
+    it('não envia signal quando não informado', async () => {
+        await apiUploadRoute('test.upload', null, {});
+
+        const received = (axios.post as any).mock.calls[0][2];
+        expect('signal' in received).toBe(false);
+    });
+
+    it('deixa de invocar onUploadProgress após o abort (desmontagem do componente)', async () => {
+        const controller = new AbortController();
+        const onUploadProgress = vi.fn();
+
+        await apiUploadRoute('test.upload', null, {}, { signal: controller.signal, onUploadProgress });
+
+        const wrapper = (axios.post as any).mock.calls[0][2].onUploadProgress;
+        expect(typeof wrapper).toBe('function');
+
+        // Antes do abort o callback do consumidor é chamado normalmente
+        wrapper({ loaded: 10, total: 100 });
+        expect(onUploadProgress).toHaveBeenCalledTimes(1);
+
+        // Depois do abort nenhum evento em trânsito escreve no consumidor
+        controller.abort();
+        wrapper({ loaded: 50, total: 100 });
+        expect(onUploadProgress).toHaveBeenCalledTimes(1);
+    });
+
+    it('não loga nem chama onError quando o upload é cancelado', async () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const onError = vi.fn();
+        (axios.post as any).mockRejectedValue({ code: 'ERR_CANCELED', name: 'CanceledError', message: 'canceled' });
+
+        const result = await apiUploadRoute('test.upload', null, {}, { onError });
+
+        expect(result).toBeNull();
+        expect(onError).not.toHaveBeenCalled();
+        expect(consoleSpy).not.toHaveBeenCalled();
+
+        consoleSpy.mockRestore();
+    });
+});

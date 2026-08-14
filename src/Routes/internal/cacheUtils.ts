@@ -1,4 +1,5 @@
 import { getClientId, onResetConfig } from '../config';
+import { createAbortError } from './abortUtils';
 
 /**
  * Serializa de forma estável um valor/objeto, ordenando as chaves de objetos recursivamente.
@@ -42,6 +43,38 @@ export function dedupeRequest<T>(key: string, fn: () => Promise<T>): Promise<T> 
     });
     inFlight.set(key, promise);
     return promise;
+}
+
+/**
+ * Informa se já existe uma requisição em voo para a chave informada.
+ * Usado pelos helpers cacheados para decidir se são os "donos" da requisição
+ * (e portanto podem propagar o `AbortSignal` para o axios sem prejudicar outros chamadores).
+ */
+export function hasInFlight(key: string): boolean {
+    return inFlight.has(key);
+}
+
+/**
+ * Cancela a **espera** do chamador por uma promise compartilhada, sem derrubar
+ * a requisição em si (que pode estar sendo aguardada por outros chamadores).
+ * Se o sinal já estiver abortado, rejeita imediatamente.
+ */
+export function raceWithSignal<T>(promise: Promise<T>, signal?: AbortSignal | null): Promise<T> {
+    if (!signal) return promise;
+
+    if (signal.aborted) {
+        promise.catch(() => {});
+        return Promise.reject(createAbortError());
+    }
+
+    return new Promise<T>((resolve, reject) => {
+        const onAbort = () => reject(createAbortError());
+        signal.addEventListener('abort', onAbort, { once: true });
+
+        promise.then(resolve, reject).finally(() => {
+            signal.removeEventListener('abort', onAbort);
+        });
+    });
 }
 
 /**
