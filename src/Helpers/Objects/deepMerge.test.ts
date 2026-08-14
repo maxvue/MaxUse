@@ -76,5 +76,97 @@ describe('deepMerge', () => {
         deepMerge({} as any, JSON.parse('{"constructor":{"prototype":{"x":1}}}'));
         expect(({} as any).x).toBeUndefined();
     });
+
+    // Referências circulares
+    it('não estoura a pilha com referência circular direta', () => {
+        const source: any = { name: 'a' };
+        source.self = source;
+
+        expect(() => deepMerge({} as any, source)).not.toThrow();
+    });
+
+    it('não estoura a pilha com ciclo aninhado', () => {
+        const source: any = { name: 'a', b: { name: 'b' } };
+        source.b.parent = source;
+
+        expect(() => deepMerge({} as any, source)).not.toThrow();
+    });
+
+    it('reconstrói o ciclo no alvo em vez de duplicar infinitamente', () => {
+        const source: any = { name: 'a' };
+        source.b = { name: 'b', a: source };
+
+        const result = deepMerge({} as any, source);
+        expect(result.b.a).toBe(result);
+        expect(result.name).toBe('a');
+        expect(result.b.name).toBe('b');
+    });
+
+    // Isolamento de referências
+    it('não compartilha referência de array com a fonte', () => {
+        const source = { items: [1, 2, 3] };
+        const result = deepMerge({} as any, source);
+
+        result.items.push(4);
+        expect(source.items).toEqual([1, 2, 3]);
+    });
+
+    it('não compartilha referência de objeto aninhado com a fonte', () => {
+        const source = { config: { theme: 'dark' } };
+        const result = deepMerge({} as any, source);
+
+        result.config.theme = 'light';
+        expect(source.config.theme).toBe('dark');
+    });
+
+    it('preserva Date, Map, Set e instâncias de classe', () => {
+        class Custom {
+            constructor(public value = 1) {}
+        }
+
+        const source = {
+            d: new Date(2020, 0, 1),
+            s: new Set([1]),
+            m: new Map([['a', 1]]),
+            c: new Custom()
+        };
+        const result = deepMerge({} as any, source);
+
+        expect(result.d).toBeInstanceOf(Date);
+        expect(result.d.getTime()).toBe(source.d.getTime());
+        expect(result.s).toBeInstanceOf(Set);
+        expect(result.m).toBeInstanceOf(Map);
+        expect(result.c).toBeInstanceOf(Custom);
+    });
+
+    it('preserva instâncias de classe no alvo raiz e aninhado', () => {
+        class Cfg {
+            constructor(
+                public a = 1,
+                public keep = 'preservar'
+            ) {}
+        }
+
+        const rootTarget = new Cfg() as any;
+        const rootResult = deepMerge(rootTarget, { b: 2 }) as any;
+        expect(rootResult.b).toBe(2);
+        expect(rootResult.a).toBe(1);
+        expect(rootResult.keep).toBe('preservar');
+        expect(rootResult instanceof Cfg).toBe(true);
+
+        const nestedTarget: any = { cfg: new Cfg() };
+        const nestedResult: any = deepMerge(nestedTarget, { cfg: { b: 2 } });
+        expect(nestedResult.cfg.a).toBe(1);
+        expect(nestedResult.cfg.keep).toBe('preservar');
+        expect(nestedResult.cfg.b).toBe(2);
+        expect(nestedResult.cfg instanceof Cfg).toBe(true);
+    });
+
+    it('não muta o array de sources recebido', () => {
+        const sources = [{ b: 2 }, { c: 3 }];
+        deepMerge({ a: 1 } as any, ...sources);
+
+        expect(sources).toHaveLength(2);
+    });
 });
 
