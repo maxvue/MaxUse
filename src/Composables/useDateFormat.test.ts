@@ -109,7 +109,10 @@ describe('useDateFormat — regressão auditoria (achado 018, parte reatividade)
             await nextTick();
 
             // Fallback atual: data de hoje (comportamento preservado nesta correção)
-            expect(formatada.value).toBeTruthy();
+            const hoje = new Date();
+            const dd = String(hoje.getDate()).padStart(2, '0');
+            const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+            expect(formatada.value).toBe(`${dd}/${mm}/${hoje.getFullYear()}`);
         });
     });
 });

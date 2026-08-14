@@ -10,6 +10,13 @@ export default defineConfig({
             TZ: 'America/Sao_Paulo'
         },
         include: ['src/**/*.test.ts'],
+        // Avaliação das asserções `expectTypeOf` dos testes. Desligado no `vitest run`
+        // padrão para não penalizar o ciclo comum; roda via `npm run test:types`.
+        typecheck: {
+            enabled: false,
+            include: ['src/**/*.test.ts'],
+            tsconfig: './tsconfig.test.json'
+        },
         coverage: {
             provider: 'v8',
             include: ['src/**/*.ts'],

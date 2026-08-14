@@ -1,0 +1,17 @@
+{
+    // Espelha o tsconfig.json, mas SEM excluir os arquivos de teste — o `exclude`
+    // do tsconfig principal é o motivo de `expectTypeOf` nunca ser avaliado.
+    // Usado apenas por `test.typecheck` do vitest (npm run test:types).
+    "extends": "./tsconfig.json",
+    "include": ["env.d.ts", "src/**/*", "src/**/*.vue", "src/**/*.json"],
+    "exclude": ["node_modules", "dist"],
+    "compilerOptions": {
+        "composite": false,
+        "declaration": false,
+        "declarationMap": false,
+        "noEmit": true,
+        // `globals: true` no vitest.config.ts: sem isto o `vi`/`expect` globais
+        // usados pelos testes não existem para o compilador.
+        "types": ["node", "vitest/globals"]
+    }
+}

@@ -21,7 +21,7 @@ describe('baseSortedIndexBy', () => {
 
     it('trata NaN, null, undefined e Symbol ordenando corretamente no final', () => {
         const sym = Symbol('s');
-        const arr = [10, 20, null, undefined, NaN];
+        const arr: (number | symbol | null | undefined)[] = [10, 20, null, undefined, NaN];
 
         expect(baseSortedIndexBy(arr, NaN, (x) => x, false)).toBe(4);
         expect(baseSortedIndexBy(arr, null, (x) => x, false)).toBe(2);

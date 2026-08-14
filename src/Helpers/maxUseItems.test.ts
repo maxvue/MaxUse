@@ -54,13 +54,13 @@ describe('maxUseAutoImport', () => {
 
     it('garante que todos os itens de maxUseItems estão presentes no autoImportData', () => {
         const items = maxUseItems();
-        const autoImportItems = (maxUseAutoImport[0] as Record<string, string[]>)['@maxvue/max-use'];
+        const autoImportItems = (maxUseAutoImport[0] as unknown as Record<string, string[]>)['@maxvue/max-use'];
         for (const item of items) expect(autoImportItems).toContain(item);
 
     });
 
     it('expõe snakeCase e demais helpers de Strings na lista de auto-import', () => {
-        const autoImportItems = (maxUseAutoImport[0] as Record<string, string[]>)['@maxvue/max-use'];
+        const autoImportItems = (maxUseAutoImport[0] as unknown as Record<string, string[]>)['@maxvue/max-use'];
         for (const item of ['snakeCase', 'camelCase', 'kebabCase']) expect(autoImportItems).toContain(item);
     });
 });
