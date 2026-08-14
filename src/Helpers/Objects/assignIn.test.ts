@@ -16,4 +16,21 @@ describe('assignIn', () => {
     it('trata object null/undefined como um novo objeto vazio', () => {
         expect(assignIn(null, { a: 1 })).toEqual({ a: 1 });
     });
+
+    it('não troca o protótipo do objeto retornado via chave __proto__', () => {
+        const payload = JSON.parse('{"__proto__":{"isAdmin":true}}');
+        const result = assignIn({}, payload) as Record<string, unknown>;
+
+        expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+        expect(result.isAdmin).toBeUndefined();
+        expect(({} as Record<string, unknown>).isAdmin).toBeUndefined();
+        expect(Object.prototype.hasOwnProperty.call(result, '__proto__')).toBe(true);
+    });
+
+    it('não troca o protótipo para null via chave __proto__', () => {
+        const payload = JSON.parse('{"__proto__":null}');
+        const result = assignIn({}, payload) as Record<string, unknown>;
+
+        expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+    });
 });

@@ -26,4 +26,21 @@ describe('renameKeys', () => {
         const map = ref({ old: 'new' });
         expect(renameKeys(obj, map)).toEqual({ new: 'value' });
     });
+
+    it('não troca o protótipo do objeto retornado quando o mapa aponta para __proto__', () => {
+        const result = renameKeys({ nome: { isAdmin: true } }, { nome: '__proto__' });
+
+        expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+        expect(result.isAdmin).toBeUndefined();
+        expect(({} as Record<string, unknown>).isAdmin).toBeUndefined();
+        expect(Object.prototype.hasOwnProperty.call(result, '__proto__')).toBe(true);
+    });
+
+    it('não troca o protótipo do objeto retornado quando a origem traz __proto__ próprio', () => {
+        const payload = JSON.parse('{"__proto__":{"isAdmin":true}}');
+        const result = renameKeys(payload, {});
+
+        expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
+        expect(result.isAdmin).toBeUndefined();
+    });
 });

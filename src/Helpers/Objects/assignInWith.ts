@@ -1,5 +1,6 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { keysIn } from './keysIn';
+import { baseAssignValue } from './_baseAssignValue';
 
 type Customizer = (objValue: unknown, srcValue: unknown, key: PropertyKey, object: unknown, source: unknown) => unknown;
 
@@ -31,7 +32,7 @@ export function assignInWith<T extends object>(object: MaybeRefOrGetter<T | null
             const srcValue = (source as Record<PropertyKey, unknown>)[key];
             const objValue = (data as Record<PropertyKey, unknown>)[key];
             const result = customizer ? customizer(objValue, srcValue, key, data, source) : undefined;
-            (data as Record<PropertyKey, unknown>)[key] = result === undefined ? srcValue : result;
+            baseAssignValue(data as Record<PropertyKey, unknown>, key, result === undefined ? srcValue : result);
         }
     }
     return data;
