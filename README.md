@@ -234,7 +234,7 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `countBy` | `(collection, iteratee) → Record<string, number>` | Conta ocorrências por grupo |
 | `orderBy` | `(collection, keys, orders?) → T[]` | Ordena por múltiplas chaves e direções |
 | `orderByWithKey` | `(collection, key, order?) → T[]` | Ordena por uma chave específica |
-| `filter` | `(collection, predicate) → T[]` | Filtra elementos com predicado |
+| `filter` | `(collection, predicate) → T[] \| Record<string, T>` | Filtra elementos com predicado |
 | `filterBy` | `(collection, key, value) → T[]` | Filtra por valor de uma propriedade |
 | `filterByNot` | `(collection, key, value) → T[]` | Filtra excluindo um valor de propriedade |
 | `findLast` | `(array, predicate) → T \| undefined` | Encontra o último elemento que satisfaz o predicado |
@@ -260,6 +260,16 @@ uniqueBy(users, 'role')      // [{ id: 1, ... }, { id: 2, ... }]
 orderBy(users, ['name'])     // Ordenado por nome
 first(users)                 // { id: 1, name: 'Ana', ... }
 ```
+
+> **`filter` e entradas nulas.** Como no Lodash, `filter(null)`, `filter(undefined)` e
+> valores primitivos devolvem `[]` — nunca lançam. A diferença deliberada da MaxUse é o
+> caso de **Record**: enquanto `_.filter` do Lodash sempre devolve array, aqui um objeto
+> indexado devolve um Record com as chaves originais preservadas.
+>
+> ```ts
+> filter(null, () => true)                                  // []
+> filter({ a: { v: 1 }, b: { v: 2 } }, (i) => i.v > 1)      // { b: { v: 2 } }
+> ```
 
 ---
 
@@ -299,7 +309,7 @@ Manipulação profunda de objetos.
 | `renameKeys` | `(object, keyMap) → object` | Renomeia chaves de um objeto |
 | `pick` | `(object, keys) → object` | Seleciona apenas as chaves indicadas |
 | `omit` | `(object, keys) → object` | Remove as chaves indicadas |
-| `mapValues` | `(object, fn) → object` | Transforma os valores de um objeto |
+| `mapValues` | `(object, fn) → object` | Transforma os valores de um objeto (`null`/`undefined` → `{}`) |
 
 > **Alias:** `cloneDeep` é um alias para `deepClone`.
 

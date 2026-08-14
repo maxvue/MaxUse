@@ -22,6 +22,18 @@ describe('mapValues', () => {
         expect(mapValues({}, (v) => v)).toEqual({});
     });
 
+    it('retorna objeto vazio para null', () => {
+        expect(mapValues(null, (v) => v)).toEqual({});
+    });
+
+    it('retorna objeto vazio para undefined', () => {
+        expect(mapValues(undefined, (v) => v)).toEqual({});
+    });
+
+    it('retorna objeto vazio para Ref nula', () => {
+        expect(mapValues(ref(null), (v) => v)).toEqual({});
+    });
+
     // Reatividade
     it('funciona com Ref', () => {
         const obj = ref({ a: 10, b: 20 });
