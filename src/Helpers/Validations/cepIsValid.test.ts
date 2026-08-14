@@ -33,6 +33,22 @@ describe('cepIsValid', () => {
         expect(cepIsValid('abcde-fgh')).toBe(false);
     });
 
+    it('rejeita o CEP zerado', () => {
+        expect(cepIsValid('00000000')).toBe(false);
+        expect(cepIsValid('00000-000')).toBe(false);
+        expect(cepIsValid(0)).toBe(false);
+    });
+
+    it('mantém válidos CEPs de dígitos repetidos em faixas atribuídas', () => {
+        expect(cepIsValid('11111111')).toBe(true);
+        expect(cepIsValid('22222222')).toBe(true);
+    });
+
+    it('mantém válidos CEPs reais', () => {
+        expect(cepIsValid('01001000')).toBe(true);
+        expect(cepIsValid('04538133')).toBe(true);
+    });
+
     it('retorna false para undefined e string vazia', () => {
         expect(cepIsValid(undefined)).toBe(false);
         expect(cepIsValid('')).toBe(false);
