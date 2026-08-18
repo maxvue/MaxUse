@@ -67,7 +67,8 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 - **ESLint style** (enforced, [eslint.config.js](eslint.config.js)): 4-space indent, single quotes, semicolons required, **no trailing commas**, `curly: multi` (single-statement bodies inline without braces — this codebase heavily uses `if (cond) return x;` on one line). Run `npm run lint` before finishing.
 - New public functions must be reachable from their category `index.ts` to appear in the flat exports, the `_` object, and auto-import data.
 
-## Agent Execution in Worktrees
+## Execução de Agentes em Worktree
 
-- Any agent/subagent execution that proposes code changes in this repository must run in a **separate git worktree**, created specifically for the proposed changes (`git worktree add ../MaxUse-wt-<slug> -b <slug>`) — never directly in the main working tree.
-- Validate the changes in the isolated worktree, then integrate (merge) into the main branch.
+- Toda execução de agentes/subagentes que proponha modificações de código neste repositório deve ocorrer em um **git worktree separado**, criado especificamente para as alterações propostas dentro da pasta oculta `.worktrees/` na raiz do projeto (`git worktree add -b wt-<slug> .worktrees/wt-<slug>`) — nunca diretamente na working tree principal. A pasta `.worktrees/` é ignorada pelo Git (`.gitignore`).
+- **Outras worktrees:** Se houver outras worktrees na pasta `.worktrees/`, não se preocupe com elas: pertencem a outros agentes em outras sessões paralelas. Não investigue outras worktrees, a menos que o usuário peça.
+- **Commits e Limpeza:** Siga as instruções da sessão/prompt quanto a commits (ou aguarde confirmação do usuário se não especificado). Ao concluir e commitar/mergear, remova a worktree criada (`git worktree remove .worktrees/wt-<slug>`).

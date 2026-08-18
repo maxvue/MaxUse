@@ -32,12 +32,12 @@ describe('apiRoute', () => {
         });
     });
 
-    it('resolve a rota POST ignorando data no resolveRoute', () => {
+    it('resolve a rota POST usando data como fallback para route_params quando aplicável', () => {
         const result = apiRoute('test.post', { id: 1 }, null, 'POST');
-        expect(config.resolveRoute).toHaveBeenCalledWith('test.post');
+        expect(config.resolveRoute).toHaveBeenCalledWith('test.post', { id: 1 });
         expect(result).toEqual({
             option_load_screen: null,
-            routeURL: 'https://example.com/test.post'
+            routeURL: 'https://example.com/test.post/1'
         });
     });
 
