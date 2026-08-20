@@ -1,0 +1,63 @@
+{
+    "repo": "maxvue/MaxUse",
+    "mainBranch": "dev",
+    "worktreeDir": ".claude/worktrees",
+    "features": {
+        "bugReport": false,
+        "productionLogs": false,
+        "pulse": false,
+        "security": true
+    },
+    "commands": {
+        "test": "npm test",
+        "formatFrontend": "npm run lint",
+        "typecheckFrontend": "npm run type-check",
+        "build": "npm run build"
+    },
+    "worktreeSetup": {
+        "symlinks": [
+            "node_modules"
+        ],
+        "notes": [
+            "O build depende do prebuild (npx tsx src/scripts/buildAutoImport.ts), que reescreve src/Helpers/autoImportData.json. Nunca editar esse JSON a mao — alterar o modulo de origem e rodar o prebuild.",
+            "Adicionar um subpath export exige editar build.lib.entry em vite.config.ts E o mapa exports em package.json; mexer em so um dos dois quebra o pacote publicado silenciosamente.",
+            "Uma nova categoria de helper precisa ser registrada nos tres pontos de agregacao: src/index.ts, src/Helpers/maxUseItems.ts e src/scripts/buildAutoImport.ts.",
+            "Colisoes de nome entre modulos sao resolvidas por linhas explicitas de export no fim de src/index.ts; um nome novo exportado por mais de um modulo precisa entrar nessa lista."
+        ]
+    },
+    "testing": {
+        "warnings": [
+            "Nao ha banco de dados: a suite roda com vitest (globals: true, ambiente happy-dom). Nenhum reset de banco se aplica a este projeto.",
+            "Os helpers de Routes usam singletons de modulo em src/Routes/config.ts. Testes que tocam Routes precisam chamar resetConfig() em setup/teardown, senao vazam estado entre arquivos e produzem falso positivo/negativo.",
+            "Os caches em getCachedApi (localStorage) e getCachedApiIDB/postCachedApiIDB (indexedDB) persistem entre testes no mesmo ambiente; limpar explicitamente ao testar cache.",
+            "index.ts, scripts/, json/ e as pastas de re-export VueUse/Locales sao excluidos da cobertura — cobertura baixa nesses caminhos nao e achado."
+        ]
+    },
+    "testSkills": [
+        "vue-vitest-testing-best-practices",
+        "systematic-debugging-best-practices"
+    ],
+    "domainSkills": {
+        "API publica e convencoes do max-use": [
+            "vue-max-use-development-best-practices",
+            "vue-max-ecosystem-api-reference"
+        ],
+        "Cache reativo e useRefCachedApi": [
+            "vue-max-use-usecachedapi-state-cache-best-practices"
+        ],
+        "Helpers HTTP por rota nomeada": [
+            "vue-axios-api-integration-best-practices",
+            "vue-router-best-practices"
+        ],
+        "Tipagem e contratos TypeScript": [
+            "typescript-best-practices",
+            "typescript-advanced-types-best-practices"
+        ],
+        "Auto-import e integracao Vue": [
+            "vue-auto-import-components-best-practices",
+            "vue-typescript-best-practices"
+        ]
+    },
+    "baselineDoc": "docs/audit/baseline-testes.md",
+    "auditOutputDir": "docs/audit"
+}
