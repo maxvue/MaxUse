@@ -29,7 +29,7 @@ export * from './upperCase';
 export * from './startCase';
 
 import { Random, ulid, intervalRandom } from './random';
-import { truncate, slugify, stripHtml, initials, readingTime } from './manipulations';
+import { truncate, slugify, stripHtml, initials, readingTime, abbrevName } from './manipulations';
 import { onlyLetters, onlyNumbers, onlySymbols, onlyLettersAndNumbers, removeSpaces } from './filters';
 import { snakeCase, kebabCase, camelCase, capitalize } from './cases';
 
@@ -46,7 +46,8 @@ export const Str = {
     capitalize,
     noHtml: stripHtml,
     initials,
-    readingTime
+    readingTime,
+    abbrevName
 };
 
 export const StrFilter = {

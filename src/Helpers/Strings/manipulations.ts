@@ -111,3 +111,66 @@ export function readingTime(value: RefString, wordsPerMinute: number = 200): str
 
     return `${minutes} min de leitura`;
 }
+
+/**
+ * Abrevia um nome completo para caber em um limite máximo de caracteres (padrão: 18).
+ * Abrevia os nomes do meio para iniciais (ex: "João Carlos da Silva Pereira" ➔ "João C. S. Pereira"),
+ * descartando preposições ("de", "da", "do", "dos", "das", "e") e garantindo que o resultado
+ * final não ultrapasse o limite de caracteres.
+ *
+ * @param value Nome a ser abreviado.
+ * @param limit Limite máximo de caracteres (padrão: 18).
+ */
+export function abbrevName(value: RefString, limit: number = 18): string {
+    const data = toValue(value);
+    if (isBlank(data)) return '';
+
+    const str = String(data).trim().replace(/\s+/g, ' ');
+    if (str.length <= limit) return str;
+
+    const prepositions = new Set(['de', 'da', 'do', 'dos', 'das', 'e', "d'"]);
+    const rawParts = str.split(' ').filter(Boolean);
+
+    if (rawParts.length <= 1) {
+        if (str.length <= limit) return str;
+        const maxChars = Math.max(1, limit - 3);
+        return [...str].slice(0, maxChars).join('') + '...';
+    }
+
+    const firstName = rawParts[0];
+    const lastName = rawParts[rawParts.length - 1];
+    const middleParts = rawParts.slice(1, -1);
+
+    // Mapeia nomes do meio para iniciais, pulando preposições
+    const abbreviatedMiddles = middleParts
+        .map((part) => {
+            if (prepositions.has(part.toLowerCase())) return '';
+            return part.charAt(0).toUpperCase() + '.';
+        })
+        .filter(Boolean);
+
+    // 1. Tenta Primeiro + Todas as Iniciais + Último
+    let candidate = [firstName, ...abbreviatedMiddles, lastName].filter(Boolean).join(' ');
+    if (candidate.length <= limit) return candidate;
+
+    // 2. Tenta remover iniciais intermediárias progressivamente da direita para a esquerda
+    for (let i = abbreviatedMiddles.length - 1; i >= 0; i--) {
+        const reduced = abbreviatedMiddles.slice(0, i);
+        candidate = [firstName, ...reduced, lastName].filter(Boolean).join(' ');
+        if (candidate.length <= limit) return candidate;
+    }
+
+    // 3. Tenta apenas Primeiro + Último Nome
+    candidate = `${firstName} ${lastName}`;
+    if (candidate.length <= limit) return candidate;
+
+    // 4. Tenta Primeiro + Inicial do Último
+    candidate = `${firstName} ${lastName.charAt(0).toUpperCase()}.`;
+    if (candidate.length <= limit) return candidate;
+
+    // 5. Se nem o primeiro nome cabe ou excede, trunca o primeiro nome garantindo <= limit
+    if (firstName.length <= limit) return firstName;
+    const maxChars = Math.max(1, limit - 3);
+    return [...firstName].slice(0, maxChars).join('') + '...';
+}
+

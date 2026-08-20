@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { ref } from 'vue';
-import { truncate, slugify, stripHtml, initials, readingTime } from './manipulations';
+import { truncate, slugify, stripHtml, initials, readingTime, abbrevName } from './manipulations';
 
 describe('truncate', () => {
     it('trunca string longa com reticências', () => {
@@ -144,3 +144,34 @@ describe('readingTime', () => {
         expect(readingTime(ref(text))).toBe('2 min de leitura');
     });
 });
+
+describe('abbrevName', () => {
+    it('retorna o nome original se menor ou igual ao limite', () => {
+        expect(abbrevName('João Silva')).toBe('João Silva');
+        expect(abbrevName('Ana')).toBe('Ana');
+    });
+
+    it('abrevia nomes do meio com preposições para caber em 18 caracteres', () => {
+        expect(abbrevName('João Carlos da Silva')).toBe('João C. Silva');
+        expect(abbrevName('João Carlos da Silva Pereira')).toBe('João C. S. Pereira');
+    });
+
+    it('remove preposições e reduz para primeiro e último se necessário', () => {
+        const result = abbrevName('Francisco de Assis de Vasconcelos', 18);
+        expect(result.length).toBeLessThanOrEqual(18);
+    });
+
+    it('trunca palavras únicas longas', () => {
+        expect(abbrevName('Constantinopolitano', 10)).toBe('Constan...');
+    });
+
+    it('retorna vazio para null ou vazio', () => {
+        expect(abbrevName(null)).toBe('');
+        expect(abbrevName('')).toBe('');
+    });
+
+    it('funciona com Ref', () => {
+        expect(abbrevName(ref('João Carlos da Silva Pereira'))).toBe('João C. S. Pereira');
+    });
+});
+

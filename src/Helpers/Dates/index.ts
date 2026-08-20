@@ -11,4 +11,5 @@ export * from './addTime';
 export * from './isWeekend';
 export * from './differences';
 export * from './timeAgo';
+export * from './formatMailDate';
 
