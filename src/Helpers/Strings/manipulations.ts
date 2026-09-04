@@ -111,3 +111,4 @@ export function readingTime(value: RefString, wordsPerMinute: number = 200): str
 
     return `${minutes} min de leitura`;
 }
+

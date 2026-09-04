@@ -144,3 +144,4 @@ describe('readingTime', () => {
         expect(readingTime(ref(text))).toBe('2 min de leitura');
     });
 });
+
