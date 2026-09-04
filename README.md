@@ -251,6 +251,7 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `groupBy` | `(collection, iteratee) → Record<string, T[]>` | Agrupa elementos por chave |
 | `keyBy` | `(collection, key) → Record<string, T>` | Indexa a coleção por uma chave |
 | `countBy` | `(collection, iteratee) → Record<string, number>` | Conta ocorrências por grupo |
+| `countWhere` | `(collection, key, value?) → number` | Conta itens cuja propriedade é igual ao valor (padrão `true`) |
 | `orderBy` | `(collection, keys, orders?) → T[]` | Ordena por múltiplas chaves e direções |
 | `orderByWithKey` | `(collection, key, order?) → T[]` | Ordena por uma chave específica |
 | `filter` | `(collection, predicate) → T[] \| Record<string, T>` | Filtra elementos com predicado |
@@ -288,6 +289,18 @@ first(users)                 // { id: 1, name: 'Ana', ... }
 > ```ts
 > filter(null, () => true)                                  // []
 > filter({ a: { v: 1 }, b: { v: 2 } }, (i) => i.v > 1)      // { b: { v: 2 } }
+> ```
+>
+> **`countBy` e `countWhere`.** Para total alinhamento com o Lodash, `countBy(collection, iteratee)`
+> agrupa e conta ocorrências retornando um `Record<string, number>`.
+> Se você precisa contar itens cuja propriedade seja igual a um determinado valor (comportamento anterior do `countBy`),
+> utilize `countWhere(collection, key, value = true)`.
+>
+> ```ts
+> countBy([6.1, 4.2, 6.3], Math.floor)       // { '4': 1, '6': 2 }
+> countBy(['one', 'two', 'three'], 'length') // { '3': 2, '5': 1 }
+> countWhere(users, 'active')                // 2 (contagem de itens onde item.active === true)
+> countWhere(users, 'role', 'admin')         // 2 (contagem de itens onde item.role === 'admin')
 > ```
 
 ---

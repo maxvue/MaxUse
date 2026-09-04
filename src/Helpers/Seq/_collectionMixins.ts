@@ -13,6 +13,7 @@ import { sortBy, orderBy } from '../Iterables/orderBy';
 import { groupBy } from '../Iterables/groupBy';
 import { keyBy } from '../Iterables/keyBy';
 import { countBy } from '../Iterables/countBy';
+import { countWhere } from '../Iterables/countWhere';
 import { head } from '../Iterables/head';
 import { last } from '../Iterables/last';
 import { initial } from '../Iterables/initial';
@@ -41,6 +42,7 @@ const collectionHelpers: Record<string, Function> = {
     groupBy,
     keyBy,
     countBy,
+    countWhere,
     head,
     first: head,
     last,

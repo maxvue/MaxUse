@@ -86,6 +86,7 @@
       "controlledComputed",
       "controlledRef",
       "countBy",
+      "countWhere",
       "cpf",
       "cpfCnpjIsValid",
       "cpfIsValid",
