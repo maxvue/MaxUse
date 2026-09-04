@@ -4,3 +4,4 @@ export * from './useRefCached';
 export * from './useDateFormat';
 export * from './useTimeAgo';
 export * from './watchTrue';
+export * from './useSpellChecker';
