@@ -1,9 +1,9 @@
 # Plano de Execução — Issue #5: [Audit] sum/sumBy engolem NaN e nao-numericos como 0, divergindo do Lodash
 
-### Descrição e Causa Raiz
+### Descrição e Causa Raiz ###
 #### 1. Contexto e Problema Relatado
 A auditoria automatizada (Lente 10 — divergência de contrato na reimplementação do Lodash) identificou que os helpers `sum` e `sumBy` divergem substancialmente do contrato do Lodash (`_.sum` e `_.sumBy`):
-- `sum` utiliza `parseFloat(val)` e trata `NaN` com fallback para `0` (`acc + (isNaN(num) ? 0 : num)`).
+- `sum` utiliza `parseFloat(val)` e substitui `NaN` por `0` (`acc + (isNaN(num) ? 0 : num)`).
 - `sumBy` realiza coerção via `Number(item[key]) || 0`.
 - Em contrapartida, a implementação de referência do Lodash utiliza adição estrita com o operador `+`, sem coerção prévia e sem supressão de `NaN`.
 
@@ -19,7 +19,7 @@ Além disso, o `README.md` promovia o objeto global `_` como agrupador das funç
 
 #### 3. Decisão Arquitetural (Triagem da Divergência)
 A divergência de `sum` e `sumBy` em relação ao Lodash é **deliberada e intencional**:
-- **Público-alvo e Caso de Uso:** A MaxUse é uma biblioteca utilitária voltada para ecossistemas frontend Vue, consumindo dados de formulários, inputs e APIs REST (ex.: Laravel, Adonis). Nesses cenários, é comum que números sejam entregues como strings numéricas (`"10.50"`), campos vazios (`""`) ou `null`. Permitir que um único valor inválido contamine um total monetário ou contábil com `NaN`, ou produza concatenações bizarras de strings (`"105"`), degradaria severamente as interfaces de usuário reativas.
+- **Público-alvo e Caso de Uso:** A MaxUse é uma biblioteca utilitária voltada para ecossistemas frontend Vue, consumindo dados de formulários, inputs e APIs REST (ex.: Laravel, Adonis). Nesses cenários, é comum que números sejam entregues como strings numéricas (`"10.50"`), campos vazios (`""`) ou `null`. Permitir que um único valor inválido contamine um total monetário ou contábil com `NaN`, ou produza concatenações anômalas de strings (`"105"`), degradaria severamente as interfaces de usuário reativas.
 - **Suporte a Reatividade e Objetos:** Os helpers da MaxUse aceitam `Ref`, `computed`, getters e estruturas do tipo `Record` (somando `Object.values`), capacidades inexistentes no Lodash.
 - **Prevenção de Breaking Changes:** A suíte de testes existente já trava expressamente esse comportamento em `src/Helpers/Iterables/sum.test.ts:L18` (`expect(sum([1, 'abc', 3])).toBe(4)`) e `src/Helpers/Iterables/sumBy.test.ts:L20` (`expect(sumBy(items, 'v')).toBe(15)`). Alinhar cegamente ao Lodash quebraria testes unitários pré-existentes e causaria regressão crítica em projetos dependentes.
 
@@ -34,19 +34,19 @@ A divergência de `sum` e `sumBy` em relação ao Lodash é **deliberada e inten
 
 #### 5. Rastreamento Reverso de Dados
 `UI (Templates / Composables Vue)` ⇄ `Store (Pinia / refs reativas / computed)` ⇄ `API / Rotas (useCachedApi / axios / DTOs de backend)` ⇄ `Helper de Iterables (sum / sumBy)`:
-1. **Origem:** Requisição HTTP recebe payload JSON contendo coleções com campos numéricos inconsistentes (strings, null, ou não numéricos).
-2. **Transformação:** O helper `sum` ou `sumBy` é chamado diretamente ou via `_`.
-3. **Execução:** O acumulador itera com `parseFloat`/`Number`, convertendo itens inválidos em `0` e convertendo strings numéricas em inteiros/floats.
-4. **Impacto:** A soma é completada sem propagar `NaN`. Na ausência de documentação e caracterização formal, auditores e desenvolvedores reportam divergência inesperada com a especificação canônica do Lodash.
+1. **Origem:** Requisição HTTP recebe payload JSON contendo coleções com campos numéricos inconsistentes (strings numéricas, null, undefined, strings não-numéricas).
+2. **Transformação/Consumo:** O helper `sum` ou `sumBy` é chamado diretamente ou via namespace `_` em computeds da store ou views do Vue.
+3. **Execução:** O acumulador itera com `parseFloat`/`Number`, convertendo itens inválidos em `0` e convertendo strings numéricas em floats/inteiros.
+4. **Impacto:** A soma é concluída sem propagar `NaN`. Na ausência de documentação e caracterização formal, auditores e desenvolvedores reportam divergência inesperada com a especificação canônica do Lodash.
 
 ---
 
 ### Arquivos afetados
-1. `src/Helpers/Iterables/sum.ts` — Atualização do JSDoc para detalhar a soma coercitiva e avisar sobre a divergência deliberada com o `_.sum` do Lodash.
-2. `src/Helpers/Iterables/sumBy.ts` — Atualização do JSDoc para detalhar a soma coercitiva e avisar sobre a divergência deliberada com o `_.sumBy` do Lodash.
-3. `src/Helpers/Iterables/sum.test.ts` — Adição de suíte de testes de caracterização (`describe('divergências deliberadas em relação ao Lodash')`).
-4. `src/Helpers/Iterables/sumBy.test.ts` — Adição de suíte de testes de caracterização (`describe('divergências deliberadas em relação ao Lodash')`).
-5. `README.md` — Atualização da seção do objeto `_` e inclusão da subseção `#### Divergências conhecidas em relação ao Lodash`, além da atualização da tabela de referência de iteráveis.
+- `src/Helpers/Iterables/sum.ts` — Atualização do JSDoc para detalhar a soma coercitiva e avisar sobre a divergência deliberada com o `_.sum` do Lodash.
+- `src/Helpers/Iterables/sumBy.ts` — Atualização do JSDoc para detalhar a soma coercitiva e avisar sobre a divergência deliberada com o `_.sumBy` do Lodash.
+- `src/Helpers/Iterables/sum.test.ts` — Adição de suíte de testes de caracterização (`describe('divergências deliberadas em relação ao Lodash')`).
+- `src/Helpers/Iterables/sumBy.test.ts` — Adição de suíte de testes de caracterização (`describe('divergências deliberadas em relação ao Lodash')`).
+- `README.md` — Atualização da seção do objeto `_` e inclusão da subseção `#### Divergências conhecidas em relação ao Lodash`, além da atualização da tabela de referência de iteráveis.
 
 ---
 
@@ -209,9 +209,10 @@ Nenhuma. O projeto é uma biblioteca utilitária para Vue 3 e TypeScript em ambi
 - **Risco de Quebra de Contrato (Backward Compatibility):** Se `sum` ou `sumBy` fossem alterados para emular rigidamente o Lodash, haveria quebra massiva de contratos para aplicações existentes da MaxUse que dependem da coerção de strings numéricas e do tratamento gracioso de valores ausentes/inválidos como `0`. A formalização documental e os testes de caracterização eliminam 100% desse risco.
 - **Risco de Regressão em Helpers Dependentes:** Noutros pontos da biblioteca onde `sum` possa ser utilizado (ex.: `wrap.test.ts`), o comportamento inalterado do código em runtime garante risco zero de regressão funcional.
 - **Risco de Regressão em Tipagens TypeScript:** As assinaturas das funções permanecem rigorosamente inalteradas (`MaybeRefOrGetter<number[] | any>` e `MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>`).
+- **Risco de Poluição de Escopo Git:** NUNCA incluir symlinks locais, `.claude/skills`, `.opencode/skills` ou `node_modules` no versionamento Git, limitando rigorosamente o escopo aos arquivos especificados no plano.
 
 #### 2. Salvaguardas e Testes de Não-Regressão
-- Suíte completa do Vitest: `npm test` garantindo que todos os 396 arquivos de teste e 2819+ asserções continuam 100% verdes.
+- Suíte completa do Vitest: `npm test` garantindo que todos os testes e asserções continuam 100% verdes.
 - Checagem de tipagem estática: `npm run type-check`.
 - Checagem de formatação e lint: `npm run lint`.
 - Build de distribuição: `npm run build`.
