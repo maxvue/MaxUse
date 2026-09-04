@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { apiRoute, type ApiRouteOptions } from './apiRoute';
 import { getConfiguredHeaders, getWithCredentials } from './config';
+import { isAbortError } from './internal/abortUtils';
 
 /**
  * Realiza uma requisição HTTP GET para uma rota nomeada.
@@ -27,7 +28,8 @@ export async function apiGetRoute<T = any>(
             ...getConfiguredHeaders(),
             ...options?.headers
         },
-        withCredentials: getWithCredentials()
+        withCredentials: getWithCredentials(),
+        ...(options?.signal ? { signal: options.signal } : {})
     };
     if (typeof localStorage !== 'undefined') {
         const clientId = localStorage.getItem('selected.client.id');
@@ -40,6 +42,13 @@ export async function apiGetRoute<T = any>(
         const response = await axios.get(system_options.routeURL, config);
         return response.data;
     } catch (error: any) {
+        // Cancelamento não é erro: não loga, não chama onError
+        if (isAbortError(error)) {
+            if (options?.throw) throw error;
+
+            return null;
+        }
+
         if (options?.onError) options.onError(error);
         if (options?.error !== false) console.error('>> Request ERRO - URL: "' + system_options.routeURL + '"', error?.message);
         if (options?.throw) throw error;

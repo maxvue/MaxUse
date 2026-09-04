@@ -4,7 +4,9 @@ import { resolveRoute, getConfiguredHeaders, getWithCredentials, getClientIdHead
 import { isBlank } from '../Helpers/Types';
 import { isEqual } from '../Helpers/Objects/isEqual';
 import { getFromIDB, setToIDB, deleteFromIDB, clearCacheIDB } from './internal/idbCache';
-import { buildCacheKey, dedupeRequest } from './internal/cacheUtils';
+import { buildCacheKey, dedupeRequest, hasInFlight, raceWithSignal } from './internal/cacheUtils';
+import { createAbortError } from './internal/abortUtils';
+import type { CachedApiOptions } from './getCachedApi';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
@@ -15,8 +17,12 @@ export { deleteFromIDB, clearCacheIDB };
 /**
  * Faz o GET na rota e persiste o resultado no cache do IndexedDB com deduplicação.
  */
-async function fetchAndStore(route_name: string, data_request: any, key: string): Promise<any> {
-    return dedupeRequest(`idb:GET:${key}`, async () => {
+async function fetchAndStore(route_name: string, data_request: any, key: string, signal?: AbortSignal): Promise<any> {
+    const dedupe_key = `idb:GET:${key}`;
+    // Só propaga o sinal ao axios quando este chamador origina a requisição.
+    const owns_request = !hasInFlight(dedupe_key);
+
+    return dedupeRequest(dedupe_key, async () => {
         const routeUrl = resolveRoute(route_name, data_request);
 
         const config: AxiosRequestConfig = {
@@ -25,7 +31,8 @@ async function fetchAndStore(route_name: string, data_request: any, key: string)
                 ...getClientIdHeader(),
                 ...getConfiguredHeaders()
             },
-            withCredentials: getWithCredentials()
+            withCredentials: getWithCredentials(),
+            ...(owns_request && signal ? { signal } : {})
         };
 
         const response = await axios.get(routeUrl, config);
@@ -49,6 +56,7 @@ async function fetchAndStore(route_name: string, data_request: any, key: string)
  * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_params`).
  * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
  * @param onUpdate - Callback chamado com o dado fresco quando a revalidação em background encontra diferença.
+ * @param options - Opções extras (ex: `{ signal }` para cancelamento). A revalidação em background não é cancelável.
  * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
  */
 export async function getCachedApiIDB(
@@ -56,7 +64,8 @@ export async function getCachedApiIDB(
     dataToRequest: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
     ttl?: number,
-    onUpdate?: (data: any) => void
+    onUpdate?: (data: any) => void,
+    options?: CachedApiOptions | null
 ): Promise<any> {
     const route_name = toValue(routeName);
 
@@ -66,6 +75,9 @@ export async function getCachedApiIDB(
     const custom_key = toValue(keyCache);
 
     const key = buildCacheKey(String(route_name), data_request, custom_key);
+
+    const signal = options?.signal;
+    if (signal?.aborted) throw createAbortError();
 
     // Tenta buscar do IndexedDB (degrada graciosamente se houver erro ao ler o cache)
     const cached = await getFromIDB(key, ttl).catch(() => null);
@@ -81,5 +93,5 @@ export async function getCachedApiIDB(
         return cached.data;
     }
 
-    return fetchAndStore(String(route_name), data_request, key);
+    return raceWithSignal(fetchAndStore(String(route_name), data_request, key, signal), signal);
 }

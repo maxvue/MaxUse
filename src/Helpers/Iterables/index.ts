@@ -1,6 +1,7 @@
 export * from './compact';
 export * from './concat';
 export * from './countBy';
+export * from './countWhere';
 export * from './filter';
 export * from './filterBy';
 export * from './filterByNot';

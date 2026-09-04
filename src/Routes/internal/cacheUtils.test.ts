@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { stableStringify, buildCacheKey, dedupeRequest } from './cacheUtils';
+import { stableStringify, buildCacheKey, dedupeRequest, hasInFlight, raceWithSignal } from './cacheUtils';
 import * as config from '../config';
 
 describe('cacheUtils (internal)', () => {
@@ -80,5 +80,63 @@ describe('cacheUtils (internal)', () => {
             const res = await dedupeRequest('key3', fn2);
             expect(res).toBe('new');
         });
+    });
+});
+
+
+describe('cacheUtils - hasInFlight e raceWithSignal', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        config.resetConfig();
+    });
+
+    it('hasInFlight indica se há requisição em voo para a chave', async () => {
+        expect(hasInFlight('chave.livre')).toBe(false);
+
+        let finish: (value: any) => void = () => {};
+        const promise = dedupeRequest('chave.livre', () => new Promise((resolve) => {
+            finish = resolve;
+        }));
+
+        expect(hasInFlight('chave.livre')).toBe(true);
+
+        finish('ok');
+        await promise;
+
+        expect(hasInFlight('chave.livre')).toBe(false);
+    });
+
+    it('raceWithSignal devolve a própria promise quando não há signal', async () => {
+        const promise = Promise.resolve('valor');
+        expect(raceWithSignal(promise)).toBe(promise);
+    });
+
+    it('raceWithSignal rejeita imediatamente se o signal já estiver abortado', async () => {
+        const controller = new AbortController();
+        controller.abort();
+
+        await expect(raceWithSignal(Promise.resolve('valor'), controller.signal))
+            .rejects.toMatchObject({ name: 'AbortError' });
+    });
+
+    it('raceWithSignal rejeita ao abortar sem afetar a promise original', async () => {
+        const controller = new AbortController();
+        let finish: (value: any) => void = () => {};
+        const original = new Promise((resolve) => {
+            finish = resolve;
+        });
+
+        const raced = raceWithSignal(original, controller.signal);
+        controller.abort();
+
+        await expect(raced).rejects.toMatchObject({ name: 'AbortError' });
+
+        finish('concluida');
+        await expect(original).resolves.toBe('concluida');
+    });
+
+    it('raceWithSignal resolve normalmente se o signal não for abortado', async () => {
+        const controller = new AbortController();
+        await expect(raceWithSignal(Promise.resolve('valor'), controller.signal)).resolves.toBe('valor');
     });
 });

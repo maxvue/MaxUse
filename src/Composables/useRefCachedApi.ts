@@ -34,9 +34,12 @@ export function useCachedApi<T = any>(
 
     const is_client = typeof localStorage !== 'undefined';
     let disposed = false;
+    let active_controller: AbortController | null = null;
 
     if (getCurrentScope()) onScopeDispose(() => {
         disposed = true;
+        active_controller?.abort();
+        active_controller = null;
     });
 
 
@@ -97,8 +100,15 @@ export function useCachedApi<T = any>(
         async ([rName, pData]) => {
             if (!rName || disposed) return;
             const my_id = ++request_id;
+
+            // Aborta a requisição anterior: além da guarda por request_id (que descarta
+            // o resultado fora de ordem), evita pagar o custo de rede da chamada obsoleta.
+            active_controller?.abort();
+            const controller = new AbortController();
+            active_controller = controller;
+
             try {
-                const value = await apiGetRoute(rName, pData);
+                const value = await apiGetRoute(rName, pData, { signal: controller.signal });
                 if (disposed || my_id !== request_id || value == null) return;
                 state.value = value;
                 if (is_client && options.watch === false && targetKey.value && targetKey.value !== 'no-key') saveToStorage(targetKey.value, value);

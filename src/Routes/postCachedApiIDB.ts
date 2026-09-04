@@ -3,7 +3,9 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { resolveRoute, getConfiguredHeaders, getWithCredentials, getClientIdHeader } from './config';
 import { isBlank } from '../Helpers/Types';
 import { getFromIDB, setToIDB } from './internal/idbCache';
-import { buildCacheKey, dedupeRequest } from './internal/cacheUtils';
+import { buildCacheKey, dedupeRequest, hasInFlight, raceWithSignal } from './internal/cacheUtils';
+import { createAbortError } from './internal/abortUtils';
+import type { CachedApiOptions } from './getCachedApi';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
@@ -18,6 +20,7 @@ type MayBeRefData = MaybeRefOrGetter<any>;
  * @param postData - Corpo da requisição POST.
  * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_clientId_params`).
  * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
+ * @param options - Opções extras (ex: `{ signal }` para cancelamento).
  * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
  */
 export async function postCachedApiIDB(
@@ -25,7 +28,8 @@ export async function postCachedApiIDB(
     routeParams: MayBeRefData = null,
     postData: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
-    ttl?: number
+    ttl?: number,
+    options?: CachedApiOptions | null
 ): Promise<any> {
     const route_name = toValue(routeName);
 
@@ -37,12 +41,19 @@ export async function postCachedApiIDB(
 
     const key = buildCacheKey(String(route_name), { routeParams: route_params, postData: post_data }, custom_key);
 
+    const signal = options?.signal;
+    if (signal?.aborted) throw createAbortError();
+
     // Tenta buscar do IndexedDB (degrada graciosamente se houver erro ao ler o cache)
     const cached = await getFromIDB(key, ttl).catch(() => null);
 
     if (cached && cached.hit) return cached.data;
 
-    return dedupeRequest(`idb:POST:${key}`, async () => {
+    const dedupe_key = `idb:POST:${key}`;
+    // Só propaga o sinal ao axios quando este chamador origina a requisição.
+    const owns_request = !hasInFlight(dedupe_key);
+
+    const request = dedupeRequest(dedupe_key, async () => {
         // Faz a requisição POST se não houver cache válido
         const routeUrl = resolveRoute(String(route_name), route_params);
 
@@ -55,7 +66,8 @@ export async function postCachedApiIDB(
                 ...getClientIdHeader(),
                 ...getConfiguredHeaders()
             },
-            withCredentials: getWithCredentials()
+            withCredentials: getWithCredentials(),
+            ...(owns_request && signal ? { signal } : {})
         };
 
         const response = await axios.post(routeUrl, post_data, config);
@@ -66,4 +78,6 @@ export async function postCachedApiIDB(
 
         return data_return;
     });
+
+    return raceWithSignal(request, signal);
 }

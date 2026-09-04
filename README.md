@@ -129,6 +129,44 @@ curry(fn)(1, _, 3)              // ❌ o objeto _ vira o valor de b, sem erro
 
 > **Migrando código de Lodash:** troque todo `_` em posição de placeholder por `placeholder`. A troca é textual e **não há erro em tempo de execução avisando** — o `_` passa como argumento real e a função executa silenciosamente com o valor errado.
 
+### `_` é um objeto, não uma função
+
+No Lodash o mesmo valor serve de namespace (`_.map`) e de wrapper chamável (`_([1,2,3])`). Aqui `_` é apenas o objeto agrupador — `_(valor)` lança `TypeError`. Para encadear, use as funções dedicadas:
+
+```ts
+import { _, chain, wrapperLodash } from '@maxvue/max-use'
+
+_.max([1, 2, 3])              // ✅ 3
+// _([1, 2, 3]).max()         // ❌ TypeError: _ is not a function
+
+chain([1, 2, 3]).max().value()          // ✅ 3 (encadeamento explícito)
+wrapperLodash([1, 2, 3]).max().value()  // ✅ 3 (encadeamento implícito)
+```
+
+### O wrapper sempre exige `.value()`
+
+No Lodash, o wrapper implícito desembrulha sozinho em métodos terminais (`max`, `min`, `sum`, `mean`, `head`, `last`, `get`). Na MaxUse **todos** os métodos retornam o wrapper, e o valor primitivo só sai com `.value()`:
+
+```ts
+wrapperLodash([1, 2, 3]).max()          // MaxUseWrapper, não 3
+wrapperLodash([1, 2, 3]).max().value()  // 3
+```
+
+O wrapper implementa `valueOf()` e `toJSON()`, então aritmética, comparação relacional e serialização continuam funcionando sem `.value()` — mas `typeof` e a comparação estrita `===` **não**:
+
+```ts
+const w = wrapperLodash([1, 2, 3]).max()
+
+w > 2                 // true
+w + 1                 // 4
+JSON.stringify(w)     // "3"
+
+typeof w              // 'object'  (no Lodash seria 'number')
+w === 3               // false     — use w.value() === 3
+```
+
+Na dúvida, chame `.value()` ao final de qualquer cadeia.
+
 ---
 
 ## ⚡ Reatividade como Princípio
@@ -251,6 +289,7 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `groupBy` | `(collection, iteratee) → Record<string, T[]>` | Agrupa elementos por chave |
 | `keyBy` | `(collection, key) → Record<string, T>` | Indexa a coleção por uma chave |
 | `countBy` | `(collection, iteratee) → Record<string, number>` | Conta ocorrências por grupo |
+| `countWhere` | `(collection, key, value?) → number` | Conta itens cuja propriedade é igual ao valor (padrão `true`) |
 | `orderBy` | `(collection, keys, orders?) → T[]` | Ordena por múltiplas chaves e direções |
 | `orderByWithKey` | `(collection, key, order?) → T[]` | Ordena por uma chave específica |
 | `filter` | `(collection, predicate) → T[] \| Record<string, T>` | Filtra elementos com predicado |
@@ -288,6 +327,18 @@ first(users)                 // { id: 1, name: 'Ana', ... }
 > ```ts
 > filter(null, () => true)                                  // []
 > filter({ a: { v: 1 }, b: { v: 2 } }, (i) => i.v > 1)      // { b: { v: 2 } }
+> ```
+>
+> **`countBy` e `countWhere`.** Para total alinhamento com o Lodash, `countBy(collection, iteratee)`
+> agrupa e conta ocorrências retornando um `Record<string, number>`.
+> Se você precisa contar itens cuja propriedade seja igual a um determinado valor (comportamento anterior do `countBy`),
+> utilize `countWhere(collection, key, value = true)`.
+>
+> ```ts
+> countBy([6.1, 4.2, 6.3], Math.floor)       // { '4': 1, '6': 2 }
+> countBy(['one', 'two', 'three'], 'length') // { '3': 2, '5': 1 }
+> countWhere(users, 'active')                // 2 (contagem de itens onde item.active === true)
+> countWhere(users, 'role', 'admin')         // 2 (contagem de itens onde item.role === 'admin')
 > ```
 
 ---
