@@ -11,18 +11,25 @@ const MAX_ARRAY_LENGTH = 4294967295;
  *
  * @param n número de vezes a invocar `iteratee`
  * @param iteratee função pura invocada com o índice de cada iteração
+ * @param maxArrayLength comprimento máximo do array gerado (padrão MAX_ARRAY_LENGTH)
  * @returns array com os resultados de cada invocação
  */
-export function times<T = number>(n: MaybeRefOrGetter<number>, iteratee?: (index: number) => T): T[] {
+export function times<T = number>(
+    n: MaybeRefOrGetter<number>,
+    iteratee?: (index: number) => T,
+    maxArrayLength = MAX_ARRAY_LENGTH
+): T[] {
     const count = toInteger(toValue(n));
     if (count < 1 || count > MAX_SAFE_INTEGER) return [];
 
     const fn = iteratee || ((index: number) => index as unknown as T);
-    const length = Math.min(count, MAX_ARRAY_LENGTH);
+    const length = Math.min(count, maxArrayLength);
     const result: T[] = new Array(length);
     for (let i = 0; i < length; i++) result[i] = fn(i);
     // Além de MAX_ARRAY_LENGTH, o Lodash continua invocando `iteratee` sem
     // acumular no array (que não pode crescer além desse limite nativo).
-    for (let i = MAX_ARRAY_LENGTH; i < count; i++) fn(i);
+    let index = maxArrayLength;
+    const remaining = count - maxArrayLength;
+    while (++index < remaining) fn(index);
     return result;
 }
