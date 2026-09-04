@@ -130,6 +130,37 @@ describe('orderBy', () => {
         const r = orderBy([{ a: 1 }, { a: null }, { a: 3 }], ['a'], ['desc']);
         expect(r.map((x) => x.a)).toEqual([3, 1, null]);
     });
+
+    it('ordena por matches object shorthand', () => {
+        const items = [
+            { role: 'user', name: 'B' },
+            { role: 'admin', name: 'A' }
+        ];
+        const result = orderBy(items, { role: 'admin' }, 'desc');
+        expect(result[0]).toEqual({ role: 'admin', name: 'A' });
+        expect(result[1]).toEqual({ role: 'user', name: 'B' });
+    });
+
+    it('ordena por matchesProperty array shorthand', () => {
+        const items = [{ status: 'off' }, { status: 'on' }];
+        const result = orderBy(items, [['status', 'on']], ['desc']);
+        expect(result[0]).toEqual({ status: 'on' });
+        expect(result[1]).toEqual({ status: 'off' });
+    });
+
+    it('suporta múltiplos critérios combinados com matches e string', () => {
+        const items = [
+            { role: 'admin', age: 30 },
+            { role: 'admin', age: 20 },
+            { role: 'user', age: 40 }
+        ];
+        const result = orderBy(items, [{ role: 'admin' }, 'age'], ['desc', 'asc']);
+        expect(result).toEqual([
+            { role: 'admin', age: 20 },
+            { role: 'admin', age: 30 },
+            { role: 'user', age: 40 }
+        ]);
+    });
 });
 
 describe('sortByMulti', () => {

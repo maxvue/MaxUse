@@ -1,20 +1,29 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 import { get } from '../Objects/get';
+import { iteratee } from '../Utils/iteratee';
 
-type Criterion<T> = string | ((item: T) => unknown);
-type OrderDirection = 'asc' | 'desc';
+type IterateeCriterion<T> =
+    | ((item: T) => unknown)
+    | PropertyKey
+    | [PropertyKey, unknown]
+    | Record<string, any>;
+
+export type Criterion<T> = IterateeCriterion<T>;
+export type OrderDirection = 'asc' | 'desc';
 
 /**
  * Ordena uma coleção por um ou mais critérios com direção configurável.
  * Unifica as funcionalidades de sortBy, sortByMulti e orderBy.
+ * Suporta iteratees Lodash: funções, propriedades (com notação de caminho profundo),
+ * objetos de correspondência (matches) e pares de propriedade/valor (matchesProperty).
  *
  * - Aceita arrays e objetos (Record → converte com Object.values).
- * - Critérios podem ser strings (nome da propriedade) ou funções de extração.
+ * - Critérios podem ser strings, funções de extração, objetos ou tuplas.
  * - Direção pode ser uma string única (aplica a todos) ou um array por critério.
  * - Valores null/undefined são empurrados para o final da lista.
  *
  * @param collection A coleção a ser ordenada (array, Record ou ref/getter de ambos).
- * @param criteria Critério(s) de ordenação: string, função, ou array misto de ambos.
+ * @param criteria Critério(s) de ordenação: string, função, objeto matches, tupla ou array misto deles.
  * @param orders Direção: 'asc' | 'desc' (global) ou array de direções por critério. Padrão: 'asc'.
  * @returns Um novo array ordenado.
  */
@@ -35,24 +44,20 @@ export function orderBy<T>(
     const dirs = Array.isArray(orders) ? orders : [];
     const globalDir: OrderDirection = typeof orders === 'string' ? orders : 'asc';
 
+    const iteratees = rules.map((rule) => {
+        if (typeof rule === 'function') return rule as (item: T) => unknown;
+        if (typeof rule === 'string') return (item: T) => get(item, rule);
+        if (typeof rule === 'object' && rule !== null) return iteratee(rule) as (item: T) => unknown;
+        return (item: T) => item;
+    });
+
     return items.sort((a, b) => {
-        for (let i = 0; i < rules.length; i++) {
-            const rule = rules[i];
+        for (let i = 0; i < iteratees.length; i++) {
+            const fn = iteratees[i];
             const dir = dirs[i] ?? globalDir;
 
-            let valA: unknown;
-            let valB: unknown;
-
-            if (typeof rule === 'function') {
-                valA = rule(a);
-                valB = rule(b);
-            } else if (typeof rule === 'string') {
-                valA = get(a, rule);
-                valB = get(b, rule);
-            } else {
-                valA = a;
-                valB = b;
-            }
+            const valA = fn(a);
+            const valB = fn(b);
 
             if (valA !== valB) {
                 // Null/undefined vão para o final independente da direção

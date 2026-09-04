@@ -36,4 +36,39 @@ describe('groupBy', () => {
         const result = groupBy(ref(users), 'dept');
         expect(Object.keys(result).length).toBe(2);
     });
+
+    it('agrupa por deep property shorthand', () => {
+        const items = [{ e: { c: 'SP' } }, { e: { c: 'RJ' } }, { e: { c: 'SP' } }];
+        const result = groupBy(items, 'e.c');
+        expect(result).toEqual({
+            SP: [{ e: { c: 'SP' } }, { e: { c: 'SP' } }],
+            RJ: [{ e: { c: 'RJ' } }]
+        });
+    });
+
+    it('agrupa por matches object shorthand', () => {
+        const items = [
+            { id: 1, active: true },
+            { id: 2, active: false },
+            { id: 3, active: true }
+        ];
+        const result = groupBy(items, { active: true });
+        expect(result['true']).toEqual([
+            { id: 1, active: true },
+            { id: 3, active: true }
+        ]);
+        expect(result['false']).toEqual([
+            { id: 2, active: false }
+        ]);
+    });
+
+    it('agrupa por matchesProperty array shorthand', () => {
+        const items = [
+            { id: 1, role: 'admin' },
+            { id: 2, role: 'user' }
+        ];
+        const result = groupBy(items, ['role', 'admin']);
+        expect(result['true']).toEqual([{ id: 1, role: 'admin' }]);
+        expect(result['false']).toEqual([{ id: 2, role: 'user' }]);
+    });
 });
