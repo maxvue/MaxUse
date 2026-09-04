@@ -49,11 +49,9 @@ export function apiRoute(
     const option_load_screen = options?.load_screen ?? null;
 
     let routeURL: string;
-    if (method === 'GET') {
-        routeURL = resolveRoute(RouteName, data);
-    } else if (options?.route_params !== undefined) {
-        routeURL = resolveRoute(RouteName, options.route_params);
-    } else {
+    if (method === 'GET') routeURL = resolveRoute(RouteName, data);
+    else if (options?.route_params !== undefined) routeURL = resolveRoute(RouteName, options.route_params);
+    else {
         const route_params = data && typeof data === 'object' && !(data instanceof FormData) ? data : undefined;
         try {
             routeURL = route_params !== undefined ? resolveRoute(RouteName, route_params) : resolveRoute(RouteName);
