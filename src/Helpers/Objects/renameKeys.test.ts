@@ -43,4 +43,44 @@ describe('renameKeys', () => {
         expect(Object.getPrototypeOf(result)).toBe(Object.prototype);
         expect(result.isAdmin).toBeUndefined();
     });
+
+    it('retorna objeto vazio quando object é null ou undefined', () => {
+        expect(renameKeys(null, { a: 'b' })).toEqual({});
+        expect(renameKeys(undefined, { a: 'b' })).toEqual({});
+    });
+
+    it('retorna objeto vazio quando object é Ref ou Getter com null ou undefined', () => {
+        const nullRef = ref<Record<string, any> | null>(null);
+        const undefinedRef = ref<Record<string, any> | undefined>(undefined);
+        expect(renameKeys(nullRef, { a: 'b' })).toEqual({});
+        expect(renameKeys(undefinedRef, { a: 'b' })).toEqual({});
+        expect(renameKeys(() => null, { a: 'b' })).toEqual({});
+        expect(renameKeys(() => undefined, { a: 'b' })).toEqual({});
+    });
+
+    it('mantém chaves originais quando map é null ou undefined', () => {
+        const obj = { a: 1, b: 2 };
+        expect(renameKeys(obj, null)).toEqual({ a: 1, b: 2 });
+        expect(renameKeys(obj, undefined)).toEqual({ a: 1, b: 2 });
+        expect(renameKeys(obj)).toEqual({ a: 1, b: 2 });
+    });
+
+    it('mantém chaves originais quando map é Ref ou Getter com null ou undefined', () => {
+        const obj = { a: 1, b: 2 };
+        const nullMapRef = ref<Record<string, string> | null>(null);
+        expect(renameKeys(obj, nullMapRef)).toEqual({ a: 1, b: 2 });
+        expect(renameKeys(obj, () => null)).toEqual({ a: 1, b: 2 });
+    });
+
+    it('lida com ambos os parâmetros null ou undefined', () => {
+        expect(renameKeys(null, null)).toEqual({});
+        expect(renameKeys(undefined, undefined)).toEqual({});
+    });
+
+    it('retorna objeto vazio quando object é um valor primitivo', () => {
+        expect(renameKeys(123 as any, {})).toEqual({});
+        expect(renameKeys('string' as any, {})).toEqual({});
+        expect(renameKeys(true as any, {})).toEqual({});
+    });
 });
+

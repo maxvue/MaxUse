@@ -10,16 +10,19 @@ import { baseAssignValue } from './_baseAssignValue';
  * @returns Um novo objeto com as chaves renomeadas.
  */
 export function renameKeys(
-    object: MaybeRefOrGetter<Record<string, any>>,
-    map: MaybeRefOrGetter<Record<string, string>>
+    object: MaybeRefOrGetter<Record<string, any> | null | undefined>,
+    map?: MaybeRefOrGetter<Record<string, string> | null | undefined>
 ): Record<string, any> {
     const rawObject = toValue(object);
     const rawMap = toValue(map);
 
+    if (rawObject == null || typeof rawObject !== 'object') return {};
+
     const renamedObject: Record<string, any> = {};
+    const safeMap = rawMap ?? {};
 
     Object.keys(rawObject).forEach((key) => {
-        const newKey = rawMap[key] || key;
+        const newKey = safeMap[key] || key;
         baseAssignValue(renamedObject, newKey, rawObject[key]);
     });
 
