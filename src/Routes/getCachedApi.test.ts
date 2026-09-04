@@ -161,3 +161,59 @@ describe('getCachedApi', () => {
         expect(res2).toEqual({ v: 2 });
     });
 });
+
+
+describe('getCachedApi - cancelamento (AbortSignal)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+        localStorage.clear();
+
+        (config.resolveRoute as any).mockImplementation((name: string) => `https://example.com/${name}`);
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getClientIdHeader as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it('propaga o signal para o axios quando é o dono da requisição', async () => {
+        const controller = new AbortController();
+        (axios.get as any).mockResolvedValue({ data: { ok: true } });
+
+        await getCachedApi('rota.signal', { id: 1 }, null, undefined, { signal: controller.signal });
+
+        expect((axios.get as any).mock.calls[0][1].signal).toBe(controller.signal);
+    });
+
+    it('rejeita sem requisitar nem gravar no localStorage quando o signal já está abortado', async () => {
+        const controller = new AbortController();
+        controller.abort();
+        (axios.get as any).mockResolvedValue({ data: { ok: true } });
+
+        await expect(getCachedApi('rota.abortada', { id: 2 }, null, undefined, { signal: controller.signal }))
+            .rejects.toMatchObject({ name: 'AbortError' });
+
+        expect(axios.get).not.toHaveBeenCalled();
+        expect(localStorage.length).toBe(0);
+    });
+
+    it('abortar um chamador não afeta o outro na mesma chave deduplicada', async () => {
+        let resolveRequest: (value: any) => void = () => {};
+        (axios.get as any).mockImplementation(() => new Promise((resolve) => {
+            resolveRequest = resolve;
+        }));
+
+        const controller = new AbortController();
+
+        const first = getCachedApi('rota.dedupe', { id: 3 });
+        const second = getCachedApi('rota.dedupe', { id: 3 }, null, undefined, { signal: controller.signal });
+        const secondResult = second.catch((error: any) => ({ aborted: error?.name }));
+
+        controller.abort();
+        resolveRequest({ data: { compartilhado: true } });
+
+        await expect(first).resolves.toEqual({ compartilhado: true });
+        await expect(secondResult).resolves.toEqual({ aborted: 'AbortError' });
+
+        // A requisição compartilhada só é feita uma vez e o cache é preservado
+        expect((axios.get as any).mock.calls.length).toBe(1);
+    });
+});

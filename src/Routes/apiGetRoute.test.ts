@@ -111,3 +111,51 @@ describe('apiGetRoute — regressão auditoria (achado 006)', () => {
         expect(consoleSpy).not.toHaveBeenCalled();
     });
 });
+
+
+describe('apiGetRoute - cancelamento (AbortSignal)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue({
+            option_load_screen: null,
+            routeURL: 'https://api.example.com/data'
+        });
+
+        (axios.get as any).mockResolvedValue({ data: { success: true } });
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it('propaga options.signal para o config do axios', async () => {
+        const controller = new AbortController();
+
+        await apiGetRoute('test.route', {}, { signal: controller.signal });
+
+        expect(axios.get).toHaveBeenCalledWith(
+            'https://api.example.com/data',
+            expect.objectContaining({ signal: controller.signal })
+        );
+    });
+
+    it('não envia signal quando não informado', async () => {
+        await apiGetRoute('test.route', {});
+
+        const received = (axios.get as any).mock.calls[0][1];
+        expect('signal' in received).toBe(false);
+    });
+
+    it('não loga nem chama onError quando a requisição é cancelada', async () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const onError = vi.fn();
+        (axios.get as any).mockRejectedValue({ code: 'ERR_CANCELED', name: 'CanceledError', message: 'canceled' });
+
+        const result = await apiGetRoute('test.route', {}, { onError });
+
+        expect(result).toBeNull();
+        expect(onError).not.toHaveBeenCalled();
+        expect(consoleSpy).not.toHaveBeenCalled();
+
+        consoleSpy.mockRestore();
+    });
+});

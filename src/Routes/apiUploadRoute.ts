@@ -1,6 +1,7 @@
 import { apiRoute, type ApiRouteOptions } from './apiRoute';
 import axios from 'axios';
 import { getConfiguredHeaders, getWithCredentials } from './config';
+import { isAbortError } from './internal/abortUtils';
 
 /**
  * Realiza upload de arquivos via requisição HTTP POST (multipart/form-data) para uma rota nomeada.
@@ -48,6 +49,18 @@ export async function apiUploadRoute<T = any>(
 
     });
 
+    const signal = options?.signal;
+    const progress_callback = options?.onUploadProgress;
+
+    // Guarda o callback de progresso: após o abort (ex: desmontagem do componente),
+    // eventos ainda em trânsito não devem escrever em refs já destruídas.
+    const onUploadProgress = progress_callback
+        ? (progressEvent: any) => {
+            if (signal?.aborted) return;
+            progress_callback(progressEvent);
+        }
+        : undefined;
+
     try {
         const message_response = await axios.post(system_options.routeURL, formData, {
             headers: {
@@ -58,10 +71,18 @@ export async function apiUploadRoute<T = any>(
                 ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
             },
             withCredentials: getWithCredentials(),
-            ...(options?.onUploadProgress ? { onUploadProgress: options.onUploadProgress } : {})
+            ...(onUploadProgress ? { onUploadProgress } : {}),
+            ...(signal ? { signal } : {})
         });
         return message_response.data;
     } catch (error: any) {
+        // Cancelamento não é erro: não loga, não chama onError
+        if (isAbortError(error)) {
+            if (options?.throw) throw error;
+
+            return null;
+        }
+
         if (options?.onError) options.onError(error);
         if (options?.error !== false) console.error('>> Erro ao fazer o upload - Rota: ' + RouteName, error);
         if (options?.throw) throw error;

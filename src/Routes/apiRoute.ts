@@ -20,6 +20,8 @@ export interface ApiRouteOptions {
     throw?: boolean;
     /** Headers extras para a requisição */
     headers?: Record<string, string>;
+    /** Sinal de cancelamento da requisição (AbortController) */
+    signal?: AbortSignal;
     [key: string]: any;
 }
 

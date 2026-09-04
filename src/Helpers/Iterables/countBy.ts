@@ -1,21 +1,33 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
-
-type T = Record<string, any> | null | undefined;
+import { iteratee } from '../Utils/iteratee';
 
 /**
- * Conta o número de elementos em uma coleção que possuem um determinado valor para uma chave.
+ * Cria um objeto composto por chaves geradas a partir dos resultados da execução
+ * de cada elemento da coleção através do iteratee. O valor correspondente de cada
+ * chave é o número de vezes que essa chave foi retornada pelo iteratee.
+ * Semelhante ao _.countBy do Lodash.
  *
- * @param collection A coleção de objetos.
- * @param key A chave a ser verificada.
- * @param value O valor a ser comparado (padrão é true).
- * @returns O número de elementos correspondentes.
+ * @param collection A coleção para iterar.
+ * @param iterateeFn O iteratee para transformar as chaves.
+ * @returns Retorna o objeto com a contagem agrupada.
  */
-export function countBy(collection: MaybeRefOrGetter<T>, key: string, value: T[keyof T] | any = true): number {
+export function countBy<T>(
+    collection: MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>,
+    iterateeFn?: unknown
+): Record<string, number> {
     const data = toValue(collection);
 
-    if (!data || typeof data !== 'object') return 0;
+    if (data == null || typeof data !== 'object') return {};
 
     const items = Array.isArray(data) ? data : Object.values(data);
+    const fn = iteratee(iterateeFn) as (value: T) => unknown;
+    const result: Record<string, number> = {};
 
-    return items.reduce((acc, item) => acc + (item[key] === value ? 1 : 0), 0);
+    for (const item of items) {
+        const key = String(fn(item));
+        result[key] = (result[key] ?? 0) + 1;
+    }
+
+    return result;
 }
+
