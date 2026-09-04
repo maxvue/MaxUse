@@ -2,10 +2,23 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 import axios, { AxiosRequestConfig } from 'axios';
 import { resolveRoute, getConfiguredHeaders, getWithCredentials, getClientIdHeader } from './config';
 import { hasContent } from '../Helpers/Types';
-import { buildCacheKey, dedupeRequest, invalidateDedupeKey } from './internal/cacheUtils';
+import { buildCacheKey, dedupeRequest, hasInFlight, raceWithSignal, invalidateDedupeKey } from './internal/cacheUtils';
+import { createAbortError } from './internal/abortUtils';
 
 type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
+
+/**
+ * Opções extras dos helpers de API com cache (`getCachedApi`, `getCachedApiIDB`, `postCachedApiIDB`).
+ */
+export interface CachedApiOptions {
+    /**
+     * Sinal de cancelamento da espera pela requisição (AbortController).
+     * Quando este chamador é quem origina a requisição, o sinal também é repassado ao axios;
+     * se a requisição for compartilhada (deduplicação), apenas a espera deste chamador é cancelada.
+     */
+    signal?: AbortSignal;
+}
 
 /**
  * Limpa uma chave específica ou todo o cache do localStorage gerenciado por `getCachedApi`.
@@ -52,13 +65,15 @@ export function clearCachedApi(key?: string): void {
  * @param dataToRequest - Parâmetros da rota.
  * @param keyCache - Chave do cache no localStorage (padrão: `max_cache:routeName_params`).
  * @param ttl - Tempo de vida do cache em milissegundos. Se expirado ou ttl=0, refaz a requisição.
+ * @param options - Opções extras (ex: `{ signal }` para cancelamento).
  * @returns Os dados da API ou do cache local. Retorna null se `routeName` for vazio.
  */
 export async function getCachedApi(
     routeName: RefStringOrNull,
     dataToRequest: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
-    ttl?: number
+    ttl?: number,
+    options?: CachedApiOptions | null
 ): Promise<any> {
     const route_name = toValue(routeName);
 
@@ -93,7 +108,15 @@ export async function getCachedApi(
         }
     }
 
-    return dedupeRequest(`ls:GET:${key}`, async () => {
+    const signal = options?.signal;
+    if (signal?.aborted) throw createAbortError();
+
+    const dedupe_key = `ls:GET:${key}`;
+    // Só propaga o sinal ao axios quando este chamador origina a requisição:
+    // abortar uma requisição compartilhada derrubaria os demais chamadores.
+    const owns_request = !hasInFlight(dedupe_key);
+
+    const request = dedupeRequest(dedupe_key, async () => {
         const routeUrl = resolveRoute(String(route_name), data_request);
 
         const config: AxiosRequestConfig = {
@@ -102,7 +125,8 @@ export async function getCachedApi(
                 ...getClientIdHeader(),
                 ...getConfiguredHeaders()
             },
-            withCredentials: getWithCredentials()
+            withCredentials: getWithCredentials(),
+            ...(owns_request && signal ? { signal } : {})
         };
 
         const response = await axios.get(routeUrl, config);
@@ -117,4 +141,6 @@ export async function getCachedApi(
 
         return data_return;
     });
+
+    return raceWithSignal(request, signal);
 }

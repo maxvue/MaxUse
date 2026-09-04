@@ -71,3 +71,49 @@ describe('apiDeleteRoute', () => {
         expect(consoleSpy).toHaveBeenCalled();
     });
 });
+
+
+describe('apiDeleteRoute - cancelamento (AbortSignal)', () => {
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        vi.spyOn(apiRouteModule, 'apiRoute').mockReturnValue({
+            option_load_screen: null,
+            routeURL: 'https://api.example.com/delete'
+        });
+
+        (axios.delete as any).mockResolvedValue({ data: { deleted: true } });
+        (config.getConfiguredHeaders as any).mockReturnValue({});
+        (config.getWithCredentials as any).mockReturnValue(true);
+    });
+
+    it('propaga options.signal para o config do axios', async () => {
+        const controller = new AbortController();
+
+        await apiDeleteRoute('test.route', { id: 1 }, { signal: controller.signal });
+
+        const received = (axios.delete as any).mock.calls[0][1];
+        expect(received.signal).toBe(controller.signal);
+    });
+
+    it('não envia signal quando não informado', async () => {
+        await apiDeleteRoute('test.route', { id: 1 });
+
+        const received = (axios.delete as any).mock.calls[0][1];
+        expect('signal' in received).toBe(false);
+    });
+
+    it('não loga nem chama onError quando a requisição é cancelada', async () => {
+        const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+        const onError = vi.fn();
+        (axios.delete as any).mockRejectedValue({ code: 'ERR_CANCELED', name: 'CanceledError', message: 'canceled' });
+
+        const result = await apiDeleteRoute('test.route', { id: 1 }, { onError });
+
+        expect(result).toBeNull();
+        expect(onError).not.toHaveBeenCalled();
+        expect(consoleSpy).not.toHaveBeenCalled();
+
+        consoleSpy.mockRestore();
+    });
+});

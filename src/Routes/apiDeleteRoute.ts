@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { apiRoute, type ApiRouteOptions } from './apiRoute';
 import { getConfiguredHeaders, getWithCredentials } from './config';
+import { isAbortError } from './internal/abortUtils';
 
 /**
  * Realiza uma requisição HTTP DELETE para uma rota nomeada.
@@ -32,10 +33,18 @@ export async function apiDeleteRoute<T = any>(
                 ...options?.headers,
                 ...(typeof localStorage !== 'undefined' && localStorage.getItem('selected.client.id') ? { 'X-Client-Id': localStorage.getItem('selected.client.id') } : {})
             },
-            withCredentials: getWithCredentials()
+            withCredentials: getWithCredentials(),
+            ...(options?.signal ? { signal: options.signal } : {})
         });
         return response.data;
     } catch (error: any) {
+        // Cancelamento não é erro: não loga, não chama onError
+        if (isAbortError(error)) {
+            if (options?.throw) throw error;
+
+            return null;
+        }
+
         if (options?.onError) options.onError(error);
         if (options?.error !== false) console.error('>> Erro ao fazer a requisição:', error);
         if (options?.throw) throw error;
