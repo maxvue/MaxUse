@@ -66,7 +66,7 @@ describe('useRefCachedApi', () => {
             // Aguardar a promise da mock ser resolvida
             await new Promise((resolve) => setTimeout(resolve, 10));
 
-            expect(mockApiGetRoute).toHaveBeenCalledWith('api.sync', { parametro: 1 });
+            expect(mockApiGetRoute).toHaveBeenCalledWith('api.sync', { parametro: 1 }, expect.objectContaining({ signal: expect.any(AbortSignal) }));
             expect(state.value).toEqual(fakeData);
             expect(JSON.parse(localStorage.getItem('api.sync')!)).toEqual(fakeData);
         });
@@ -143,7 +143,7 @@ describe('useCachedApi — regressão auditoria (achado 012)', () => {
         });
 
         await vi.waitFor(() => {
-            expect(mockApi).toHaveBeenCalledWith('api.prec', { a: 1 });
+            expect(mockApi).toHaveBeenCalledWith('api.prec', { a: 1 }, expect.objectContaining({ signal: expect.any(AbortSignal) }));
         });
     });
 
@@ -207,7 +207,7 @@ describe('useCachedApi — regressão auditoria (achado 012)', () => {
 
             pageRef.value = 2;
             await vi.waitFor(() => expect(state.value).toEqual({ page: 2 }));
-            expect(mockApi).toHaveBeenCalledWith('api.paginated', { page: 2 });
+            expect(mockApi).toHaveBeenCalledWith('api.paginated', { page: 2 }, expect.objectContaining({ signal: expect.any(AbortSignal) }));
         });
     });
 
@@ -276,3 +276,49 @@ describe('useCachedApi — regressão auditoria (achado 012)', () => {
 });
 
 
+describe('useRefCachedApi - cancelamento (AbortSignal)', () => {
+    beforeEach(() => {
+        localStorage.clear();
+        vi.clearAllMocks();
+    });
+
+    afterEach(() => {
+        localStorage.clear();
+    });
+
+    it('aborta a requisição em voo ao descartar o escopo', async () => {
+        const mockApiGetRoute = vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockResolvedValue({ ok: true });
+        const scope = effectScope();
+
+        scope.run(() => {
+            useCachedApi('api.dispose', { data: { id: 1 } });
+        });
+
+        const signal = mockApiGetRoute.mock.calls[0][2]!.signal as AbortSignal;
+        expect(signal.aborted).toBe(false);
+
+        scope.stop();
+        expect(signal.aborted).toBe(true);
+    });
+
+    it('aborta a requisição anterior quando os parâmetros mudam', async () => {
+        const mockApiGetRoute = vi.spyOn(apiGetRouteModule, 'apiGetRoute').mockResolvedValue({ ok: true });
+        const scope = effectScope();
+        const pageRef = ref(1);
+
+        scope.run(() => {
+            useCachedApi('api.troca', { data: computed(() => ({ page: pageRef.value })) });
+        });
+
+        const firstSignal = mockApiGetRoute.mock.calls[0][2]!.signal as AbortSignal;
+
+        pageRef.value = 2;
+        await nextTick();
+
+        expect(firstSignal.aborted).toBe(true);
+        const secondSignal = mockApiGetRoute.mock.calls[1][2]!.signal as AbortSignal;
+        expect(secondSignal.aborted).toBe(false);
+
+        scope.stop();
+    });
+});
