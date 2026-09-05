@@ -1,4 +1,5 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
+import { baseToString } from '../Lang/_baseToString';
 
 /**
  * Converte um valor para número seguindo a coerção interna do Lodash
@@ -15,15 +16,17 @@ function baseToNumber(value: unknown): number {
 
 /**
  * Subtrai `other` de `value`. Se ambos forem `undefined`, retorna `0`; se
- * apenas um for fornecido, retorna esse valor sem operação. Se algum dos
- * dois for string, concatena em vez de subtrair numericamente.
+ * apenas um for fornecido, retorna esse valor sem operação. Se **algum**
+ * dos dois for string, ambos são convertidos via `toString` e o operador
+ * `-` é aplicado diretamente — peculiaridade do Lodash:
+ * `_.subtract('3', true)` vira `'3' - 'true'` = `NaN`.
  * Semelhante ao _.subtract do Lodash.
  *
- * @param value valor de origem
- * @param other valor a subtrair
- * @returns diferença (ou concatenação) dos dois valores
+ * @param value valor de origem (minuendo)
+ * @param other valor a subtrair (subtraendo)
+ * @returns diferença dos dois valores
  */
-export function subtract(value?: MaybeRefOrGetter<unknown>, other?: MaybeRefOrGetter<unknown>): number | string {
+export function subtract(value?: MaybeRefOrGetter<unknown>, other?: MaybeRefOrGetter<unknown>): number {
     const a = value === undefined ? undefined : toValue(value);
     const b = other === undefined ? undefined : toValue(other);
 
@@ -31,10 +34,11 @@ export function subtract(value?: MaybeRefOrGetter<unknown>, other?: MaybeRefOrGe
 
     let result: unknown = a;
     if (b !== undefined) {
-        if (result === undefined) return b as number | string;
-        if (typeof a === 'string' || typeof b === 'string') result = (`${a}` as unknown as number) - (`${b}` as unknown as number);
+        if (result === undefined) return b as number;
+        if (typeof a === 'string' || typeof b === 'string') result = (baseToString(a) as unknown as number) - (baseToString(b) as unknown as number);
         else result = baseToNumber(a) - baseToNumber(b);
 
     }
-    return result as number | string;
+    return result as number;
 }
+

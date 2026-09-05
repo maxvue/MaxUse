@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, expectTypeOf } from 'vitest';
 import { ref } from 'vue';
 import { subtract } from './subtract';
 
@@ -24,4 +24,28 @@ describe('subtract', () => {
     it('funciona com Ref', () => {
         expect(subtract(ref(6), ref(4))).toBe(2);
     });
+
+    it('possui assinatura de tipo com retorno estritamente number', () => {
+        expectTypeOf(subtract).returns.toEqualTypeOf<number>();
+        expectTypeOf(subtract('10', '4')).toEqualTypeOf<number>();
+        expectTypeOf(subtract(10, 4)).toEqualTypeOf<number>();
+    });
+
+    it('nunca concatena strings, sempre retornando a diferenca numerica', () => {
+        const res = subtract('10', '4');
+        expect(res).toBe(6);
+        expect(typeof res).toBe('number');
+        expect(res).not.toBe('104');
+    });
+
+    it('quando algum operando é string, aplica o operador direto sem baseToNumber (peculiaridade)', () => {
+        expect(subtract('3', true)).toBeNaN();
+        expect(subtract(3, true)).toBe(2);
+    });
+
+    it('converte null/undefined em texto literal ao aplicar baseToString em ambos operandos (peculiaridade)', () => {
+        expect(subtract('1', null)).toBeNaN();
+        expect(subtract(null, '1')).toBeNaN();
+    });
 });
+
