@@ -10,7 +10,7 @@ type RefDate = MaybeRefOrGetter<string | number | Date | null | undefined>;
  * - Ontem: "Ontem HH:mm" (ex: "Ontem 10:22")
  * - Menos de 1 semana (< 7 dias): "X dias" (ex: "3 dias")
  * - Menos de 1 mês (< 30 dias): "X Semanas" (ex: "2 Semanas", "1 Semana")
- * - Menos de 1 ano (< 365 dias): "X Mêses" (ex: "2 Mêses", "1 Mês")
+ * - Menos de 1 ano (< 365 dias): "X Meses" (ex: "2 Meses", "1 Mês")
  * - Mais de 1 ano (>= 365 dias): "X Anos" (ex: "2 Anos", "1 Ano")
  *
  * @param value A data a ser formatada.
@@ -76,7 +76,7 @@ export function formatMailDate(value: RefDate): string {
     // Menos de 1 ano (< 365 dias)
     if (calendarDays < 365) {
         const months = Math.max(1, (now.getFullYear() - date.getFullYear()) * 12 + (now.getMonth() - date.getMonth()) || Math.floor(calendarDays / 30));
-        return months === 1 ? '1 Mês' : `${months} Mêses`;
+        return months === 1 ? '1 Mês' : `${months} Meses`;
     }
 
     // Mais de 1 ano

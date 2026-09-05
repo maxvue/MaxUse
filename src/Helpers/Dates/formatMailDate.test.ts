@@ -48,10 +48,10 @@ describe('formatMailDate', () => {
         expect(formatMailDate(date7days)).toBe('1 Semana');
     });
 
-    it('formata menos de 1 ano como "X Mêses"', () => {
+    it('formata menos de 1 ano como "X Meses"', () => {
         const now = new Date();
         const date60days = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 60, 10, 0);
-        expect(formatMailDate(date60days)).toBe('2 Mêses');
+        expect(formatMailDate(date60days)).toBe('2 Meses');
     });
 
     it('formata mais de 1 ano como "X Anos"', () => {
