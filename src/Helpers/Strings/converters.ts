@@ -82,15 +82,16 @@ export function parseBrNumber(value: unknown): number {
     str = str.replace(/\s*(bytes?|[bkmgtpezy]b?)?$/i, '').trim();
     if (!str) return NaN;
 
-    if (str.includes(',')) {
-        const normalized = str.replace(/\./g, '').replace(',', '.');
-        str = normalized;
-    } else if (str.includes('.')) {
+    const hasComma = str.includes(',');
+    const hasDot = str.includes('.');
+
+    if (hasComma && hasDot) {
+        const isPtBr = str.lastIndexOf(',') > str.lastIndexOf('.');
+        str = isPtBr ? str.replace(/\./g, '').replace(',', '.') : str.replace(/,/g, '');
+    } else if (hasComma) str = str.replace(',', '.');
+    else if (hasDot) {
         const isMilhar = /^[+-]?\d{1,3}(\.\d{3})+$/.test(str);
-        if (isMilhar) {
-            const normalized = str.replace(/\./g, '');
-            str = normalized;
-        }
+        if (isMilhar) str = str.replace(/\./g, '');
     }
 
     // Notação científica direta (ex: 2e3, -1.5e-2) ou decimal comum
