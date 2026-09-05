@@ -110,3 +110,39 @@ describe('diffInYears / diffInMonths — regressão auditoria (achado 026)', () 
         expect(diffInYears('2026-01-01', '2005-12-31')).toBe(20);
     });
 });
+
+describe('diffInMonths / diffInYears — transições entre último dia de meses (Issue #29)', () => {
+    it('considera 1 mês completo em transição 31/01 a 28/02 (ano não bissexto)', () => {
+        expect(diffInMonths('2026-01-31', '2026-02-28')).toBe(1);
+        expect(diffInMonths('2026-02-28', '2026-01-31')).toBe(1);
+    });
+
+    it('considera 1 mês completo em transição 31/01 a 29/02 (ano bissexto)', () => {
+        expect(diffInMonths('2024-01-31', '2024-02-29')).toBe(1);
+        expect(diffInMonths('2024-02-29', '2024-01-31')).toBe(1);
+    });
+
+    it('considera 1 mês completo em transições de 31 dias para meses de 30 dias', () => {
+        expect(diffInMonths('2026-03-31', '2026-04-30')).toBe(1);
+        expect(diffInMonths('2026-05-31', '2026-06-30')).toBe(1);
+        expect(diffInMonths('2026-08-31', '2026-09-30')).toBe(1);
+        expect(diffInMonths('2026-10-31', '2026-11-30')).toBe(1);
+    });
+
+    it('não completa o mês se o último dia do mês de destino não foi alcançado', () => {
+        expect(diffInMonths('2026-01-31', '2026-02-27')).toBe(0);
+        expect(diffInMonths('2024-01-31', '2024-02-28')).toBe(0);
+        expect(diffInMonths('2026-03-31', '2026-04-29')).toBe(0);
+    });
+
+    it('calcula múltiplos meses corretamente com ancoragem no fim do mês', () => {
+        expect(diffInMonths('2026-01-31', '2026-04-30')).toBe(3);
+        expect(diffInMonths('2025-01-31', '2026-02-28')).toBe(13);
+    });
+
+    it('calcula 1 ano completo para aniversário em 29 de fevereiro no ano seguinte não bissexto', () => {
+        expect(diffInYears('2024-02-29', '2025-02-28')).toBe(1);
+        expect(diffInYears('2024-02-29', '2025-02-27')).toBe(0);
+    });
+});
+

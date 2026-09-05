@@ -53,8 +53,10 @@ export function diffInMonths(date1: RefDate, date2: RefDate): number {
     let months = (later.getFullYear() - earlier.getFullYear()) * 12
                + (later.getMonth() - earlier.getMonth());
 
-    // Desconta o mês em curso se o dia ainda não foi alcançado
-    if (later.getDate() < earlier.getDate()) months--;
+    // Desconta o mês em curso se o dia ainda não foi alcançado no mês de destino
+    const lastDayOfLaterMonth = new Date(later.getFullYear(), later.getMonth() + 1, 0).getDate();
+    const anchorDay = Math.min(earlier.getDate(), lastDayOfLaterMonth);
+    if (later.getDate() < anchorDay) months--;
 
     return Math.max(0, months);
 }
