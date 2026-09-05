@@ -6,14 +6,14 @@
 ### Descrição e Causa Raiz
 
 #### Descrição Detalhada do Problema e Agravantes
-Durante a auditoria automatizada de segurança e robustez (lente 5 - injeção em RegExp), identificou-se uma vulnerabilidade de compilação dinâmica de expressões regulares sem sanitização no composable [`useSpellChecker`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts#L508-L523).
+Durante auditoria automatizada de segurança e robustez (lente 5 - injeção em RegExp), identificou-se uma vulnerabilidade de compilação dinâmica de expressões regulares sem sanitização no composable [`useSpellChecker.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts#L508-L523).
 
-A função `applySuggestion(word: string, replacement: string)` aceita qualquer string para o parâmetro `word` e interpola esse valor diretamente dentro do construtor nativo de expressões regulares:
+A função `applySuggestion(word: string, replacement: string)` aceita qualquer string para o parâmetro `word` e interpola esse valor diretamente no construtor nativo de expressões regulares:
 ```ts
 const regex = new RegExp(`\\b${word}\\b`, 'g');
 ```
 
-Isso produz três agravantes críticos em tempo de execução:
+Isso produz quatro agravantes críticos em tempo de execução:
 
 1. **Falha Crítica por Injeção Sintática de Metacaracteres RegExp (Crash por `SyntaxError`):**
    - Quando o termo `word` contém caracteres com significado especial em expressões regulares (tais como quantificadores `+`, `*`, `?`, delimitadores de agrupamento `(`, `)`, classes `[`, `]`, barras verticais `|`, chaves `{`, `}`, etc.), o construtor `new RegExp` tenta interpretá-los sintaticamente.
@@ -28,14 +28,17 @@ Isso produz três agravantes críticos em tempo de execução:
    - Consequências graves de contorno:
      - **Palavras iniciadas por letra acentuada (ex.: `'órgão'`, `'água'`, `'ícone'`, `'área'`):** Em um texto como `"o órgão regulador"`, a transição entre o espaço `' '` (`\W`) e o caractere inicial `'ó'` (`\W`) NÃO é reconhecida como borda de palavra (`\b`). Assim, `\bórgão\b` nunca encontra correspondência e a substituição falha silenciosamente.
      - **Palavras terminadas por letra acentuada (ex.: `'maçã'`, `'você'`, `'café'`, `'está'`):** Em um texto como `"comprei maçã na feira"`, a transição entre `'ã'` (`\W`) e o espaço `' '` (`\W`) também NÃO é reconhecida como `\b`. A substituição não ocorre.
-     - Como a biblioteca `@maxvue/max-use` tem suporte e dicionário prioritários para termos em pt-BR (vide `TECHNICAL_DICTIONARY` em [`useSpellChecker.ts:L65-150`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts#L65-L150)), a ineficácia com palavras acentuadas compromete diretamente a função precípua do composable.
+     - Como a biblioteca `@maxvue/max-use` tem suporte e dicionário prioritários para termos em pt-BR (vide `TECHNICAL_DICTIONARY` em [`useSpellChecker.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts#L65-L150)), a ineficácia com palavras acentuadas compromete diretamente a função precípua do composable.
 
 3. **Substituição Insegura com Padrões de Cifrão em `replacement`:**
    - Ao executar `raw.replace(regex, replacement)`, se a string `replacement` contiver sequências como `$&`, `$'` ou `$1` (por exemplo, valores monetários como `"$100"` ou `"$&#"`), o método nativo `String.prototype.replace` interpreta esses caracteres como referências a grupos de captura, corrompendo o texto resultante.
    - A substituição deve empregar uma função de substituição (`() => replacement`), que trata a string de reposição de maneira puramente literal.
 
 4. **Ausência de Cláusula de Guarda para Parâmetros Inválidos:**
-   - Se `word` for string vazia, `null` ou `undefined`, a compilação ou execução de regex pode gerar comportamento errático ou substituição indesejada em toda a string.
+   - Se `word` for string vazia, `null` ou `undefined`, a compilação ou execução de regex pode gerar comportamento errático ou substituição indesejada em toda a string. Deve haver retorno antecipado seguro de `raw`.
+
+5. **Histórico de Reprovação no Portão de Qualidade:**
+   - Uma tentativa prévia de implementação da issue #23 foi reprovada na etapa de verificação (`result-check.json`) porque foram incluídos indevidamente no commit do Git links simbólicos apontando para caminhos absolutos locais (`node_modules`, `.claude/skills`, `.opencode/skills`), violando os Portões 4 (Escopo) e 2 (Risco de quebra de ambiente). O presente plano define controles estritos de higiene de versionamento para sanar definitivamente tal deficiência.
 
 #### Causa Raiz Comprovada
 - **Localização Exata no Código:**
@@ -64,7 +67,7 @@ Isso produz três agravantes críticos em tempo de execução:
 
 - **Rastreamento Reverso de Dados:**
   - **UI (Camada de Apresentação):** Componentes Vue (ex.: editores de texto, campos de entrada ou painéis de revisão ortográfica) exibem lista de palavras incorretas e opções sugeridas (`suggestions`). Ao clicar em uma sugestão, aciona-se `@click="applySuggestion(erro.word, sugestao)"`.
-  - **Store / Reatividade:** O composable [`useSpellChecker`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts) gerencia o estado da string (`source`), a lista reativa de erros (`errors`) e o mapa de sugestões (`suggestions`). A chamada de `applySuggestion` é executada de forma síncrona pelo consumidor.
+  - **Store / Reatividade:** O composable [`useSpellChecker.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts) gerencia o estado da string (`source`), a lista reativa de erros (`errors`) e o mapa de sugestões (`suggestions`). A chamada de `applySuggestion` é executada de forma síncrona pelo consumidor.
   - **Camada de Serviço / Transformação:** A interpolação insegura e sem fronteiras Unicode falha na execução síncrona do JavaScript, lançando `SyntaxError` ou falhando silenciosamente na substituição de termos acentuados.
   - **API / Rotas / Banco de Dados:** Camada client-side pura de composable Vue, sem chamadas de rede nem persistência remota.
 
@@ -73,7 +76,7 @@ Isso produz três agravantes críticos em tempo de execução:
 ### Arquivos afetados
 
 1. [`src/Composables/useSpellChecker.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts):
-   - Importar o helper existente [`escapeRegExp`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Helpers/Strings/escapeRegExp.ts) de `../Helpers/Strings/escapeRegExp`.
+   - Importar o helper existente [`escapeRegExp.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Helpers/Strings/escapeRegExp.ts) de `../Helpers/Strings/escapeRegExp`.
    - Adicionar cláusula de guarda defensiva para `word` vazio ou não-string (`if (!word || typeof word !== 'string') return raw;`).
    - Substituir `\b` por fronteiras Unicode compatíveis: lookbehind negativo `(?<![\p{L}\p{N}])` e lookahead negativo `(?![\p{L}\p{N}])`.
    - Sanitizar `word` com `escapeRegExp(word)` e compilar a expressão regular com flags `'gu'`.
@@ -91,7 +94,7 @@ Isso produz três agravantes críticos em tempo de execução:
    - Registro e documentação técnica do plano de execução da issue #23.
 
 > [!IMPORTANT]
-> **Controle Estrito de Escopo:** Nenhum outro arquivo, link simbólico (`node_modules`, `.claude/`, `.opencode/`), ou dependência deve ser modificado, criado ou adicionado ao Git. Ao realizar o commit, deve-se versionar única e exclusivamente os arquivos listados acima (`git add src/Composables/useSpellChecker.ts src/Composables/useSpellChecker.test.ts docs/issues/23/plan.md`). Links simbólicos para diretórios locais absolutos corrompem o ambiente de CI/CD e configuram violação estrita do escopo.
+> **Controle Estrito de Escopo (Portão de Qualidade 4):** Nenhum outro arquivo, link simbólico (`node_modules`, `.claude/skills`, `.opencode/skills`), ou dependência deve ser modificado, criado ou adicionado ao Git. Ao realizar o commit, deve-se versionar única e exclusivamente os arquivos listados acima (`git add src/Composables/useSpellChecker.ts src/Composables/useSpellChecker.test.ts docs/issues/23/plan.md`). Links simbólicos para diretórios locais absolutos corrompem o ambiente de CI/CD e configuram violação estrita do escopo.
 
 ---
 
@@ -99,7 +102,7 @@ Isso produz três agravantes críticos em tempo de execução:
 
 1. **Passo 1: Escrever os Testes Unitários de Falha (Fase Red do TDD)**
    - No arquivo [`src/Composables/useSpellChecker.test.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.test.ts), adicionar a suíte de testes que reproduz as falhas de `SyntaxError`, a ausência de correspondência para termos acentuados e o tratamento de `$`.
-   - Executar `npm test -- src/Composables/useSpellChecker.test.ts` e confirmar a ocorrência de falha (Red).
+   - Confirmar o comportamento da falha em cenário Red.
 
 2. **Passo 2: Importar Helper de Sanitização**
    - No arquivo [`src/Composables/useSpellChecker.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-23/src/Composables/useSpellChecker.ts):
