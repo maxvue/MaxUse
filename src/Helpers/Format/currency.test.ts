@@ -54,6 +54,11 @@ describe('formatCurrency', () => {
         expect(formatCurrency('1.234.567')).toBe('R$ 1.234.567,00');
     });
 
+    it('formata strings numéricas no padrão internacional com vírgula de milhar', () => {
+        expect(formatCurrency('1,234.56')).toBe('R$ 1.234,56');
+        expect(formatCurrency('1,234,567.89')).toBe('R$ 1.234.567,89');
+    });
+
     it('faz round-trip do próprio formato de saída', () => {
         expect(formatCurrency(formatCurrency(1234.56))).toBe('R$ 1.234,56');
     });

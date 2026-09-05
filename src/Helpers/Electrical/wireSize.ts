@@ -89,7 +89,6 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
     const rawVoltage = Number(options?.voltage ?? 220);
     const voltage_type = options?.voltage_type;
     const length = Number(options?.length ?? 10);
-    const max_percent = Number(options?.max_loss ?? 5);
 
     const fca = Number(options?.fca ?? 1);
     const fct = Number(options?.fct ?? 1);
@@ -117,7 +116,27 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
         ? (voltage_type === 'ff' || rawVoltage > 254 ? rawVoltage : toPhasePhase(rawVoltage))
         : rawVoltage;
 
-    const voltage_drop_allowed = voltage_base * (max_percent / 100);
+    const hasVoltageDrop = options?.voltage_drop !== undefined && !isBlank(options?.voltage_drop) && Number(options?.voltage_drop) > 0;
+    const hasMaxLoss = options?.max_loss !== undefined && !isBlank(options?.max_loss) && Number(options?.max_loss) > 0;
+
+    let voltage_drop_allowed: number;
+    let max_percent: number;
+
+    if (hasVoltageDrop && hasMaxLoss) {
+        const dropFromVolt = Number(options.voltage_drop);
+        const dropFromLoss = voltage_base * (Number(options.max_loss) / 100);
+        voltage_drop_allowed = Math.min(dropFromVolt, dropFromLoss);
+        max_percent = (voltage_drop_allowed / voltage_base) * 100;
+    } else if (hasVoltageDrop) {
+        voltage_drop_allowed = Number(options.voltage_drop);
+        max_percent = (voltage_drop_allowed / voltage_base) * 100;
+    } else if (hasMaxLoss) {
+        max_percent = Number(options.max_loss);
+        voltage_drop_allowed = voltage_base * (max_percent / 100);
+    } else {
+        max_percent = 5;
+        voltage_drop_allowed = voltage_base * (max_percent / 100);
+    }
 
     const section = phases === 3
         ? (Math.sqrt(3) * currentVal * length * rho) / voltage_drop_allowed
@@ -198,9 +217,9 @@ export async function wireSize(current: T, options: WireOptions = {}): Promise<W
         voltage_drop = k * currentVal * length * Z_efetiva;
         percent_drop = (voltage_drop / voltage_base) * 100;
 
-        if (percent_drop <= max_percent || wireIdx === all_wires.length - 1) {
+        if (percent_drop <= max_percent || voltage_drop <= voltage_drop_allowed || wireIdx === all_wires.length - 1) {
             data_return.wire = candidateWire;
-            if (percent_drop > max_percent && wireIdx === all_wires.length - 1) data_return.exceeded = true;
+            if (percent_drop > max_percent && voltage_drop > voltage_drop_allowed && wireIdx === all_wires.length - 1) data_return.exceeded = true;
             break;
         }
         wireIdx++;

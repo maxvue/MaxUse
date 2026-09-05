@@ -94,6 +94,10 @@ describe('formatBytes — regressão auditoria (achado 014)', () => {
         expect(formatBytes('1.024')).toBe('1 KB');
     });
 
+    it('interpreta strings no padrão internacional com vírgula de milhar', () => {
+        expect(formatBytes('1,234.56 KB')).toBe('1.21 KB');
+    });
+
     it('não fabrica números a partir de notação científica', () => {
         expect(formatBytes('2e3')).not.toBe('23 Bytes');
     });
