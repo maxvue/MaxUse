@@ -344,6 +344,60 @@ describe('wireSize', () => {
             }
         }
     });
+
+    it('respeita voltage_drop em Volts quando especificado', async () => {
+        const result = await wireSize(20, {
+            voltage: 220,
+            voltage_drop: 2,
+            length: 50
+        });
+        expect(result).not.toBeNull();
+        expect(result!.voltage_drop).toBeLessThanOrEqual(2);
+        expect(result!.wire).toBe(25);
+    });
+
+    it('aceita voltage_drop como string numérica', async () => {
+        const result = await wireSize(20, {
+            voltage: 220,
+            voltage_drop: '2',
+            length: 50
+        });
+        expect(result).not.toBeNull();
+        expect(result!.voltage_drop).toBeLessThanOrEqual(2);
+        expect(result!.wire).toBe(25);
+    });
+
+    it('aplica o limite mais restritivo entre voltage_drop e max_loss quando ambos são fornecidos', async () => {
+        const resA = await wireSize(20, {
+            voltage: 220,
+            length: 50,
+            voltage_drop: 2,
+            max_loss: 5
+        });
+        expect(resA!.voltage_drop).toBeLessThanOrEqual(2);
+        expect(resA!.wire).toBe(25);
+
+        const resB = await wireSize(20, {
+            voltage: 220,
+            length: 50,
+            voltage_drop: 10,
+            max_loss: 1
+        });
+        expect(resB!.voltage_drop).toBeLessThanOrEqual(2.2);
+        expect(resB!.loss_percent).toBeLessThanOrEqual(1);
+    });
+
+    it('respeita voltage_drop em circuito trifásico', async () => {
+        const result = await wireSize(30, {
+            voltage: 380,
+            voltage_type: 'ff',
+            phases: 3,
+            length: 60,
+            voltage_drop: 5
+        });
+        expect(result).not.toBeNull();
+        expect(result!.voltage_drop).toBeLessThanOrEqual(5);
+    });
 });
 
 describe('calculaCabo (alias)', () => {
