@@ -38,4 +38,33 @@ describe('filter', () => {
         const result = filter(ref([1, 2, 3, 4]), (n: number) => n % 2 === 0);
         expect(result).toEqual([2, 4]);
     });
+
+    it('filtra por property shorthand', () => {
+        const result = filter([{ a: 1 }, { a: 0 }], 'a');
+        expect(result).toEqual([{ a: 1 }]);
+    });
+
+    it('filtra por deep property shorthand', () => {
+        const items = [{ nested: { active: true } }, { nested: { active: false } }];
+        const result = filter(items, 'nested.active');
+        expect(result).toEqual([{ nested: { active: true } }]);
+    });
+
+    it('filtra por matches object shorthand', () => {
+        const items = [{ a: 1, b: 2 }, { a: 2, b: 2 }];
+        const result = filter(items, { a: 1 });
+        expect(result).toEqual([{ a: 1, b: 2 }]);
+    });
+
+    it('filtra por matchesProperty array shorthand', () => {
+        const items = [{ a: 1, b: 2 }, { a: 2, b: 2 }];
+        const result = filter(items, ['a', 2]);
+        expect(result).toEqual([{ a: 2, b: 2 }]);
+    });
+
+    it('filtra Record com shorthand', () => {
+        const obj = { x: { a: 1 }, y: { a: 0 } };
+        const result = filter(obj, 'a');
+        expect(result).toEqual({ x: { a: 1 } });
+    });
 });

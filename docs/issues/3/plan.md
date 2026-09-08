@@ -7,7 +7,7 @@
 ### Descrição e Causa Raiz
 
 #### 1. Descrição do Problema e Agravantes
-Na versão 2.0.0 da biblioteca `@maxvue/max-use`, a dependência legada `lodash-es` foi descontinuada e substituída por reimplementações nativas e composables otimizados para Vue 3. Entretanto, cinco funções essenciais de iteração de coleções (`keyBy`, `filter`, `findLast`, `groupBy` e `orderBy`) foram implementadas assumindo contratos excessivamente restritos para seus Iteratees/Predicates, divergindo drasticamente do contrato universal estabelecido pelo Lodash e assumido como padrão pela biblioteca.
+Na versão 2.0.0 da biblioteca `@maxvue/max-use`, a dependência legada `lodash-es` foi descontinuada e substituída por reimplementações nativas e composables otimizados para Vue 3. Entretanto, cinco funções utilitárias essenciais de iteração de coleções (`keyBy`, `filter`, `findLast`, `groupBy` e `orderBy`) foram implementadas assumindo contratos restritos para seus Iteratees/Predicates, divergindo drasticamente do contrato universal estabelecido pelo Lodash e esperado pelos consumidores da biblioteca.
 
 O contrato canônico do Lodash para coleções estipula que Iteratees aceitam **quatro formatos polimórficos**:
 1. **Função customizada:** `(value, key/index, collection) => result`
@@ -16,11 +16,11 @@ O contrato canônico do Lodash para coleções estipula que Iteratees aceitam **
 4. **Matches shorthand (objeto plano):** `{ status: 'active', role: 'admin' }` (validação de correspondência parcial de atributos)
 
 Nas implementações originais em `dev`, esses formatos não são suportados de maneira uniforme e geram dois modos severos de falha:
-- **Lançamento de Exceções em Tempo de Execução (`TypeError`):** Em `filter` e `findLast`, o parâmetro de avaliação é invocado cegamente como função (`callback(item)` ou `predicate(data[i], i, data)`). Quando o consumidor envia uma string, objeto ou tupla, ocorre erro de execução imediato (`TypeError: callback is not a function` / `TypeError: predicate is not a function`), abortando a renderização ou rotina consumidora.
-- **Corrupção e Perda Silenciosa de Dados (Pior Cenário):** Em `keyBy` e `groupBy`, a passagem de uma função no caso do `keyBy` (`keyBy(items, u => u.id)`) ou de uma string com notação pontuada aninhada no `groupBy` (`groupBy(items, 'category.id')`) tenta indexar os itens via chave direta `item[key]`. Como `key` é uma função ou uma string pontuada que não existe como chave direta plana no objeto, `item[key]` avalia como `undefined`. O resultado é agrupado ou indexado sob a chave string `"undefined"`. No caso do `keyBy`, cada registro sucessivo sobrescreve o anterior na chave `"undefined"`, **descartando silenciosamente todos os itens da coleção exceto o último**, sem emitir qualquer aviso ou exceção.
+- **Lançamento de Exceções em Tempo de Execução (`TypeError`):** Em `filter` e `findLast`, o parâmetro de avaliação é invocado cegamente como função (`callback(item)` ou `predicate(data[i], i, data)`). Quando o consumidor envia uma string, objeto ou tupla, ocorre erro de execução imediato (`TypeError: callback is not a function` / `TypeError: predicate is not a function`), abortando rotinas consumidoras e renderizações reativas.
+- **Corrupção e Perda Silenciosa de Dados (Pior Cenário):** Em `keyBy` e `groupBy`, a passagem de uma função no caso do `keyBy` (`keyBy(items, u => u.id)`) ou de uma string com notação pontuada aninhada no `groupBy` (`groupBy(items, 'category.id')`) tenta indexar os itens via chave direta `item[key]`. Como `key` é uma função ou uma string pontuada que não existe como chave direta plana no objeto, `item[key]` avalia como `undefined`. O resultado é agrupado ou indexado sob a chave string `"undefined"`. No caso do `keyBy`, cada registro sucessivo sobrescreve o anterior na chave `"undefined"`, **descartando silenciosamente todos os itens da coleção exceto o último**, sem emitir qualquer erro ou aviso.
 
 #### 2. Causa Raiz Comprovada
-A causa raiz reside no fato de nenhuma dessas cinco funções normalizar o argumento recebido com o utilitário canônico já existente na biblioteca [`src/Helpers/Utils/iteratee.ts:L23-31`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/src/Helpers/Utils/iteratee.ts#L23-L31), somado à tipagem TypeScript que anteriormente restringia a assinatura a callbacks ou strings planas, ou que, em tentativas anteriores de correção, utilizou uniões com `unknown` (ex.: `predicate?: unknown` ou `Criterion<T> = ... | unknown`), colapsando a união do TypeScript para `unknown` e destruindo a inferência de tipo contextual (*contextual typing*) dos parâmetros em callbacks anônimos.
+A causa raiz reside no fato de nenhuma dessas cinco funções normalizar o argumento recebido com o utilitário canônico já existente na biblioteca [`src/Helpers/Utils/iteratee.ts:L23-31`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/src/Helpers/Utils/iteratee.ts#L23-L31), somado à tipagem TypeScript que anteriormente restringia a assinatura a callbacks ou strings planas, ou que, em tentativas anteriores de correção, utilizou uniões com `unknown` (ex.: `predicate?: unknown` ou `Criterion<T> = ... | unknown`), colapsando a união do TypeScript para `unknown` e destruindo a inferência de tipo contextual (*contextual typing*) dos parâmetros em callbacks anônimos inline.
 
 Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
 
@@ -28,8 +28,12 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
    - *Código original em `dev`:*
      ```typescript
      export function keyBy(collection: MaybeRefOrGetter<T | any[]>, key: string): Record<string, T> {
-         ...
-         return Object.fromEntries(items.map((item) => [String(item[key]), item]));
+         const data = toValue(collection);
+         if (!data || typeof data !== 'object') return {};
+         const items = Array.isArray(data) ? data : Object.values(data);
+         return Object.fromEntries(
+             items.map((item) => [String(item[key]), item])
+         );
      }
      ```
    - *Comprovação causal:* O parâmetro `key` é forçado como `string` na tipagem e indexa diretamente `item[key]`. Se uma função `u => u.id` é passada, `item[key]` tenta acessar a propriedade `"u => u.id"`, que é `undefined`. O retorno colapsa todos os elementos em `result["undefined"]`, retendo apenas o último registro. Também falha com strings de caminho profundo (ex.: `'profile.id'`), objetos matches e tuplas.
@@ -38,7 +42,9 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
    - *Código original em `dev`:*
      ```typescript
      export function filter(collection: MaybeRefOrGetter<T>, callback: (card: any) => void): T[] | Record<string, T> {
-         ...
+         const data = toValue(collection);
+         if (data == null) return [];
+         if (typeof data !== 'object') return [];
          if (Array.isArray(data)) return data.filter((item) => callback(item));
          return Object.fromEntries(Object.entries(data).filter(([, item]) => callback(item)));
      }
@@ -49,7 +55,8 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
    - *Código original em `dev`:*
      ```typescript
      export function findLast<T>(collection: MaybeRefOrGetter<T[] | null | undefined>, predicate: (value: T, index: number, collection: T[]) => boolean): T | undefined {
-         ...
+         const data = toValue(collection);
+         if (!data || !Array.isArray(data)) return undefined;
          for (let i = data.length - 1; i >= 0; i--) if (predicate(data[i], i, data)) return data[i];
          return undefined;
      }
@@ -60,9 +67,20 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
    - *Código original em `dev`:*
      ```typescript
      export function groupBy<T>(collection: MaybeRefOrGetter<T[] | Record<string, T> | any>, iteratee: string | ((item: T) => string | number)): Record<string, T[]> {
-         ...
-         if (typeof iteratee === 'function') key = iteratee(item as T);
-         else key = (item as any)[iteratee];
+         const data = toValue(collection);
+         if (!data) return {};
+         const items = Array.isArray(data) ? data : Object.values(data);
+         const result: Record<string, T[]> = {};
+         for (const item of items) {
+             let key: string | number;
+             if (typeof iteratee === 'function') key = iteratee(item as T);
+             else key = (item as any)[iteratee];
+             const groupKey = String(key);
+             if (!result[groupKey]) result[groupKey] = [];
+             result[groupKey].push(item as T);
+         }
+         return result;
+     }
      ```
    - *Comprovação causal:* O branch `else` assume que qualquer iteratee não-função é acessível diretamente via índice raso `(item as any)[iteratee]`. Para caminhos profundos (`'address.city'`), `item['address.city']` resulta em `undefined`, agrupando todos os registros na chave `"undefined"`. O mesmo ocorre para objetos matches e tuplas.
 
@@ -118,8 +136,8 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
   - Iterar com tratamento adequado para arrays e Records.
 - [`src/Helpers/Iterables/orderBy.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/src/Helpers/Iterables/orderBy.ts):
   - Integrar `iteratee` de `../Utils/iteratee`.
-  - Refatorar a definição de `Criterion<T>` sem incluir `| unknown` no final da união, garantindo que `((item: T) => unknown)` não seja colapsado e preserve a inferência de tipo de `(u) => u.name.length`.
-  - Pré-compilar critérios via `iteratee` para objetos matches e tuplas, mantendo otimização de performance no loop de ordenação.
+  - Ajustar `Criterion<T>` removendo `| unknown` para não colapsar a tipagem contextual em callbacks anônimos.
+  - Pré-compilar critérios suportando objetos matches e tuplas matchesProperty além de funções e caminhos pontuados.
 
 #### 2. Testes Automatizados Unitários
 - [`src/Helpers/Iterables/keyBy.test.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/src/Helpers/Iterables/keyBy.test.ts): Adicionar testes para função iteratee, caminho profundo pontuado, objeto matches, tupla matchesProperty e coleção Record.
@@ -129,7 +147,7 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
 - [`src/Helpers/Iterables/orderBy.test.ts`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/src/Helpers/Iterables/orderBy.test.ts): Adicionar testes para ordenação por critério de objeto matches, critério de tupla array e múltiplos critérios combinando strings e objetos.
 
 #### 3. Documentação e Escopo do Git
-- [`README.md`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/README.md): Atualizar a tabela descritiva da seção `Iterables` documentando a conformidade com os iteratees polimórficos do Lodash.
+- [`README.md`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/README.md): Atualizar a documentação da seção `Iterables` registrando a conformidade com os iteratees polimórficos do Lodash.
 - **Saneamento de Escopo Git:** Remover symlinks indevidos commitados em iterações prévias (`node_modules`, `.claude/skills`, `.opencode/skills`) para garantir total limpeza no `git diff dev..HEAD`.
 
 ---
@@ -259,9 +277,6 @@ Evidências pontuais e comprovadas nos arquivos-fonte da branch base `dev`:
    ```
 4. Dentro do loop de `items.sort`, comparar `valA = fn(a)` e `valB = fn(b)`.
 
-#### Passo 7: Documentação e README
-1. Atualizar a tabela descritiva da seção de Iterables no [`README.md`](file:///home/johnattas/GitHub/MaxUse/.max-code-worktrees/wt-implement-issue-3/README.md) detalhando o suporte aos quatro formatos de iteratee do Lodash.
-
 ---
 
 ### Especificação de Teste TDD (Red-Green)
@@ -301,7 +316,7 @@ Os testes abaixo falham na implementação original de `dev` e comprovam a resol
    - **Caso 3 (Múltiplos critérios combinados):** `orderBy([{ role: 'admin', age: 30 }, { role: 'admin', age: 20 }, { role: 'user', age: 40 }], [{ role: 'admin' }, 'age'], ['desc', 'asc'])` deve ordenar por `role: 'admin'` em primeiro lugar e desempatar pela idade em ordem ascendente.
 
 #### 2. Validação da Correção (*Green*)
-Após a alteração cirúrgica dos 5 arquivos em `src/Helpers/Iterables/`, todos os 24 testes existentes + todos os novos testes de shorthands devem passar sem qualquer regressão.
+Após a alteração cirúrgica dos 5 arquivos em `src/Helpers/Iterables/`, todos os testes unitários existentes e novos testes de shorthands devem passar sem qualquer regressão.
 
 ---
 
@@ -321,7 +336,7 @@ Nenhuma migration necessária. A biblioteca `@maxvue/max-use` é uma coleção d
 3. **Risco de Comportamento em Fallbacks Numéricos no `orderBy`:**
    - *Mitigação:* O teste legado `fallback compara valores diretamente quando rule não é string nem function` envia `0 as any`. Com a pré-compilação via `typeof rule === 'object' && rule !== null`, valores numéricos caem no branch padrão `(item) => item`, preservando integralmente o comportamento legado testado.
 4. **Risco de Poluição de Escopo Git por Symlinks:**
-   - *Mitigação:* Antes de qualquer commit, validar `git status` e `git diff dev..HEAD --name-status` para assegurar que nenhum symlink de máquina local (`node_modules`, `.claude/skills`, etc.) seja incluído.
+   - *Mitigação:* Antes de qualquer commit na etapa de implementação, validar `git status` e `git diff dev..HEAD --name-status` para assegurar que nenhum symlink de máquina local (`node_modules`, `.claude/skills`, etc.) seja incluído.
 
 ---
 
@@ -364,6 +379,9 @@ Para comprovar formal e conclusivamente a implementação:
 
 ### Skills Aplicáveis
 
-- `superpowers` (enforcement do fluxo de engenharia estruturado: investigação prévia, especificação técnica, ciclo TDD Red-Green e portões de qualidade).
-- `systematic-debugging-best-practices` (análise de causa raiz comprovada, reprodução empírica do defeito e isolamento da anomalia).
-- `code-review-and-quality` (inspeção de conformidade estrita de contratos, verificação de tipagem contextual do TypeScript, cobertura de testes e prevenção de poluição no git).
+- `systematic-debugging-best-practices`: Análise causal aprofundada, rastreamento reverso de dados e isolamento da discrepância com o contrato do Lodash.
+- `planning-with-files`: Estruturação do plano cirúrgico em documentação viva persistente (`docs/issues/3/plan.md`) para orientação das etapas de execução.
+- `tdd`: Metodologia Red-Green estrita, documentando casos de teste de falha prévia e critérios inequívocos de passagem.
+- `superpowers`: Fluxo de engenharia estruturado com critérios de aceitação estritos e portões de qualidade.
+- `code-review-and-quality`: Auditoria estrita de código, verificação de tipagem contextual do TypeScript sem colapso para `unknown` e vigilância contra poluição de escopo no Git.
+- `production-code-audit`: Preservação e garantia de conformidade com contratos públicos e estabilidade em ambiente de produção.

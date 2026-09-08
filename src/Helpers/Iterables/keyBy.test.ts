@@ -44,5 +44,42 @@ describe('keyBy', () => {
         const r = keyBy([{ id: '10' }], 'id');
         expect(Object.keys(r).every((k) => k === k.trim())).toBe(true);
     });
+
+    it('indexa por função iteratee', () => {
+        const users = [{ id: 1, name: 'Ana' }, { id: 2, name: 'Bruno' }];
+        const result = keyBy(users, (u) => u.id);
+        expect(result).toEqual({
+            '1': { id: 1, name: 'Ana' },
+            '2': { id: 2, name: 'Bruno' }
+        });
+    });
+
+    it('indexa por caminho profundo (deep property)', () => {
+        const items = [{ meta: { code: 'A' } }, { meta: { code: 'B' } }];
+        const result = keyBy(items, 'meta.code');
+        expect(result).toEqual({
+            A: { meta: { code: 'A' } },
+            B: { meta: { code: 'B' } }
+        });
+    });
+
+    it('indexa por matches object shorthand', () => {
+        const items = [{ id: 1, admin: true }, { id: 2, admin: false }];
+        const result = keyBy(items, { admin: true });
+        expect(result['true']).toEqual({ id: 1, admin: true });
+        expect(result['false']).toEqual({ id: 2, admin: false });
+    });
+
+    it('indexa por matchesProperty array shorthand', () => {
+        const items = [{ id: 1, role: 'editor' }, { id: 2, role: 'viewer' }];
+        const result = keyBy(items, ['role', 'editor']);
+        expect(result['true']).toEqual({ id: 1, role: 'editor' });
+        expect(result['false']).toEqual({ id: 2, role: 'viewer' });
+    });
+
+    it('indexa por identidade sem iteratee', () => {
+        const result = keyBy([1, 2]);
+        expect(result).toEqual({ '1': 1, '2': 2 });
+    });
 });
 

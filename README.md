@@ -301,16 +301,16 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `chunk` | `(array, size) → T[][]` | Divide o array em pedaços de tamanho fixo |
 | `uniq` | `(array) → T[]` | Remove itens duplicados (primitivos) |
 | `uniqueBy` | `(array, key) → T[]` | Remove duplicatas por propriedade ou função seletora |
-| `groupBy` | `(collection, iteratee) → Record<string, T[]>` | Agrupa elementos por chave |
-| `keyBy` | `(collection, key) → Record<string, T>` | Indexa a coleção por uma chave |
+| `groupBy` | `(collection, iteratee?) → Record<string, T[]>` | Agrupa elementos por chave/iteratee (suporta caminhos profundos e shorthands) |
+| `keyBy` | `(collection, iteratee?) → Record<string, T>` | Indexa a coleção por chave/iteratee (suporta caminhos profundos e shorthands) |
 | `countBy` | `(collection, iteratee) → Record<string, number>` | Conta ocorrências por grupo |
 | `countWhere` | `(collection, key, value?) → number` | Conta itens cuja propriedade é igual ao valor (padrão `true`) |
-| `orderBy` | `(collection, keys, orders?) → T[]` | Ordena por múltiplas chaves e direções |
+| `orderBy` | `(collection, criteria?, orders?) → T[]` | Ordena por critérios/iteratees e direções (suporta objetos e tuplas) |
 | `orderByWithKey` | `(collection, key, order?) → T[]` | Ordena por uma chave específica |
-| `filter` | `(collection, predicate) → T[] \| Record<string, T>` | Filtra elementos com predicado |
+| `filter` | `(collection, predicate?) → T[] \| Record<string, T>` | Filtra elementos com predicado/iteratee (suporta shorthands) |
 | `filterBy` | `(collection, key, value) → T[]` | Filtra por valor de uma propriedade |
 | `filterByNot` | `(collection, key, value) → T[]` | Filtra excluindo um valor de propriedade |
-| `findLast` | `(array, predicate) → T \| undefined` | Encontra o último elemento que satisfaz o predicado |
+| `findLast` | `(collection, predicate?, fromIndex?) → T \| undefined` | Encontra o último elemento que satisfaz o predicado/iteratee |
 | `sum` | `(array) → number` | Soma todos os valores numéricos ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
 | `sumBy` | `(array, key) → number` | Soma valores de uma propriedade específica ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
 | `sample` | `(array) → T` | Retorna um elemento aleatório |
