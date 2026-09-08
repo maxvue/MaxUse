@@ -1,4 +1,5 @@
 import { ref, computed, watch, toValue, isRef, getCurrentScope, onScopeDispose, type Ref, type ComputedRef, type MaybeRefOrGetter } from 'vue';
+import { escapeRegExp } from '../Helpers/Strings/escapeRegExp';
 
 /**
  * Representa um erro ortográfico identificado no texto.
@@ -507,12 +508,15 @@ export function useSpellChecker(
     const applySuggestion = (word: string, replacement: string): string => {
         const raw = toValue(source);
         if (!raw || typeof raw !== 'string') return raw ?? '';
+        if (!word || typeof word !== 'string') return raw;
 
-        const regex = new RegExp(`\\b${word}\\b`, 'g');
-        const updated = raw.replace(regex, replacement);
+        const prefix = '(?<![\\p{L}\\p{N}])';
+        const suffix = '(?![\\p{L}\\p{N}])';
+
+        const regex = new RegExp(`${prefix}${escapeRegExp(word)}${suffix}`, 'gu');
+        const updated = raw.replace(regex, () => replacement);
 
         if (isRef(source)) (source as Ref<string | null | undefined>).value = updated;
-
 
         runCheck();
         return updated;
