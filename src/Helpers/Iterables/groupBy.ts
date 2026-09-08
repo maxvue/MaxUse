@@ -26,20 +26,18 @@ export function groupBy<T>(
     const fn = toIteratee(iterateeFn);
     const result: Record<string, T[]> = {};
 
-    if (Array.isArray(data)) {
-        for (let i = 0; i < data.length; i++) {
-            const item = data[i];
-            const groupKey = String(fn(item, i, data));
-            if (!result[groupKey]) result[groupKey] = [];
-            result[groupKey].push(item);
-        }
-    } else {
-        for (const [key, item] of Object.entries(data)) {
-            const groupKey = String(fn(item, key, data));
-            if (!result[groupKey]) result[groupKey] = [];
-            result[groupKey].push(item as T);
-        }
+    if (Array.isArray(data)) for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+        const groupKey = String(fn(item, i, data));
+        if (!result[groupKey]) result[groupKey] = [];
+        result[groupKey].push(item);
     }
+    else for (const [key, item] of Object.entries(data)) {
+        const groupKey = String(fn(item, key, data));
+        if (!result[groupKey]) result[groupKey] = [];
+        result[groupKey].push(item as T);
+    }
+
 
     return result;
 }

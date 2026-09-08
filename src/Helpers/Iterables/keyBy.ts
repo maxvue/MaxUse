@@ -28,18 +28,16 @@ export function keyBy<T>(
     const fn = iteratee(iterateeFn);
     const result: Record<string, T> = {};
 
-    if (Array.isArray(data)) {
-        for (let i = 0; i < data.length; i++) {
-            const item = data[i];
-            const k = fn(item, i, data);
-            result[String(k)] = item;
-        }
-    } else {
-        for (const [key, item] of Object.entries(data)) {
-            const k = fn(item, key, data);
-            result[String(k)] = item;
-        }
+    if (Array.isArray(data)) for (let i = 0; i < data.length; i++) {
+        const item = data[i];
+        const k = fn(item, i, data);
+        result[String(k)] = item;
     }
+    else for (const [key, item] of Object.entries(data)) {
+        const k = fn(item, key, data);
+        result[String(k)] = item;
+    }
+
 
     return result;
 }
