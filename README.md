@@ -68,6 +68,8 @@ if (isString(text)) {
 
 Para manter a conveniência do padrão Lodash, a MaxUse exporta o objeto `_`. Ele agrupa **todos os helpers próprios**, as funções do **VueUse** e do **Lodash**, priorizando a MaxUse em caso de conflitos.
 
+> A partir da **2.0.0** a MaxUse não depende mais do `lodash-es`: os utilitários de estilo Lodash (`debounce`, `groupBy`, `sum`, `get`/`set`, …) são **reimplementações próprias**. A API é inspirada no Lodash, mas não é garantida como equivalente 1:1 — veja as divergências abaixo.
+
 ```ts
 import { _ } from '@maxvue/max-use'
 
@@ -81,6 +83,19 @@ const { x, y } = _.useMouse()
 // Funções do Lodash
 const debounced = _.debounce(fn, 300)
 ```
+
+#### Divergências conhecidas em relação ao Lodash
+
+Diferenças **deliberadas** de comportamento, travadas por testes de caracterização. Quem migra de `lodash-es` deve conferir estes casos:
+
+| Helper | MaxUse | Lodash | Motivo |
+|:---|:---|:---|:---|
+| `sum` | `sum([6, 4, NaN])` → `10`<br/>`sum(['1', '2'])` → `3`<br/>`sum([1, 'abc', 2])` → `3` | `NaN`<br/>`'12'`<br/>`'1abc2'` | Soma **coercitiva**: cada item passa por `parseFloat` e o que não for numérico conta como `0`. Nunca retorna `NaN` (Lodash usa `+`, concatenando com string em vez de converter). |
+| `sumBy` | `sumBy([{ a: 'x' }, { a: 2 }], 'a')` → `2`<br/>`sumBy([{ a: '10' }, { a: '5' }], 'a')` → `15` | `'x2'`<br/>`'105'` | Mesmo contrato: `Number(valor) \|\| 0`. Nunca retorna `NaN`. |
+
+O fallback `0` é intencional: os helpers foram desenhados para dados vindos de API/formulário (Laravel, Adonis), onde valores numéricos chegam como string, `null` ou ausentes, e um único campo sujo não deve contaminar um total inteiro com `NaN`. Se precisar da semântica estrita do Lodash, faça a soma manualmente (`items.reduce((a, b) => a + b, 0)`).
+
+Além disso, `sum` e `sumBy` aceitam `Ref`/getter e `Record` (somando `Object.values`), o que o Lodash não faz.
 
 ### 3. Importação por Submódulos
 
@@ -296,8 +311,8 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `filterBy` | `(collection, key, value) → T[]` | Filtra por valor de uma propriedade |
 | `filterByNot` | `(collection, key, value) → T[]` | Filtra excluindo um valor de propriedade |
 | `findLast` | `(array, predicate) → T \| undefined` | Encontra o último elemento que satisfaz o predicado |
-| `sum` | `(array) → number` | Soma todos os valores numéricos |
-| `sumBy` | `(array, key) → number` | Soma valores de uma propriedade específica |
+| `sum` | `(array) → number` | Soma todos os valores numéricos ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
+| `sumBy` | `(array, key) → number` | Soma valores de uma propriedade específica ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
 | `sample` | `(array) → T` | Retorna um elemento aleatório |
 | `shuffle` | `(array) → T[]` | Embaralha os elementos |
 | `size` | `(value) → number` | Tamanho de arrays, strings, objetos, Maps, Sets |
