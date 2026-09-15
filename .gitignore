@@ -19,6 +19,8 @@ tsconfig.tsbuildinfo
 GEMINI.md
 .gemini/
 .agents/
+.claude/
+.worktrees/
 .windsurf/
 .cursor/
 .copilot/
