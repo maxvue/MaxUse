@@ -312,7 +312,7 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `filterByNot` | `(collection, key, value) → T[]` | Filtra excluindo um valor de propriedade |
 | `findLast` | `(collection, predicate?, fromIndex?) → T \| undefined` | Encontra o último elemento que satisfaz o predicado/iteratee |
 | `sum` | `(array) → number` | Soma todos os valores numéricos ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
-| `sumBy` | `(array, key) → number` | Soma valores de uma propriedade específica ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
+| `sumBy` | `(collection, iteratee?) → number` | Soma valores de uma propriedade (inclusive aninhada com notação de ponto) ou derivada por iteratee ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
 | `sample` | `(array) → T` | Retorna um elemento aleatório |
 | `shuffle` | `(array) → T[]` | Embaralha os elementos |
 | `size` | `(value) → number` | Tamanho de arrays, strings, objetos, Maps, Sets |

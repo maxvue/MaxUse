@@ -26,6 +26,37 @@ describe('sumBy', () => {
         expect(sumBy(ref([{ v: 3 }, { v: 7 }]), 'v')).toBe(10);
     });
 
+    it('soma por caminho profundo pontuado (dot notation)', () => {
+        const modules = [
+            { id: 1, data_specs: { voc: 45.2 } },
+            { id: 2, data_specs: { voc: 45.2 } },
+            { id: 3, data_specs: { voc: 10 } }
+        ];
+        expect(sumBy(modules, 'data_specs.voc')).toBe(100.4);
+    });
+
+    it('soma por função iteratee', () => {
+        const modules = [
+            { id: 1, data_specs: { voc: 45.2 } },
+            { id: 2, data_specs: { voc: 45.2 } }
+        ];
+        expect(sumBy(modules, (m: any) => m.data_specs.voc)).toBe(90.4);
+    });
+
+    it('coerção graciosa para 0 em caminhos aninhados incompletos ou nulos', () => {
+        const items = [
+            { data_specs: { voc: 45.2 } },
+            { data_specs: null },
+            { data_specs: {} },
+            {}
+        ];
+        expect(sumBy(items, 'data_specs.voc')).toBe(45.2);
+    });
+
+    it('soma elementos diretamente quando iteratee é omitido ou nulo', () => {
+        expect(sumBy([10, 20, 30])).toBe(60);
+    });
+
     // Testes de caracterização: a divergência em relação ao _.sumBy do Lodash é
     // DELIBERADA e faz parte do contrato público. Se algum destes falhar por uma
     // tentativa de "alinhar ao Lodash", a mudança é breaking change e precisa de
