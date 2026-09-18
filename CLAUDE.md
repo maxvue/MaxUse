@@ -69,6 +69,8 @@ Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every fu
 
 ## Execução de Agentes em Worktree
 
-- Toda execução de agentes/subagentes que proponha modificações de código neste repositório deve ocorrer em um **git worktree separado**, criado especificamente para as alterações propostas dentro da pasta oculta `.worktrees/` na raiz do projeto (`git worktree add -b wt-<slug> .worktrees/wt-<slug>`) — nunca diretamente na working tree principal. A pasta `.worktrees/` é ignorada pelo Git (`.gitignore`).
-- **Outras worktrees:** Se houver outras worktrees na pasta `.worktrees/`, não se preocupe com elas: pertencem a outros agentes em outras sessões paralelas. Não investigue outras worktrees, a menos que o usuário peça.
-- **Commits e Limpeza:** Siga as instruções da sessão/prompt quanto a commits (ou aguarde confirmação do usuário se não especificado). Ao concluir e commitar/mergear, remova a worktree criada (`git worktree remove .worktrees/wt-<slug>`).
+- **Orquestração Automática pelo MaxCode:** Toda execução de modificações de código via painel do MaxCode já opera em um **git worktree dedicado e isolado**, criado e gerenciado automaticamente pela extensão (por padrão sob `.max-code-worktrees/wt-<id>`).
+- **Proibido criar worktrees ou branches adicionais:** O agente **NUNCA** deve criar novas worktrees (`git worktree add`), trocar de branch (`git checkout`, `git switch`) ou criar branches manuais (`git branch`). Trabalhe **estritamente dentro da pasta da worktree indicada no prompt** pelo MaxCode.
+- **Outras worktrees:** Se houver outras pastas ou worktrees no repositório, ignore-as: pertencem a outros agentes ou sessões paralelas.
+- **Commits, Merge e Push são exclusivos do usuário:** O agente **NUNCA** deve executar `git commit`, `git merge`, `git push` ou `git worktree remove` por conta própria. Toda integração, commit e remoção da worktree é realizada exclusivamente pelo usuário através dos botões e comandos do painel do MaxCode (`/commit`, etc.).
+- **Execução fora do MaxCode (fallback legado):** Se e somente se o agente for executado fora do MaxCode (CLI manual direto na raiz sem worktree pré-alocada), as alterações devem ocorrer em um worktree temporário sob `.worktrees/wt-<slug>`, aguardando instruções explícitas do usuário para commit/merge.
