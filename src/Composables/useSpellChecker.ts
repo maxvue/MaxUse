@@ -2,61 +2,61 @@ import { ref, computed, watch, toValue, isRef, getCurrentScope, onScopeDispose, 
 import { escapeRegExp } from '../Helpers/Strings/escapeRegExp';
 
 /**
- * Representa um erro ortográfico identificado no texto.
+ * Represents a spelling or terminology error identified in text.
  */
 export interface SpellCheckError {
-    /** Palavra ou termo original identificado com erro */
+    /** The original word or term detected as having an error */
     word: string;
-    /** Índice de início do caractere no texto */
+    /** Character start index in the source string */
     start: number;
-    /** Índice de fim do caractere no texto */
+    /** Character end index in the source string */
     end: number;
-    /** Lista de sugestões de correção ortográfica */
+    /** List of correction suggestions */
     suggestions: string[];
 }
 
 /**
- * Opções de configuração do composable useSpellChecker.
+ * Configuration options for the `useSpellChecker` composable.
  */
 export interface UseSpellCheckerOptions {
     /**
-     * Tempo de espera em milissegundos para debounce da verificação ortográfica.
+     * Debounce time in milliseconds before running the spell check.
      * @default 300
      */
     debounceMs?: number;
     /**
-     * Se deve incluir o dicionário de termos técnicos de energia solar e engenharia.
+     * Whether to include the specialized solar and electrical engineering dictionary.
      * @default true
      */
     technicalTerms?: boolean;
     /**
-     * Dicionário customizado de termos/substituições adicionais (chave em minúsculas -> correção).
+     * Additional custom word substitutions (lowercase key -> replacement string or array).
      */
     customDictionary?: Record<string, string | string[]>;
     /**
-     * Se deve executar a verificação imediatamente na inicialização.
+     * Whether to run the check immediately upon initialization.
      * @default true
      */
     immediate?: boolean;
 }
 
 /**
- * Retorno do composable useSpellChecker.
+ * Return interface for the `useSpellChecker` composable.
  */
 export interface UseSpellCheckerReturn {
-    /** Lista reativa de erros detectados no texto atual */
+    /** Reactive list of errors detected in the current text */
     errors: Ref<SpellCheckError[]>;
-    /** Booleano reativo indicando se há algum erro detectado */
+    /** Reactive boolean indicating whether any error is present */
     hasErrors: ComputedRef<boolean>;
-    /** Mapa de sugestões indexadas pelas palavras com erro */
+    /** Computed dictionary mapping misspelled words to replacement suggestions */
     suggestions: ComputedRef<Record<string, string[]>>;
-    /** Executa a verificação ortográfica imediatamente */
+    /** Runs spell check immediately and returns detected errors */
     checkNow: () => Promise<SpellCheckError[]>;
-    /** Retorna o texto corrigido aplicando as melhores sugestões */
+    /** Returns corrected text applying top suggestions */
     getCorrectedText: (input?: string) => string;
-    /** Alias para getCorrectedText */
+    /** Alias for getCorrectedText */
     correctText: (input?: string) => string;
-    /** Substitui uma palavra específica ou aplica sugestão no texto */
+    /** Replaces a specific misspelled word in reactive source */
     applySuggestion: (word: string, replacement: string) => string;
 }
 
@@ -276,7 +276,7 @@ const COMMON_PTBR_DICTIONARY: Record<string, string | string[]> = {
     automatico: 'automático',
     automatica: 'automática',
     rapido: 'rápido',
-    rapida: 'rapida',
+    rapida: 'rápida',
     otimo: 'ótimo',
     otima: 'ótima',
     pagina: 'página',
@@ -325,33 +325,36 @@ const COMMON_PTBR_DICTIONARY: Record<string, string | string[]> = {
 };
 
 /**
- * Ajusta a capitalização da sugestão para corresponder ao padrão da palavra original.
+ * Matches the casing pattern of an original word onto a replacement word.
+ *
+ * @param original - The original source word to detect casing from.
+ * @param replacement - The replacement word to format.
+ * @returns The replacement word with matched casing (uppercase, capitalized, or lowercase).
  */
 export function matchCasing(original: string, replacement: string): string {
     if (!original || !replacement) return replacement;
 
-    // Se original é todo em maiúsculas (ex: INSTALACAO -> INSTALAÇÃO)
+    // All uppercase (e.g. INSTALACAO -> INSTALAÇÃO)
     if (original === original.toUpperCase() && original !== original.toLowerCase()) return replacement.toUpperCase();
 
-
-    // Se original começa com maiúscula (ex: Instalacao -> Instalação)
+    // Capitalized (e.g. Instalacao -> Instalação)
     if (original[0] === original[0].toUpperCase() && original.slice(1) === original.slice(1).toLowerCase()) return replacement.charAt(0).toUpperCase() + replacement.slice(1);
-
 
     return replacement;
 }
 
 /**
- * Composable reativo para assistência e correção ortográfica em tempo real (pt-BR e termos fotovoltaicos).
+ * Reactive composable for real-time spell checking and terminology assistance.
+ * Includes Brazilian Portuguese common misspellings and specialized solar/electrical engineering terminology.
  *
- * @param source - Texto ou referência reativa a ser verificada.
- * @param options - Opções de configuração (debounce, dicionário customizado, termos técnicos).
- * @returns Objeto com erros reativos, sugestões e métodos de autocorreção.
+ * @param source - Text string or reactive Ref/getter to check.
+ * @param options - Configuration options (debounce, custom dictionary, technical terms).
+ * @returns An object containing reactive errors, suggestions, and auto-correction helpers.
  *
  * @example
  * ```typescript
- * const texto = ref('homologacao na consessionaria');
- * const { errors, getCorrectedText, checkNow } = useSpellChecker(texto, { debounceMs: 300 });
+ * const text = ref('homologacao na consessionaria');
+ * const { errors, getCorrectedText, checkNow } = useSpellChecker(text, { debounceMs: 300 });
  *
  * // getCorrectedText() -> 'homologação na concessionária'
  * ```

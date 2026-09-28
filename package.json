@@ -1,7 +1,7 @@
 {
     "name": "@maxvue/max-use",
     "version": "2.0.0",
-    "description": "Biblioteca de Funções e Composables Vue — VueUse + Lodash + Helpers com suporte total a reatividade",
+    "description": "The definitive utility library for Vue 3 — VueUse + custom reactive Lodash-style helpers & composables",
     "main": "./dist/index.es.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",
@@ -88,7 +88,10 @@
     "files": [
         "dist",
         "LICENSE",
-        "README.md"
+        "README.md",
+        "README.pt-BR.md",
+        "CHANGELOG.md",
+        "CONTRIBUTING.md"
     ],
     "scripts": {
         "dev": "vite",
@@ -142,7 +145,8 @@
         "vue": "^3.6.0-rc.5",
         "vue-eslint-parser": "^10.4.0",
         "vue-router": "^5.1.0",
-        "vue-tsc": "^3.3.9"
+        "vue-tsc": "^3.3.9",
+        "tsx": "^4.19.0"
     },
     "keywords": [
         "vue",
@@ -175,8 +179,13 @@
         "access": "public"
     },
     "peerDependencies": {
-        "@vueuse/core": "^14.0.0",
-        "vue": "^3.5.0 || ^3.6.0-rc.5",
-        "vue-router": "^5.0.6"
+        "@vueuse/core": "^10.0.0 || ^11.0.0 || ^12.0.0 || ^13.0.0 || ^14.0.0",
+        "vue": "^3.3.0 || ^3.4.0 || ^3.5.0 || ^3.6.0-rc.5",
+        "vue-router": "^4.0.0 || ^5.0.0"
+    },
+    "peerDependenciesMeta": {
+        "vue-router": {
+            "optional": true
+        }
     }
 }

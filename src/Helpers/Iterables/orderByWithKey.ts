@@ -6,13 +6,17 @@ type T = Record<string, any>;
 type OrderCriteria<T> = keyof T | (keyof T)[] | { [K in keyof T]?: 'asc' | 'desc' };
 
 /**
- * Ordena uma coleção de objetos com base em critérios e, em seguida, mapeia os resultados para um objeto indexado por uma chave específica.
+ * Sorts a collection of objects by criteria, then indexes the sorted results by a specified key.
  *
- * @param collection A coleção de objetos a ser ordenada e indexada.
- * @param criteria O(s) critério(s) de ordenação.
- * @param object_keyBy A chave a ser usada como índice do objeto retornado.
- * @param order A direção de ordenação (padrão é 'asc').
- * @returns Um objeto mapeado pela chave e ordenado de acordo com os critérios.
+ * @param collection - The collection of objects to sort and index.
+ * @param criteria - Sort criteria (property key, array of keys, or `{ [key]: 'asc' | 'desc' }`).
+ * @param object_keyBy - The object key to index the resulting Record by.
+ * @param order - Sort direction when criteria does not specify ('asc' or 'desc', default: 'asc').
+ * @returns A Record indexed by `object_keyBy`.
+ * @example
+ * const users = [{ id: 1, name: 'Bob', age: 30 }, { id: 2, name: 'Alice', age: 25 }];
+ * const result = orderByWithKey(users, 'age', 'id');
+ * // { '2': { id: 2, name: 'Alice', age: 25 }, '1': { id: 1, name: 'Bob', age: 30 } }
  */
 export function orderByWithKey(
     collection: MaybeRefOrGetter<T[] | Record<string, T> | null | undefined>,

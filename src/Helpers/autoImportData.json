@@ -19,6 +19,7 @@
       "apiGetRoute",
       "apiPostRoute",
       "apiPutRoute",
+      "apiRoute",
       "apiUploadRoute",
       "ary",
       "assert",

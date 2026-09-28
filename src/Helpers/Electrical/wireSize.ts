@@ -9,22 +9,22 @@ type Isolation = 'pvc' | 'epr' | 'xlpe';
 type Phases = 1 | 2 | 3 | '1' | '2' | '3';
 
 /**
- * Opções de configuração para o cálculo de bitola de cabos elétricos.
+ * Configuration options for sizing electrical cables (NBR 5410).
  *
- * @property current - Corrente elétrica do circuito (A).
- * @property material - Material do condutor ('copper'/'cu' ou 'aluminum'/'al').
- * @property isolation - Tipo de isolação ou temperatura ('70', '90', 'pvc', 'epr', 'xlpe').
- * @property method - Método de instalação conforme NBR 5410 ('a1', 'a2', 'b1', 'b2', 'c', 'd', 'e', 'f', 'g').
- * @property length - Comprimento do circuito em metros.
- * @property voltage - Tensão do circuito em volts.
- * @property voltage_type - Tipo de tensão ('fn' para fase-neutro ou 'ff' para fase-fase).
- * @property phases - Número de fases (1, 2 ou 3).
- * @property max_loss - Percentual máximo de queda de tensão permitido.
- * @property voltage_drop - Queda de tensão máxima permitida (V).
- * @property fca - Fator de correção de agrupamento.
- * @property fct - Fator de correção de temperatura.
- * @property circuit_type - Tipo do circuito ('lighting'/'iluminacao' ou 'power'/'tomada'/'forca').
- * @property cos_phi - Fator de potência cos(φ) (padrão: 0.95).
+ * @property current - Circuit electric current in Amperes (A).
+ * @property material - Conductor material ('copper'/'cu' or 'aluminum'/'al'). Default: 'copper'.
+ * @property isolation - Insulation temperature rating or type ('70', '90', 'pvc', 'epr', 'xlpe'). Default: '70'.
+ * @property method - Installation method per NBR 5410 ('a1', 'a2', 'b1', 'b2', 'c', 'd', 'e', 'f', 'g'). Default: 'b1'.
+ * @property length - Circuit length in meters (m). Default: 10.
+ * @property voltage - Circuit nominal voltage in Volts (V). Default: 220.
+ * @property voltage_type - Voltage type ('fn' for phase-neutral, 'ff' for phase-phase).
+ * @property phases - Number of phases (1, 2, or 3). Default: 2.
+ * @property max_loss - Maximum allowable voltage drop percentage (%). Default: 4.
+ * @property voltage_drop - Maximum allowable voltage drop in Volts (V).
+ * @property fca - Grouping correction factor. Default: 1.
+ * @property fct - Temperature correction factor. Default: 1.
+ * @property circuit_type - Circuit application type ('lighting' or 'power').
+ * @property cos_phi - Power factor cos(φ). Default: 0.95.
  */
 export type WireOptions = {
     current?: T;
@@ -43,6 +43,16 @@ export type WireOptions = {
     cos_phi?: number | string;
 };
 
+/**
+ * Result of the electrical wire size calculation.
+ *
+ * @property wire - Recommended nominal cross-section in mm².
+ * @property max_current - Ampacity rating of the selected conductor under specified conditions.
+ * @property voltage_drop - Calculated voltage drop in Volts (V).
+ * @property loss_percent - Calculated percentage voltage drop (%).
+ * @property exceeded - Indicates whether circuit requirements exceed standard table limits.
+ * @property table_loaded - Indicates whether installation table was dynamically loaded.
+ */
 export type WireSizeResult = {
     wire: number;
     max_current: number;
@@ -53,10 +63,10 @@ export type WireSizeResult = {
 };
 
 /**
- * Converte tensão fase-neutro para tensão fase-fase, arredondando para o valor comercial mais próximo.
+ * Converts phase-neutral voltage to phase-phase voltage, rounding to the closest standard commercial voltage.
  *
- * @param phaseNeutralVoltage - Tensão fase-neutro em volts.
- * @returns Tensão fase-fase comercial mais próxima.
+ * @param phaseNeutralVoltage - Phase-neutral voltage in Volts.
+ * @returns Closest commercial phase-phase voltage.
  */
 function toPhasePhase(phaseNeutralVoltage: number): number {
     const array = [110, 120, 127, 210, 220, 240, 380, 440, 480];
@@ -65,11 +75,14 @@ function toPhasePhase(phaseNeutralVoltage: number): number {
 }
 
 /**
- * Calcula a seção nominal de um cabo elétrico com base na corrente, opções de material, isolação, entre outros.
+ * Calculates the nominal cross-section of an electrical cable based on ampacity and maximum allowable voltage drop according to Brazilian standard NBR 5410.
  *
- * @param current A corrente elétrica do circuito.
- * @param options Opções do cálculo, como material, tensão, método de instalação e distância.
- * @returns Um objeto com a bitola do cabo, a corrente máxima, a queda de tensão e a porcentagem de perda.
+ * @param current - Electric current in Amperes (accepts number, numeric string, or reactive Ref/getter).
+ * @param options - Sizing options including material, voltage, distance, grouping factor, and installation method.
+ * @returns A Promise resolving to `WireSizeResult` with recommended wire gauge in mm², or `null` if current is invalid.
+ * @example
+ * const result = await wireSize(32, { voltage: 220, length: 25, max_loss: 2 });
+ * console.log(result?.wire); // 6 (mm²)
  */
 export async function wireSize(current: T, options: WireOptions = {}): Promise<WireSizeResult | null> {
     const data = toValue(current);

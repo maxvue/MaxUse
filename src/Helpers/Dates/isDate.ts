@@ -1,16 +1,20 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
-type RefString = MaybeRefOrGetter<string | number | null | undefined>;
+type RefDate = MaybeRefOrGetter<Date | string | number | null | undefined>;
 
 /**
- * Verifica se um valor é uma data válida.
- * Suporta instâncias de Date, timestamps numéricos, strings no padrão ISO e formato brasileiro (DD/MM/YYYY).
+ * Checks if a value is a valid date.
+ * Supports Date instances, numeric timestamps, ISO strings, and Brazilian format (DD/MM/YYYY [HH:mm[:ss]]).
  *
- * @param valor O valor a ser verificado.
- * @returns Retorna true se for uma data válida.
+ * @param value The value to check.
+ * @returns True if the value represents a valid date, false otherwise.
+ * @example
+ * isDate(new Date()) // true
+ * isDate('25/12/2026') // true
+ * isDate('invalid') // false
  */
-export function isDate(valor: RefString): boolean {
-    const data: any = toValue(valor);
+export function isDate(value: RefDate): boolean {
+    const data: any = toValue(value);
     if (data instanceof Date) return !isNaN(data.getTime());
 
     if (typeof data === 'string') {

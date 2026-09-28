@@ -58,3 +58,5 @@ temp_cov.txt
 
 # Outros
 .valet-phoenix.json
+.worktrees/
+.max-code-worktrees/

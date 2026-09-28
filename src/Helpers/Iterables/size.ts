@@ -4,11 +4,19 @@ import { isBlank } from '../Types';
 type T = Record<string, any> | string | number | null | undefined;
 
 /**
- * Retorna o tamanho (comprimento) de uma coleção, string, objeto, Map ou Set.
+ * Gets the size of `value` by returning the length for array-like values
+ * or the number of own enumerable properties for objects, Map, or Set.
  *
- * @param value O valor a ter seu tamanho calculado.
- * @param allow_number Se verdadeiro, retorna o próprio valor numérico caso o tipo seja número (padrão é true).
- * @returns O tamanho do valor especificado.
+ * Distinct from Lodash: When `allow_number` is true (default), passing a number returns the number itself.
+ *
+ * @param value - The collection, string, object, number, Map, or Set to inspect.
+ * @param allow_number - If true, returns the numeric value itself when `value` is a number (default: true).
+ * @returns Returns the size or length of `value`.
+ * @example
+ * size([1, 2, 3]) // 3
+ * size({ a: 1, b: 2 }) // 2
+ * size('hello') // 5
+ * size(42) // 42
  */
 export function size(value: MaybeRefOrGetter<T>, allow_number: boolean = true): number {
     if (!value) return 0;

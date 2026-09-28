@@ -9,3 +9,4 @@ export * from './goToRoute';
 export * from './getCachedApi';
 export * from './getCachedApiIDB';
 export * from './postCachedApiIDB';
+export * from './apiRoute';
