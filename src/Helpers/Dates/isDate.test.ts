@@ -4,7 +4,7 @@ import { isDate } from './isDate';
 
 describe('isDate', () => {
     it('valida instância de Date', () => {
-        expect(isDate(new Date() as any)).toBe(true);
+        expect(isDate(new Date())).toBe(true);
     });
 
     it('valida string ISO', () => {

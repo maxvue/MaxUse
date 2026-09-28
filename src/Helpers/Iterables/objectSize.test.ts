@@ -25,6 +25,12 @@ describe('objectSize', () => {
     it('retorna 0 para string', () => {
         expect(objectSize('hello')).toBe(0);
     });
+
+    it('funciona com Refs reativas', async () => {
+        const { ref } = await import('vue');
+        expect(objectSize(ref({ a: 1, b: 2 }))).toBe(2);
+        expect(objectSize(ref([1, 2]))).toBe(0);
+    });
 });
 
 describe('isObjectValid', () => {

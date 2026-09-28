@@ -26,55 +26,68 @@
 
 ## ✨ Por que MaxUse?
 
-| | Lodash puro | VueUse puro | **MaxUse** |
+| Recursos | Lodash puro | VueUse puro | **MaxUse** |
 |:---|:---:|:---:|:---:|
-| Reatividade Vue nativa (`MaybeRefOrGetter`) | ❌ | ✅ | ✅ |
-| Helpers utilitários (strings, arrays, objetos) | ✅ | ❌ | ✅ |
-| Composables (watchers, storage, spell checker) | ❌ | ✅ | ✅ |
-| Validações brasileiras (CPF, CNPJ, CEP, telefone) | ❌ | ❌ | ✅ |
-| Formatação pt-BR (moeda, documentos, máscaras) | ❌ | ❌ | ✅ |
-| Integração Ziggy/Laravel (rotas nomeadas, IDB) | ❌ | ❌ | ✅ |
-| API unificada (`_`) | ✅ | ❌ | ✅ |
-| Tree-shaking + 16 submódulos | ⚠️ | ✅ | ✅ |
-| Auto Import (`unplugin-auto-import`) | ❌ | ✅ | ✅ |
+| Reatividade nativa do Vue 3 (`toValue`) | ❌ | ✅ | ✅ |
+| Utilitários completos de arrays, objetos e funções | ✅ | ❌ | ✅ (nativos TS) |
+| Composables avançados (storage, debounce, spellchecker) | ❌ | ✅ | ✅ |
+| Validações brasileiras (CPF, CNPJ, CEP, Cartão, Telefone) | ❌ | ❌ | ✅ |
+| Formatação pt-BR (moeda BRL, documentos, máscaras) | ❌ | ❌ | ✅ |
+| Integração HTTP com rotas nomeadas (Ziggy / Laravel / Adonis) | ❌ | ❌ | ✅ |
+| Cache HTTP em `localStorage` e `IndexedDB` (Stale-While-Revalidate) | ❌ | ❌ | ✅ |
+| API unificada (`_`) sem dependência do `lodash-es` | ✅ | ❌ | ✅ |
+| Tree-shaking granular + 18 submódulos | ⚠️ | ✅ | ✅ |
+| Preset de Auto Import para `unplugin-auto-import` | ❌ | ✅ | ✅ |
 
 ---
 
 ## 📦 Instalação
 
 ```bash
+<<<<<<< HEAD
 npm install @maxvue/max-use @vueuse/core vue
 ```
 
-> **Módulo Routes (Ziggy / Laravel / Cache):** Se utilizar `@maxvue/max-use/routes`, instale também as dependências opcionais:
+# npm
+npm install @maxvue/max-use @vueuse/core vue
+
+# pnpm
+pnpm add @maxvue/max-use @vueuse/core vue
+
+# yarn
+yarn add @maxvue/max-use @vueuse/core vue
+
+# bun
+bun add @maxvue/max-use @vueuse/core vue
+```
+
+> **Módulo Routes (Opcional):** Se utilizar navegação SPA e rotas nomeadas com Ziggy / Laravel em `@maxvue/max-use/routes`, instale também:
 > ```bash
-> npm install ziggy-js vue-router axios idb-keyval
+> npm install vue-router ziggy-js
 > ```
 
 ---
 
 ## 🚀 Como Usar
 
-### 1. Importação Individual (Recomendado)
+### 1. Importação Individual (Recomendado para Tree-Shaking)
 
 ```ts
-import { isString, isWeekend, capitalize, deepMerge } from '@maxvue/max-use'
+import { isString, isWeekend, capitalize, deepMerge, formatCurrency } from '@maxvue/max-use'
 
-const text = 'hello'
-if (isString(text)) {
-  console.log(capitalize(text)) // Hello
-}
+const preco = formatCurrency(1250.5) // "R$ 1.250,50"
 ```
 
 ### 2. O Objeto Centralizado (`_`)
 
-Para manter a conveniência do padrão Lodash, a MaxUse exporta o objeto `_`. Ele agrupa os helpers próprios e composables do VueUse com suporte reativo.
+A MaxUse disponibiliza o objeto `_` que agrupa todos os helpers próprios da biblioteca, as funções do **VueUse** e as reimplementações de estilo **Lodash**, priorizando a MaxUse em colisões de nome.
 
-> A partir da **2.0.0** a MaxUse não depende mais do `lodash-es`: os utilitários de estilo Lodash (`debounce`, `groupBy`, `sum`, `get`/`set`, …) são **reimplementações próprias em TypeScript puro**.
+> **Importante (v2.0.0):** A MaxUse não depende mais de `lodash-es`. Todos os utilitários clássicos (`debounce`, `throttle`, `groupBy`, `sum`, `get`, `set`, etc.) são reimplementações nativas em TypeScript, otimizadas para reatividade do Vue.
 
 ```ts
 import { _ } from '@maxvue/max-use'
 
+<<<<<<< HEAD
 // Helpers nativos da MaxUse
 const id = _.intervalRandom(1, 10)
 const merged = _.deepMerge({ a: 1 }, { b: 2 })
@@ -126,10 +139,22 @@ import { vueUse } from '@maxvue/max-use'
 
 // Todos os exports do @vueuse/core, sem filtros
 const { useMouse, useStorage, useClipboard } = vueUse
+=======
+// Helpers nativos MaxUse
+const id = _.intervalRandom(1, 10)
+const total = _.sum([10, '20', null]) // 30 (coerção segura)
+
+// Composables integrados do VueUse
+const { x, y } = _.useMouse()
+
+// Utilitários de função estilo Lodash
+const debounced = _.debounce(() => console.log('salvo'), 300)
+>>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## 🔀 Diferenças conhecidas em relação ao Lodash
 
 ### Placeholder de `partial` / `curry` / `bind`
@@ -882,10 +907,83 @@ const projects = await getCachedApiIDB('api.projects.all', null, 'all-projects',
 
 // 5. Navegação
 goToRoute('projects.show', { id: 42 })
+=======
+## 🛠️ Configuração de Rotas (`@maxvue/max-use/routes`)
+
+O submódulo de rotas oferece um cliente HTTP declarativo baseado em nomes de rotas (Laravel/Ziggy/Adonis), com suporte a cache em `localStorage` e `IndexedDB`.
+
+### Setup Inicial Obrigatório
+
+```ts
+// main.ts ou app.ts
+import { createApp } from 'vue'
+import { setLibraryRouter, setRouteResolver, setApiRequestConfig } from '@maxvue/max-use/routes'
+import { route } from 'ziggy-js' // ou seu provedor de rotas
+import router from './router'
+import App from './App.vue'
+
+const app = createApp(App)
+
+// 1. Conecta o Vue Router para navegações com goToRoute()
+setLibraryRouter(router)
+
+// 2. Conecta o resolvedor de rotas nomeadas (OBRIGATÓRIO para apiGetRoute, getRoute, etc.)
+setRouteResolver((name, params) => {
+    try {
+        return route(name, params)
+    } catch {
+        return null
+    }
+})
+
+// 3. (Opcional) Configura cabeçalhos globais e cookies para requisições com autenticação
+setApiRequestConfig({
+    withCredentials: true,
+    headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Authorization': () => {
+            const token = localStorage.getItem('token')
+            return token ? `Bearer ${token}` : ''
+        }
+    }
+})
+
+app.use(router).mount('#app')
+```
+
+### Utilização das Requisições
+
+```ts
+import { 
+    apiGetRoute, 
+    apiPostRoute, 
+    apiPutRoute, 
+    getCachedApi, 
+    getCachedApiIDB 
+} from '@maxvue/max-use/routes'
+
+// GET simples
+const usuarios = await apiGetRoute('api.usuarios.index', { page: 1 })
+
+// POST com corpo
+await apiPostRoute('api.usuarios.store', { nome: 'Maria', email: 'maria@email.com' })
+
+// PUT com parâmetro de rota na URL e corpo
+await apiPutRoute('api.usuarios.update', { nome: 'Maria Silva' }, {
+    route_params: { id: 42 }
+})
+
+// Cache rápido no localStorage (TTL de 5 minutos)
+const configs = await getCachedApi('api.configuracoes', {}, 'app_configs', 5 * 60 * 1000)
+
+// Cache persistente em IndexedDB com Stale-While-Revalidate
+const catalogo = await getCachedApiIDB('api.catalogo.produtos', {}, 'catalogo_produtos', 60 * 60 * 1000)
+>>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 ```
 
 ---
 
+<<<<<<< HEAD
 ## ⚡ Submódulos Utilitários Adicionais
 
 A MaxUse inclui submódulos dedicados para atender a todos os cenários de desenvolvimento:
@@ -900,14 +998,24 @@ A MaxUse inclui submódulos dedicados para atender a todos os cenários de desen
 ## 🧩 Auto Import
 
 A MaxUse oferece integração nativa com `unplugin-auto-import`. Com uma única configuração, **todos os helpers e composables** ficam disponíveis globalmente sem imports manuais, com tipagem TypeScript gerada automaticamente.
+=======
+## ⚡ Auto Import (`unplugin-auto-import`)
+
+Para utilizar todos os helpers e composables automaticamente sem precisar de imports manuais:
+>>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
+<<<<<<< HEAD
+=======
+import vue from '@vitejs/plugin-vue'
+>>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 import AutoImport from 'unplugin-auto-import/vite'
 import { maxUseAutoImport } from '@maxvue/max-use'
 
 export default defineConfig({
+<<<<<<< HEAD
   plugins: [
     AutoImport({
       imports: [
@@ -961,6 +1069,33 @@ const ago = useTimeAgo(createdAt)
 
 ---
 
+## 💻 Desenvolvimento Local
+
+```bash
+# Instala as dependências
+npm install
+
+# Executa todos os testes unitários (Vitest)
+npm test
+
+# Executa testes incluindo checagem estática de tipos
+npm run test:all
+
+# Verificação estática de tipos (vue-tsc)
+npm run type-check
+
+# Linter de código e formatação
+npm run lint
+
+# Inicia o playground interativo em http://localhost:5173
+npm run dev:playground
+
+# Compila a biblioteca (prebuild + bundles em dist/)
+npm run build
+```
+
+---
+
 ## 🤝 Contribuindo
 
 Para instruções de desenvolvimento local, execução de testes, checagem de tipos e padrões de PR, consulte o nosso guia [CONTRIBUTING.md](CONTRIBUTING.md).
@@ -971,5 +1106,5 @@ Para visualizar o histórico de versões e alterações detalhadas da v2, consul
 
 ## 📄 Licença
 
-**MIT License** © [Johnattas Santana](https://github.com/maxvue)
+Distribuído sob a licença MIT. Consulte o arquivo [LICENSE](LICENSE) para obter mais informações.
 

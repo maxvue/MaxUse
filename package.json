@@ -1,7 +1,7 @@
 {
     "name": "@maxvue/max-use",
     "version": "2.0.0",
-    "description": "The definitive utility library for Vue 3 — VueUse + custom reactive Lodash-style helpers & composables",
+    "description": "Vue 3 utility and composable library — VueUse + Lodash reimplementation + Reactive Brazilian helpers",
     "main": "./dist/index.es.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",

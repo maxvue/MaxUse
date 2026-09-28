@@ -1,95 +1,103 @@
+import { toValue } from 'vue';
 import { size } from '../Iterables';
 
 /**
- * Verifica se um valor NÃO está vazio (tem tamanho > 0).
- * Usa {@link size} internamente para calcular o tamanho.
+ * Checks whether a value is NOT empty (size > 0).
+ * Uses {@link size} internally after unwrapping Vue reactivity with {@link toValue}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor tiver conteúdo (size > 0).
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value has content (size > 0).
  */
 export function notEmpty<V>(value: V): value is NonNullable<V> {
-    if (typeof value === 'boolean' || typeof value === 'number') return true;
-    return size(value as any) > 0;
+    const raw = toValue(value);
+    if (typeof raw === 'boolean' || typeof raw === 'number') return true;
+    return size(raw as any) > 0;
 }
 
 /**
- * Verifica se um valor NÃO está vazio (tem tamanho > 0).
- * Alias semântico de {@link notEmpty}.
+ * Checks whether a value is NOT empty (size > 0).
+ * Semantic alias for {@link notEmpty}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor tiver conteúdo (size > 0).
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value has content (size > 0).
  */
 export function isNotEmpty<V>(value: V): value is NonNullable<V> {
-    if (typeof value === 'boolean' || typeof value === 'number') return true;
-    return size(value as any) > 0;
+    const raw = toValue(value);
+    if (typeof raw === 'boolean' || typeof raw === 'number') return true;
+    return size(raw as any) > 0;
 }
 
 /**
- * Verifica se um valor NÃO está vazio.
- * Alias de {@link notEmpty}.
+ * Checks whether a value is NOT empty.
+ * Alias for {@link notEmpty}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor tiver conteúdo (size > 0).
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value has content (size > 0).
  */
 export function noEmpty<V>(value: V): value is NonNullable<V> {
-    if (typeof value === 'boolean' || typeof value === 'number') return true;
-    return size(value as any) > 0;
+    const raw = toValue(value);
+    if (typeof raw === 'boolean' || typeof raw === 'number') return true;
+    return size(raw as any) > 0;
 }
 
 /**
- * Verifica se um valor está vazio (tamanho === 0).
- * Inverso de {@link notEmpty}.
+ * Checks whether a value is empty (size === 0).
+ * Inverse of {@link notEmpty}. Unwraps Vue reactivity with {@link toValue}.
  *
- * ATENÇÃO: booleanos e números (inclusive `0` e `false`) nunca são considerados
- * vazios. Para tratar `0` como ausência de valor, use {@link isBlank}.
+ * NOTE: booleans and numbers (including `0` and `false`) are never considered empty.
+ * To treat `0` or empty strings as absent values, use {@link isBlank}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor estiver vazio (size === 0).
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value is empty (size === 0).
  */
 export function isEmpty<V>(value: V): boolean {
-    if (typeof value === 'boolean' || typeof value === 'number') return false;
-    return size(value as any) === 0;
+    const raw = toValue(value);
+    if (typeof raw === 'boolean' || typeof raw === 'number') return false;
+    return size(raw as any) === 0;
 }
 
 /**
- * Verifica se um valor está vazio (tamanho === 0).
- * Alias simplificado de {@link isEmpty}.
+ * Checks whether a value is empty (size === 0).
+ * Simplified alias for {@link isEmpty}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor estiver vazio (size === 0).
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value is empty (size === 0).
  */
 export function empty<V>(value: V): boolean {
-    if (typeof value === 'boolean' || typeof value === 'number') return false;
-    return size(value as any) === 0;
+    const raw = toValue(value);
+    if (typeof raw === 'boolean' || typeof raw === 'number') return false;
+    return size(raw as any) === 0;
 }
 
 /**
- * Verifica se um valor é válido (não é null e não é undefined).
+ * Checks whether a value is valid (neither null nor undefined).
+ * Unwraps Vue reactivity with {@link toValue}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor não for null nem undefined.
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value is not null and not undefined.
  */
 export function isValid<V>(value: V): value is NonNullable<V> {
-    return value !== null && value !== undefined;
+    const raw = toValue(value);
+    return raw !== null && raw !== undefined;
 }
 
 /**
- * Verifica se um valor NÃO é válido (é null ou undefined).
- * Inverso de {@link isValid}.
+ * Checks whether a value is NOT valid (either null or undefined).
+ * Inverse of {@link isValid}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor for null ou undefined.
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value is null or undefined.
  */
 export function isNotValid<V>(value: V): value is Extract<V, null | undefined> {
     return !isValid(value);
 }
 
 /**
- * Verifica se um valor NÃO tem conteúdo válido (é null ou undefined).
- * Alias de {@link isNotValid}.
+ * Checks whether a value does NOT have valid content (either null or undefined).
+ * Alias for {@link isNotValid}.
  *
- * @param value - O valor a ser verificado.
- * @returns true se o valor for null ou undefined.
+ * @param value - The value or ref to inspect.
+ * @returns True if the unwrapped value is null or undefined.
  */
 export function notHasValidContent<V>(value: V): value is Extract<V, null | undefined> {
     return !isValid(value);

@@ -38,10 +38,11 @@ Run these scripts from the repository root:
 | `npm run type-check` | Performs strict TypeScript type checks without emitting files |
 | `npm run lint` | Runs ESLint and Stylelint with automatic formatting fixes |
 | `npm test` | Runs the full Vitest test suite once |
+| `npm run test:all` | Runs unit tests followed by static type tests |
 | `npm run test:watch` | Runs Vitest in watch mode for TDD workflows |
 | `npm run test:coverage` | Generates a V8 code coverage report |
 | `npm run test:types` | Type-checks tests with Vitest |
-| `npm run dev:playground` | Starts the local interactive playground for manual component/composable testing |
+| `npm run dev:playground` | Starts the local interactive playground for manual testing |
 
 ---
 
@@ -62,6 +63,7 @@ Every helper, composable, or route utility must be covered by automated tests in
 Run a specific test file:
 ```bash
 npx vitest run src/Composables/useTimeAgo.test.ts
+npx vitest run src/Helpers/Validations/documents.test.ts
 ```
 
 ---
@@ -79,21 +81,18 @@ npx vitest run src/Composables/useTimeAgo.test.ts
 4. **Code Formatting:**
    - 4-space indentation.
    - Single quotes (`'`), semicolons required (`;`).
+   - No trailing commas.
    - Run `npm run lint` before committing.
 
 ---
 
-## 🌿 Git Workflow
+## 📝 Pull Request Checklist
 
-1. Create a descriptive branch or worktree:
-   ```bash
-   git checkout -b feat/your-feature-name
-   ```
-2. Verify all checks pass before pushing:
-   ```bash
-   npm run lint
-   npm run type-check
-   npm test
-   npm run build
-   ```
-3. Open a Pull Request on GitHub targeting the `dev` branch with a clear description of changes, tests added, and relevant documentation updates.
+Before submitting a PR, make sure:
+- [ ] `npm test` passes without errors.
+- [ ] `npm run test:all` passes cleanly.
+- [ ] `npm run type-check` passes without errors.
+- [ ] `npm run lint` passes without warnings.
+- [ ] All new functions have complete JSDoc documentation with `@param` and `@returns`.
+- [ ] New helpers are re-exported from their category `index.ts`.
+- [ ] Unit tests covering edge cases (`null`, `undefined`, reactive `ref`) are included.

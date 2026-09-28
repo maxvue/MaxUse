@@ -58,5 +58,15 @@ temp_cov.txt
 
 # Outros
 .valet-phoenix.json
+
+# Worktrees e sessões de agentes
 .worktrees/
 .max-code-worktrees/
+.superpowers/
+.claude/
+.opencode/
+
+# Subprojetos e dados locais
+EngeTec-Site/
+RESULTADO.md
+config.json

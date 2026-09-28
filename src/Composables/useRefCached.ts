@@ -3,28 +3,28 @@ import { ref, Ref, toValue, type MaybeRefOrGetter, computed, watch, onScopeDispo
 export type ToRefCached<T> = [T] extends [Ref] ? T : Ref<T>;
 type KeyCached = MaybeRefOrGetter<string | number | null | undefined>;
 
+const NO_KEY = Symbol('no-key');
+
 /**
- * Cria uma Ref sincronizada com o `localStorage`, com suporte a reatividade entre abas.
- * Quando o valor muda, persiste automaticamente. Quando outra aba modifica o mesmo item,
- * sincroniza via evento nativo `storage`.
+ * Creates a reactive Ref synchronized with `localStorage`, supporting cross-tab synchronization.
+ * Automatically saves on value change. When another browser tab updates the same item,
+ * synchronizes state via native `storage` events.
  *
- * @param key - Chave do localStorage (aceita Ref/Getter para chave dinâmica). Se null/undefined, usa 'no-key'.
- * @param default_value - Valor padrão quando a chave não existe no localStorage.
- * @returns Uma Ref reativa sincronizada com o localStorage.
+ * @param key - localStorage key (supports Ref/Getter for dynamic keys). If null, undefined or empty string, persistence is disabled and operates only in memory.
+ * @param default_value - Default fallback value when key does not exist in localStorage.
+ * @returns A reactive Ref synchronized with localStorage.
  *
  * @example
  * ```typescript
- * // Persistência simples
- * const tema = useRefCached('app-tema', 'escuro');
- * tema.value = 'claro'; // salva em localStorage['app-tema']
+ * // Simple persistence
+ * const theme = useRefCached('app-theme', 'dark');
+ * theme.value = 'light'; // Persisted to localStorage['app-theme']
  *
- * // Chave dinâmica baseada em ref
+ * // Dynamic key based on a ref
  * const userId = ref(42);
  * const config = useRefCached(computed(() => `config-${userId.value}`), {});
  * ```
  */
-const NO_KEY = Symbol('no-key');
-
 export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T> {
     const raw_key = computed<string | typeof NO_KEY>(() => {
         const k = toValue(key);

@@ -2,11 +2,11 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 import { isBlank } from '../Types';
 
 /**
- * Retorna o número de chaves próprias de um objeto.
- * Retorna 0 para valores nulos, vazios, arrays ou não-objetos.
+ * Returns the number of own enumerable keys in an object.
+ * Returns 0 for null, empty, arrays, or non-object values.
  *
- * @param object - O objeto a ter seu tamanho calculado (aceita Ref ou Getter).
- * @returns O número de chaves do objeto, ou 0 se não for um objeto válido.
+ * @param object - The object or ref to calculate size for.
+ * @returns Number of own keys, or 0 if not a valid object.
  */
 export function objectSize(object: MaybeRefOrGetter<any>): number {
     const value = toValue(object);
@@ -15,7 +15,7 @@ export function objectSize(object: MaybeRefOrGetter<any>): number {
 
     if (isBlank(value)) return 0;
 
-    if (Array.isArray(object)) return 0;
+    if (Array.isArray(value)) return 0;
 
     if (typeof value === 'object') return Object.keys(value).length as number;
 
@@ -23,10 +23,10 @@ export function objectSize(object: MaybeRefOrGetter<any>): number {
 }
 
 /**
- * Type-guard que verifica se um valor é um objeto válido com pelo menos uma chave.
+ * Type-guard that checks whether a value is a valid non-empty object with at least one key.
  *
- * @param value - O valor a ser verificado.
- * @returns true se for um objeto não-vazio (objectSize > 0).
+ * @param value - The value to inspect.
+ * @returns True if value is a non-empty object (objectSize > 0).
  */
 export function isObjectValid<V>(value: V): value is Object & NonNullable<V> {
     return objectSize(value as any) > 0;

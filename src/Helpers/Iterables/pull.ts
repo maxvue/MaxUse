@@ -1,15 +1,16 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
 /**
- * Remove todas as ocorrências dos `values` especificados do array,
- * usando SameValueZero para comparação (com suporte a `NaN`). **Muta** o
- * array de entrada.
- * Semelhante ao _.pull do Lodash.
+ * Removes all provided values from an array using SameValueZero for equality comparisons.
+ * Mutates the input array in-place.
+ * Mirrors Lodash's `_.pull`.
  *
- * @param array array a modificar (mutado in-place)
- * @param values valores a remover
- * @returns o próprio array, sem os valores removidos
+ * @param array - The array to modify (mutated in-place).
+ * @param values - The values to remove.
+ * @returns The mutated array.
  */
+export function pull<T>(array: MaybeRefOrGetter<T[]>, ...values: T[]): T[];
+export function pull<T>(array: MaybeRefOrGetter<T[] | null | undefined>, ...values: T[]): T[] | null | undefined;
 export function pull<T>(array: MaybeRefOrGetter<T[] | null | undefined>, ...values: T[]): T[] | null | undefined {
     const data = toValue(array);
     if (!data || !data.length || !values.length) return data;

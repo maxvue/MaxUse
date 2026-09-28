@@ -145,4 +145,14 @@ describe('isEmpty — regressão auditoria (achado 001)', () => {
         expect(isEmpty(0)).toBe(false);
         expect(isEmpty(false)).toBe(false);
     });
+
+    it('suporta refs e getters com toValue', async () => {
+        const { ref } = await import('vue');
+        expect(isValid(ref(null))).toBe(false);
+        expect(isValid(ref(undefined))).toBe(false);
+        expect(isValid(ref('hello'))).toBe(true);
+        expect(isEmpty(ref(''))).toBe(true);
+        expect(isEmpty(ref([1, 2]))).toBe(false);
+        expect(notEmpty(ref('test'))).toBe(true);
+    });
 });

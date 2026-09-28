@@ -3,23 +3,22 @@ import { keys } from './keys';
 import { baseAssignValue } from './_baseAssignValue';
 
 /**
- * Atribui as propriedades **próprias** enumeráveis de cada objeto em
- * `sources` a `object`, da esquerda para a direita — fontes posteriores
- * sobrescrevem propriedades anteriores. Muta e retorna `object`. Se
- * `object` for `null`/`undefined`, é tratado como `Object(object)` (um
- * objeto novo vazio), espelhando o Lodash.
- * Semelhante ao _.assign do Lodash.
+ * Assigns own enumerable string keyed properties of source objects to the destination object.
+ * Source objects are applied from left to right. Subsequent sources overwrite property assignments of previous sources.
+ * Mutates and returns `object`. If `object` is null/undefined, it is coerced to an empty object.
+ * Mirrors Lodash's `_.assign`.
  *
- * @param object objeto de destino (mutado in-place)
- * @param sources objetos fonte, aplicados em ordem
- * @returns o próprio `object`
+ * @param object - The destination object (mutated in-place).
+ * @param sources - The source objects.
+ * @returns The destination object.
  */
 export function assign<T extends object>(object: MaybeRefOrGetter<T | null | undefined>, ...sources: Array<unknown | null | undefined>): T {
     const raw = toValue(object);
     const data = (raw == null ? {} : Object(raw)) as T;
     for (const source of sources) {
-        if (!source) continue;
-        for (const key of keys(source)) baseAssignValue(data as Record<PropertyKey, unknown>, key, (source as Record<PropertyKey, unknown>)[key]);
+        const rawSource = toValue(source);
+        if (!rawSource) continue;
+        for (const key of keys(rawSource)) baseAssignValue(data as Record<PropertyKey, unknown>, key, (rawSource as Record<PropertyKey, unknown>)[key]);
     }
     return data;
 }

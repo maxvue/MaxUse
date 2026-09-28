@@ -12,10 +12,9 @@ export default defineConfig({
     ],
     root: resolve(__dirname),
     server: {
-        host: 'maxcomponents.test',
+        host: true,
         open: false,
-        cors: true,
-        origin: 'https://maxcomponents.test'
+        cors: true
     },
     resolve: {
         alias: {

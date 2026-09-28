@@ -1,15 +1,18 @@
 import { toValue, type MaybeRefOrGetter } from 'vue';
 
 /**
- * Transforma `value` em array se ainda não for um. Chamado sem argumentos,
- * retorna um array vazio.
- * Semelhante ao _.castArray do Lodash.
+ * Casts `value` as an array if it is not already one.
+ * When called with no arguments, returns an empty array.
+ * Mirrors Lodash's `_.castArray`.
  *
- * @param value valor a transformar em array
- * @returns o próprio array, ou um array contendo `value`
+ * @param value - The value to cast as an array.
+ * @returns The original array or a new array wrapping `value`.
  */
-export function castArray<T>(value?: MaybeRefOrGetter<T>): T[] {
+export function castArray(): any[];
+export function castArray<T>(value: MaybeRefOrGetter<T[]>): T[];
+export function castArray<T>(value: MaybeRefOrGetter<T>): T[];
+export function castArray<T>(value?: MaybeRefOrGetter<T | T[]>): T[] {
     if (arguments.length === 0) return [];
-    const data = toValue(value as MaybeRefOrGetter<T>);
-    return Array.isArray(data) ? data : [data];
+    const data = toValue(value as any);
+    return Array.isArray(data) ? (data as T[]) : [data as T];
 }
