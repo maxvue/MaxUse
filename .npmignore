@@ -31,7 +31,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Source maps gerados
-*.js.map
+# (mantidos no dist para debugging dos consumidores)
 
 # Imagens do repositório
 maxvue-big.png

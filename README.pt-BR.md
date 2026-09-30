@@ -44,10 +44,6 @@
 ## 📦 Instalação
 
 ```bash
-<<<<<<< HEAD
-npm install @maxvue/max-use @vueuse/core vue
-```
-
 # npm
 npm install @maxvue/max-use @vueuse/core vue
 
@@ -87,31 +83,17 @@ A MaxUse disponibiliza o objeto `_` que agrupa todos os helpers próprios da bib
 ```ts
 import { _ } from '@maxvue/max-use'
 
-<<<<<<< HEAD
 // Helpers nativos da MaxUse
 const id = _.intervalRandom(1, 10)
 const merged = _.deepMerge({ a: 1 }, { b: 2 })
+const total = _.sum([10, '20', null]) // 30 (coerção segura)
 
 // Composables do VueUse integrados
 const { x, y } = _.useMouse()
 
 // Funções estilo Lodash
-const debounced = _.debounce(fn, 300)
+const debounced = _.debounce(() => console.log('salvo'), 300)
 ```
-
-#### Divergências conhecidas em relação ao Lodash
-
-Diferenças **deliberadas** de comportamento travadas por testes de caracterização:
-
-| Helper | MaxUse | Lodash | Motivo |
-|:---|:---|:---|:---|
-| `sum` | `sum([6, 4, NaN])` → `10`<br/>`sum(['1', '2'])` → `3` | `NaN`<br/>`'12'` | Coercitivo (`parseFloat`): dados não numéricos viram `0`. Nunca retorna `NaN`. Aceita `Ref` e `Record`. |
-| `sumBy` | `sumBy([{ a: '10' }, { a: '5' }], 'a')` → `15` | `'105'` | Mesma coerção: `Number(valor) \|\| 0`. Nunca retorna `NaN`. |
-| `orderBy` | Nulos e `undefined` sempre ao final | Nulos no início em `'desc'` | Consistência de visualização em tabelas e formulários: dados ausentes sempre vão para o final. |
-| `deepMerge` | Clona profundamente instâncias (`Date`, `Map`, `Set`) | Preserva instâncias por referência | Evita vazamento de referências e mutação acidental entre objetos mesclados. |
-| `isEmpty` | `isEmpty(0) === false`<br/>`isEmpty(false) === false` | `true`<br/>`true` | Em formulários, `0` e `false` são valores válidos preenchidos e não devem ser tratados como vazios. |
-| `size` | `size(42) === 42` (com `allow_number: true`) | `0` | Ergonomia para contadores e tamanhos numéricos. |
-| `filter` | Em `Record<string, T>`, retorna `Record<string, T>` | Retorna `T[]` (perde chaves) | Preserva a estrutura de dicionário indexado. |
 
 ### 3. Importação por Submódulos
 
@@ -139,23 +121,23 @@ import { vueUse } from '@maxvue/max-use'
 
 // Todos os exports do @vueuse/core, sem filtros
 const { useMouse, useStorage, useClipboard } = vueUse
-=======
-// Helpers nativos MaxUse
-const id = _.intervalRandom(1, 10)
-const total = _.sum([10, '20', null]) // 30 (coerção segura)
-
-// Composables integrados do VueUse
-const { x, y } = _.useMouse()
-
-// Utilitários de função estilo Lodash
-const debounced = _.debounce(() => console.log('salvo'), 300)
->>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 ```
 
 ---
 
-<<<<<<< HEAD
 ## 🔀 Diferenças conhecidas em relação ao Lodash
+
+Diferenças **deliberadas** de comportamento travadas por testes de caracterização:
+
+| Helper | MaxUse | Lodash | Motivo |
+|:---|:---|:---|:---|
+| `sum` | `sum([6, 4, NaN])` → `10`<br/>`sum(['1', '2'])` → `3` | `NaN`<br/>`'12'` | Coercitivo (`parseFloat`): dados não numéricos viram `0`. Nunca retorna `NaN`. Aceita `Ref` e `Record`. |
+| `sumBy` | `sumBy([{ a: '10' }, { a: '5' }], 'a')` → `15` | `'105'` | Mesma coerção: `Number(valor) \|\| 0`. Nunca retorna `NaN`. |
+| `orderBy` | Nulos e `undefined` sempre ao final | Nulos no início em `'desc'` | Consistência de visualização em tabelas e formulários: dados ausentes sempre vão para o final. |
+| `deepMerge` | Clona profundamente instâncias (`Date`, `Map`, `Set`) *(muta o target)* | Preserva instâncias por referência *(muta o target)* | Evita vazamento de referências e mutação acidental entre objetos mesclados. |
+| `isEmpty` | `isEmpty(0) === false`<br/>`isEmpty(false) === false` | `true`<br/>`true` | Em formulários, `0` e `false` são valores válidos preenchidos e não devem ser tratados como vazios. |
+| `size` | `size(42) === 42` (com `allow_number: true`) | `0` | Ergonomia para contadores e tamanhos numéricos. |
+| `filter` | Em `Record<string, T>`, retorna `Record<string, T>` | Retorna `T[]` (perde chaves) | Preserva a estrutura de dicionário indexado. |
 
 ### Placeholder de `partial` / `curry` / `bind`
 
@@ -343,7 +325,7 @@ Manipulação de arrays, coleções e objetos iteráveis.
 | `sumBy` | `(collection, iteratee?) → number` | Soma valores de uma propriedade (inclusive aninhada com notação de ponto) ou derivada por iteratee ([veja divergências](#divergências-conhecidas-em-relação-ao-lodash)) |
 | `sample` | `(array) → T` | Retorna um elemento aleatório |
 | `shuffle` | `(array) → T[]` | Embaralha os elementos |
-| `size` | `(value) → number` | Tamanho de arrays, strings, objetos, Maps, Sets |
+| `size` | `(value, allow_number?) → number` | Retorna o tamanho de arrays, strings, objetos, Maps, Sets ou o próprio número |
 | `objectSize` | `(value) → number` | Quantidade de chaves de um objeto |
 | `valuesInKey` | `(collection, key) → any[]` | Extrai todos os valores de uma chave |
 
@@ -351,9 +333,9 @@ Manipulação de arrays, coleções e objetos iteráveis.
 import { groupBy, uniqueBy, orderBy, first } from '@maxvue/max-use/iterables'
 
 const users = [
-  { id: 1, name: 'Ana', role: 'admin' },
-  { id: 2, name: 'João', role: 'user' },
-  { id: 3, name: 'Maria', role: 'admin' }
+  { id: 1, name: 'Ana', role: 'admin', active: true },
+  { id: 2, name: 'João', role: 'user', active: false },
+  { id: 3, name: 'Maria', role: 'admin', active: true }
 ]
 
 groupBy(users, 'role')       // { admin: [...], user: [...] }
@@ -866,7 +848,7 @@ setApiRequestConfig({
 | `apiPutRoute<T>` | PUT | Requisição PUT para rota nomeada com body e parâmetros |
 | `apiDeleteRoute<T>` | DELETE | Requisição DELETE para rota nomeada com payload opcional |
 | `apiUploadRoute<T>` | POST | Envio multipart com FormData automático e progresso (`onUploadProgress`) |
-| `apiRoute` | Base | Função genérica de resolução de rota e opções com Axios |
+| `apiRoute` | Base | Função interna que resolve a URL da rota e extrai flags de opções |
 | `getCachedApi<T>` | GET | GET com cache no localStorage e TTL |
 | `clearCachedApi` | — | Invalidação e limpeza manual de chaves em cache no localStorage |
 | `getCachedApiIDB<T>` | GET | Cache persistente em **IndexedDB** com estratégia *Stale-While-Revalidate* |
@@ -899,8 +881,8 @@ await apiUploadRoute('api.documents.upload', fileInstance, { category: 'solar' }
   onUploadProgress: (e) => console.log(`Progresso: ${Math.round((e.loaded / e.total) * 100)}%`)
 })
 
-// 4. Cache IndexedDB (Offline-first / Stale-While-Revalidate)
-const projects = await getCachedApiIDB('api.projects.all', null, 'all-projects', 3600, (freshData) => {
+// 4. Cache IndexedDB (Offline-first / Stale-While-Revalidate com TTL de 1 hora = 3.600.000 ms)
+const projects = await getCachedApiIDB('api.projects.all', null, 'all-projects', 60 * 60 * 1000, (freshData) => {
   // Callback executado caso a API retorne dados mais recentes que o cache
   console.log('Dados atualizados em background:', freshData)
 })
@@ -958,12 +940,15 @@ import {
     apiGetRoute, 
     apiPostRoute, 
     apiPutRoute, 
+    apiDeleteRoute,
+    getRoute,
+    goToRoute,
     getCachedApi, 
     getCachedApiIDB 
 } from '@maxvue/max-use/routes'
 
-// GET simples
-const usuarios = await apiGetRoute('api.usuarios.index', { page: 1 })
+// GET simples tipado com parâmetros
+const usuarios = await apiGetRoute<User[]>('api.usuarios.index', { page: 1 })
 
 // POST com corpo
 await apiPostRoute('api.usuarios.store', { nome: 'Maria', email: 'maria@email.com' })
@@ -973,17 +958,26 @@ await apiPutRoute('api.usuarios.update', { nome: 'Maria Silva' }, {
     route_params: { id: 42 }
 })
 
-// Cache rápido no localStorage (TTL de 5 minutos)
+// DELETE com parâmetro de rota na URL
+await apiDeleteRoute('api.usuarios.destroy', null, {
+    route_params: { id: 42 }
+})
+
+// Resolver string da URL
+const perfilUrl = getRoute('api.usuarios.show', { id: 42 }) // "/api/usuarios/42"
+
+// Navegação SPA programática
+goToRoute('dashboard.index')
+
+// Cache rápido no localStorage (TTL de 5 minutos = 300.000 ms)
 const configs = await getCachedApi('api.configuracoes', {}, 'app_configs', 5 * 60 * 1000)
 
-// Cache persistente em IndexedDB com Stale-While-Revalidate
+// Cache persistente em IndexedDB com Stale-While-Revalidate (TTL de 1 hora = 3.600.000 ms)
 const catalogo = await getCachedApiIDB('api.catalogo.produtos', {}, 'catalogo_produtos', 60 * 60 * 1000)
->>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 ```
 
 ---
 
-<<<<<<< HEAD
 ## ⚡ Submódulos Utilitários Adicionais
 
 A MaxUse inclui submódulos dedicados para atender a todos os cenários de desenvolvimento:
@@ -995,28 +989,20 @@ A MaxUse inclui submódulos dedicados para atender a todos os cenários de desen
 
 ---
 
-## 🧩 Auto Import
-
-A MaxUse oferece integração nativa com `unplugin-auto-import`. Com uma única configuração, **todos os helpers e composables** ficam disponíveis globalmente sem imports manuais, com tipagem TypeScript gerada automaticamente.
-=======
 ## ⚡ Auto Import (`unplugin-auto-import`)
 
-Para utilizar todos os helpers e composables automaticamente sem precisar de imports manuais:
->>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
+A MaxUse oferece integração nativa com `unplugin-auto-import`. Com uma única configuração, **todos os helpers e composables** ficam disponíveis globalmente sem imports manuais, com tipagem TypeScript gerada automaticamente:
 
 ```ts
 // vite.config.ts
 import { defineConfig } from 'vite'
-<<<<<<< HEAD
-=======
 import vue from '@vitejs/plugin-vue'
->>>>>>> fa510a82 (docs: atualizar documentação completa, sincronizar submódulos e preparar release v2.0.0)
 import AutoImport from 'unplugin-auto-import/vite'
 import { maxUseAutoImport } from '@maxvue/max-use'
 
 export default defineConfig({
-<<<<<<< HEAD
   plugins: [
+    vue(),
     AutoImport({
       imports: [
         'vue',

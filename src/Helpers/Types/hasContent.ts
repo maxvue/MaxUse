@@ -3,11 +3,11 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 type RefAny = MaybeRefOrGetter<any>;
 
 /**
- * Verifica se um valor possui algum conteúdo, não sendo vazio, nulo, indefinido ou um array/objeto sem chaves.
+ * Checks whether a value has content (is not null, undefined, empty string/array/object/Map/Set).
  *
- * @param value O valor a ser verificado.
- * @param if_zero Define se o número 0 é considerado como tendo conteúdo (padrão é false).
- * @returns Retorna verdadeiro se o valor contiver dados.
+ * @param value - The value or ref to check.
+ * @param if_zero - Whether numeric 0 should be treated as having content (default: false).
+ * @returns True if the unwrapped value contains data.
  */
 export function hasContentFn(value: RefAny, if_zero: boolean = false): boolean {
     const data: any = toValue(value);
@@ -30,12 +30,13 @@ export function hasContentFn(value: RefAny, if_zero: boolean = false): boolean {
 }
 
 /**
- * Type-guard que verifica se um valor possui conteúdo.
- * Retorna true e restringe o tipo para `NonNullable<V>` quando o valor tem dados.
+ * Type-guard checking whether a value has content.
+ * Returns true and narrows the type to `NonNullable<V>` when the value contains valid data.
  *
- * @param value - O valor a ser verificado.
- * @param if_zero - Se true, considera o número 0 como tendo conteúdo (padrão: false).
- * @returns true se o valor contiver dados (narrowing para NonNullable).
+ * @template V - The type of value being tested.
+ * @param value - The value or ref to check.
+ * @param if_zero - If true, treats the number 0 as having content (default: false).
+ * @returns True if the value contains data (narrows to NonNullable).
  */
 export function hasContent<V>(value: V, if_zero: boolean = false): value is NonNullable<V> {
     return hasContentFn(value as any, if_zero);

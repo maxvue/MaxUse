@@ -4,10 +4,10 @@ import { isBlank } from '../Types/isBlank';
 type RefString = MaybeRefOrGetter<string | number | null | undefined>;
 
 /**
- * Converte uma string ou número em uma string padronizada, sem acentos, sem caracteres especiais e em letras minúsculas (ideal para busca).
+ * Converts a string or number into a normalized, accent-free, lowercase alphanumeric string (ideal for searches).
  *
- * @param value O valor a ser normalizado.
- * @returns A string normalizada.
+ * @param value - The value or ref/getter to normalize.
+ * @returns The normalized searchable string.
  */
 export function toSearchableString(value: RefString): string {
     const data = toValue(value);
@@ -16,6 +16,9 @@ export function toSearchableString(value: RefString): string {
     return String(data).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 }
 
+/**
+ * Alias for {@link toSearchableString}.
+ */
 export const normalizeToSearch = toSearchableString;
 
 /**
@@ -38,12 +41,12 @@ function normalizeNumericString(raw: string): string {
 }
 
 /**
- * Converte um valor em um número, com a opção de arredondar para uma quantidade específica de casas decimais.
- * Aceita tanto o formato brasileiro ("1.234,56") quanto o internacional ("1,234.56").
+ * Converts a value into a number, with optional decimal rounding.
+ * Supports both Brazilian ("1.234,56") and international ("1,234.56") number formats.
  *
- * @param value O valor a ser convertido.
- * @param decimals Opcional. A quantidade de casas decimais.
- * @returns O número convertido ou arredondado. Retorna 0 se a conversão não for possível.
+ * @param value - The value or ref/getter to convert.
+ * @param decimals - Optional number of decimal places to round to.
+ * @returns Converted number, or 0 if conversion is not possible.
  */
 export function toNumber(value: RefString, decimals: number | null = null): number {
     const data = toValue(value);
@@ -62,9 +65,12 @@ export function toNumber(value: RefString, decimals: number | null = null): numb
 }
 
 /**
- * Converte uma entrada numérica ou string contendo valores pt-BR ou internacionais em um `number` válido.
- * Trata o formato de milhar pt-BR (ex: "1.234" -> 1234, "1.234,56" -> 1234.56, "R$ 1.234,56" -> 1234.56).
- * Retorna `NaN` em caso de valores inválidos ou não finitos (como Infinity).
+ * Converts a numeric input or string containing pt-BR or international formatted values into a valid number.
+ * Gracefully parses thousand separators ("1.234" -> 1234, "1.234,56" -> 1234.56, "R$ 1.234,56" -> 1234.56).
+ * Returns NaN for invalid inputs or non-finite numbers.
+ *
+ * @param value - Input to parse.
+ * @returns Parsed number or NaN.
  */
 export function parseBrNumber(value: unknown): number {
     if (value === null || value === undefined || value === '') return NaN;

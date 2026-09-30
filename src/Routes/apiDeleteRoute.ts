@@ -4,14 +4,14 @@ import { getConfiguredHeaders, getWithCredentials } from './config';
 import { isAbortError } from './internal/abortUtils';
 
 /**
- * Realiza uma requisição HTTP DELETE para uma rota nomeada.
- * Inclui automaticamente os headers configurados via `setApiRequestConfig`.
+ * Performs an HTTP DELETE request to a named route.
+ * Automatically injects headers configured via `setApiRequestConfig`.
  *
- * @template T - Tipo do payload de retorno da API.
- * @param RouteName - Nome da rota (ex: 'api.usuarios.destroy').
- * @param data - Corpo da requisição (enviado no campo `data` do axios.delete).
- * @param options - Opções extras passadas para `apiRoute` (incluindo `route_params`, `onError`, `throw`).
- * @returns Os dados da resposta ou null em caso de erro. Retorna false se a rota for inválida.
+ * @template T - Expected API response payload type.
+ * @param RouteName - Named route string (e.g. 'api.users.destroy').
+ * @param data - Request body payload (passed via Axios delete `data`).
+ * @param options - Extra options (use `options.route_params` for URL route placeholders, `onError`, `throw`, etc.).
+ * @returns Response data, false if the route is invalid, or null on request failure.
  */
 export async function apiDeleteRoute<T = any>(
     RouteName: string | null | undefined,

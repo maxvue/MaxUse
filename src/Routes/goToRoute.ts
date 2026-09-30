@@ -12,18 +12,17 @@ onResetConfig(() => {
 });
 
 /**
- * Configura a instância do Vue Router para uso interno na biblioteca.
- * Deve ser chamado uma vez na inicialização da aplicação (ex: no `main.ts`).
+ * Configures the Vue Router instance for programmatic navigation across the library.
+ * Should be called once during application bootstrap (e.g., in `main.ts`).
  *
- * @param router - A instância do Vue Router da aplicação.
+ * @param router - Application Vue Router instance.
  *
  * @example
  * ```typescript
  * import { createApp } from 'vue';
- * import { createRouter } from 'vue-router';
- * import { setLibraryRouter } from 'max-use';
+ * import { router } from './router';
+ * import { setLibraryRouter } from '@maxvue/max-use';
  *
- * const router = createRouter({ ... });
  * setLibraryRouter(router);
  * ```
  */
@@ -32,13 +31,13 @@ export const setLibraryRouter = (router: Router): void => {
 };
 
 /**
- * Navega programaticamente para uma rota registrada ou Vue Router pelo nome.
- * Tenta resolver primeiro via o resolvedor configurado; se não encontrar, usa `router.push` com `name`.
+ * Programmatically navigates to a named route via route resolver or Vue Router name.
+ * Resolves route path via configured resolver first; falls back to `router.push({ name })`.
  *
- * @param route - Nome da rota (registrada ou Vue Router).
- * @param data - Parâmetros da rota (usados como params e query no fallback Vue Router).
- * @returns true se a navegação foi disparada, false se o nome for vazio.
- * @throws Error se `setLibraryRouter` não tiver sido chamado antes.
+ * @param route - Route name (string or ref/getter).
+ * @param data - Route parameters / payload.
+ * @returns True if navigation was initiated, false if route name is blank.
+ * @throws Error if `setLibraryRouter` was not called prior to invocation.
  */
 export const goToRoute = (route: MaybeRefOrGetter<string | null> = null, data: any = {}): boolean => {
     if (!activeRouter) throw new Error('Router não configurado na biblioteca.');

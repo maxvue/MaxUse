@@ -3,12 +3,18 @@ import { isBlank } from '../Helpers/Types';
 import { resolveRoute, hasRoute } from './config';
 
 /**
- * Resolve uma rota nomeada e retorna sua URL.
- * Verifica se a rota existe antes de resolvê-la.
+ * Resolves a named route and returns its URL string.
+ * Verifies route existence with configured resolver prior to resolution.
  *
- * @param routeName - Nome da rota (ex: 'dashboard.index').
- * @param data - Parâmetros da rota (substituídos na URL).
- * @returns A URL resolvida ou null se a rota não existir ou o nome for vazio.
+ * @param routeName - Route name (e.g. 'dashboard.index').
+ * @param data - Route parameters used for placeholder substitution.
+ * @returns Resolved URL string, or null if the route does not exist or name is blank.
+ *
+ * @example
+ * ```typescript
+ * const url = getRoute('users.show', { id: 42 });
+ * // url → '/users/42'
+ * ```
  */
 export const getRoute = (routeName: MaybeRefOrGetter<string | null> = null, data: any = {}): string | null => {
     const route_value = toValue(routeName);
@@ -20,5 +26,5 @@ export const getRoute = (routeName: MaybeRefOrGetter<string | null> = null, data
     return null;
 };
 
-/** Alias de {@link getRoute}. */
+/** Alias for {@link getRoute}. */
 export const getRouteByName = getRoute;

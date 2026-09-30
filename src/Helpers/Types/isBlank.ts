@@ -1,24 +1,26 @@
 import { hasContentFn } from './hasContent';
 
 /**
- * Verifica se um valor está "em branco".
+ * Checks whether a value is blank (empty string, null, undefined, empty array/object/Map/Set).
+ * Inverse of {@link hasContent}.
  *
- * @param value O valor a ser verificado.
- * @param if_zero Se true, considera o número 0 como NÃO estando em branco.
- * @returns Retorna true se estiver em branco.
+ * @template V - The type of value being tested.
+ * @param value - The value or ref to check.
+ * @param if_zero - If true, treats the number 0 as NOT blank.
+ * @returns True if the unwrapped value is blank.
  */
-
 export function isBlank<V>(value: V, if_zero: boolean = false): boolean {
-    return ! hasContentFn(value as any, if_zero);
+    return !hasContentFn(value as any, if_zero);
 }
 
 /**
- * Alias de {@link isBlank}. Verifica se um valor está em branco.
+ * Alias for {@link isBlank}. Checks whether a value is blank.
  *
- * @param value - O valor a ser verificado.
- * @param if_zero - Se true, considera o número 0 como NÃO estando em branco.
- * @returns true se estiver em branco.
+ * @template V - The type of value being tested.
+ * @param value - The value or ref to check.
+ * @param if_zero - If true, treats the number 0 as NOT blank.
+ * @returns True if the unwrapped value is blank.
  */
 export function blank<V>(value: V, if_zero: boolean = false): boolean {
-    return ! hasContentFn(value as any, if_zero);
+    return !hasContentFn(value as any, if_zero);
 }

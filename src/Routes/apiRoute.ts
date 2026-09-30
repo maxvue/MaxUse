@@ -1,44 +1,47 @@
 import { resolveRoute } from './config';
 
 /**
- * Opções para configuração e comportamento das requisições via `api*Route`.
+ * Options configuring behavior for `api*Route` helpers.
  */
 export interface ApiRouteOptions {
-    /** Exibe tela de carregamento global */
+    /** Whether to trigger global loading screen */
     load_screen?: boolean;
-    /** Trata a resposta como download de arquivo (blob) no GET */
+    /** Treat response as file download (blob) in GET requests */
     file?: boolean;
-    /** Se false, silencia o log de erro no console */
+    /** If false, silences console error logging */
     error?: boolean;
-    /** Parâmetros da URL da rota em métodos de mutação (POST, PUT, DELETE, UPLOAD) */
+    /** URL placeholder route parameters for mutating methods (POST, PUT, DELETE, UPLOAD) */
     route_params?: Record<string, any>;
-    /** Callback para capturar o objeto de erro Axios completo (status HTTP, 422, etc) */
+    /** Callback capturing complete Axios error object (HTTP status, 422 validation, etc.) */
     onError?: (error: unknown) => void;
-    /** Callback de progresso do upload */
+    /** Upload progress event callback */
     onUploadProgress?: (progressEvent: any) => void;
-    /** Se true, lança/repropaga a exceção em caso de falha HTTP */
+    /** If true, rethrows error on HTTP failure instead of returning null/false */
     throw?: boolean;
-    /** Headers extras para a requisição */
+    /** Extra HTTP headers */
     headers?: Record<string, string>;
-    /** Sinal de cancelamento da requisição (AbortController) */
+    /** AbortSignal for request cancellation */
     signal?: AbortSignal;
     [key: string]: any;
 }
 
+/**
+ * Result returned by the internal {@link apiRoute} resolver helper.
+ */
 export interface ApiRouteResult {
     option_load_screen: boolean | null;
     routeURL: string;
 }
 
 /**
- * Resolve uma rota nomeada e prepara opções auxiliares para requisições HTTP.
- * Função base usada internamente por `apiGetRoute`, `apiPostRoute`, `apiPutRoute` e `apiDeleteRoute`.
+ * Resolves a named route into a URL and extracts helper options.
+ * Base resolver function used internally by `apiGetRoute`, `apiPostRoute`, `apiPutRoute`, and `apiDeleteRoute`.
  *
- * @param RouteName - Nome da rota (ex: 'api.usuarios.index').
- * @param data - Parâmetros da rota (substituídos na URL para GET).
- * @param options - Opções extras (ex: `{ load_screen: true, route_params: { id: 1 } }`).
- * @param method - Método HTTP ('GET', 'POST', 'PUT', 'DELETE'). Padrão: 'GET'.
- * @returns Objeto com `routeURL` e `option_load_screen`, ou null se `RouteName` for falsy.
+ * @param RouteName - Named route string (e.g. 'api.users.index').
+ * @param data - Route parameters (for GET) or payload.
+ * @param options - Additional options (e.g. `{ load_screen: true, route_params: { id: 1 } }`).
+ * @param method - HTTP method ('GET', 'POST', 'PUT', 'DELETE'). Default: 'GET'.
+ * @returns Object containing `routeURL` and `option_load_screen`, or null if RouteName is blank.
  */
 export function apiRoute(
     RouteName: string | null | undefined,

@@ -3,10 +3,10 @@ import { ulid } from 'ulid';
 import { watchDebounced } from '@vueuse/core';
 
 /**
- * Tipo de retorno do composable {@link useDefaultReset}.
- * Estende uma Ref adicionando o método `reset()` para restaurar ao valor inicial.
+ * Return type of the {@link useDefaultReset} composable.
+ * Extends a Vue Ref by attaching a `.reset()` method that restores initial data.
  *
- * @template T - O tipo do valor armazenado na Ref.
+ * @template T - The type of value stored in the Ref.
  */
 export type DefaultReset<T> = ([T] extends [Ref] ? T : Ref<T>) & {
     reset(): void;
@@ -87,5 +87,5 @@ export function useDefaultReset<T>(initialData: T, timer: number | null = null):
     return state as DefaultReset<T>;
 }
 
-/** Alias de {@link useDefaultReset}. */
+/** Alias for {@link useDefaultReset}. */
 export const refAutoReset = useDefaultReset;

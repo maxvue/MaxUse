@@ -36,9 +36,15 @@ function getBrlFormatter(): Intl.NumberFormat {
 }
 
 /**
- * Formata um número para o padrão de moeda brasileira (R$).
+ * Formats a numeric value or numeric string into Brazilian Real currency format ("R$ 1.250,50").
+ * Handles null, undefined, empty values and reactive refs gracefully.
  *
- * @param value O valor a ser formatado.
+ * @param value - The numeric value, string, or ref/getter to format.
+ * @returns Formatted currency string in BRL.
+ * @example
+ * formatCurrency(1250.5) // "R$ 1.250,50"
+ * formatCurrency('1250.50') // "R$ 1.250,50"
+ * formatCurrency(null) // "R$ 0,00"
  */
 export function formatCurrency(value: RefString): string {
     const data = toValue(value);

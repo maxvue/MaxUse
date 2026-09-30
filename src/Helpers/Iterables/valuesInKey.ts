@@ -3,14 +3,15 @@ import { toValue, type MaybeRefOrGetter } from 'vue';
 type T = Record<string, any> | any[] | null | undefined;
 
 /**
- * Extrai e retorna um array plano (flat) contendo os valores de uma chave específica de todos os objetos em uma coleção.
+ * Extracts and returns a flat array of values for a specified key from all objects in a collection.
  *
- * @param collection A coleção de objetos.
- * @param key A chave a ser extraída de cada objeto.
- * @param default_value O valor padrão a ser usado caso a chave não exista ou seja nula (padrão é false).
- * @returns Um array contendo os valores extraídos.
+ * @template V - The expected type of the extracted values.
+ * @param collection - A collection of objects (Array, Record, or Ref/getter).
+ * @param key - The property key to extract from each item.
+ * @param default_value - Fallback value to use if the key does not exist or is null/undefined (default: false).
+ * @returns A flat array containing the extracted values.
  */
-export function valuesInKey(collection: MaybeRefOrGetter<T>, key: string, default_value: any = false) {
+export function valuesInKey<V = any>(collection: MaybeRefOrGetter<T>, key: string, default_value: any = false): V[] {
     const data = toValue(collection);
 
     if (!data || typeof data !== 'object') return [];

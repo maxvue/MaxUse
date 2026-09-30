@@ -2,24 +2,26 @@ import { watchDebounced, type WatchDebouncedOptions, whenever, type WheneverOpti
 import { watch, nextTick, type WatchSource, type WatchOptions, type WatchHandle } from 'vue';
 import { isNotEmpty } from '../Helpers/Validations';
 
-/** Alias de `whenever` do VueUse. Executa o callback apenas quando o source for truthy. */
+/** Alias for VueUse `whenever`. Invokes callback only when the source evaluates to truthy. */
 export const watchTrue = whenever;
 
 /**
- * Watch que dispara o callback somente quando o valor do source é válido (não-vazio via `isNotEmpty`).
- * Útil para reagir apenas quando dados reais estiverem disponíveis, ignorando estados null/undefined/vazio.
+ * Watcher that invokes callback only when the source value is valid (non-empty via `isNotEmpty`).
+ * Ignores initial/transient null, undefined, or empty states.
  *
- * @param source - A fonte reativa a ser observada.
- * @param callback - Função chamada com o valor válido (NonNullable) e o valor anterior.
- * @param options - Opções do watch (suporta `once`, `immediate`, `deep`, etc.).
- * @returns O handle do watcher para parar manualmente.
+ * @template T - Source data type.
+ * @template Immediate - Whether watcher runs immediately.
+ * @param source - Reactive source to watch.
+ * @param callback - Function invoked with valid non-null value and previous value.
+ * @param options - Watcher options (supports `once`, `immediate`, `deep`, etc.).
+ * @returns WatchHandle to manually stop the watcher.
  *
  * @example
  * ```typescript
- * const usuario = ref<Usuario | null>(null);
+ * const user = ref<User | null>(null);
  *
- * watchIfValid(usuario, (user) => {
- *     console.log('Usuário carregado:', user.nome);
+ * watchIfValid(user, (validUser) => {
+ *     console.log('User loaded:', validUser.name);
  * });
  * ```
  */
@@ -47,30 +49,32 @@ export function watchIfValid<T, Immediate extends Readonly<boolean> = false>(
     return handle;
 }
 
-/** Alias de {@link watchIfValid}. */
+/** Alias for {@link watchIfValid}. */
 export const watchValid = watchIfValid;
-/** Alias de {@link watchIfValid}. */
+/** Alias for {@link watchIfValid}. */
 export const watchIsValid = watchIfValid;
-/** Alias de {@link watchIfValid}. */
+/** Alias for {@link watchIfValid}. */
 export const watchIsValidComputed = watchIfValid;
-/** Alias de {@link watchIfValid}. */
+/** Alias for {@link watchIfValid}. */
 export const watchComputedIsValid = watchIfValid;
 
 /**
- * Watch com debounce que dispara o callback somente quando o valor do source é válido.
- * Combina a funcionalidade de `watchDebounced` do VueUse com a validação de `isNotEmpty`.
+ * Debounced watcher that invokes callback only when the source value is valid (non-empty via `isNotEmpty`).
+ * Combines VueUse `watchDebounced` with `isNotEmpty` validation.
  *
- * @param source - A fonte reativa a ser observada.
- * @param callback - Função chamada com o valor válido (NonNullable) e o valor anterior.
- * @param options - Opções do watchDebounced (suporta `debounce`, `maxWait`, `once`, etc.).
- * @returns O handle do watcher para parar manualmente.
+ * @template T - Source data type.
+ * @template Immediate - Whether watcher runs immediately.
+ * @param source - Reactive source to watch.
+ * @param callback - Function invoked with valid non-null value and previous value.
+ * @param options - Debounced watch options (supports `debounce`, `maxWait`, `once`, etc.).
+ * @returns WatchHandle to manually stop the watcher.
  *
  * @example
  * ```typescript
- * const termoBusca = ref('');
+ * const searchTerm = ref('');
  *
- * watchDebounceIfValid(termoBusca, (termo) => {
- *     buscarUsuarios(termo);
+ * watchDebounceIfValid(searchTerm, (term) => {
+ *     fetchUsers(term);
  * }, { debounce: 300 });
  * ```
  */
@@ -97,13 +101,13 @@ export function watchDebounceIfValid<T, Immediate extends Readonly<boolean> = fa
     return handle;
 }
 
-/** Alias de {@link watchDebounceIfValid}. */
+/** Alias for {@link watchDebounceIfValid}. */
 export const watchDebouncedValid = watchDebounceIfValid;
-/** Alias de {@link watchDebounceIfValid}. */
+/** Alias for {@link watchDebounceIfValid}. */
 export const watchDebouncedIsValid = watchDebounceIfValid;
-/** Alias de {@link watchDebounceIfValid}. */
+/** Alias for {@link watchDebounceIfValid}. */
 export const watchDebounceValid = watchDebounceIfValid;
-/** Alias de {@link watchDebounceIfValid}. */
+/** Alias for {@link watchDebounceIfValid}. */
 export const watchComputedDebounceValid = watchDebounceIfValid;
-/** Alias de {@link watchDebounceIfValid}. */
+/** Alias for {@link watchDebounceIfValid}. */
 export const watchComputedDebounceIsValid = watchDebounceIfValid;

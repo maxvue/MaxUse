@@ -94,6 +94,20 @@ const { x, y } = _.useMouse()
 const debounced = _.debounce(() => console.log('Saved!'), 300)
 ```
 
+#### Intentional Differences with Lodash
+
+Deliberate behavioral distinctions enforced by characterization tests:
+
+| Helper | MaxUse | Lodash | Rationale |
+|:---|:---|:---|:---|
+| `sum` | `sum([6, 4, NaN])` → `10`<br/>`sum(['1', '2'])` → `3` | `NaN`<br/>`'12'` | Coercive parsing (`parseFloat`): non-numeric values become `0`. Never returns `NaN`. Accepts `Ref` and `Record`. |
+| `sumBy` | `sumBy([{ a: '10' }, { a: '5' }], 'a')` → `15` | `'105'` | Same coercion: `Number(val) \|\| 0`. Never returns `NaN`. |
+| `orderBy` | Nulls and `undefined` are always sorted to the end | Nulls at beginning in `'desc'` | UI consistency: missing values always stay at the bottom. |
+| `deepMerge` | Deep-clones instances (`Date`, `Map`, `Set`) *(mutates target)* | Preserves instances by reference *(mutates target)* | Prevents reference leakage and accidental cross-mutation. |
+| `isEmpty` | `isEmpty(0) === false`<br/>`isEmpty(false) === false` | `true`<br/>`true` | In form controls, `0` and `false` represent valid inputs. |
+| `size` | `size(42) === 42` (with `allow_number: true`) | `0` | Ergonomic counting for numeric values. |
+| `filter` | On `Record<string, T>`, returns `Record<string, T>` | Returns `T[]` (loses keys) | Preserves dictionary key mapping. |
+
 ---
 
 ## 🛤️ Routes Submodule (`@maxvue/max-use/routes`)
@@ -146,26 +160,42 @@ import {
     apiGetRoute, 
     apiPostRoute, 
     apiPutRoute, 
+    apiDeleteRoute,
+    getRoute,
+    goToRoute,
     getCachedApi, 
     getCachedApiIDB 
 } from '@maxvue/max-use/routes'
 
-// Simple GET
-const users = await apiGetRoute('api.users.index', { page: 1 })
+// Typed GET with query parameters
+const users = await apiGetRoute<User[]>('api.users.index', { page: 1 })
 
-// POST with body
+// POST with request body payload
 await apiPostRoute('api.users.store', { name: 'John Doe', email: 'john@example.com' })
 
-// PUT with URL route parameters and body payload
+// PUT with URL route parameters and request body
 await apiPutRoute('api.users.update', { name: 'John Updated' }, {
     route_params: { id: 42 }
 })
 
-// Fast localStorage cache (5-minute TTL)
+// DELETE with URL route parameter
+await apiDeleteRoute('api.users.destroy', null, {
+    route_params: { id: 42 }
+})
+
+// Resolve route URL string
+const profileUrl = getRoute('api.users.show', { id: 42 }) // "/api/users/42"
+
+// Programmatic SPA navigation
+goToRoute('dashboard.index')
+
+// Fast localStorage cache (5-minute TTL = 300,000 ms)
 const configs = await getCachedApi('api.config', {}, 'app_configs', 5 * 60 * 1000)
 
-// Persistent IndexedDB cache with Stale-While-Revalidate
-const catalog = await getCachedApiIDB('api.catalog', {}, 'catalog_cache', 60 * 60 * 1000)
+// Persistent IndexedDB cache with Stale-While-Revalidate (1-hour TTL = 3,600,000 ms)
+const catalog = await getCachedApiIDB('api.catalog', {}, 'catalog_cache', 60 * 60 * 1000, (freshData) => {
+    console.log('Background updated:', freshData)
+})
 ```
 
 ---
@@ -227,6 +257,14 @@ Import directly from subpaths to maximize bundling efficiency:
 ---
 
 ## 🛠️ Key API Details & Caveats
+
+### Composables
+- **`useRefCached(key, defaultValue)`**: Synchronizes a reactive `Ref` with `localStorage` and listens to native `storage` events across browser tabs.
+- **`useCachedApi<T>(routeName, options)`**: Stale-while-revalidate pattern linking an API GET endpoint with `localStorage` and immediate reactive updates.
+- **`useDateFormat(date, format)`**: Reactive date formatter with safe reactive fallback.
+- **`useTimeAgo(date, format)`**: Localized relative time formatter with multiple styles (`'br'`, `'abbrev'`, `'action'`, `'limit'`, `'limitAbbrev'`).
+- **`watchIfValid(source, callback)`** & **`watchDebounceIfValid`**: Watchers that fire callbacks only when the watched value is non-empty (`isNotEmpty`).
+- **`useSpellChecker(text, options)`**: Reactive Brazilian Portuguese spellchecker with suggestions and auto-correction.
 
 ### Objects
 - **`deepMerge(target, ...sources)`**: Mutates `target` in place. Use `deepMerge({}, defaults, userConfig)` to avoid mutating original objects.

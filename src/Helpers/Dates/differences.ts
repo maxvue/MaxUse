@@ -9,7 +9,11 @@ function parseDate(value: RefDate): Date | null {
 }
 
 /**
- * Calcula a diferença absoluta em segundos entre duas datas.
+ * Calculates absolute difference in seconds between two dates.
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in seconds.
  */
 export function diffInSeconds(date1: RefDate, date2: RefDate): number {
     const d1 = parseDate(date1);
@@ -19,29 +23,45 @@ export function diffInSeconds(date1: RefDate, date2: RefDate): number {
 }
 
 /**
- * Calcula a diferença absoluta em minutos entre duas datas.
+ * Calculates absolute difference in minutes between two dates.
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in minutes.
  */
 export function diffInMinutes(date1: RefDate, date2: RefDate): number {
     return Math.abs(Math.floor(diffInSeconds(date1, date2) / 60));
 }
 
 /**
- * Calcula a diferença absoluta em horas entre duas datas.
+ * Calculates absolute difference in hours between two dates.
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in hours.
  */
 export function diffInHours(date1: RefDate, date2: RefDate): number {
     return Math.abs(Math.floor(diffInMinutes(date1, date2) / 60));
 }
 
 /**
- * Calcula a diferença absoluta em dias entre duas datas.
+ * Calculates absolute difference in days between two dates.
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in days.
  */
 export function diffInDays(date1: RefDate, date2: RefDate): number {
     return Math.abs(Math.floor(diffInHours(date1, date2) / 24));
 }
 
 /**
- * Calcula a diferença absoluta em meses COMPLETOS entre duas datas.
- * O dia é considerado: 31/01 → 01/02 retorna 0, pois não completou um mês.
+ * Calculates absolute difference in full calendar months between two dates.
+ * Considers day of month (e.g. 31/01 to 01/02 returns 0).
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in full months.
  */
 export function diffInMonths(date1: RefDate, date2: RefDate): number {
     const d1 = parseDate(date1);
@@ -53,7 +73,7 @@ export function diffInMonths(date1: RefDate, date2: RefDate): number {
     let months = (later.getFullYear() - earlier.getFullYear()) * 12
                + (later.getMonth() - earlier.getMonth());
 
-    // Desconta o mês em curso se o dia ainda não foi alcançado no mês de destino
+    // Subtract incomplete month if day threshold was not reached
     const lastDayOfLaterMonth = new Date(later.getFullYear(), later.getMonth() + 1, 0).getDate();
     const anchorDay = Math.min(earlier.getDate(), lastDayOfLaterMonth);
     if (later.getDate() < anchorDay) months--;
@@ -62,8 +82,12 @@ export function diffInMonths(date1: RefDate, date2: RefDate): number {
 }
 
 /**
- * Calcula a diferença absoluta em anos COMPLETOS entre duas datas.
- * O dia e o mês são considerados, tornando-a adequada para cálculo de idade.
+ * Calculates absolute difference in full calendar years between two dates.
+ * Suitable for age calculations.
+ *
+ * @param date1 - First date (string, number, Date, or ref/getter).
+ * @param date2 - Second date (string, number, Date, or ref/getter).
+ * @returns Absolute difference in full years.
  */
 export function diffInYears(date1: RefDate, date2: RefDate): number {
     return Math.floor(diffInMonths(date1, date2) / 12);

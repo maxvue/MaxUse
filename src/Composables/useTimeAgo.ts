@@ -76,27 +76,27 @@ export const FORMAT_MAP: Record<TimeAgoFormat, UseTimeAgoMessages> = {
 };
 
 /**
- * Retorna uma string reativa indicando quanto tempo se passou desde uma data (ou falta para ela).
- * Wrapper do VueUse `useTimeAgo` com mensagens traduzidas para pt-BR e múltiplos formatos.
+ * Returns a reactive formatted string indicating relative time passed since a date (or until a future date).
+ * VueUse `useTimeAgo` wrapper localized with pt-BR messages and multiple presentation formats.
  *
- * Formatos disponíveis:
- * - `'br'` — Padrão completo em pt-BR ("Ontem", "2 dias", "Mês passado").
- * - `'abbrev'` — Abreviado ("1 Sem", "2h", "3m").
- * - `'action'` — Orientado a ação ("Realizar Hoje", "Atrasado: 2 dias").
- * - `'limit'` — Estilo de prazo (idêntico a action).
- * - `'limitAbbrev'` / `'limit_abbrev'` / `'future'` — Abreviado com estilo de prazo.
+ * Available formats:
+ * - `'br'` — Full default in pt-BR ("Ontem", "2 dias", "Mês passado").
+ * - `'abbrev'` — Abbreviated ("1 Sem", "2h", "3m").
+ * - `'action'` — Action-oriented deadlines ("Realizar Hoje", "Atrasado: 2 dias").
+ * - `'limit'` — Deadline limit style (alias of action).
+ * - `'limitAbbrev'` / `'limit_abbrev'` / `'future'` — Abbreviated deadline format.
  *
- * @param initialDate - A data de referência (aceita Date, timestamp, string ISO ou valores reativos).
- * @param format - O formato das mensagens (padrão: 'br').
- * @returns Um objeto reativo `UseTimeAgoReturn` com a string formatada.
+ * @param initialDate - Reference date (Date, timestamp, ISO string, or reactive ref/getter).
+ * @param format - Message format presets (default: 'br').
+ * @returns A reactive `UseTimeAgoReturn` object with the formatted string.
  *
  * @example
  * ```typescript
- * const tempoAtras = timeAgo('2026-05-20');
- * // tempoAtras.value → '4 dias'
+ * const elapsed = timeAgo('2026-05-20');
+ * // elapsed.value → '4 dias'
  *
- * const prazo = timeAgo('2026-05-30', 'action');
- * // prazo.value → 'Realizar em 6 dias'
+ * const deadline = timeAgo('2026-05-30', 'action');
+ * // deadline.value → 'Realizar em 6 dias'
  * ```
  */
 export const timeAgo = (
@@ -112,5 +112,5 @@ export const timeAgo = (
     }, { messages: FORMAT_MAP[format as TimeAgoFormat] ?? ptBr });
 };
 
-/** Alias de {@link timeAgo}. */
+/** Alias for {@link timeAgo}. */
 export const useTimeAgo = timeAgo;

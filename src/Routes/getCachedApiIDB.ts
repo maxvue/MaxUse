@@ -45,28 +45,29 @@ async function fetchAndStore(route_name: string, data_request: any, key: string,
 }
 
 /**
- * Busca dados de uma rota API com cache via IndexedDB (stale-while-revalidate).
- * Se já existir dado cacheado (e não expirado), retorna imediatamente e revalida em background:
- * a requisição é disparada mesmo assim e, se o dado do servidor for diferente do cacheado,
- * o cache é atualizado e `onUpdate` é chamado com o dado fresco.
- * Sem cache válido, faz o GET, armazena e retorna o resultado.
+ * Fetches API route data with IndexedDB cache (stale-while-revalidate pattern).
+ * If valid cache entry exists, returns it immediately and revalidates in the background:
+ * the request is fired anyway, and if server data differs from cached data,
+ * the cache is updated and `onUpdate` is called with the fresh data.
+ * Without valid cache, executes GET, stores in IndexedDB, and returns the result.
  *
- * @param routeName - Nome da rota.
- * @param dataToRequest - Parâmetros da rota.
- * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_params`).
- * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
- * @param onUpdate - Callback chamado com o dado fresco quando a revalidação em background encontra diferença.
- * @param options - Opções extras (ex: `{ signal }` para cancelamento). A revalidação em background não é cancelável.
- * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
+ * @template T - Expected response data type.
+ * @param routeName - Route name or getter.
+ * @param dataToRequest - Route parameters or payload.
+ * @param keyCache - Cache key in IndexedDB (defaults to `${routeName}_${params}`).
+ * @param ttl - Cache time-to-live in milliseconds (e.g., 3_600_000 for 1 hour). If omitted, never expires.
+ * @param onUpdate - Callback invoked with fresh data if background revalidation detects differences.
+ * @param options - Additional options including AbortSignal.
+ * @returns Cached or fresh API data, or null if routeName is blank.
  */
-export async function getCachedApiIDB(
+export async function getCachedApiIDB<T = any>(
     routeName: RefStringOrNull,
     dataToRequest: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
     ttl?: number,
-    onUpdate?: (data: any) => void,
+    onUpdate?: (data: T) => void,
     options?: CachedApiOptions | null
-): Promise<any> {
+): Promise<T | null> {
     const route_name = toValue(routeName);
 
     if (isBlank(route_name)) return null;

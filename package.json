@@ -1,6 +1,6 @@
 {
     "name": "@maxvue/max-use",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "description": "Vue 3 utility and composable library — VueUse + Lodash reimplementation + Reactive Brazilian helpers",
     "main": "./dist/index.es.js",
     "module": "./dist/index.es.js",
@@ -91,7 +91,8 @@
         "README.md",
         "README.pt-BR.md",
         "CHANGELOG.md",
-        "CONTRIBUTING.md"
+        "CONTRIBUTING.md",
+        "SECURITY.md"
     ],
     "scripts": {
         "dev": "vite",

@@ -4,14 +4,14 @@ import { getConfiguredHeaders, getWithCredentials } from './config';
 import { isAbortError } from './internal/abortUtils';
 
 /**
- * Realiza uma requisição HTTP GET para uma rota nomeada.
- * Suporta download de arquivos (blob) e tratamento de erros configurável.
+ * Performs an HTTP GET request to a named route.
+ * Supports file downloads (blob) and configurable error handling / throwing.
  *
- * @template T - Tipo do payload de retorno da API.
- * @param RouteName - Nome da rota (ex: 'api.usuarios.index').
- * @param data - Parâmetros da rota (substituídos na URL).
- * @param options - Opções extras (onError, throw, file, error, load_screen).
- * @returns Os dados da resposta ou null em caso de erro.
+ * @template T - Expected API response payload type.
+ * @param RouteName - Named route string (e.g. 'api.users.index').
+ * @param data - Route parameters substituted into the URL or query parameters.
+ * @param options - Extra options (onError, throw, file, error, load_screen, signal).
+ * @returns The response data, or null on error / cancellation.
  */
 export async function apiGetRoute<T = any>(
     RouteName: string | null | undefined,

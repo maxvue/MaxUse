@@ -4,15 +4,15 @@ import { getConfiguredHeaders, getWithCredentials } from './config';
 import { isAbortError } from './internal/abortUtils';
 
 /**
- * Realiza upload de arquivos via requisição HTTP POST (multipart/form-data) para uma rota nomeada.
- * Converte automaticamente dados em FormData, incluindo serialização de objetos aninhados via JSON.
+ * Performs multipart file upload via HTTP POST (`multipart/form-data`) to a named route.
+ * Automatically constructs FormData, including JSON serialization of nested objects.
  *
- * @template T - Tipo do payload de retorno da API.
- * @param RouteName - Nome da rota (ex: 'api.documentos.upload').
- * @param files - Arquivos a serem enviados. Aceita `{ files: File[] }`, `File[]`, um `File` único ou null.
- * @param data - Dados adicionais enviados junto com os arquivos.
- * @param options - Opções extras passadas para `apiRoute` (incluindo `route_params`, `onError`, `throw`).
- * @returns Os dados da resposta, false se a rota for inválida, ou null em caso de erro na requisição.
+ * @template T - Expected API response payload type.
+ * @param RouteName - Named route string (e.g. 'api.documents.upload').
+ * @param files - Files to upload. Accepts `{ files: File[] }`, `File[]`, a single `File`, or null.
+ * @param data - Additional payload data sent alongside files.
+ * @param options - Extra options (use `options.route_params` for URL placeholders, `onUploadProgress`, `onError`, `throw`, etc.).
+ * @returns Response data, false if the route is invalid, or null on request failure.
  */
 export async function apiUploadRoute<T = any>(
     RouteName: string | null | undefined,

@@ -1,17 +1,17 @@
 /**
- * Tipo para o resolvedor de rotas.
- * Recebe o nome da rota e parâmetros opcionais.
- * Retorna a URL resolvida ou null se a rota não existir.
+ * Type definition for the route resolver function.
+ * Receives the route name and optional parameters.
+ * Returns the resolved URL string or null if the route does not exist.
  */
 export type RouteResolver = (name: string, params?: Record<string, any>) => string | null;
 
 /**
- * Configuração de headers e opções para requisições HTTP.
+ * Request headers and options configuration for HTTP requests.
  */
 export interface ApiRequestConfig {
-    /** Headers extras adicionados a todas as requisições que alteram dados (POST, PUT, DELETE, UPLOAD) */
+    /** Additional headers added to mutating requests (POST, PUT, DELETE, UPLOAD) */
     headers?: Record<string, string | (() => string)>;
-    /** Se deve enviar cookies cross-origin (padrão: true) */
+    /** Whether to send cross-origin credentials/cookies (default: true) */
     withCredentials?: boolean;
 }
 
@@ -19,18 +19,16 @@ let routeResolver: RouteResolver | null = null;
 let apiConfig: ApiRequestConfig = { withCredentials: true };
 
 /**
- * Callbacks de limpeza registrados por outros módulos que mantêm estado global.
- * Usa registro em vez de import direto porque `goToRoute.ts` já importa deste
- * arquivo — importá-lo de volta criaria uma dependência circular.
+ * Cleanup callbacks registered by other modules maintaining global state.
  *
  * @internal
  */
 const resetHandlers = new Set<() => void>();
 
 /**
- * Registra um callback a ser executado por {@link resetConfig}.
- * @returns Função de cancelamento do registro (unsubscribe).
- * @internal Uso interno da biblioteca.
+ * Registers a callback invoked by {@link resetConfig}.
+ * @returns Unsubscribe function.
+ * @internal Internal library usage.
  */
 export function onResetConfig(handler: () => void): () => void {
     resetHandlers.add(handler);
@@ -40,33 +38,17 @@ export function onResetConfig(handler: () => void): () => void {
 }
 
 /**
- * Configura o resolvedor de rotas da biblioteca.
- * Deve ser chamado uma vez na inicialização da aplicação.
+ * Configures the library route resolver function.
+ * Should be called once during application bootstrap (e.g., in main.ts).
  *
- * O resolvedor recebe o nome da rota e parâmetros opcionais, e retorna a URL completa.
- * Se a rota não existir, deve retornar null.
- *
- * @param resolver - Função que converte nome + params em URL.
+ * @param resolver - Function converting route name + params into a URL string.
  *
  * @example
  * ```typescript
- * import { setRouteResolver } from 'max-use';
+ * import { setRouteResolver } from '@maxvue/max-use';
+ * import { route } from 'ziggy-js';
  *
- * // Exemplo simples com base URL
- * setRouteResolver((name, params) => {
- *     const routes: Record<string, string> = {
- *         'api.usuarios.index': '/api/usuarios',
- *         'api.usuarios.show': '/api/usuarios/:id',
- *     };
- *     let url = routes[name];
- *     if (!url) return null;
- *     if (params) {
- *         for (const [key, value] of Object.entries(params)) {
- *             url = url.replace(`:${key}`, String(value));
- *         }
- *     }
- *     return url;
- * });
+ * setRouteResolver((name, params) => route(name, params));
  * ```
  */
 export function setRouteResolver(resolver: RouteResolver): void {
@@ -74,23 +56,18 @@ export function setRouteResolver(resolver: RouteResolver): void {
 }
 
 /**
- * Configura opções globais para as requisições HTTP da biblioteca.
- * Headers configurados aqui são aplicados em todas as requisições que alteram dados.
+ * Configures global HTTP request options for the library.
  *
- * @param config - Configuração parcial que será mesclada com a existente.
+ * @param config - Partial configuration merged with existing config.
  *
  * @example
  * ```typescript
- * import { setApiRequestConfig } from 'max-use';
+ * import { setApiRequestConfig } from '@maxvue/max-use';
  *
- * // Para Adonis (CSRF via cookie é automático pelo Axios)
- * setApiRequestConfig({ withCredentials: true });
- *
- * // Para adicionar headers customizados (ex: token Bearer)
  * setApiRequestConfig({
+ *     withCredentials: true,
  *     headers: {
- *         'Authorization': () => `Bearer ${getToken()}`,
- *         'X-Custom': 'valor-fixo'
+ *         'Authorization': () => `Bearer ${getToken()}`
  *     }
  * });
  * ```
@@ -100,13 +77,13 @@ export function setApiRequestConfig(config: ApiRequestConfig): void {
 }
 
 /**
- * Resolve uma rota pelo nome usando o resolver configurado.
- * @internal Uso interno da biblioteca.
+ * Resolves a route name into a URL using the configured resolver.
+ * @internal
  *
- * @param name - Nome da rota.
- * @param params - Parâmetros da rota.
- * @returns A URL resolvida.
- * @throws Se o resolver não estiver configurado ou a rota não for encontrada.
+ * @param name - Route name.
+ * @param params - Route parameters.
+ * @returns Resolved URL string.
+ * @throws If route resolver is not configured or route is not found.
  */
 export function resolveRoute(name: string, params?: any): string {
     if (!routeResolver) throw new Error(
@@ -120,12 +97,12 @@ export function resolveRoute(name: string, params?: any): string {
 }
 
 /**
- * Verifica se uma rota existe no resolver configurado.
- * @internal Uso interno da biblioteca.
+ * Checks whether a named route exists in the configured resolver.
+ * @internal
  *
- * @param name - Nome da rota.
- * @param params - Parâmetros opcionais da rota.
- * @returns true se a rota existe, false caso contrário.
+ * @param name - Route name.
+ * @param params - Optional route parameters.
+ * @returns True if route exists, false otherwise.
  */
 export function hasRoute(name: string, params?: Record<string, any>): boolean {
     if (!routeResolver) return false;

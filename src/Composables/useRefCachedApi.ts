@@ -3,23 +3,43 @@ import { apiGetRoute } from '../Routes/apiGetRoute';
 
 export type ToRefCachedApi<T> = [T] extends [Ref] ? T : Ref<T>;
 
+/**
+ * Options for configuring {@link useCachedApi}.
+ *
+ * @template T - Expected data type.
+ */
 export interface UseCachedApiOptions<T> {
+    /** Parameters or query payload passed to the route resolver and GET request (alias of `data`). */
     data_get?: MaybeRefOrGetter<Record<string, unknown> | unknown>;
+    /** Parameters or query payload passed to the route resolver and GET request. */
     data?: MaybeRefOrGetter<Record<string, unknown> | unknown>;
+    /** Custom localStorage key. Defaults to route name when omitted. */
     key?: MaybeRefOrGetter<string | null | undefined>;
+    /** Fallback initial value before network/cache resolves. */
     defaultValue?: T;
+    /** Whether to synchronize state into localStorage (default: true). */
     sync?: boolean;
+    /** Whether to watch dynamic route/parameters and refetch automatically (default: true). */
     watch?: boolean;
 }
 
 /**
- * Cria uma Ref com cache local (localStorage) que sincroniza automaticamente com uma rota de API (GET).
- * Na primeira chamada, carrega do cache local (se existir) e dispara a requisição em background para atualizar.
+ * Creates a reactive Ref with localStorage cache that synchronizes automatically with an API GET route.
+ * On first invocation, reads from local cache (if available) while firing a background request to revalidate.
  *
- * @template T - Tipo dos dados retornados.
- * @param route_name - Nome da rota para a requisição GET (aceita Ref/Getter).
- * @param options - Opções de configuração.
- * @returns Uma Ref reativa com os dados da API/cache.
+ * @template T - Response data type.
+ * @param route_name - Route name or getter for the GET request.
+ * @param options - Configuration options.
+ * @returns A reactive Ref containing cached or fresh API data.
+ * @example
+ * ```typescript
+ * const users = useCachedApi<User[]>('api.users.index', {
+ *   defaultValue: [],
+ *   data_get: { active: true },
+ *   key: 'users-cache'
+ * });
+ * console.log(users.value); // Reactive Ref value
+ * ```
  */
 export function useCachedApi<T = any>(
     route_name: MaybeRefOrGetter<string | null | undefined>,
@@ -124,9 +144,9 @@ export function useCachedApi<T = any>(
     return state;
 }
 
-/** Alias de {@link useCachedApi}. */
+/** Alias for {@link useCachedApi}. */
 export const useRefCachedApi = useCachedApi;
-/** Alias de {@link useCachedApi}. */
+/** Alias for {@link useCachedApi}. */
 export const useSharedCacheApi = useCachedApi;
-/** Alias de {@link useCachedApi}. */
+/** Alias for {@link useCachedApi}. */
 export const useInCacheApi = useCachedApi;

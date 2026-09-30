@@ -1,4 +1,4 @@
-import { debounce } from './debounce';
+import { debounce, type DebouncedFunction } from './debounce';
 
 export interface ThrottleOptions {
     leading?: boolean;
@@ -6,18 +6,23 @@ export interface ThrottleOptions {
 }
 
 /**
- * Cria uma versão "throttled" de `func`, que invoca `func` no máximo uma
- * vez a cada `wait` milissegundos. Implementado sobre `debounce`, usando
- * `maxWait: wait`. Suporta `options.leading` e `options.trailing`, além dos
- * métodos `.cancel()`, `.flush()` e `.pending()`.
- * Semelhante ao _.throttle do Lodash.
+ * Creates a throttled function that only invokes `func` at most once per every
+ * `wait` milliseconds. Implemented over `debounce` using `maxWait: wait`.
+ * Supports `options.leading` and `options.trailing`, plus the `.cancel()`,
+ * `.flush()`, and `.pending()` control methods.
+ * Equivalent to Lodash `_.throttle`.
  *
- * @param func função a limitar
- * @param wait milissegundos mínimos entre invocações (padrão 0)
- * @param options `leading` (padrão `true`) e `trailing` (padrão `true`)
- * @returns função throttled com `.cancel()`, `.flush()` e `.pending()`
+ * @template T - The target function type.
+ * @param func - The function to throttle.
+ * @param wait - The number of milliseconds to throttle invocations to (default: 0).
+ * @param options - Options object with `leading` (default: true) and `trailing` (default: true).
+ * @returns A new throttled function with `.cancel()`, `.flush()`, and `.pending()` methods.
  */
-export function throttle<T extends (...args: any[]) => any>(func: T, wait: number = 0, options?: ThrottleOptions) {
+export function throttle<T extends (...args: any[]) => any>(
+    func: T,
+    wait: number = 0,
+    options?: ThrottleOptions
+): DebouncedFunction<T> {
     let leading = true;
     let trailing = true;
 

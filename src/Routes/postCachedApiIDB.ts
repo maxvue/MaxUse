@@ -11,26 +11,27 @@ type RefStringOrNull = MaybeRefOrGetter<string | null | undefined>;
 type MayBeRefData = MaybeRefOrGetter<any>;
 
 /**
- * Busca dados de uma rota API via POST com cache via IndexedDB.
- * Se já existir dado cacheado (e não expirado), retorna sem fazer requisição.
- * Caso contrário, faz o POST e armazena o resultado para futuras chamadas.
+ * Fetches API route data via POST with IndexedDB caching.
+ * If valid unexpired cached data exists, returns it immediately without issuing a request.
+ * Otherwise, sends the POST request, stores the result in IndexedDB, and returns it.
  *
- * @param routeName - Nome da rota.
- * @param routeParams - Parâmetros da rota (URL params).
- * @param postData - Corpo da requisição POST.
- * @param keyCache - Chave do cache no IndexedDB (padrão: `routeName_clientId_params`).
- * @param ttl - Tempo de vida do cache em milissegundos (ex: 60000 = 1 min). Se não informado, o cache não expira.
- * @param options - Opções extras (ex: `{ signal }` para cancelamento).
- * @returns Os dados da API ou do cache. Retorna null se `routeName` for vazio.
+ * @template T - Expected response data type.
+ * @param routeName - Route name or getter.
+ * @param routeParams - Route parameters (URL params resolved by route resolver).
+ * @param postData - Request payload body for POST.
+ * @param keyCache - Cache key in IndexedDB (defaults to `${routeName}_${clientId}_${params}`).
+ * @param ttl - Cache time-to-live in milliseconds (e.g., 3_600_000 for 1 hour). If omitted, never expires.
+ * @param options - Additional options including AbortSignal.
+ * @returns Cached or fresh API data, or null if routeName is blank.
  */
-export async function postCachedApiIDB(
+export async function postCachedApiIDB<T = any>(
     routeName: RefStringOrNull,
     routeParams: MayBeRefData = null,
     postData: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
     ttl?: number,
     options?: CachedApiOptions | null
-): Promise<any> {
+): Promise<T | null> {
     const route_name = toValue(routeName);
 
     if (isBlank(route_name)) return null;

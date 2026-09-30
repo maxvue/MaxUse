@@ -10,6 +10,7 @@ const NO_KEY = Symbol('no-key');
  * Automatically saves on value change. When another browser tab updates the same item,
  * synchronizes state via native `storage` events.
  *
+ * @template T - The type of value stored in the Ref.
  * @param key - localStorage key (supports Ref/Getter for dynamic keys). If null, undefined or empty string, persistence is disabled and operates only in memory.
  * @param default_value - Default fallback value when key does not exist in localStorage.
  * @returns A reactive Ref synchronized with localStorage.
@@ -121,11 +122,14 @@ export function useRefCached<T>(key: KeyCached, default_value: T): ToRefCached<T
     return state;
 }
 
-/** Alias de {@link useRefCached}. */
+/** Alias for {@link useRefCached}. */
 export const useRefStorage = useRefCached;
-/** Alias de {@link useRefCached}. */
+/** Alias for {@link useRefCached}. */
 export const useCached = useRefCached;
-/** Alias de {@link useRefCached}. */
+/** Alias for {@link useRefCached}. */
 export const useSharedCache = useRefCached;
-/** Alias de {@link useRefCached}. */
+/**
+ * Alias for {@link useRefCached}.
+ * Note: MaxUse's `useStorage` specifically targets `localStorage` with cross-tab synchronization.
+ */
 export const useStorage = useRefCached;

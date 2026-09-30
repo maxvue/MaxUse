@@ -56,25 +56,26 @@ export function clearCachedApi(key?: string): void {
 }
 
 /**
- * Busca dados de uma rota API com cache via localStorage.
- * Se já existir dado cacheado (e não expirado por TTL), retorna imediatamente sem fazer requisição.
- * Caso contrário, faz o GET e armazena o resultado para futuras chamadas.
- * Erros de rede HTTP propagam a rejeição.
+ * Fetches API route data with localStorage caching.
+ * If valid cached data exists (and has not expired by TTL), returns it immediately without issuing a network request.
+ * Otherwise, sends the GET request and stores the result for subsequent calls.
+ * Network/HTTP errors reject the promise.
  *
- * @param routeName - Nome da rota.
- * @param dataToRequest - Parâmetros da rota.
- * @param keyCache - Chave do cache no localStorage (padrão: `max_cache:routeName_params`).
- * @param ttl - Tempo de vida do cache em milissegundos. Se expirado ou ttl=0, refaz a requisição.
- * @param options - Opções extras (ex: `{ signal }` para cancelamento).
- * @returns Os dados da API ou do cache local. Retorna null se `routeName` for vazio.
+ * @template T - Expected response data type.
+ * @param routeName - Route name or getter.
+ * @param dataToRequest - Route parameters or payload.
+ * @param keyCache - Cache key in localStorage (defaults to `max_cache:${routeName}_${params}`).
+ * @param ttl - Cache time-to-live in milliseconds (e.g., 3_600_000 for 1 hour). If expired or ttl=0, refetches.
+ * @param options - Additional options including AbortSignal.
+ * @returns Cached or fresh API data, or null if routeName is blank.
  */
-export async function getCachedApi(
+export async function getCachedApi<T = any>(
     routeName: RefStringOrNull,
     dataToRequest: MayBeRefData = null,
     keyCache: RefStringOrNull = null,
     ttl?: number,
     options?: CachedApiOptions | null
-): Promise<any> {
+): Promise<T | null> {
     const route_name = toValue(routeName);
 
     if (!hasContent(route_name)) return null;

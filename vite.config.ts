@@ -9,7 +9,7 @@ const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url
 export default defineConfig({
     plugins: [
         vue(),
-        dts({ rollupTypes: false }),
+        dts({ rollupTypes: false, exclude: ['src/scripts/**'] }),
         generateExportsManifest()
     ],
     build: {
