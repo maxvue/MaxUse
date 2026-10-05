@@ -16,7 +16,6 @@ tsconfig.tsbuildinfo
 *~
 
 # IA / Agentes
-GEMINI.md
 .gemini/
 .agents/
 .windsurf/

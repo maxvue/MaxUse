@@ -1,76 +1,87 @@
-# CLAUDE.md
+# MaxUse — CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este documento fornece as diretrizes e instruções canônicas para o Claude Code (`claude.ai/code`) e assistentes da Anthropic ao trabalhar com o código deste repositório.
 
-## Project Overview
+---
 
-`@maxvue/max-use` is a tree-shakable Vue 3 utility library (published to npm) that unifies **VueUse + Lodash + custom helpers** behind a single dependency. It targets the Brazilian market (CPF/CNPJ/CEP/phone validations, pt-BR formatting) and Laravel/Adonis + Vue projects (named-route HTTP helpers). Source is TypeScript; comments and docs are in Portuguese.
+## 1. Diretrizes de Idioma
 
-## Commands
+- **Português do Brasil (pt-BR)** para: comunicação com o usuário, planejamento, comentários de código e mensagens de commit.
+- **Inglês (en-US)** para: identificadores de código (nomes de funções, variáveis, tipos, interfaces, arquivos e diretórios).
+
+---
+
+## 2. Visão Geral do Projeto
+
+`@maxvue/max-use` é uma biblioteca utilitária e de composables para **Vue 3** (publicada no npm) que unifica **VueUse + reimplementação moderna do Lodash (sem dependência do `lodash-es`) + helpers reativos brasileiros** (`toValue`).
+
+- **Foco de Mercado:** Projetos Vue 3 e ecossistema brasileiro (validações e formatações de CPF, CNPJ, CEP, telefone e manipulação temporal com fuso `America/Sao_Paulo`) com integração de rotas nomeadas com backends Laravel/Adonis.
+- **Reatividade com `toValue`:** Funções utilitárias e composables recebem indistintamente refs, computeds, getters ou valores primitivos.
+
+---
+
+## 3. Comandos do Projeto
 
 ```bash
-npm run build          # prebuild (regen auto-import data) → vue-tsc typecheck → vite lib build
+npm run build          # prebuild (atualiza auto-import) → vue-tsc → vite build
 npm run type-check     # vue-tsc --noEmit
+npm run typecheck:tsgo # Checagem estática ultrarrápida via tsgo
 npm run lint           # eslint . --fix
-npm test               # vitest run (all *.test.ts) — runtime assertions only
-npm run test:types     # vitest run --typecheck.only — evaluates expectTypeOf assertions
-npm run test:all       # runtime tests followed by the type tests
-npm run test:watch     # vitest watch mode
-npm run test:coverage  # vitest run --coverage (v8)
-npm run dev:playground # vite dev server against ./playground for manual testing
+npm test               # vitest run (executa todos os *.test.ts)
+npm run test:types     # vitest run --typecheck.only (avalia asserções expectTypeOf)
+npm run test:all       # vitest run seguido de testes de tipo
+npm run test:watch     # vitest em modo watch
+npm run test:coverage  # vitest run --coverage (cobertura v8)
+npm run dev:playground # Inicia o dev server Vite do ./playground para testes manuais
 ```
 
-Run a single test file or filter by name:
-
+Executar arquivo de teste específico ou filtrar por nome:
 ```bash
 npx vitest run src/Helpers/Validations/documents.test.ts
 npx vitest run -t 'isCpf'
 ```
 
-`npm run release` builds, bumps the patch version, pushes tags, and publishes — only run when explicitly asked to publish.
+> [!NOTE]
+> `npm run release` gera build, incrementa patch version, sobe tags no git e publica no npm — **execute somente se explicitamente solicitado pelo usuário**.
 
-## Architecture
+---
 
-### Modular exports with a central `_` object
-The public API is assembled in [src/index.ts](src/index.ts). Everything is re-exported flat for named imports (`import { isCpf } from '@maxvue/max-use'`), **and** merged into a single `_` object mirroring Lodash's convention. Since the lodash-es migration removed that dependency entirely, the `_` object is built by merging just `ownHelpers` and the filtered VueUse. **VueUse keys are filtered out when the name already exists in `ownHelpers`**, so own helpers win every collision and `_.someHelper` and the named export `someHelper` always agree.
+## 4. Arquitetura e Módulos
 
-Ambiguity between modules (e.g. `now`, `get`/`set`, `isObject`, `useTimeAgo`) is resolved with explicit `export { ... }` lines near the bottom of `index.ts` — add to that list if you introduce a name exported by more than one module.
+### 4.1 Exportações Modulares e Objeto Central `_`
+- A API pública é reunida em `src/index.ts`. Cada função é exportada de forma plana para named imports (`import { isCpf } from '@maxvue/max-use'`) e também agregada no objeto `_` (espelhando a convenção do Lodash).
+- **Prioridade em colisões:** Funções próprias (`ownHelpers`) sobrepõem as do VueUse quando houver colisão de nomes.
+- Resolução de ambiguidades (`now`, `get`/`set`, `isObject`, `useTimeAgo`) é tratada explicitamente ao final de `src/index.ts`.
 
-### Three top-level source areas under `src/`
-- **`Helpers/`** — pure functions grouped by domain: `Browser`, `Dates`, `Electrical`, `Format`, `Iterables`, `Math`, `Objects`, `Strings`, `Types`, `Validations`, plus `VueUse` (curated re-exports) and `Locales`.
-- **`Composables/`** — reactive Vue composables (`useRefCached`, `useRefCachedApi`, `useTimeAgo`, `useDateFormat`, `watchTrue`, `useDefaultReset`).
-- **`Routes/`** — framework-agnostic named-route HTTP helpers (see below).
+### 4.2 As Três Áreas de Código-Fonte em `src/`
+- **`Helpers/`** — Funções puras organizadas em 16 categorias:
+  - `Browser`, `Dates`, `Electrical`, `Format`, `Functions`, `Iterables`, `Lang`, `Locales`, `Math`, `Objects`, `Seq`, `Strings`, `Types`, `Utils`, `Validations`, `VueUse`.
+- **`Composables/`** — Composables reativos:
+  - `useRefCached`, `useRefCachedApi`, `useTimeAgo`, `useDateFormat`, `watchTrue`, `useDefaultReset`.
+- **`Routes/`** — Camada HTTP agnóstica para rotas nomeadas:
+  - Singletons de configuração em `src/Routes/config.ts`: `setRouteResolver`, `setApiRequestConfig`, `resetConfig`.
+  - Helpers com cache: `getCachedApi` (`localStorage`), `getCachedApiIDB` e `postCachedApiIDB` (`IndexedDB`).
 
-### Helper category convention
-Each `Helpers/<Category>/` folder has an `index.ts` that (1) re-exports every function flat and (2) builds a namespace object aggregating them (e.g. `Validations/index.ts` exports both the individual functions and a `validate` object). For a **single new helper/composable**, exporting it from its category's `index.ts` is enough — nothing needs to be added by hand elsewhere. Only when creating a **new category** do you follow this pattern and register it in **all three** aggregation points: [src/index.ts](src/index.ts), [src/Helpers/maxUseItems.ts](src/Helpers/maxUseItems.ts), and [src/scripts/buildAutoImport.ts](src/scripts/buildAutoImport.ts).
+### 4.3 Multi-entry Library Build e Auto-Import
+- `vite.config.ts` declara entradas Rollup para cada um dos 18 submódulos em ES format (`./dist/*.es.js` + `.d.ts`), mapeados no `exports` do `package.json`.
+- `unplugin-auto-import` é alimentado por `src/Helpers/autoImportData.json` (arquivo gerado pelo script `src/scripts/buildAutoImport.ts` no `prebuild`). Nunca altere o JSON manualmente.
 
-### Multi-entry library build
-[vite.config.ts](vite.config.ts) declares one Rollup entry per subpath export (`browser`, `dates`, `math`, `routes`, etc.), ES format only, minify off, sourcemaps on. Each entry maps to a `./dist/*.es.js` + `.d.ts` pair listed under `exports` in [package.json](package.json) (e.g. `@maxvue/max-use/validations`). **Adding a new subpath export requires editing both** the `build.lib.entry` map in vite.config.ts and the `exports` map in package.json. Vue and all runtime `dependencies`/`peerDependencies` are externalized. A custom `generateExportsManifest` plugin emits `dist/exports.json` listing the public API surface.
+---
 
-### Auto-import generation (prebuild step)
-`unplugin-auto-import` support is powered by [src/Helpers/autoImportData.json](src/Helpers/autoImportData.json), a **generated file**. The `prebuild` script runs `tsx src/scripts/buildAutoImport.ts`, which imports every module, collects export names (plus VueUse *type* names parsed out of `@vueuse/core`'s `.d.ts`), and rewrites that JSON. Consumers load it via `maxUseAutoImport`. Do not hand-edit `autoImportData.json` — change the source module and rebuild.
+## 5. Convenções de Código
 
-### Routes module (framework-agnostic HTTP)
-[src/Routes/config.ts](src/Routes/config.ts) holds module-level singletons configured once at app startup:
-- `setRouteResolver((name, params) => url | null)` — bridges to Ziggy/Laravel or any named-route system. Internal helpers (`resolveRoute`, `hasRoute`) throw/return based on it.
-- `setApiRequestConfig({ headers, withCredentials })` — global headers (values may be functions resolved per-request, e.g. `Authorization`) and cookie behavior for mutating requests.
-- `resetConfig()` — `@internal`, used to reset singletons between tests. It also runs every callback registered via `onResetConfig()`, which is how `goToRoute.ts` clears its `activeRouter`. **If you add module-level state to `Routes/`, register its cleanup with `onResetConfig()`** — don't import `goToRoute.ts` from `config.ts`, that would be a circular import.
+- **Indentação e Estilo:** 4 espaços, aspas simples, ponto e vírgula obrigatório, **sem vírgula final** (`comma-dangle: never`).
+- **Condicionais Curtas (`curly: multi`):** Instruções condicionais únicas devem permanecer na **mesma linha**: `if (cond) return valor;`.
+- **Componentes Vue (Playground/Exemplos):** Ordem estrita: 1º `<template>`, 2º `<script setup lang="ts">`, 3º `<style lang="scss">`.
+- **Ambiente de Testes:** Vitest com `happy-dom`, `globals: true` e `TZ: 'America/Sao_Paulo'`. `tsconfig.json` exclui arquivos de teste da checagem padrão; testes de tipo rodam isolados com `tsconfig.test.json` via `npm run test:types`.
 
-`apiRoute` is the base used by `apiGetRoute`/`apiPostRoute`/`apiPutRoute`/`apiDeleteRoute`/`apiUploadRoute`. Cached variants: `getCachedApi` caches in `localStorage`; `getCachedApiIDB` and `postCachedApiIDB` use the native `indexedDB` API through the shared internal layer in [src/Routes/internal/idbCache.ts](src/Routes/internal/idbCache.ts) — put IDB changes there, not in the individual helpers. `deleteFromIDB` and `clearCacheIDB` stay publicly re-exported from `getCachedApiIDB.ts`. Because config is global singletons, tests must call `resetConfig()` in setup/teardown.
+---
 
-### Data-driven helpers
-`Helpers/Electrical/wireSize.ts` reads lookup tables from `src/json/*.json` (electrical wire-sizing tables like `al-70-bi-a1.json`). `resolveJsonModule` is enabled; these JSON files are bundled, not external.
+## 6. Diretrizes de Execução em Git Worktree
 
-## Conventions
-
-- **Tests are colocated** as `<name>.test.ts` next to source; vitest runs with `globals: true` and the `happy-dom` environment. `tsconfig.json` **excludes** `src/**/*.test.ts`, so `vue-tsc` never sees test files — `expectTypeOf` assertions are only evaluated by `npm run test:types`, which uses [tsconfig.test.json](tsconfig.test.json) (same config, without that exclude). A test file that relies on `expectTypeOf` proves nothing under plain `npm test`. `index.ts` files, `scripts/`, `json/`, and the VueUse/Locales re-export folders are excluded from coverage.
-- **ESLint style** (enforced, [eslint.config.js](eslint.config.js)): 4-space indent, single quotes, semicolons required, **no trailing commas**, `curly: multi` (single-statement bodies inline without braces — this codebase heavily uses `if (cond) return x;` on one line). Run `npm run lint` before finishing.
-- New public functions must be reachable from their category `index.ts` to appear in the flat exports, the `_` object, and auto-import data.
-
-## Execução de Agentes em Worktree
-
-- **Orquestração Automática pelo MaxCode:** Toda execução de modificações de código via painel do MaxCode já opera em um **git worktree dedicado e isolado**, criado e gerenciado automaticamente pela extensão (por padrão sob `.max-code-worktrees/wt-<id>`).
-- **Proibido criar worktrees ou branches adicionais:** O agente **NUNCA** deve criar novas worktrees (`git worktree add`), trocar de branch (`git checkout`, `git switch`) ou criar branches manuais (`git branch`). Trabalhe **estritamente dentro da pasta da worktree indicada no prompt** pelo MaxCode.
-- **Outras worktrees:** Se houver outras pastas ou worktrees no repositório, ignore-as: pertencem a outros agentes ou sessões paralelas.
-- **Commits, Merge e Push são exclusivos do usuário:** O agente **NUNCA** deve executar `git commit`, `git merge`, `git push` ou `git worktree remove` por conta própria. Toda integração, commit e remoção da worktree é realizada exclusivamente pelo usuário através dos botões e comandos do painel do MaxCode (`/commit`, etc.).
-- **Execução fora do MaxCode (fallback legado):** Se e somente se o agente for executado fora do MaxCode (CLI manual direto na raiz sem worktree pré-alocada), as alterações devem ocorrer em um worktree temporário sob `.max-code-worktrees/wt-<slug>`, aguardando instruções explícitas do usuário para commit/merge.
+1. **Isolamento Obrigatório:**
+   - **No MaxCode (VSCode):** A execução opera automaticamente em um git worktree dedicado gerenciado pela extensão sob `.max-code-worktrees/wt-<id>`.
+   - **Fora do MaxCode (CLI manual / Terminal):** Toda alteração deve ocorrer em um worktree temporário sob `.worktrees/<nome-da-branch>`, derivado de `dev`.
+   - É proibido realizar modificações diretamente na raiz do repositório ou na branch principal.
+2. **Governança de Commits:**
+   - O agente **NUNCA** executa `git commit`, `git merge`, `git push` ou exclusão de worktrees por conta própria. Toda integração aguarda aprovação explícita do usuário.
