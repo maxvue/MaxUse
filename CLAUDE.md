@@ -1,6 +1,6 @@
 # MaxUse — CLAUDE.md
 
-Este documento fornece as diretrizes e instruções canônicas para o Claude Code (`claude.ai/code`) e assistentes da Anthropic ao trabalhar com o código deste repositório.
+Este documento é a fonte canônica para Claude, Gemini/Antigravity, Codex, OpenCode e demais agentes. AGENTS.md e GEMINI.md apontam para esta mesma fonte.
 
 ---
 
@@ -30,6 +30,7 @@ npm run lint           # eslint . --fix
 npm test               # vitest run (executa todos os *.test.ts)
 npm run test:types     # vitest run --typecheck.only (avalia asserções expectTypeOf)
 npm run test:all       # vitest run seguido de testes de tipo
+npm run test:ui        # Interface gráfica do Vitest
 npm run test:watch     # vitest em modo watch
 npm run test:coverage  # vitest run --coverage (cobertura v8)
 npm run dev:playground # Inicia o dev server Vite do ./playground para testes manuais
@@ -85,3 +86,22 @@ npx vitest run -t 'isCpf'
    - É proibido realizar modificações diretamente na raiz do repositório ou na branch principal.
 2. **Governança de Commits:**
    - O agente **NUNCA** executa `git commit`, `git merge`, `git push` ou exclusão de worktrees por conta própria. Toda integração aguarda aprovação explícita do usuário.
+
+
+## Execução e validação em lote
+
+- Implemente todo o bloco autorizado e seus testes antes de executar validações. Depois, valide o conjunto, corrija falhas em lote e revalide após concluir as correções. Não execute testes, tipos ou builds após cada microedição.
+- Leia diretrizes na primeira admissão e consulte trechos necessários nas retomadas. Preserve decisões e autorização já concedidas; peça nova decisão somente para ampliação de escopo ou ambiguidade relevante.
+- Comandos agregados já executam suas etapas: não repita testes, tipos, lint ou build sobre a mesma revisão sem mudança relevante, falha ou dúvida concreta.
+- Preserve asserções, regressões, revisão final e gates de segurança/release. Falhas persistentes exigem diagnóstico; não amplie o escopo para corrigir baseline sem estabelecer causalidade e autorização.
+- Informe progresso e limitações, sem segredos ou conclusão verde com verificações falhando/pendentes. Este fluxo não autoriza publicação, deploy ou integração Git.
+
+
+## Contexto compartilhado dos harnesses
+
+- CSS/utilitários: UnoCSS com o preset corporativo `presetMaxUno`, preservando os contratos de estilo do ecossistema.
+- TypeScript estrito, Vue Composition API, Vite multi-entry, Vitest/happy-dom e ESLint são a base. Confira versões no package/lockfile quando relevantes; descrições históricas não substituem contratos instalados.
+- Testes temporais usam `TZ: America/Sao_Paulo`, configurado no Vitest. Preserve a checagem isolada dos testes de tipos, pois o tsconfig principal exclui testes.
+- Preserve categorias Helpers/Composables/Routes, named exports, namespace `_`, aliases e prioridade dos helpers próprios sobre VueUse.
+- Ao acrescentar helper, atualize exports da categoria e gere auto-import conforme o contrato. `npm run build` já executa o hook `prebuild`; não execute `prebuild` isolado novamente no mesmo lote sem mudança dos exports ou necessidade concreta. Nunca edite o JSON gerado à mão.
+- Planejamento/autorização já concedidos valem para o bloco aprovado em todos os harnesses. Peça aprovação somente para novas decisões/escopo; não reinicie a entrevista na troca de agente.
